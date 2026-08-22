@@ -15,14 +15,17 @@ guskant 氏の **zantufa-1.9999.peg** を Rust/pest 向けに移植したもの�
 - **統語論**(コアサブセット)
   - 文(sentence): 項(terms)+ `cu` + 述語(bridi_tail)
   - sumti: 代名詞(KOhA)/ 冠詞句(le lo la…)/ 量化描述(`ro lo remna`)/ 数詞
+    / 接続(`e` `a` `o` `u` + `nai`、`joi` 系)
   - selbri: tanru(名詞句修飾)/ `na` 否定 / `se te ve xe` 変換 / `co` 逆順
+    / tanru 接続(`melbi je cmalu`)/ 述語連鎖(`gi'e` `gi'a` …)
   - `be … bei … be'o` 項連結(linked sumti)
   - 抽象(`nu ka ni zu'o …`)/ `ke … ke'e` グルーピング
   - 引用(`lu … li'u` 文引用 / `zo` 単語引用 = sumti。`lo'u … le'u` 誤文引用 = 自由修飾語)
   - 関係節(`poi / noi`)/ 所有(`pe / po / goi`)
   - 自由修飾語(感情標識 `ui` 等、`xu` 疑問、`sei` 挿入、`to … toi` 注釈。
     連鎖(`mu'o ge'e coi`)や項・述語間の挿入(`xu do su'a djica`)も許容)
-  - 呼格(`coi …`)/ 文連結(`.i` `ni'o`)
+  - 呼格(`coi …`)/ 文連結(`.i` `ni'o`、`.ije` `.ijanai` 等の結合表記を含む)
+  - 先接続詞(`ge … gi`: 項と文の接続)
   - **時制・相**(PU `pu ca ba` / CAhA `ka'e ca'a …` / ZAhO `co'a ca'o ba'o …`
     / ZI `zi za zu` / VA `vi va vu` / TAhE `ta'e di'i na'o ru'i`)
   - 数量詞+述語の項(`pa prenu cu klama`)、描述内数量詞(`le ci gerku`)
@@ -54,7 +57,7 @@ println!("{}", tree::to_sexpr(pairs, "mi viska le gerku"));
 ## 開発
 
 ```console
-$ cargo test      # 全テスト(48件、実文148文を含む)
+$ cargo test      # 全テスト(56件、実文151文を含む)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 ```
@@ -92,13 +95,13 @@ src/
 |---|---|
 | `tests/morphology.rs` | 語形認識(gismu/lujvo/cmevla/ストレス等) |
 | `tests/syntax.rs` | 統語構造の検証 |
-| `tests/corpus.rs` | **Tatoeba 実文97文**(CC BY 2.0 FR)+ CLL 風厳選例文51文 |
+| `tests/corpus.rs` | **Tatoeba 実文97文**(CC BY 2.0 FR)+ CLL 風厳選例文54文 |
 
 実文コーパスは [Tatoeba](https://tatoeba.org) のロジバン文を使用しています。
 
 ## 既知の制限・ロードマップ
 
-- 接続詞(`ek / gihek / joik / gek`、`a e o u` 系。先接続詞 `ge … gi` を含む)未実装
+- 接続詞は基本形のみ対応。`bo` グルーピング(`joi bo` 等)、間隔接続(BIhI `bi'o bi'i`)は未実装
 - 数理表現(mex)、lerfu(BY/BU)、消去(SI/SU)未実装
 - 引用は `lu … li'u` / `zo` / `lo'u … le'u` のみ対応。ZOI と入れ子引用は未対応
   (pest に後方参照がなく、純粋な PEG では区切り語の再照合ができないため)

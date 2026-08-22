@@ -1,8 +1,17 @@
 # 開発ステータス
 
-## 現在の状態: v0.3 完成(全テストグリーン)
+## 現在の状態: v0.4 完成(全テストグリーン)
 
-- ライブラリ5 / 形態論11 / 統語29 / コーパス3 = 計48テスト全パス
+- ライブラリ5 / 形態論11 / 統語37 / コーパス3 = 計56テスト全パス
+
+## v0.4 で追加(コミット a66ed7d)
+- 接続詞一式:
+  - 項接続: A(`e a o u` + nai)、JOI(`joi jo'e fa'u ku'a`)
+  - tanru 接続: JA(`ja je jo ju` + nai)、述語連鎖: GIhA(`gi'e` 等)
+  - 文接続: `.ije` `.ija` 等(I+JA)。結合表記(.ije/.ijanai)は IJ_joint ルールで対応
+  - 先接続: GA…GI(項レベル gek_sumti / 文レベル gek_sentence)
+- 技術メモ: 「ij」で始まる語(.ije 等)は fu'ivla と紛らわしいため
+  tanru_unit の BRIVLA から排除(`!("ija"|"ije"|"ijo"|"iju")` ガード)
 - テスト対象文: Tatoeba実文97文 + CLL風厳選例文51文 + 単体テスト用文
 - cargo build / cargo fmt --check / cargo clippy --all-targets 警告ゼロ
 
@@ -38,4 +47,4 @@
    明示的に `sp1?` を挟む(selbri の s_marks→tanru 間など)
 
 ## 次の拡張候補
-- 接続詞(ek/gihek/joik/gek)、mex 数理、BAI タグ接続、ZOI・入れ子引用
+- 接続詞の bo グルーピング・BIhI 間隔接続、mex 数理、BAI タグ接続、ZOI・入れ子引用
