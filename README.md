@@ -30,7 +30,7 @@ guskant 氏の **zantufa-1.9999.peg** を Rust/pest 向けに移植したもの�
     / ZI `zi za zu` / VA `vi va vu` / TAhE `ta'e di'i na'o ru'i`)
   - 数量詞+述語の項(`pa prenu cu klama`)、描述内数量詞(`le ci gerku`)
   - `me` 述語、項のみのフラグメント(`mi` 単独)、単独感情標識(`.ui`)
-- **出力**: 整形ツリー / S 式
+- **出力**: 整形ツリー / S 式 / JSON(`{"rule","text","children"}` 形式)
 
 ## 使い方
 
@@ -40,6 +40,9 @@ $ lojban "mi tavla do"
 
 # S 式で表示
 $ lojban "le mlatu cu cadzu" --sexpr
+
+# JSON で表示
+$ lojban "le mlatu cu cadzu" --json
 
 # stdin から入力
 $ echo "coi la alis." | lojban
@@ -57,7 +60,7 @@ println!("{}", tree::to_sexpr(pairs, "mi viska le gerku"));
 ## 開発
 
 ```console
-$ cargo test      # 全テスト(69件、実文157文を含む)
+$ cargo test      # 全テスト(74件=単体70+doc 4、実文157文を含む)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 ```
