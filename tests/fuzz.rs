@@ -186,28 +186,3 @@ fn 入れ子の各深度で有限時間で応答する() {
         let _ = parse(&v);
     }
 }
-
-#[test]
-fn probe_slow_inputs() {
-    let mut rng = Rng(0x9E37_79B9_7F4A_7C15);
-    let mut times: Vec<(u128, String)> = Vec::new();
-    for _ in 0..400 {
-        let len = rng.below(60);
-        let s: String = (0..len)
-            .map(|_| ALPHABET[rng.below(ALPHABET.len())] as char)
-            .collect();
-        if max_nest_of(&s) > 3 {
-            continue;
-        }
-        let t0 = std::time::Instant::now();
-        let _ = parse(&s);
-        let ms = t0.elapsed().as_millis();
-        if ms > 20 {
-            times.push((ms, s));
-        }
-    }
-    times.sort_by(|a, b| b.0.cmp(&a.0));
-    for (ms, s) in times.iter().take(8) {
-        println!("{ms}ms: {s:?}");
-    }
-}
