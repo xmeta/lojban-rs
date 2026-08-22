@@ -198,6 +198,8 @@ const CURATED: &[&str] = &[
     "ge mi gleki gi do bilma",
     "mi tavla do bau la lojban.",
     "ta to'e melbi",
+    "li re su'i re du li vo",
+    "mi dunda li pa pi'i ci do",
 ];
 
 #[test]

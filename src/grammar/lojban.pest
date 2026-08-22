@@ -38,7 +38,7 @@ tagged = { FA_clause ~ sp1 ~ sumti | BAI_clause ~ sp1 ~ sumti }
 
 sumti      = { sumti_core ~ (sp1 ~ relative_clauses)? ~ (sp1 ~ ek_joik ~ sp1 ~ sumti)* }
 sumti_core = _{ KOhA_clause | desc | quant_desc | quant_selbri | number | abstraction
-               | lu_quote | zo_quote | gek_sumti }
+               | lu_quote | zo_quote | gek_sumti | li_mex }
 quant_selbri = { number ~ sp1 ~ selbri ~ (sp1 ~ KU_clause)? }
 
 desc        = { LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
@@ -83,6 +83,12 @@ ke_group   = { KE_clause ~ sp1 ~ selbri ~ (sp1 ~ KEhE_clause)? }
 
 // BE…BEI による項連結(selbri への内部項の付加。be'o による明示閉鎖も許容)
 linked_args = { BE_clause ~ sp1 ~ sumti ~ (sp1 ~ BEI_clause ~ sp1 ~ sumti)* ~ (sp1 ~ BEhO_clause)? }
+
+// 数理表現(mex)。LI...LOhO で sumti 化。演算子は左結合の単純連鎖、括弧は vei...ve'o
+mex         = { mex_operand ~ (sp1 ~ VUhU_clause ~ sp1 ~ mex_operand)* }
+mex_operand = _{ number | vei_group }
+vei_group   = { VEI_clause ~ sp0 ~ mex ~ (sp0 ~ VEhO_clause)? }
+li_mex      = { LI_clause ~ sp0 ~ mex ~ (sp0 ~ LOhO_clause)? }
 
 // 接続詞(後置: A/JOI=項、GIhA=述語連鎖、JA=tanru、I+JA=文。先接続: GA...GI)
 ek_joik      = _{ (A_clause | JOI_clause | BIhI_clause) ~ (sp1 ~ NAI_clause)?
@@ -300,6 +306,11 @@ GOI_core = @{ ( ^"po'e" | ^"po'u" | ^"no'u" | ^"goi" | ^"pe" | ^"po" | ^"ne") ~ 
 GOhA_core = @{ ( ^"go'i" | ^"go'o" | ^"nei" | ^"ra'o" | ^"du" | ^"mo") ~ &word_boundary }
 I_core = @{ ( ^"i") ~ &word_boundary }
 BIhI_core = @{ ( ^"bi'o" | ^"bi'i" | ^"mi'i") ~ &word_boundary }
+VUhU_core = @{ ( ^"su'i" | ^"vu'u" | ^"pi'i" | ^"fe'i" | ^"gei" | ^"de'o" | ^"te'o"
+               | ^"re'a" | ^"va'a" | ^"pa'i" | ^"si'i" | ^"fu'u") ~ &word_boundary }
+VEI_core  = @{ ( ^"vei") ~ &word_boundary }
+VEhO_core = @{ ( ^"ve'o" | ^"veho") ~ &word_boundary }
+LOhO_core = @{ ( ^"lo'o" | ^"loho") ~ &word_boundary }
 JA_core = @{ ( ^"ja" | ^"je" | ^"jo" | ^"ju") ~ &word_boundary }
 // 結合形(.ijanai 等)用: 語境界ガードなしの素の JA
 JA_bare = _{ ^"ja" | ^"je" | ^"jo" | ^"ju" }
@@ -331,7 +342,7 @@ NU_core = @{ ( ^"je'i" | ^"mu'e" | ^"pu'u" | ^"zu'o" | ^"li'i" | ^"su'u" | ^"du'
 PA_core = @{ (^"dau" | ^"fei" | ^"jai" | ^"rei" | ^"vai" | ^"so'a" | ^"so'e" | ^"so'i"
                | ^"so'u" | ^"za'u" | ^"su'o" | ^"ji'i" | ^"xo" | ^"pi"
                | ^"pa" | ^"re" | ^"ci" | ^"vo" | ^"mu" | ^"xa" | ^"ze" | ^"bi" | ^"so" | ^"no"
-               | ^"ro") ~ &word_boundary }
+               | ^"ro" | ^"ki'o" | ^"ma'u" | ^"ni'u") ~ &word_boundary }
 ROI_core = @{ ( ^"roi") ~ &word_boundary }
 SE_core = @{ ( ^"se" | ^"te" | ^"ve" | ^"xe") ~ &word_boundary }
 SEI_core = @{ ( ^"sei") ~ &word_boundary }
@@ -395,6 +406,10 @@ GOI_clause = { GOI_core }
 GOhA_clause = { GOhA_core }
 I_clause = { I_core }
 BIhI_clause = { BIhI_core }
+VUhU_clause = { VUhU_core }
+VEI_clause  = { VEI_core }
+VEhO_clause = { VEhO_core }
+LOhO_clause = { LOhO_core }
 JA_clause = { JA_core }
 JOI_clause = { JOI_core }
 KE_clause = { KE_core }

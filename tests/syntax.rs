@@ -341,3 +341,34 @@ fn bihi_間隔接続() {
     // 連鎖先のない間隔接続は拒否
     assert!(LojbanParser::parse(Rule::text, "mi klama bi'o").is_err());
 }
+
+#[test]
+fn li_による数式の項() {
+    let s = parse_ok("li re su'i re du li vo");
+    assert!(s.contains("VUhU_core \"su'i\""), "{s}");
+    assert!(s.contains("li_mex"), "{s}");
+}
+
+#[test]
+fn 演算子連鎖と括弧() {
+    let s = parse_ok("li pa su'i re pi'i ci");
+    assert!(s.contains("VUhU_core \"pi'i\""), "{s}");
+    let s = parse_ok("li vei pa su'i re ve'o pi'i ci");
+    assert!(s.contains("VEI_core \"vei\""), "{s}");
+}
+
+#[test]
+fn 負数と桁区切り() {
+    let s = parse_ok("li ni'u ci du li vo vu'u ze");
+    assert!(s.contains("PA_core \"ni'u\""), "{s}");
+    let s = parse_ok("li pa ki'o re ci");
+    assert!(s.contains("PA_core \"ki'o\""), "{s}");
+}
+
+#[test]
+fn 不完全な数式は拒否される() {
+    // 演算子で終わる数式
+    assert!(LojbanParser::parse(Rule::text, "li pa su'i").is_err());
+    // 被演算子のない数式
+    assert!(LojbanParser::parse(Rule::text, "li su'i").is_err());
+}
