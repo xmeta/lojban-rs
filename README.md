@@ -106,6 +106,7 @@ src/
 |---|---|
 | `tests/morphology.rs` | 語形認識(gismu/lujvo/cmevla/ストレス等) |
 | `tests/syntax.rs` | 統語構造の検証 |
+| `tests/fuzz.rs` | 簡易ファジング(ランダム・変異・深さ掃引)。重量版は `cargo test -- --ignored` |
 | `tests/corpus.rs` | **Tatoeba 実文97文**(CC BY 2.0 FR)+ CLL 風厳選例文60文 |
 
 実文コーパスは [Tatoeba](https://tatoeba.org) のロジバン文を使用しています。
@@ -127,6 +128,10 @@ src/
 - zantufa が許す「無ポーズ隣接単語」(例: `mibroda` = mi+broda)は不受理。
   本パーサーでは常にポーズ(空白・`.` `,` `!` `?`)区切りを要求する
 - 母音のみの語(例: `iii`)は zantufa 原典準拠で fu'ivla として受理される
+- 引用(lu / lo'u)と数式括弧(vei)の入れ子は深さ 8 まで(それ超過は高速拒否。
+  PEG のバックトラックが指数時間になるためのリソース保護)
+- 非語トークン(タイポ等)の拒否には rafsi 分解のバックトラックで
+  100ms 級かかる場合がある
 
 ## ライセンス
 
