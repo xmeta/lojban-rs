@@ -301,13 +301,14 @@ LAhE_core = @{ ( ^"la'e" | ^"lu'e") ~ &word_boundary }
 LE_core = @{ ( ^"le'i" | ^"lo'i" | ^"la'i" | ^"lei" | ^"loi" | ^"lai" | ^"le" | ^"lo" | ^"la") ~ &word_boundary }
 LEhU_core = @{ ( ^"le'u" | ^"lehu") ~ &word_boundary }
 LI_core = @{ ( ^"li") ~ &word_boundary }
+// li'u は LU と LOhU に共通する終端詞のため、LIhU/LUhU 両クラスが同一語形を持つ(zantufa の命名踏襲)
 LIhU_core = @{ ( ^"li'u" | ^"lihu") ~ &word_boundary }
 LOhU_core = @{ ( ^"lo'u" | ^"lohu") ~ &word_boundary }
 LU_core = @{ ( ^"lu") ~ &word_boundary }
 LUhU_core = @{ ( ^"li'u" | ^"lihu") ~ &word_boundary }
 NA_core = @{ ( ^"na") ~ &word_boundary }
 NAhE_core = @{ ( ^"na'e" | ^"to'e" | ^"no'e" | ^"je'a") ~ &word_boundary }
-NIhO_core = @{ ( ^"niho") ~ &word_boundary }
+NIhO_core = @{ ( ^"ni'o" | ^"niho") ~ &word_boundary }
 NOI_core = @{ ( ^"poi" | ^"noi" | ^"voi") ~ &word_boundary }
 NU_core = @{ ( ^"je'i" | ^"mu'e" | ^"pu'u" | ^"zu'o" | ^"li'i" | ^"su'u" | ^"du'u" | ^"nu" | ^"ka" | ^"ni") ~ &word_boundary }
 PA_core = @{ (^"dau" | ^"fei" | ^"jai" | ^"rei" | ^"vai" | ^"so'a" | ^"so'e" | ^"so'i"

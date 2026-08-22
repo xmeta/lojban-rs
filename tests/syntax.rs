@@ -187,7 +187,34 @@ fn lu_による文引用() {
 fn lohu_による誤文引用は_free() {
     let s = parse_ok("mi gleki lohu coi lehu");
     assert!(s.contains("LOhU_core"), "{s}");
-    assert!(s.contains("free"), "{s}");
+    assert!(s.contains("lohu_quote"), "{s}");
+}
+
+#[test]
+fn 引用の標準表記_lihu_lehu() {
+    let s = parse_ok("lu mi klama li'u");
+    assert!(s.contains("LUhU_core \"li'u\""), "{s}");
+    let s = parse_ok("mi gleki lo'u coi le'u");
+    assert!(s.contains("LOhU_core \"lo'u\""), "{s}");
+    assert!(s.contains("LEhU_core \"le'u\""), "{s}");
+}
+
+#[test]
+fn 文連結_niho_の標準表記() {
+    let s = parse_ok("ni'o mi klama .i do stali");
+    assert!(s.contains("NIhO_core \"ni'o\""), "{s}");
+}
+
+#[test]
+fn 不完全な引用や項連結は拒否される() {
+    // 未閉鎖の LU 引用
+    assert!(LojbanParser::parse(Rule::text, "lu mi klama").is_err());
+    // 未閉鎖の LOhU 引用
+    assert!(LojbanParser::parse(Rule::text, "mi gleki lohu coi").is_err());
+    // 引用対象のない zo
+    assert!(LojbanParser::parse(Rule::text, "zo").is_err());
+    // 項のない be
+    assert!(LojbanParser::parse(Rule::text, "mi klama be").is_err());
 }
 
 #[test]

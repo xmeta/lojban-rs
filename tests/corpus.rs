@@ -191,6 +191,8 @@ const CURATED: &[&str] = &[
     "mi cusku zo coi",
     "do pu cusku lu mi klama lihu",
     "le gerku poi cadzu ku'o cu batci",
+    "lu mi klama li'u",
+    "ni'o mi viska do",
 ];
 
 #[test]
