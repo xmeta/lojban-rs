@@ -20,8 +20,11 @@ text = { SOI ~ sp0 ~ content? ~ sp0 ~ EOI }
 
 content = { lead? ~ item ~ (sp1 ~ sep ~ sp1 ~ item)* }
 lead    = _{ sep ~ sp1 }
-sep     = { I_clause | NIhO_clause }
-item    = { sentence | free | Y_clause | fragment | tense_item }
+sep     = { I_clause ~ (sp1 ~ JA_clause)? ~ (sp1 ~ NAI_clause)?
+          | IJ_joint | NIhO_clause }
+// .ije / .ijanai 等の結合表記(I+JA が一語に綴られる)
+IJ_joint = { ^"i" ~ !space_char ~ JA_bare ~ (NAI_clause)? ~ &word_boundary }
+item    = { gek_sentence | sentence | free | Y_clause | fragment | tense_item }
 fragment  = { terms ~ (sp1 ~ VAU_clause)? }
 tense_item = { tense_mark }
 
@@ -33,9 +36,9 @@ terms = { term ~ (sp1 ~ term)* }
 term  = { tagged | sumti }
 tagged = { FA_clause ~ sp1 ~ sumti }
 
-sumti      = { sumti_core ~ (sp1 ~ relative_clauses)? }
+sumti      = { sumti_core ~ (sp1 ~ relative_clauses)? ~ (sp1 ~ ek_joik ~ sp1 ~ sumti)* }
 sumti_core = _{ KOhA_clause | desc | quant_desc | quant_selbri | number | abstraction
-               | lu_quote | zo_quote }
+               | lu_quote | zo_quote | gek_sumti }
 quant_selbri = { number ~ sp1 ~ selbri ~ (sp1 ~ KU_clause)? }
 
 desc        = { LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
@@ -50,7 +53,7 @@ relative_clause  = {
   | GOI_clause ~ sp1 ~ sumti ~ (sp1 ~ GEhU_clause)?
 }
 
-bridi_tail = { selbri ~ tail_terms }
+bridi_tail = { selbri ~ tail_terms ~ (sp1 ~ gihek_link ~ sp1 ~ bridi_tail)* }
 tail_terms = { (sp1 ~ term)* ~ (sp1 ~ VAU_clause)? }
 
 selbri  = { s_marks? ~ sp1? ~ tense_marks? ~ sp1? ~ tanru ~ co_tail? }
@@ -63,9 +66,11 @@ tense_marks = _{ tense_mark ~ (sp1 ~ tense_mark)* ~ (sp1 ~ KU_clause)? }
 tense_mark  = _{ PU_clause | CAhA_clause | ZAhO_clause | ZI_clause | VA_clause
                | TAhE_clause | ROI_clause }
 
-tanru      = { tanru_unit ~ (sp1 ~ tanru_unit)* }
+tanru      = { tanru_unit ~ (sp1 ~ tanru_link ~ sp1 ~ tanru_unit | sp1 ~ tanru_unit)* }
 tanru_unit = {
-     BRIVLA_clause ~ (sp1 ~ linked_args)?
+     !("ija" | "ije" | "ijo" | "iju") ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
+   // 注: 「i+字母」で始まる語(.ije / .ijanai 等の文連結結合形)は tanru の先頭に来ないため除外。
+   // 母音始まりの語そのもの(.a'onai 等)は述語のみの文として正当なので許容する
    | GOhA_clause ~ (sp1 ~ linked_args)?
    | CMEVLA_clause
    | nu_form
@@ -78,6 +83,13 @@ ke_group   = { KE_clause ~ sp1 ~ selbri ~ (sp1 ~ KEhE_clause)? }
 
 // BE…BEI による項連結(selbri への内部項の付加。be'o による明示閉鎖も許容)
 linked_args = { BE_clause ~ sp1 ~ sumti ~ (sp1 ~ BEI_clause ~ sp1 ~ sumti)* ~ (sp1 ~ BEhO_clause)? }
+
+// 接続詞(後置: A/JOI=項、GIhA=述語連鎖、JA=tanru、I+JA=文。先接続: GA...GI)
+ek_joik      = _{ (A_clause | JOI_clause) ~ (sp1 ~ NAI_clause)? }
+gihek_link   = _{ GIhA_clause ~ (sp1 ~ NAI_clause)? }
+tanru_link   = _{ JA_clause ~ (sp1 ~ NAI_clause)? }
+gek_sentence = { GA_clause ~ sp1 ~ sentence ~ sp1 ~ GI_clause ~ sp1 ~ sentence }
+gek_sumti    = { GA_clause ~ sp1 ~ sumti ~ sp1 ~ GI_clause ~ sp1 ~ sumti }
 
 // 引用(LU...LUhU / ZO+単語は sumti、LOhU...LEhU は free。ZOI は未対応)
 lu_quote   = { LU_clause ~ sp0 ~ content ~ sp0 ~ LUhU_clause }
@@ -286,6 +298,9 @@ GIhI_core = @{ ( ^"gihi") ~ &word_boundary }
 GOI_core = @{ ( ^"po'e" | ^"po'u" | ^"no'u" | ^"goi" | ^"pe" | ^"po" | ^"ne") ~ &word_boundary }
 GOhA_core = @{ ( ^"go'i" | ^"go'o" | ^"nei" | ^"ra'o" | ^"du" | ^"mo") ~ &word_boundary }
 I_core = @{ ( ^"i") ~ &word_boundary }
+JA_core = @{ ( ^"ja" | ^"je" | ^"jo" | ^"ju") ~ &word_boundary }
+// 結合形(.ijanai 等)用: 語境界ガードなしの素の JA
+JA_bare = _{ ^"ja" | ^"je" | ^"jo" | ^"ju" }
 JOI_core = @{ ( ^"jo'e" | ^"joi" | ^"fa'u" | ^"ku'a") ~ &word_boundary }
 KE_core = @{ ( ^"ke") ~ &word_boundary }
 KEhE_core = @{ ( ^"ke'e" | ^"kehe") ~ &word_boundary }
@@ -377,6 +392,7 @@ GIhI_clause = { GIhI_core }
 GOI_clause = { GOI_core }
 GOhA_clause = { GOhA_core }
 I_clause = { I_core }
+JA_clause = { JA_core }
 JOI_clause = { JOI_core }
 KE_clause = { KE_core }
 KEI_clause = { KEI_core }

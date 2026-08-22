@@ -239,3 +239,67 @@ fn 挿入と呼格の標準閉鎖() {
     let s = parse_ok("coi la alis. do'u mi klama");
     assert!(s.contains("DOhU_core \"do'u\""), "{s}");
 }
+
+#[test]
+fn tanru接続_je() {
+    let s = parse_ok("mi viska melbi je cmalu nixli");
+    assert!(s.contains("JA_core \"je\""), "{s}");
+}
+
+#[test]
+fn sumti接続_e() {
+    let s = parse_ok("mi e do klama");
+    assert!(s.contains("A_core \"e\""), "{s}");
+    let s = parse_ok("mi joi do klama");
+    assert!(s.contains("JOI_core \"joi\""), "{s}");
+}
+
+#[test]
+fn bridi_tail接続_gihe() {
+    let s = parse_ok("mi nelci gi'e viska do");
+    assert!(s.contains("GIhA_core \"gi'e\""), "{s}");
+}
+
+#[test]
+fn 文接続_ije() {
+    let s = parse_ok("mi klama .ije do stali");
+    // 結合形(.ije)は IJ_joint ノードになる
+    assert!(s.contains("IJ_joint \"ije\""), "{s}");
+    let s = parse_ok("mi klama .i je do stali");
+    assert!(s.contains("JA_core \"je\""), "{s}");
+}
+
+#[test]
+fn 文接続_結合形_ijanai() {
+    let s = parse_ok("mi klama .ijanai do stali");
+    // JA_bare は silent のため IJ_joint ノードと NAI のみ確認
+    assert!(s.contains("IJ_joint"), "{s}");
+    assert!(s.contains("NAI_core \"nai\""), "{s}");
+}
+
+#[test]
+fn 先接続詞_ge_gi() {
+    let s = parse_ok("ge mi klama gi do cadzu");
+    assert!(s.contains("gek_sentence"), "{s}");
+    let s = parse_ok("mi viska ge le gerku gi le mlatu");
+    assert!(s.contains("GI_core \"gi\""), "{s}");
+}
+
+#[test]
+fn 接続詞_nai() {
+    let s = parse_ok("mi e nai do klama");
+    assert!(s.contains("A_core \"e\""), "{s}");
+    assert!(s.contains("NAI_core \"nai\""), "{s}");
+    let s = parse_ok("ta melbi je nai cmalu");
+    assert!(s.contains("JA_core \"je\""), "{s}");
+}
+
+#[test]
+fn 不完全な接続は拒否される() {
+    // 連鎖先のない gi'e
+    assert!(LojbanParser::parse(Rule::text, "mi klama gi'e").is_err());
+    // 閉鎖のない先接続
+    assert!(LojbanParser::parse(Rule::text, "ge mi klama").is_err());
+    // 接続先のない je
+    assert!(LojbanParser::parse(Rule::text, "mi viska je").is_err());
+}
