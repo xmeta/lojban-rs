@@ -34,10 +34,6 @@ pub use grammar::{LojbanParser, Rule};
 /// assert!(pairs.count() >= 1);
 /// ```
 pub fn parse(text: &str) -> Result<Pairs<'_, Rule>, Error<Rule>> {
-    fn leak_parse(s: String) -> Result<Pairs<'static, Rule>, Error<Rule>> {
-        let leaked: &'static str = Box::leak(s.into_boxed_str());
-        LojbanParser::parse(Rule::text, leaked)
-    }
     let err = |msg: String| {
         let end = text.len();
         Error::new_from_span(
@@ -45,6 +41,11 @@ pub fn parse(text: &str) -> Result<Pairs<'_, Rule>, Error<Rule>> {
             Span::new(text, 0, end).unwrap_or_else(|| Span::new(text, 0, 0).unwrap()),
         )
     };
+    check_nesting(text).map_err(err)?;
+    fn leak_parse(s: String) -> Result<Pairs<'static, Rule>, Error<Rule>> {
+        let leaked: &'static str = Box::leak(s.into_boxed_str());
+        LojbanParser::parse(Rule::text, leaked)
+    }
     let normalized = normalize_zoi(text).map_err(err)?;
     let erased = apply_erasure(normalized.as_ref()).map_err(err)?;
     match erased {
@@ -54,6 +55,45 @@ pub fn parse(text: &str) -> Result<Pairs<'_, Rule>, Error<Rule>> {
         },
         Cow::Owned(s) => leak_parse(s),
     }
+}
+
+/// 入れ子深度の上限。PEG のバックトラックが引用・括弧の深い入れ子で
+/// 指数時間になるため、リソース保護として受理を打ち切る。
+const MAX_NEST: i32 = 8;
+
+/// 引用(lu / lohu)と数式括弧(vei)の入れ子深度を検査する。
+///
+/// 上限超過の場合はエラー(深い入れ子は解析が指数時間になるため、
+/// 高速な拒否に切り替える)。閉じ過ぎ(負の深さ)は文法側の判定に委ねる。
+fn check_nesting(text: &str) -> Result<(), String> {
+    let mut lu: i32 = 0;
+    let mut lohu: i32 = 0;
+    let mut vei: i32 = 0;
+    for tok in text.split_ascii_whitespace() {
+        match tok
+            .trim_start_matches(['.', ',', '!', '?'])
+            .to_ascii_lowercase()
+            .as_str()
+        {
+            "lu" => lu += 1,
+            "li'u" | "lihu" => lu -= 1,
+            "lo'u" | "lohu" => lohu += 1,
+            "le'u" | "lehu" => lohu -= 1,
+            "vei" => vei += 1,
+            "ve'o" | "veho" => vei -= 1,
+            _ => {}
+        }
+        if lu > MAX_NEST {
+            return Err(format!("lu 引用の入れ子が深すぎます(上限 {MAX_NEST})"));
+        }
+        if lohu > MAX_NEST {
+            return Err(format!("lo'u 引用の入れ子が深すぎます(上限 {MAX_NEST})"));
+        }
+        if vei > MAX_NEST {
+            return Err(format!("vei 括弧の入れ子が深すぎます(上限 {MAX_NEST})"));
+        }
+    }
+    Ok(())
 }
 
 /// 消去語(si / su)の意味論的処理。
@@ -287,6 +327,17 @@ mod tests {
         assert!(s.contains("\"si\""), "{s}");
         // zo の引用対象としての si
         assert!(parse("mi cusku zo si").is_ok());
+    }
+
+    #[test]
+    fn 入れ子深度上限() {
+        // 上限以内は受理される
+        assert!(parse("lu lu lu mi klama li'u li'u li'u").is_ok());
+        // 上限超過は指数時間を避けるため高速に拒否される
+        let deep = format!("{}{}", "lu ".repeat(20), "li'u ".repeat(20));
+        assert!(parse(&deep).is_err());
+        let deep_vei = format!("li {}pa{}", "vei ".repeat(20), " ve'o".repeat(20));
+        assert!(parse(&deep_vei).is_err());
     }
 
     #[test]
