@@ -128,7 +128,7 @@ fn tatoeba_実文コーパス() {
     ];
     let mut failures = Vec::new();
     for s in corpus {
-        if let Err(e) = LojbanParser::parse(Rule::text, s) {
+        if let Err(e) = lojban::parse(s) {
             failures.push(format!("{s} :: {}", e.variant.message()));
         }
     }
@@ -201,13 +201,14 @@ const CURATED: &[&str] = &[
     "li re su'i re du li vo",
     "mi dunda li pa pi'i ci do",
     "mi viska le re su'i ci gerku",
+    "mi cusku zoi .ky. hello world .ky.",
 ];
 
 #[test]
 fn 厳選例文コーパス() {
     let mut failures = Vec::new();
     for s in CURATED {
-        if let Err(e) = LojbanParser::parse(Rule::text, s) {
+        if let Err(e) = lojban::parse(s) {
             failures.push(format!("{s} :: {}", e.variant.message()));
         }
     }

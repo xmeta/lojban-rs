@@ -38,7 +38,7 @@ tagged = { FA_clause ~ sp1 ~ sumti | BAI_clause ~ sp1 ~ sumti }
 
 sumti      = { sumti_core ~ (sp1 ~ relative_clauses)? ~ (sp1 ~ ek_joik ~ sp1 ~ sumti)* }
 sumti_core = _{ KOhA_clause | desc | quant_desc | quant_selbri | number | abstraction
-               | lu_quote | zo_quote | gek_sumti | li_mex }
+               | lu_quote | zo_quote | gek_sumti | li_mex | zoi_quote }
 quant_selbri = { number ~ sp1 ~ selbri ~ (sp1 ~ KU_clause)? }
 
 desc        = { LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
@@ -89,6 +89,9 @@ mex         = { mex_operand ~ (sp1 ~ VUhU_clause ~ sp1 ~ mex_operand)* }
 mex_operand = _{ number | vei_group }
 vei_group   = { VEI_clause ~ sp0 ~ mex ~ (sp0 ~ VEhO_clause)? }
 li_mex      = { LI_clause ~ sp0 ~ mex ~ (sp0 ~ LOhO_clause)? }
+// ZOI 引用。本文は lib.rs の前処理で zo'e に正規化される(PEG に後方参照がないため)
+zoi_quote   = { ZOI_clause ~ sp1 ~ zoi_token ~ sp1 ~ word ~ sp1 ~ zoi_token }
+zoi_token   = @{ (ASCII_ALPHANUMERIC | "." | "," | "!" | "?" | "'")+ }
 
 // 接続詞(後置: A/JOI=項、GIhA=述語連鎖、JA=tanru、I+JA=文。先接続: GA...GI)
 ek_joik      = _{ (A_clause | JOI_clause | BIhI_clause) ~ (sp1 ~ NAI_clause)?

@@ -7,8 +7,8 @@ use lojban::tree::to_sexpr;
 use pest::Parser;
 
 fn parse_ok(input: &str) -> String {
-    let pairs = LojbanParser::parse(Rule::text, input)
-        .unwrap_or_else(|e| panic!("解析失敗: {input:?}: {e}"));
+    // 公開 API 経由(ZOI 正規化などの前処理を含む)
+    let pairs = lojban::parse(input).unwrap_or_else(|e| panic!("解析失敗: {input:?}: {e}"));
     to_sexpr(pairs, input)
 }
 
@@ -386,4 +386,12 @@ fn 描述内の数式() {
 fn 不完全な描述内数式は拒否される() {
     // 演算子で終わる数量詞
     assert!(LojbanParser::parse(Rule::text, "mi viska le re su'i").is_err());
+}
+
+#[test]
+fn zoi_による任意テキスト引用() {
+    let s = parse_ok("mi cusku zoi .ky. hello world .ky.");
+    assert!(s.contains("zoi_quote"), "{s}");
+    let s = parse_ok("zoi gy English text gy cu gliru");
+    assert!(s.contains("ZOI_core \"zoi\""), "{s}");
 }
