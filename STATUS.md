@@ -7,9 +7,12 @@
 ## v0.9.1 で追加(brivla 解析の最速化)
 - lujvo ルールの否定先読み(!gismu ~ !fuhivla)を削除。
   BRIVLA の選択順序と全サイレントルール構造により受理集合は不変
-- brivla_core の選択順序を変更し、高価な fuhivla を最後に
+- brivla_core / any_extended_rafsi の選択順序を変更し、高価な fuhivla を最後に
 - 効果(ベンチ比): 全体で 30〜45% 高速化。
   短文 278µs→153µs、lujvo 929µs→679µs、to_json 733µs→415µs
+- 実験して却下: BRIVLA の選択順序入替(gismu|lujvo|fuhivla → gismu|fuhivla|lujvo)は
+  lujvo 入力で逆に数割遅くなるため保留。残るボトルネックは initial_rafsi* の
+  バックトラック構造自体(再設計にはリスクが伴うため現状維持)
 
 ## v0.9 で追加
 - JSON 出力: CLI `--json` とライブラリ関数 `tree::to_json`

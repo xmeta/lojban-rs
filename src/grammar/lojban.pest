@@ -235,7 +235,9 @@ lujvo = _{ brivla }
 brivla_core = _{ gismu | CVV_final_rafsi | stressed_initial_rafsi ~ short_final_rafsi | fuhivla }
 stressed_initial_rafsi = _{ stressed_extended_rafsi | stressed_y_rafsi | stressed_y_less_rafsi }
 initial_rafsi = _{ extended_rafsi | y_rafsi | !any_extended_rafsi ~ y_less_rafsi ~ !any_extended_rafsi }
-any_extended_rafsi = _{ fuhivla | extended_rafsi | stressed_extended_rafsi }
+// 注: 否定先読み(!any_extended_rafsi)から頻繁に呼ばれるため、
+// 高価な fuhivla を最後に(受理集合は不変・全サイレントルール)
+any_extended_rafsi = _{ extended_rafsi | stressed_extended_rafsi | fuhivla }
 extended_rafsi = _{ brivla_rafsi | fuhivla_rafsi }
 stressed_extended_rafsi = _{ stressed_brivla_rafsi | stressed_fuhivla_rafsi }
 
