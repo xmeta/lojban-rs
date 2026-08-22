@@ -135,3 +135,30 @@ fn 時制詞を含む文() {
     let s = parse_ok("ta'e do simsa le mlatu");
     assert!(s.contains("TAhE_core \"ta'e\""), "{s}");
 }
+
+#[test]
+fn be_による項連結() {
+    let s = parse_ok("mi klama be le zdani");
+    assert!(s.contains("linked_args"), "{s}");
+    assert!(s.contains("BE_core \"be\""), "{s}");
+    assert!(s.contains("LE_core \"le\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"zdani\""), "{s}");
+}
+
+#[test]
+fn bei_による連結項の列挙() {
+    let s = parse_ok("mi klama be le zdani bei le zarci");
+    assert!(s.contains("linked_args"), "{s}");
+    assert!(s.contains("BEI_core \"bei\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"zdani\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"zarci\""), "{s}");
+}
+
+#[test]
+fn beo_明示閉鎖() {
+    // be'o で連結項を閉じ、後続の項と区切る
+    let s = parse_ok("mi klama be le zdani be'o do");
+    assert!(s.contains("linked_args"), "{s}");
+    assert!(s.contains("BEhO_core \"be'o\""), "{s}");
+    assert!(s.contains("KOhA_core \"do\""), "{s}");
+}

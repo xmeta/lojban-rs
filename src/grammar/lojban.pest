@@ -63,10 +63,20 @@ tense_mark  = _{ PU_clause | CAhA_clause | ZAhO_clause | ZI_clause | VA_clause
                | TAhE_clause | ROI_clause }
 
 tanru      = { tanru_unit ~ (sp1 ~ tanru_unit)* }
-tanru_unit = { BRIVLA_clause | CMEVLA_clause | GOhA_clause | nu_form | ke_group | me_form }
+tanru_unit = {
+     BRIVLA_clause ~ (sp1 ~ linked_args)?
+   | GOhA_clause ~ (sp1 ~ linked_args)?
+   | CMEVLA_clause
+   | nu_form
+   | ke_group
+   | me_form
+}
 nu_form    = { s_marks? ~ sp1? ~ NU_clause ~ sp1 ~ sentence ~ (sp1 ~ KEI_clause)? }
 me_form    = { ME_clause ~ sp1 ~ sumti }
 ke_group   = { KE_clause ~ sp1 ~ selbri ~ (sp1 ~ KEhE_clause)? }
+
+// BE…BEI による項連結(selbri への内部項の付加。be'o による明示閉鎖も許容)
+linked_args = { BE_clause ~ sp1 ~ sumti ~ (sp1 ~ BEI_clause ~ sp1 ~ sumti)* ~ (sp1 ~ BEhO_clause)? }
 
 frees_s   = _{ free ~ (sp1 ~ free)* }
 frees_m   = _{ (sp1 ~ free)+ }
@@ -248,7 +258,7 @@ BAI_core = @{ (^"bau" | ^"bai" | ^"cau" | ^"cu'u" | ^"mu'i" | ^"mu'u" | ^"ni'i"
                | ^"fau" | ^"ka'a") ~ &word_boundary }
 BE_core = @{ ( ^"be") ~ &word_boundary }
 BEI_core = @{ ( ^"bei") ~ &word_boundary }
-BEhO_core = @{ ( ^"beho") ~ &word_boundary }
+BEhO_core = @{ ( ^"be'o" | ^"beho") ~ &word_boundary }
 BO_core = @{ ( ^"bo") ~ &word_boundary }
 BOI_core = @{ ( ^"boi") ~ &word_boundary }
 CO_core = @{ ( ^"co") ~ &word_boundary }
