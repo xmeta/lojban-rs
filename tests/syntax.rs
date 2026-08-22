@@ -416,3 +416,21 @@ fn quant_selbri_は従来形のみ() {
     let s = parse_ok("pa prenu cu klama");
     assert!(s.contains("PA_core \"pa\""), "{s}");
 }
+
+#[test]
+fn bu_による文字化() {
+    // 代名詞の文字化が項として機能
+    let s = parse_ok("mi bu prami do");
+    assert!(s.contains("bu_lerfu"), "{s}");
+    assert!(s.contains("BU_core \"bu\""), "{s}");
+    // cmavo の文字化
+    let s = parse_ok("mi cusku zo'e bu");
+    assert!(s.contains("bu_lerfu"), "{s}");
+}
+
+#[test]
+fn bu_なしでは従来どおり() {
+    // bu が続かない場合は通常の項として解析される
+    let s = parse_ok("mi prami do");
+    assert!(!s.contains("bu_lerfu"), "{s}");
+}

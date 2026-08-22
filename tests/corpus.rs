@@ -201,6 +201,7 @@ const CURATED: &[&str] = &[
     "mi viska le re su'i ci gerku",
     "mi cusku zoi .ky. hello world .ky.",
     "li xy su'i re du li vo",
+    "mi bu prami do",
 ];
 
 #[test]

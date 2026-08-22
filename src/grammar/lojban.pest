@@ -37,7 +37,7 @@ term  = { tagged | sumti }
 tagged = { FA_clause ~ sp1 ~ sumti | BAI_clause ~ sp1 ~ sumti }
 
 sumti      = { sumti_core ~ (sp1 ~ relative_clauses)? ~ (sp1 ~ ek_joik ~ sp1 ~ sumti)* }
-sumti_core = _{ KOhA_clause | desc | BY_clause | quant_desc | quant_selbri | number | abstraction
+sumti_core = _{ bu_lerfu | KOhA_clause | desc | BY_clause | quant_desc | quant_selbri | number | abstraction
                | lu_quote | zo_quote | gek_sumti | li_mex | zoi_quote | BY_clause }
 quant_selbri = { number ~ sp1 ~ selbri ~ (sp1 ~ KU_clause)? }
 
@@ -89,6 +89,10 @@ mex         = { mex_operand ~ (sp1 ~ VUhU_clause ~ sp1 ~ mex_operand)* }
 mex_operand = _{ number | vei_group | BY_clause }
 vei_group   = { VEI_clause ~ sp0 ~ mex ~ (sp0 ~ VEhO_clause)? }
 li_mex      = { LI_clause ~ sp0 ~ mex ~ (sp0 ~ LOhO_clause)? }
+// 文字化(任意の語 + bu で文字参照)。sumti_core の先頭で試行し
+// bu が続かない場合は速やかにフォールバックする
+bu_lerfu    = { word ~ sp1 ~ BU_clause }
+
 // ZOI 引用。本文は lib.rs の前処理で zo'e に正規化される(PEG に後方参照がないため)
 zoi_quote   = { ZOI_clause ~ sp1 ~ zoi_token ~ sp1 ~ word ~ sp1 ~ zoi_token }
 zoi_token   = @{ (ASCII_ALPHANUMERIC | "." | "," | "!" | "?" | "'")+ }
