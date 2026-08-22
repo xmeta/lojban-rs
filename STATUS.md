@@ -10,9 +10,13 @@
 - brivla_core / any_extended_rafsi の選択順序を変更し、高価な fuhivla を最後に
 - 効果(ベンチ比): 全体で 30〜45% 高速化。
   短文 278µs→153µs、lujvo 929µs→679µs、to_json 733µs→415µs
-- 実験して却下: BRIVLA の選択順序入替(gismu|lujvo|fuhivla → gismu|fuhivla|lujvo)は
-  lujvo 入力で逆に数割遅くなるため保留。残るボトルネックは initial_rafsi* の
-  バックトラック構造自体(再設計にはリスクが伴うため現状維持)
+- 実験して却下①: BRIVLA の選択順序入替(gismu|lujvo|fuhivla → gismu|fuhivla|lujvo)は
+  lujvo 入力で逆に数割遅くなる
+- 実験して却下②: stress 先頭スキャンの軽量子音クラス化(連結合法性述語の省略)は
+  lujvo 約4% の改善にとどまり、不正クラスタ語での意味論変化リスクに見合わないため取消。
+  残るボトルネックは initial_rafsi* のバックトラック構造自体であり、
+  文法レベルの最適化はここが実用限界。更なる高速化は
+  カスタムパーサー/Packrat メモ化等のアーキテクチャ変更が必要
 
 ## v0.9 で追加
 - JSON 出力: CLI `--json` とライブラリ関数 `tree::to_json`
