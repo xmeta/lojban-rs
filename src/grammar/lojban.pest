@@ -45,7 +45,7 @@ desc        = { LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
 quant_desc  = { number ~ sp1 ~ LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
 number      = { PA_clause ~ (sp1 ~ PA_clause)* }
 abstraction = { NU_clause ~ sp1 ~ sentence ~ (sp1 ~ KEI_clause)? }
-sumti_tail  = _{ (number ~ sp1)? ~ selbri }
+sumti_tail  = _{ (mex ~ sp1)? ~ selbri }
 
 relative_clauses = { relative_clause ~ (sp1 ~ relative_clause)* }
 relative_clause  = {

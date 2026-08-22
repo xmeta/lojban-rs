@@ -372,3 +372,18 @@ fn 不完全な数式は拒否される() {
     // 被演算子のない数式
     assert!(LojbanParser::parse(Rule::text, "li su'i").is_err());
 }
+
+#[test]
+fn 描述内の数式() {
+    let s = parse_ok("mi viska le re su'i ci gerku");
+    assert!(s.contains("VUhU_core \"su'i\""), "{s}");
+    // 従来の単純数量詞も引き続き受理
+    let s = parse_ok("mi viska le ci gerku");
+    assert!(s.contains("PA_core \"ci\""), "{s}");
+}
+
+#[test]
+fn 不完全な描述内数式は拒否される() {
+    // 演算子で終わる数量詞
+    assert!(LojbanParser::parse(Rule::text, "mi viska le re su'i").is_err());
+}

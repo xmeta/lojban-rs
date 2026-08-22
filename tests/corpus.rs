@@ -200,6 +200,7 @@ const CURATED: &[&str] = &[
     "ta to'e melbi",
     "li re su'i re du li vo",
     "mi dunda li pa pi'i ci do",
+    "mi viska le re su'i ci gerku",
 ];
 
 #[test]
