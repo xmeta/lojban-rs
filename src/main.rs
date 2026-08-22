@@ -42,11 +42,11 @@ fn main() -> ExitCode {
     match lojban::parse(&input) {
         Ok(pairs) => {
             if args.json {
-                println!("{}", tree::to_json(pairs, &input));
+                println!("{}", tree::to_json(pairs));
             } else if args.sexpr {
-                println!("{}", tree::to_sexpr(pairs, &input));
+                println!("{}", tree::to_sexpr(pairs));
             } else {
-                println!("{}", tree::to_tree_string(pairs, &input));
+                println!("{}", tree::to_tree_string(pairs));
             }
             ExitCode::SUCCESS
         }

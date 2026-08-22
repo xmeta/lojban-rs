@@ -9,7 +9,7 @@ use pest::Parser;
 fn parse_ok(input: &str) -> String {
     // 公開 API 経由(ZOI 正規化などの前処理を含む)
     let pairs = lojban::parse(input).unwrap_or_else(|e| panic!("解析失敗: {input:?}: {e}"));
-    to_sexpr(pairs, input)
+    to_sexpr(pairs)
 }
 
 #[test]

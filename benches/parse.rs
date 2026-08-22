@@ -58,20 +58,10 @@ fn bench_output(c: &mut Criterion) {
     let mut g = c.benchmark_group("output");
     configure(&mut g);
     g.bench_function("to_sexpr", |b| {
-        b.iter(|| {
-            tree::to_sexpr(
-                LojbanParser::parse(Rule::text, black_box(input)).unwrap(),
-                input,
-            )
-        })
+        b.iter(|| tree::to_sexpr(LojbanParser::parse(Rule::text, black_box(input)).unwrap()))
     });
     g.bench_function("to_json", |b| {
-        b.iter(|| {
-            tree::to_json(
-                LojbanParser::parse(Rule::text, black_box(input)).unwrap(),
-                input,
-            )
-        })
+        b.iter(|| tree::to_json(LojbanParser::parse(Rule::text, black_box(input)).unwrap()))
     });
     g.finish();
 }

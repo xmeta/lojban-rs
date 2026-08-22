@@ -297,12 +297,12 @@ mod tests {
     fn 消去_si() {
         use crate::tree::to_sexpr;
         let pairs = parse("mi klama si cadzu").unwrap();
-        let s = to_sexpr(pairs, "");
+        let s = to_sexpr(pairs);
         assert!(!s.contains("\"klama\""), "{s}");
         assert!(s.contains("\"cadzu\""), "{s}");
         // 連続 si
         let pairs = parse("mi klama do si si cadzu").unwrap();
-        let s = to_sexpr(pairs, "");
+        let s = to_sexpr(pairs);
         assert!(!s.contains("\"do\""), "{s}");
         assert!(s.contains("\"cadzu\""), "{s}");
     }
@@ -312,7 +312,7 @@ mod tests {
         use crate::tree::to_sexpr;
         // 直前の .i まで遡って消去(.i は残る)
         let pairs = parse("mi klama .i do su tavla").unwrap();
-        let s = to_sexpr(pairs, "");
+        let s = to_sexpr(pairs);
         assert!(!s.contains("\"do\""), "{s}");
         assert!(s.contains("\"tavla\""), "{s}");
     }
@@ -322,7 +322,7 @@ mod tests {
         use crate::tree::to_sexpr;
         // 引用内の si は内容として残る
         let pairs = parse("lu mi klama si li'u cu melbi").unwrap();
-        let s = to_sexpr(pairs, "");
+        let s = to_sexpr(pairs);
         assert!(s.contains("\"klama\""), "{s}");
         assert!(s.contains("\"si\""), "{s}");
         // zo の引用対象としての si

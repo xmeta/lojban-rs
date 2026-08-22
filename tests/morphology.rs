@@ -102,7 +102,7 @@ fn 文中の語クラス認識() {
     use lojban::tree::to_sexpr;
     let input = "mi viska le gerku";
     let pairs = LojbanParser::parse(Rule::text, input).unwrap();
-    let s = to_sexpr(pairs, input);
+    let s = to_sexpr(pairs);
     assert!(s.contains("KOhA_clause"), "{s}");
     assert!(s.contains("BRIVLA_core \"viska\""), "{s}");
     assert!(s.contains("LE_clause"), "{s}");

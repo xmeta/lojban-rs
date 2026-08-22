@@ -18,10 +18,10 @@ use crate::grammar::Rule;
 /// use pest::Parser;
 ///
 /// let pairs = LojbanParser::parse(Rule::text, "mi klama").unwrap();
-/// let s = tree::to_sexpr(pairs, "mi klama");
+/// let s = tree::to_sexpr(pairs);
 /// assert!(s.starts_with("(text"), "{s}");
 /// ```
-pub fn to_sexpr(pairs: Pairs<'_, Rule>, _input: &str) -> String {
+pub fn to_sexpr(pairs: Pairs<'_, Rule>) -> String {
     let mut out = String::new();
     for pair in pairs {
         write_pair(pair, &mut out);
@@ -59,10 +59,10 @@ fn write_pair(pair: Pair<'_, Rule>, out: &mut String) {
 /// use pest::Parser;
 ///
 /// let pairs = LojbanParser::parse(Rule::text, "mi klama").unwrap();
-/// let s = tree::to_tree_string(pairs, "mi klama");
+/// let s = tree::to_tree_string(pairs);
 /// assert!(s.contains("text:"), "{s}");
 /// ```
-pub fn to_tree_string(pairs: Pairs<'_, Rule>, _input: &str) -> String {
+pub fn to_tree_string(pairs: Pairs<'_, Rule>) -> String {
     let mut out = String::new();
     for pair in pairs {
         write_tree(pair, 0, &mut out);
@@ -90,10 +90,10 @@ fn write_tree(pair: Pair<'_, Rule>, depth: usize, out: &mut String) {
 /// use pest::Parser;
 ///
 /// let pairs = LojbanParser::parse(Rule::text, "mi klama").unwrap();
-/// let j = tree::to_json(pairs, "mi klama");
+/// let j = tree::to_json(pairs);
 /// assert!(j.starts_with("{\"rule\":\"text\""), "{j}");
 /// ```
-pub fn to_json(pairs: Pairs<'_, Rule>, _input: &str) -> String {
+pub fn to_json(pairs: Pairs<'_, Rule>) -> String {
     let mut out = String::new();
     for pair in pairs {
         write_json(&pair, &mut out);
@@ -177,7 +177,7 @@ mod tests {
     fn sexpr_単語() {
         let input = "mi";
         let pairs = LojbanParser::parse(Rule::word, input).unwrap();
-        let s = to_sexpr(pairs, input);
+        let s = to_sexpr(pairs);
         assert_eq!(s, "(word (CMAVO_clause (CMAVO_core \"mi\")))");
     }
 
@@ -185,7 +185,7 @@ mod tests {
     fn tree_単語() {
         let input = "gerku";
         let pairs = LojbanParser::parse(Rule::word, input).unwrap();
-        let s = to_tree_string(pairs, input);
+        let s = to_tree_string(pairs);
         assert!(s.contains("word: \"gerku\""));
         assert!(s.contains("BRIVLA_clause"), "{s}");
         assert!(!s.contains("EOI"));
@@ -195,7 +195,7 @@ mod tests {
     fn json_単語() {
         let input = "mi";
         let pairs = LojbanParser::parse(Rule::word, input).unwrap();
-        let j = to_json(pairs, input);
+        let j = to_json(pairs);
         assert!(j.contains("\"rule\":\"word\""), "{j}");
         assert!(j.contains("CMAVO_clause"), "{j}");
         assert!(!j.contains("EOI"), "{j}");
