@@ -189,3 +189,26 @@ fn lohu_による誤文引用は_free() {
     assert!(s.contains("LOhU_core"), "{s}");
     assert!(s.contains("free"), "{s}");
 }
+
+#[test]
+fn 終端詞の標準アポストロフィ表記() {
+    // 相対節の閉鎖 ku'o
+    let s = parse_ok("le gerku poi cadzu ku'o cu batci");
+    assert!(s.contains("KUhO_core \"ku'o\""), "{s}");
+    // 所有の閉鎖 ge'u
+    let s = parse_ok("le gerku pe mi ge'u cu batci");
+    assert!(s.contains("GEhU_core \"ge'u\""), "{s}");
+    // ke グルーピングの閉鎖 ke'e
+    let s = parse_ok("mi viska ke cmalu ke'e nixli");
+    assert!(s.contains("KEhE_core \"ke'e\""), "{s}");
+}
+
+#[test]
+fn 挿入と呼格の標準閉鎖() {
+    // sei の閉鎖 se'u
+    let s = parse_ok("sei mi gleki se'u mi klama");
+    assert!(s.contains("SEhU_core \"se'u\""), "{s}");
+    // 呼格の閉鎖 do'u
+    let s = parse_ok("coi la alis. do'u mi klama");
+    assert!(s.contains("DOhU_core \"do'u\""), "{s}");
+}

@@ -272,14 +272,14 @@ CO_core = @{ ( ^"co") ~ &word_boundary }
 COI_core = @{ (^"coi" | ^"co'o" | ^"je'e" | ^"ju'i" | ^"re'i" | ^"nu'e" | ^"fi'i"
                | ^"fe'o" | ^"mu'o" | ^"mi'e" | ^"ta'a" | ^"pe'u" | ^"ki'e" | ^"doi") ~ &word_boundary }
 CU_core = @{ ( ^"cu") ~ &word_boundary }
-DOhU_core = @{ ( ^"dohu") ~ &word_boundary }
+DOhU_core = @{ ( ^"do'u" | ^"dohu") ~ &word_boundary }
 FA_core = @{ ( ^"fi'a" | ^"fa" | ^"fe" | ^"fi" | ^"fo" | ^"fu") ~ &word_boundary }
-FAhO_core = @{ ( ^"faho") ~ &word_boundary }
-FEhU_core = @{ ( ^"fehu") ~ &word_boundary }
-FIhO_core = @{ ( ^"fiho") ~ &word_boundary }
+FAhO_core = @{ ( ^"fa'o" | ^"faho") ~ &word_boundary }
+FEhU_core = @{ ( ^"fe'u" | ^"fehu") ~ &word_boundary }
+FIhO_core = @{ ( ^"fi'o" | ^"fiho") ~ &word_boundary }
 GA_core = @{ ( ^"ga" | ^"ge" | ^"go" | ^"gu") ~ &word_boundary }
-GAhO_core = @{ ( ^"kehi" | ^"gaho") ~ &word_boundary }
-GEhU_core = @{ ( ^"gehu") ~ &word_boundary }
+GAhO_core = @{ ( ^"ke'i" | ^"kehi" | ^"ga'o" | ^"gaho") ~ &word_boundary }
+GEhU_core = @{ ( ^"ge'u" | ^"gehu") ~ &word_boundary }
 GI_core = @{ ( ^"gi") ~ &word_boundary }
 GIhA_core = @{ ( ^"gi'a" | ^"gi'e" | ^"gi'i" | ^"gi'o" | ^"gi'u") ~ &word_boundary }
 GIhI_core = @{ ( ^"gihi") ~ &word_boundary }
@@ -288,7 +288,7 @@ GOhA_core = @{ ( ^"go'i" | ^"go'o" | ^"nei" | ^"ra'o" | ^"du" | ^"mo") ~ &word_b
 I_core = @{ ( ^"i") ~ &word_boundary }
 JOI_core = @{ ( ^"jo'e" | ^"joi" | ^"fa'u" | ^"ku'a") ~ &word_boundary }
 KE_core = @{ ( ^"ke") ~ &word_boundary }
-KEhE_core = @{ ( ^"kehe") ~ &word_boundary }
+KEhE_core = @{ ( ^"ke'e" | ^"kehe") ~ &word_boundary }
 KEI_core = @{ ( ^"kei") ~ &word_boundary }
 KOhA_core = @{ (^"zo'e" | ^"zu'i" | ^"ke'a" | ^"mi'o" | ^"ko'a" | ^"ko'e" | ^"ko'i"
                | ^"ko'o" | ^"ko'u" | ^"fo'a" | ^"fo'e" | ^"fo'i" | ^"fo'o" | ^"fo'u"
@@ -296,7 +296,7 @@ KOhA_core = @{ (^"zo'e" | ^"zu'i" | ^"ke'a" | ^"mi'o" | ^"ko'a" | ^"ko'e" | ^"ko
                | ^"mi" | ^"do" | ^"ti" | ^"ta" | ^"tu" | ^"ri" | ^"ra" | ^"ru" | ^"ko"
                | ^"ma" | ^"da" | ^"de" | ^"di") ~ &word_boundary }
 KU_core = @{ ( ^"ku") ~ &word_boundary }
-KUhO_core = @{ ( ^"kuho") ~ &word_boundary }
+KUhO_core = @{ ( ^"ku'o" | ^"kuho") ~ &word_boundary }
 LAhE_core = @{ ( ^"la'e" | ^"lu'e") ~ &word_boundary }
 LE_core = @{ ( ^"le'i" | ^"lo'i" | ^"la'i" | ^"lei" | ^"loi" | ^"lai" | ^"le" | ^"lo" | ^"la") ~ &word_boundary }
 LEhU_core = @{ ( ^"le'u" | ^"lehu") ~ &word_boundary }
@@ -317,7 +317,7 @@ PA_core = @{ (^"dau" | ^"fei" | ^"jai" | ^"rei" | ^"vai" | ^"so'a" | ^"so'e" | ^
 ROI_core = @{ ( ^"roi") ~ &word_boundary }
 SE_core = @{ ( ^"se" | ^"te" | ^"ve" | ^"xe") ~ &word_boundary }
 SEI_core = @{ ( ^"sei") ~ &word_boundary }
-SEhU_core = @{ ( ^"sehu") ~ &word_boundary }
+SEhU_core = @{ ( ^"se'u" | ^"sehu") ~ &word_boundary }
 TO_core = @{ ( ^"to") ~ &word_boundary }
 TOI_core = @{ ( ^"toi") ~ &word_boundary }
 UI_core = @{ (^"u'i" | ^"u'u" | ^"ru'e" | ^"ju'o" | ^"pe'i" | ^"sa'e" | ^"ta'o"
@@ -327,7 +327,7 @@ UI_core = @{ (^"u'i" | ^"u'u" | ^"ru'e" | ^"ju'o" | ^"pe'i" | ^"sa'e" | ^"ta'o"
                | ^"i'e" | ^"be'e" | ^"be'u" | ^"di'ai" | ^"fau'u" | ^"ge'e"
                | ^"li'a" | ^"ni'au" | ^"pei" | ^"o'i" | ^"su'a") ~ &word_boundary }
 VAU_core = @{ ( ^"vau") ~ &word_boundary }
-VUhO_core = @{ ( ^"vuho") ~ &word_boundary }
+VUhO_core = @{ ( ^"vu'o" | ^"vuho") ~ &word_boundary }
 Y_core = @{ ( ("y" | "Y")+) ~ &word_boundary }
 NAI_core = @{ ( ^"nai") ~ &word_boundary }
 PU_core   = @{ (^"pu" | ^"ca" | ^"ba") ~ &word_boundary }
