@@ -1,16 +1,24 @@
 # 開発ステータス
 
-## 現在の状態: v0.9 完成(全テストグリーン)
+## 現在の状態: v0.9.1 完成(全テストグリーン)
 
 - ライブラリ7 / 形態論11 / 統語49 / コーパス3 / doc 4 = 計74テスト全パス
+
+## v0.9.1 で追加(brivla 解析の最速化)
+- lujvo ルールの否定先読み(!gismu ~ !fuhivla)を削除。
+  BRIVLA の選択順序と全サイレントルール構造により受理集合は不変
+- brivla_core の選択順序を変更し、高価な fuhivla を最後に
+- 効果(ベンチ比): 全体で 30〜45% 高速化。
+  短文 278µs→153µs、lujvo 929µs→679µs、to_json 733µs→415µs
 
 ## v0.9 で追加
 - JSON 出力: CLI `--json` とライブラリ関数 `tree::to_json`
 - doc test 導入(parse / to_sexpr / to_tree_string / to_json の使用例がそのままテストに)
 - ベンチマーク導入(criterion、`cargo bench`)。基準値:
-  - parse 短文 約280µs / 描述+関係節 約716µs / 複合(接続詞・引用・mex)約815µs
-  - 形態論 gismu 約12µs / **lujvo 約930µs(rafsi 分解のバックトラックが重い。将来の最適化候補)**
-  - 出力 to_sexpr 約721µs / to_json 約733µs
+  - v0.9.1 時点: parse 短文 約153µs / 描述+関係節 約405µs / 複合 約518µs
+  - 形態論 gismu 約12µs / lujvo 約679µs(v0.9 から 27% 改善。なお gismu 比 57 倍で
+    rafsi 分解のバックトラックが残るボトルネック)
+  - 出力 to_sexpr 約469µs / to_json 約415µs
 
 ## v0.8 で追加
 - ZOI 引用(zoi DELIM 本文 DELIM): parse() 前処理で区切り語の対応を検証し、

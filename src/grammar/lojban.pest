@@ -227,9 +227,12 @@ zifcme = _{ !h ~ (nucleus | glide | h | consonant ~ !pause)* ~ consonant ~ &paus
 brivla = _{ !cmavo ~ initial_rafsi* ~ brivla_core }
 BRIVLA = _{ gismu_2 | lujvo | fuhivla }
 gismu_2 = _{ gismu }
-lujvo = _{ !gismu ~ !fuhivla ~ brivla }
+// 注: かつて !gismu ~ !fuhivla の否定先読みがあったが、BRIVLA の選択順序
+// (gismu_2 | lujvo | fuhivla)と全ルールがサイレントであることから受理集合は
+// 不変のため削除(否定先読みが全体解析を繰り返し大幅に遅かった)
+lujvo = _{ brivla }
 
-brivla_core = _{ fuhivla | gismu | CVV_final_rafsi | stressed_initial_rafsi ~ short_final_rafsi }
+brivla_core = _{ gismu | CVV_final_rafsi | stressed_initial_rafsi ~ short_final_rafsi | fuhivla }
 stressed_initial_rafsi = _{ stressed_extended_rafsi | stressed_y_rafsi | stressed_y_less_rafsi }
 initial_rafsi = _{ extended_rafsi | y_rafsi | !any_extended_rafsi ~ y_less_rafsi ~ !any_extended_rafsi }
 any_extended_rafsi = _{ fuhivla | extended_rafsi | stressed_extended_rafsi }
