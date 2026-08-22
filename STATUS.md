@@ -1,10 +1,17 @@
 # 開発ステータス
 
-## 現在の状態: v0.2 完成(全テストグリーン)
+## 現在の状態: v0.3 完成(全テストグリーン)
 
-- ライブラリ5 / 形態論11 / 統語17 / コーパス3 = 計36テスト全パス
-- テスト対象文: Tatoeba実文97文 + CLL風厳選例文46文 + 単体テスト用文
-- cargo build / cargo clippy --all-targets 警告ゼロ
+- ライブラリ5 / 形態論11 / 統語29 / コーパス3 = 計48テスト全パス
+- テスト対象文: Tatoeba実文97文 + CLL風厳選例文51文 + 単体テスト用文
+- cargo build / cargo fmt --check / cargo clippy --all-targets 警告ゼロ
+
+## v0.3 で追加(改善ラウンド、コミット 72569bf..68bd29e)
+- プロジェクト基盤: git 管理・GitHub Actions CI(fmt/clippy/test)・crates.io 用 metadata(v0.2.0)
+- BE…BEI 項連結(linked sumti): `mi klama be le zdani bei le zarci`、be'o 明示閉鎖
+- 引用統語: LU…li'u(文引用)/ zo(単語引用)= sumti、lo'u…le'u(誤文引用)= free
+- 終端詞・ni'o の標準アポストロフィ表記対応(li'u, ku'o, ke'e, se'u, do'u, ge'u, ke'i 等。h 表記も併用可)
+- 否定テスト(未閉鎖引用・項のない be 等)、CI 強化(--locked, concurrency)
 
 ## v0.2 で追加(コーパス駆動)
 - 時制・相(PU/CAhA/ZAhO/ZI/VA/TAhE)と selbri・文頭への接続
@@ -31,4 +38,4 @@
    明示的に `sp1?` を挟む(selbri の s_marks→tanru 間など)
 
 ## 次の拡張候補
-- 接続詞(ek/gihek/joik/gek)、mex 数理、引用統語接続、BAI タグ接続
+- 接続詞(ek/gihek/joik/gek)、mex 数理、BAI タグ接続、ZOI・入れ子引用
