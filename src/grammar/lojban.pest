@@ -56,7 +56,11 @@ relative_clause  = {
 bridi_tail = { selbri ~ tail_terms ~ (sp1 ~ gihek_link ~ sp1 ~ bridi_tail)* }
 tail_terms = { (sp1 ~ term)* ~ (sp1 ~ VAU_clause)? }
 
-selbri  = { s_marks? ~ sp1? ~ tense_marks? ~ sp1? ~ tanru ~ co_tail? }
+selbri  = { s_marks? ~ sp1? ~ tense_marks? ~ sp1? ~ tanru ~ co_tail?
+          | (NAhE_clause ~ sp1)? ~ guhek_selbri }
+// 述語の先接続(gu'e X gi Y 等。camxes の selbri_6 相当)
+guhek_selbri = { GUhA_clause ~ (sp1 ~ NAI_clause)? ~ sp1 ~ selbri ~ sp1 ~ GI_clause
+                 ~ sp1 ~ selbri }
 co_tail = _{ sp1 ~ CO_clause ~ sp1 ~ s_marks? ~ tanru }
 s_marks = _{ s_mark ~ (sp1 ~ s_mark)* }
 s_mark  = { NA_clause | SE_clause | NAhE_clause }
@@ -98,8 +102,9 @@ zoi_quote   = { ZOI_clause ~ sp1 ~ zoi_token ~ sp1 ~ word ~ sp1 ~ zoi_token }
 zoi_token   = @{ (ASCII_ALPHANUMERIC | "." | "," | "!" | "?" | "'")+ }
 
 // 接続詞(後置: A/JOI=項、GIhA=述語連鎖、JA=tanru、I+JA=文。先接続: GA...GI)
-ek_joik      = _{ (A_clause | JOI_clause | BIhI_clause) ~ (sp1 ~ NAI_clause)?
-                  ~ (sp1 ~ BO_clause)? }
+ek_joik      = _{ (A_clause | JOI_clause) ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clause)?
+                | (GAhO_clause ~ sp1)? ~ BIhI_clause ~ (sp1 ~ GAhO_clause)?
+                  ~ (sp1 ~ NAI_clause)? }
 gihek_link   = _{ GIhA_clause ~ (sp1 ~ NAI_clause)? }
 tanru_link   = _{ JA_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clause)? }
 gek_sentence = { GA_clause ~ sp1 ~ sentence ~ sp1 ~ GI_clause ~ sp1 ~ sentence }
@@ -329,6 +334,7 @@ BY_core   = @{ (^"by" | ^"cy" | ^"dy" | ^"fy" | ^"gy" | ^"jy" | ^"ky" | ^"ly"
               | ^"zy" | ^"abu" | ^"ebu" | ^"ibu" | ^"obu" | ^"ubu" | ^"ybu")
               ~ &word_boundary }
 BU_core   = @{ ( ^"bu") ~ &word_boundary }
+GUhA_core = @{ ( ^"gu'a" | ^"gu'e" | ^"gu'o" | ^"gu'u") ~ &word_boundary }
 SI_core   = @{ ( ^"si") ~ &word_boundary }
 SU_core   = @{ ( ^"su") ~ &word_boundary }
 JA_core = @{ ( ^"ja" | ^"je" | ^"jo" | ^"ju") ~ &word_boundary }
@@ -432,6 +438,7 @@ VEhO_clause = { VEhO_core }
 LOhO_clause = { LOhO_core }
 BY_clause   = { BY_core }
 BU_clause   = { BU_core }
+GUhA_clause = { GUhA_core }
 SI_clause   = { SI_core }
 SU_clause   = { SU_core }
 JA_clause = { JA_core }

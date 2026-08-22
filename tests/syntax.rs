@@ -434,3 +434,21 @@ fn bu_なしでは従来どおり() {
     let s = parse_ok("mi prami do");
     assert!(!s.contains("bu_lerfu"), "{s}");
 }
+
+#[test]
+fn 先接続_述語_guhe() {
+    let s = parse_ok("mi gu'e klama gi cadzu");
+    assert!(s.contains("GUhA_core \"gu'e\""), "{s}");
+    // NAhE との組み合わせ(camxes selbri_6 準拠)
+    let s = parse_ok("ta na'e gu'e melbi gi cmalu");
+    assert!(s.contains("NAhE_core \"na'e\""), "{s}");
+}
+
+#[test]
+fn gaho_間隔端点() {
+    let s = parse_ok("mi klama pa ga'o bi'o ke'i re");
+    assert!(s.contains("GAhO_core \"ga'o\""), "{s}");
+    let s = parse_ok("mi klama pa bi'o re");
+    // 従来形(GAhO 省略)も後方互換
+    assert!(s.contains("BIhI_core \"bi'o\""), "{s}");
+}
