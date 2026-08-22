@@ -110,7 +110,8 @@ lohu_quote = { LOhU_clause ~ sp0 ~ (!LEhU_clause ~ word) ~ (sp1 ~ !LEhU_clause ~
 frees_s   = _{ free ~ (sp1 ~ free)* }
 frees_m   = _{ (sp1 ~ free)+ }
 free      = { free_unit ~ (sp1 ~ free_unit)* }
-free_unit = { ui_free | sei_free | to_quote | vocative | lohu_quote }
+free_unit = { ui_free | sei_free | to_quote | vocative | lohu_quote
+           | SI_clause | SU_clause }
 ui_free  = { UI_clause ~ (sp1 ~ NAI_clause)? }
 sei_free = { SEI_clause ~ sp1 ~ sentence ~ (sp1 ~ SEhU_clause)? }
 to_quote = { TO_clause ~ (sp0 ~ (word ~ (sp1 ~ word)*)?)? ~ (sp1 ~ TOI_clause)? }
@@ -324,6 +325,8 @@ BY_core   = @{ (^"by" | ^"cy" | ^"dy" | ^"fy" | ^"gy" | ^"jy" | ^"ky" | ^"ly"
               | ^"zy" | ^"abu" | ^"ebu" | ^"ibu" | ^"obu" | ^"ubu" | ^"ybu")
               ~ &word_boundary }
 BU_core   = @{ ( ^"bu") ~ &word_boundary }
+SI_core   = @{ ( ^"si") ~ &word_boundary }
+SU_core   = @{ ( ^"su") ~ &word_boundary }
 JA_core = @{ ( ^"ja" | ^"je" | ^"jo" | ^"ju") ~ &word_boundary }
 // 結合形(.ijanai 等)用: 語境界ガードなしの素の JA
 JA_bare = _{ ^"ja" | ^"je" | ^"jo" | ^"ju" }
@@ -425,6 +428,8 @@ VEhO_clause = { VEhO_core }
 LOhO_clause = { LOhO_core }
 BY_clause   = { BY_core }
 BU_clause   = { BU_core }
+SI_clause   = { SI_core }
+SU_clause   = { SU_core }
 JA_clause = { JA_core }
 JOI_clause = { JOI_core }
 KE_clause = { KE_core }

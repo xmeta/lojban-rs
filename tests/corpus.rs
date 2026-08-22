@@ -8,8 +8,6 @@ use pest::Parser;
 
 /// 既知の未対応・非標準文(解析に失敗することが正)
 const KNOWN_FAILURES: &[&str] = &[
-    // SU(消去)は未実装
-    "su",
     // 非標準形の借用語(zantufa でも受理されない)
     "rutrpinia",
     "rutrxanonaskuamosa",

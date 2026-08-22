@@ -34,20 +34,128 @@ pub use grammar::{LojbanParser, Rule};
 /// assert!(pairs.count() >= 1);
 /// ```
 pub fn parse(text: &str) -> Result<Pairs<'_, Rule>, Error<Rule>> {
-    let normalized = normalize_zoi(text).map_err(|msg| {
+    fn leak_parse(s: String) -> Result<Pairs<'static, Rule>, Error<Rule>> {
+        let leaked: &'static str = Box::leak(s.into_boxed_str());
+        LojbanParser::parse(Rule::text, leaked)
+    }
+    let err = |msg: String| {
         let end = text.len();
         Error::new_from_span(
             ErrorVariant::CustomError { message: msg },
             Span::new(text, 0, end).unwrap_or_else(|| Span::new(text, 0, 0).unwrap()),
         )
-    })?;
-    match normalized {
-        Cow::Borrowed(s) => LojbanParser::parse(Rule::text, s),
-        Cow::Owned(s) => {
-            let leaked: &'static str = Box::leak(s.into_boxed_str());
-            LojbanParser::parse(Rule::text, leaked)
+    };
+    let normalized = normalize_zoi(text).map_err(err)?;
+    let erased = apply_erasure(normalized.as_ref()).map_err(err)?;
+    match erased {
+        Cow::Borrowed(_) => match normalized {
+            Cow::Borrowed(s) => LojbanParser::parse(Rule::text, s),
+            Cow::Owned(s) => leak_parse(s),
+        },
+        Cow::Owned(s) => leak_parse(s),
+    }
+}
+
+/// 消去語(si / su)の意味論的処理。
+///
+/// - `si`: 直前の語を消去(文区切りは跨がない、連続可)
+/// - `su`: 直前の文区切り(`.i …` / `ni'o` / `niho`)まで遡って消去
+///
+/// 引用(lu…li'u、lohu…lehu)内の si/su は内容として保護し、
+/// `zo` の直後の語も保護する。消去が行われた場合は語を空白区切りで
+/// 再構成した正規化テキストを返す(解析木は消去後に基づく)。
+fn apply_erasure(text: &str) -> Result<Cow<'_, str>, String> {
+    let b = text.as_bytes();
+    let mut spans: Vec<(usize, usize)> = Vec::new();
+    let mut i = 0usize;
+    while i < b.len() {
+        while i < b.len() && b[i].is_ascii_whitespace() {
+            i += 1;
+        }
+        if i >= b.len() {
+            break;
+        }
+        let start = i;
+        while i < b.len() && !b[i].is_ascii_whitespace() {
+            i += 1;
+        }
+        spans.push((start, i));
+    }
+
+    // 前置のポーズ記号(.)等を除いた語形
+    fn bare(tok: &str) -> &str {
+        tok.trim_start_matches(['.', ',', '!', '?'])
+    }
+    let is_sep = |t: &str| matches!(bare(t).to_ascii_lowercase().as_str(), "i" | "niho" | "ni'o");
+
+    let mut keep = vec![true; spans.len()];
+    let mut lu_depth: i32 = 0;
+    let mut lohu_depth: i32 = 0;
+    let mut prev_zo = false;
+    let mut changed = false;
+
+    for k in 0..spans.len() {
+        let t = &text[spans[k].0..spans[k].1];
+        let bb = bare(t).to_ascii_lowercase();
+        if lu_depth > 0 || lohu_depth > 0 {
+            match bb.as_str() {
+                "lu" => lu_depth += 1,
+                "li'u" | "lihu" => lu_depth -= 1,
+                "lo'u" | "lohu" => lohu_depth += 1,
+                "le'u" | "lehu" => lohu_depth -= 1,
+                _ => {}
+            }
+            prev_zo = false;
+            continue;
+        }
+        match bb.as_str() {
+            "lu" => lu_depth += 1,
+            "lo'u" | "lohu" => lohu_depth += 1,
+            "zo" => prev_zo = true,
+            _ => {
+                let protected = prev_zo;
+                prev_zo = false;
+                if protected {
+                    continue;
+                }
+                if bb == "si" {
+                    let mut j = k;
+                    while j > 0 {
+                        j -= 1;
+                        if keep[j] && !is_sep(&text[spans[j].0..spans[j].1]) {
+                            keep[j] = false;
+                            break;
+                        }
+                    }
+                    keep[k] = false;
+                    changed = true;
+                } else if bb == "su" {
+                    for j in (0..k).rev() {
+                        if is_sep(&text[spans[j].0..spans[j].1]) {
+                            break;
+                        }
+                        keep[j] = false;
+                    }
+                    keep[k] = false;
+                    changed = true;
+                }
+            }
         }
     }
+
+    if !changed {
+        return Ok(Cow::Borrowed(text));
+    }
+    let mut out = String::with_capacity(text.len());
+    for (idx, alive) in keep.iter().enumerate() {
+        if *alive {
+            if !out.is_empty() {
+                out.push(' ');
+            }
+            out.push_str(&text[spans[idx].0..spans[idx].1]);
+        }
+    }
+    Ok(Cow::Owned(out))
 }
 
 /// ZOI 引用(`zoi DELIM 本文 DELIM`)の事前スキャン。
@@ -143,6 +251,42 @@ mod tests {
         assert!(parse("qqq").is_err());
         // 空の描述
         assert!(parse("le cu").is_err());
+    }
+
+    #[test]
+    fn 消去_si() {
+        use crate::tree::to_sexpr;
+        let pairs = parse("mi klama si cadzu").unwrap();
+        let s = to_sexpr(pairs, "");
+        assert!(!s.contains("\"klama\""), "{s}");
+        assert!(s.contains("\"cadzu\""), "{s}");
+        // 連続 si
+        let pairs = parse("mi klama do si si cadzu").unwrap();
+        let s = to_sexpr(pairs, "");
+        assert!(!s.contains("\"do\""), "{s}");
+        assert!(s.contains("\"cadzu\""), "{s}");
+    }
+
+    #[test]
+    fn 消去_su() {
+        use crate::tree::to_sexpr;
+        // 直前の .i まで遡って消去(.i は残る)
+        let pairs = parse("mi klama .i do su tavla").unwrap();
+        let s = to_sexpr(pairs, "");
+        assert!(!s.contains("\"do\""), "{s}");
+        assert!(s.contains("\"tavla\""), "{s}");
+    }
+
+    #[test]
+    fn 引用内とzo直後の消去語は保護される() {
+        use crate::tree::to_sexpr;
+        // 引用内の si は内容として残る
+        let pairs = parse("lu mi klama si li'u cu melbi").unwrap();
+        let s = to_sexpr(pairs, "");
+        assert!(s.contains("\"klama\""), "{s}");
+        assert!(s.contains("\"si\""), "{s}");
+        // zo の引用対象としての si
+        assert!(parse("mi cusku zo si").is_ok());
     }
 
     #[test]
