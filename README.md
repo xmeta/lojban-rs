@@ -87,6 +87,12 @@ src/
 | cmavo クラス | 各 selmaho の語彙リスト(`*_core`)+ 語境界ラッパー(`*_clause`) |
 | 統語 | text → content → sentence → terms/sumti/selbri/tanru → free |
 
+## 性能
+
+同一文章での簡易ベンチマークでは、リファレンス実装 camxes.js(JS)の
+約 5〜8 倍の速度で解析できる(詳細・注意書きは [docs/comparison.md](docs/comparison.md))。
+再現: `cargo run --release --example speed_check`
+
 ## 参考資料
 
 - **主移植元**: [guskant/gerna_cipra](https://github.com/guskant/gerna_cipra) `zantufa-1.9999.peg`
