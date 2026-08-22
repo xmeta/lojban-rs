@@ -57,7 +57,7 @@ println!("{}", tree::to_sexpr(pairs, "mi viska le gerku"));
 ## 開発
 
 ```console
-$ cargo test      # 全テスト(65件、実文155文を含む)
+$ cargo test      # 全テスト(67件、実文156文を含む)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 ```
@@ -95,15 +95,15 @@ src/
 |---|---|
 | `tests/morphology.rs` | 語形認識(gismu/lujvo/cmevla/ストレス等) |
 | `tests/syntax.rs` | 統語構造の検証 |
-| `tests/corpus.rs` | **Tatoeba 実文97文**(CC BY 2.0 FR)+ CLL 風厳選例文58文 |
+| `tests/corpus.rs` | **Tatoeba 実文97文**(CC BY 2.0 FR)+ CLL 風厳選例文59文 |
 
 実文コーパスは [Tatoeba](https://tatoeba.org) のロジバン文を使用しています。
 
 ## 既知の制限・ロードマップ
 
 - 接続詞は基本形対応済み(`bo` グルーピング・BIhI 間隔接続 `bi'o bi'i mi'i` を含む)。GUhEK 等の詳細制御は未実装
-- 数理表現(mex)は LI…LOhO の項として対応(`li re su'i re`、`vei … ve'o` 括弧、
-  `ki'o` `ma'u` `ni'u`)。演算子は左結合の単純連鎖で、描述内数量詞への埋め込みは未対応
+- 数理表現(mex)は LI…LOhO の項と描述内数量詞(`le re su'i ci gerku`)に対応
+  (`vei … ve'o` 括弧、`ki'o` `ma'u` `ni'u`)。演算子は左結合の単純連鎖
 - lerfu(BY/BU)、消去(SI/SU)未実装
 - 引用は `lu … li'u` / `zo` / `lo'u … le'u` のみ対応。ZOI と入れ子引用は未対応
   (pest に後方参照がなく、純粋な PEG では区切り語の再照合ができないため)
