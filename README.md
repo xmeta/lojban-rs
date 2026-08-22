@@ -57,7 +57,7 @@ println!("{}", tree::to_sexpr(pairs, "mi viska le gerku"));
 ## 開発
 
 ```console
-$ cargo test      # 全テスト(67件、実文156文を含む)
+$ cargo test      # 全テスト(69件、実文157文を含む)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 ```
@@ -95,7 +95,7 @@ src/
 |---|---|
 | `tests/morphology.rs` | 語形認識(gismu/lujvo/cmevla/ストレス等) |
 | `tests/syntax.rs` | 統語構造の検証 |
-| `tests/corpus.rs` | **Tatoeba 実文97文**(CC BY 2.0 FR)+ CLL 風厳選例文59文 |
+| `tests/corpus.rs` | **Tatoeba 実文97文**(CC BY 2.0 FR)+ CLL 風厳選例文60文 |
 
 実文コーパスは [Tatoeba](https://tatoeba.org) のロジバン文を使用しています。
 
@@ -105,8 +105,9 @@ src/
 - 数理表現(mex)は LI…LOhO の項と描述内数量詞(`le re su'i ci gerku`)に対応
   (`vei … ve'o` 括弧、`ki'o` `ma'u` `ni'u`)。演算子は左結合の単純連鎖
 - lerfu(BY/BU)、消去(SI/SU)未実装
-- 引用は `lu … li'u` / `zo` / `lo'u … le'u` のみ対応。ZOI と入れ子引用は未対応
-  (pest に後方参照がなく、純粋な PEG では区切り語の再照合ができないため)
+- 引用は `lu … li'u`(入れ子可)/ `zo` / `lo'u … le'u` / `zoi DELIM 本文 DELIM` に対応。
+  ZOI は区切り語対応を解析前スキャンで検証し、本文は解析木上 `zo'e` に正規化される
+  (pest に後方参照がないための設計。未閉鎖・不一致はエラー)
 - タグは FA と BAI(bau mu'i 等。項と文頭に接続)に対応
 - cmavo 語彙は標準 CLL 系の主要語に絞り込み(実験的 cmavo は未収録。
   `lojban.pest` の各 `*_core` に選択肢を追加するだけで拡張可能)
