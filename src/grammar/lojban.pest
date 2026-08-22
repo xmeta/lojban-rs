@@ -1,0 +1,402 @@
+// =====================================================================
+// ロジバン PEG 文法
+// 原典: zantufa-1.9999.peg (guskant/gerna_cipra) を Rust/pest 向けに移植
+//
+// 移植方針:
+// - zantufa のルール名・構造を可能な限り踏襲する
+// - WHITESPACE ルールは定義しない(ポーズ=空白・. , ! ? は意味を持つため
+//   sp ルールで明示管理する)
+// - 補助ルールは silent(_{}) にして解析木を清潔に保つ
+// - 語彙リスト(cmavo 各クラス)は実験的 cmavo を除く標準 CLL 系の主要語に絞った
+//   (拡張は各クラスの選択肢に追加するだけでよい)
+// =====================================================================
+
+// ---------------------------------------------------------------------
+// 統語層(zantufa の text/statement/sentence/sumti/selbri 構造をコアサブセット
+// として移植。トークン間のポーズは sp1 で明示接続する。
+// 接続詞(gek/ek/gihek/joik)・mex・引用(LU/ZO/ZOI/LOhU)は将来拡張)
+// ---------------------------------------------------------------------
+text = { SOI ~ sp0 ~ content? ~ sp0 ~ EOI }
+
+content = { lead? ~ item ~ (sp1 ~ sep ~ sp1 ~ item)* }
+lead    = _{ sep ~ sp1 }
+sep     = { I_clause | NIhO_clause }
+item    = { sentence | free | Y_clause | fragment | tense_item }
+fragment  = { terms ~ (sp1 ~ VAU_clause)? }
+tense_item = { tense_mark }
+
+sentence   = { frees_s? ~ sp1? ~ tense_marks? ~ sp1? ~ (terms_full | bridi_tail) ~ frees_m? }
+terms_full = { terms ~ (sp1 ~ CU_clause)? ~ sp1 ~ frees_mid? ~ bridi_tail }
+frees_mid  = _{ free ~ (sp1 ~ free)* }
+
+terms = { term ~ (sp1 ~ term)* }
+term  = { tagged | sumti }
+tagged = { FA_clause ~ sp1 ~ sumti }
+
+sumti      = { sumti_core ~ (sp1 ~ relative_clauses)? }
+sumti_core = _{ KOhA_clause | desc | quant_desc | quant_selbri | number | abstraction }
+quant_selbri = { number ~ sp1 ~ selbri ~ (sp1 ~ KU_clause)? }
+
+desc        = { LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
+quant_desc  = { number ~ sp1 ~ LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
+number      = { PA_clause ~ (sp1 ~ PA_clause)* }
+abstraction = { NU_clause ~ sp1 ~ sentence ~ (sp1 ~ KEI_clause)? }
+sumti_tail  = _{ (number ~ sp1)? ~ selbri }
+
+relative_clauses = { relative_clause ~ (sp1 ~ relative_clause)* }
+relative_clause  = {
+    NOI_clause ~ sp1 ~ sentence ~ (sp1 ~ KUhO_clause)?
+  | GOI_clause ~ sp1 ~ sumti ~ (sp1 ~ GEhU_clause)?
+}
+
+bridi_tail = { selbri ~ tail_terms }
+tail_terms = { (sp1 ~ term)* ~ (sp1 ~ VAU_clause)? }
+
+selbri  = { s_marks? ~ sp1? ~ tense_marks? ~ sp1? ~ tanru ~ co_tail? }
+co_tail = _{ sp1 ~ CO_clause ~ sp1 ~ s_marks? ~ tanru }
+s_marks = _{ s_mark ~ (sp1 ~ s_mark)* }
+s_mark  = { NA_clause | SE_clause }
+
+// 時制・相・方位の連続(zantufa の tag/tense の簡略版。ku による明示閉鎖も許容)
+tense_marks = _{ tense_mark ~ (sp1 ~ tense_mark)* ~ (sp1 ~ KU_clause)? }
+tense_mark  = _{ PU_clause | CAhA_clause | ZAhO_clause | ZI_clause | VA_clause
+               | TAhE_clause | ROI_clause }
+
+tanru      = { tanru_unit ~ (sp1 ~ tanru_unit)* }
+tanru_unit = { BRIVLA_clause | CMEVLA_clause | GOhA_clause | nu_form | ke_group | me_form }
+nu_form    = { s_marks? ~ sp1? ~ NU_clause ~ sp1 ~ sentence ~ (sp1 ~ KEI_clause)? }
+me_form    = { ME_clause ~ sp1 ~ sumti }
+ke_group   = { KE_clause ~ sp1 ~ selbri ~ (sp1 ~ KEhE_clause)? }
+
+frees_s   = _{ free ~ (sp1 ~ free)* }
+frees_m   = _{ (sp1 ~ free)+ }
+free      = { free_unit ~ (sp1 ~ free_unit)* }
+free_unit = { ui_free | sei_free | to_quote | vocative }
+ui_free  = { UI_clause ~ (sp1 ~ NAI_clause)? }
+sei_free = { SEI_clause ~ sp1 ~ sentence ~ (sp1 ~ SEhU_clause)? }
+to_quote = { TO_clause ~ (sp0 ~ (word ~ (sp1 ~ word)*)?)? ~ (sp1 ~ TOI_clause)? }
+
+vocative     = { COI_clause ~ (sp1 ~ vocative_arg)? ~ (sp1 ~ DOhU_clause)? }
+vocative_arg = _{ CMEVLA_clause | desc }
+
+// 語ラッパー(後続ポーズを自己消費)
+word = { CMEVLA_clause | CMAVO_clause | BRIVLA_clause }
+
+// 1文字以上のポーズ / 0文字以上のポーズ
+sp1 = _{ space_char+ }
+sp0 = _{ space_char* }
+
+// 語境界: 直後が字母・数字・アポストロフィでないこと(語の後方一致を防ぐ)
+word_boundary = _{ !ASCII_ALPHANUMERIC ~ !"'" }
+
+space_char = _{ " " | "\t" | "\n" | "\r" | "." | "," | "!" | "?" }
+
+// ---------------------------------------------------------------------
+// 文字レベルの定義(zantufa の子音規則には子音連結の合法性が組み込まれている)
+// ---------------------------------------------------------------------
+a = _{ "a" | "A" }
+e = _{ "e" | "E" }
+i = _{ "i" | "I" }
+o = _{ "o" | "O" }
+u = _{ "u" | "U" }
+y = _{ ("y" | "Y") ~ !(!("y" | "Y") ~ nucleus) }
+
+l = _{ ("l" | "L") ~ !h ~ !glide ~ !("l" | "L") }
+m = _{ ("m" | "M") ~ !h ~ !glide ~ !("m" | "M") }
+n = _{ ("n" | "N") ~ !h ~ !glide ~ !("n" | "N") ~ !affricate }
+r = _{ ("r" | "R") ~ !h ~ !glide ~ !("r" | "R") }
+b = _{ ("b" | "B") ~ !h ~ !glide ~ !("b" | "B") ~ !unvoiced }
+d = _{ ("d" | "D") ~ !h ~ !glide ~ !("d" | "D") ~ !unvoiced }
+g = _{ ("g" | "G") ~ !h ~ !glide ~ !("g" | "G") ~ !unvoiced }
+v = _{ ("v" | "V") ~ !h ~ !glide ~ !("v" | "V") ~ !unvoiced }
+j = _{ ("j" | "J") ~ !h ~ !glide ~ !("j" | "J") ~ !("z" | "Z") ~ !unvoiced }
+z = _{ ("z" | "Z") ~ !h ~ !glide ~ !("z" | "Z") ~ !("j" | "J") ~ !unvoiced }
+s = _{ ("s" | "S") ~ !h ~ !glide ~ !("s" | "S") ~ !("c" | "C") ~ !voiced }
+c = _{ ("c" | "C") ~ !h ~ !glide ~ !("c" | "C") ~ !("s" | "S") ~ !("x" | "X") ~ !voiced }
+x = _{ ("x" | "X") ~ !h ~ !glide ~ !("x" | "X") ~ !("c" | "C") ~ !("k" | "K") ~ !voiced }
+k = _{ ("k" | "K") ~ !h ~ !glide ~ !("k" | "K") ~ !("x" | "X") ~ !voiced }
+f = _{ ("f" | "F") ~ !h ~ !glide ~ !("f" | "F") ~ !voiced }
+p = _{ ("p" | "P") ~ !h ~ !glide ~ !("p" | "P") ~ !voiced }
+t = _{ ("t" | "T") ~ !h ~ !glide ~ !("t" | "T") ~ !voiced }
+
+consonant = _{ voiced | unvoiced | syllabic }
+syllabic  = _{ l | m | n | r }
+voiced    = _{ b | d | g | j | v | z }
+unvoiced  = _{ c | f | k | p | s | t | x }
+
+affricate = _{ t ~ c | t ~ s | d ~ j | d ~ z }
+liquid    = _{ l | r }
+other     = _{ p | t ~ !l | k | f | x | b | d ~ !l | g | v | m | n ~ !liquid }
+sibilant  = _{ c | s ~ !x | (j | z) ~ !n ~ !liquid }
+
+initial = _{ ( affricate | (sibilant? ~ other? ~ liquid?) ) ~ !consonant ~ !glide }
+initial_pair = _{ &initial ~ consonant ~ consonant ~ !consonant }
+
+onset  = _{ h | glide | initial }
+nucleus = _{ vowel | diphthong | y ~ !nucleus }
+vowel  = _{ (a | e | i | o | u) ~ !nucleus }
+diphthong = _{ (a ~ i ~ !i | a ~ u ~ !u | e ~ i ~ !i | o ~ i ~ !i) ~ !nucleus }
+glide  = _{ (i | u) ~ &nucleus }
+h      = _{ ("'" | "h") ~ &nucleus }
+
+cluster = _{ consonant ~ consonant+ }
+
+// ---------------------------------------------------------------------
+// 音節・ストレス(zantufa の stress 先読み機構)
+// ---------------------------------------------------------------------
+any_syllable          = _{ onset ~ nucleus ~ coda? | consonantal_syllable }
+syllable              = _{ onset ~ !y ~ nucleus ~ coda? }
+consonantal_syllable  = _{ consonant ~ &syllabic ~ coda }
+coda                  = _{ !any_syllable ~ consonant ~ &any_syllable | syllabic? ~ consonant? ~ &pause }
+final_syllable        = _{ onset ~ !y ~ !stressed ~ nucleus ~ !cmevla ~ &word_boundary }
+
+stress            = _{ (consonant | glide)* ~ h? ~ y? ~ syllable ~ pause }
+stressed          = _{ onset ~ ("A" | "E" | "I" | "O" | "U") }
+stressed_syllable = _{ &stressed ~ syllable | syllable ~ &stress }
+stressed_diphthong = _{ &stressed ~ diphthong | diphthong ~ &stress }
+stressed_vowel    = _{ &stressed ~ vowel | vowel ~ &stress }
+
+unstressed_syllable  = _{ !stressed ~ syllable ~ !stress | consonantal_syllable }
+unstressed_diphthong = _{ !stressed ~ diphthong ~ !stress }
+unstressed_vowel     = _{ !stressed ~ vowel ~ !stress }
+
+// ---------------------------------------------------------------------
+// ポーズ・単語境界
+// ---------------------------------------------------------------------
+pause     = _{ space_char+ | EOF_rule }
+EOF_rule  = _{ !ANY }
+
+// ---------------------------------------------------------------------
+// 形態論: cmavo / cmevla / brivla / rafsi
+// ---------------------------------------------------------------------
+cmavo = _{ !cmevla ~ !CVCy_lujvo ~ cmavo_form ~ &word_boundary }
+
+cmavo_form = _{
+    !h ~ !cluster ~ onset ~ (nucleus ~ h)* ~ (!stressed ~ nucleus | nucleus ~ !cluster)
+    | y+
+}
+
+CVCy_lujvo = _{
+    CVC_rafsi ~ y ~ h? ~ initial_rafsi* ~ brivla_core
+    | stressed_CVC_rafsi ~ y ~ short_final_rafsi
+}
+
+cmevla = _{ jbocme | zifcme }
+jbocme = _{ &zifcme ~ any_syllable* ~ &pause }
+zifcme = _{ !h ~ (nucleus | glide | h | consonant ~ !pause)* ~ consonant ~ &pause }
+
+brivla = _{ !cmavo ~ initial_rafsi* ~ brivla_core }
+BRIVLA = _{ gismu_2 | lujvo | fuhivla }
+gismu_2 = _{ gismu }
+lujvo = _{ !gismu ~ !fuhivla ~ brivla }
+
+brivla_core = _{ fuhivla | gismu | CVV_final_rafsi | stressed_initial_rafsi ~ short_final_rafsi }
+stressed_initial_rafsi = _{ stressed_extended_rafsi | stressed_y_rafsi | stressed_y_less_rafsi }
+initial_rafsi = _{ extended_rafsi | y_rafsi | !any_extended_rafsi ~ y_less_rafsi ~ !any_extended_rafsi }
+any_extended_rafsi = _{ fuhivla | extended_rafsi | stressed_extended_rafsi }
+extended_rafsi = _{ brivla_rafsi | fuhivla_rafsi }
+stressed_extended_rafsi = _{ stressed_brivla_rafsi | stressed_fuhivla_rafsi }
+
+stressed_brivla_rafsi = _{ &unstressed_syllable ~ brivla_head ~ stressed_syllable ~ h ~ y }
+brivla_rafsi = _{ &(syllable ~ consonantal_syllable* ~ syllable) ~ brivla_head ~ h ~ y ~ h? }
+stressed_fuhivla_rafsi = _{ fuhivla_head ~ stressed_syllable ~ consonantal_syllable* ~ !h ~ onset ~ y }
+fuhivla_rafsi = _{ &unstressed_syllable ~ fuhivla_head ~ !h ~ onset ~ y ~ h? }
+
+fuhivla = _{ fuhivla_head ~ stressed_syllable ~ consonantal_syllable* ~ final_syllable }
+fuhivla_head = _{ !rafsi_string ~ brivla_head }
+brivla_head = _{ !cmavo ~ !slinkuhi ~ !h ~ &onset ~ unstressed_syllable* }
+slinkuhi = _{ !rafsi_string ~ consonant ~ rafsi_string }
+rafsi_string = _{
+    y_less_rafsi*
+    ~ ( gismu | CVV_final_rafsi | stressed_y_less_rafsi ~ short_final_rafsi | y_rafsi
+      | stressed_y_rafsi | stressed_y_less_rafsi? ~ initial_pair ~ y
+      | hy_rafsi | stressed_hy_rafsi )
+}
+
+gismu = _{
+    ( initial_pair ~ stressed_vowel | consonant ~ stressed_vowel ~ consonant )
+    ~ &final_syllable ~ consonant ~ vowel ~ &word_boundary
+}
+CVV_final_rafsi = _{ consonant ~ stressed_vowel ~ h ~ &final_syllable ~ vowel ~ &word_boundary }
+short_final_rafsi = _{ &final_syllable ~ (consonant ~ diphthong | initial_pair ~ vowel) ~ &word_boundary }
+
+stressed_y_rafsi = _{ (stressed_long_rafsi | stressed_CVC_rafsi) ~ y }
+stressed_y_less_rafsi = _{ stressed_CVC_rafsi ~ !y | stressed_CCV_rafsi | stressed_CVV_rafsi }
+stressed_long_rafsi = _{ initial_pair ~ stressed_vowel ~ consonant | consonant ~ stressed_vowel ~ consonant ~ consonant }
+stressed_CVC_rafsi = _{ consonant ~ stressed_vowel ~ consonant }
+stressed_CCV_rafsi = _{ initial_pair ~ stressed_vowel }
+stressed_CVV_rafsi = _{ consonant ~ (unstressed_vowel ~ h ~ stressed_vowel | stressed_diphthong) ~ r_hyphen? }
+
+y_rafsi = _{ (long_rafsi | CVC_rafsi) ~ y ~ h? }
+y_less_rafsi = _{ !y_rafsi ~ !stressed_y_rafsi ~ !hy_rafsi ~ !stressed_hy_rafsi ~ (CVC_rafsi | CCV_rafsi | CVV_rafsi) ~ !h }
+hy_rafsi = _{ (long_rafsi ~ vowel | CCV_rafsi | CVV_rafsi) ~ h ~ y ~ h? }
+stressed_hy_rafsi = _{ (long_rafsi ~ stressed_vowel | stressed_CCV_rafsi | stressed_CVV_rafsi) ~ h ~ y }
+
+long_rafsi = _{ initial_pair ~ unstressed_vowel ~ consonant | consonant ~ unstressed_vowel ~ consonant ~ consonant }
+CVC_rafsi = _{ consonant ~ unstressed_vowel ~ consonant }
+CCV_rafsi = _{ initial_pair ~ unstressed_vowel }
+CVV_rafsi = _{ consonant ~ (unstressed_vowel ~ h ~ unstressed_vowel | unstressed_diphthong) ~ r_hyphen? }
+r_hyphen = _{ r ~ &consonant | n ~ &r }
+
+// ---------------------------------------------------------------------
+// cmavo クラス(標準 CLL 系の主要語。アポストロフィ付き語は ^"...\" 表記)
+// ---------------------------------------------------------------------
+A_core = @{ ( "a" | "e" | "o" | "u") ~ &word_boundary }
+BAI_core = @{ (^"bau" | ^"bai" | ^"cau" | ^"cu'u" | ^"mu'i" | ^"mu'u" | ^"ni'i"
+               | ^"ri'a" | ^"ta'i" | ^"ki'u" | ^"kai" | ^"pa'u" | ^"se'o" | ^"si'u"
+               | ^"va'o" | ^"zu'e" | ^"ja'e" | ^"ra'i" | ^"ri'i" | ^"de'i" | ^"du'o"
+               | ^"fau" | ^"ka'a") ~ &word_boundary }
+BE_core = @{ ( ^"be") ~ &word_boundary }
+BEI_core = @{ ( ^"bei") ~ &word_boundary }
+BEhO_core = @{ ( ^"beho") ~ &word_boundary }
+BO_core = @{ ( ^"bo") ~ &word_boundary }
+BOI_core = @{ ( ^"boi") ~ &word_boundary }
+CO_core = @{ ( ^"co") ~ &word_boundary }
+COI_core = @{ (^"coi" | ^"co'o" | ^"je'e" | ^"ju'i" | ^"re'i" | ^"nu'e" | ^"fi'i"
+               | ^"fe'o" | ^"mu'o" | ^"mi'e" | ^"ta'a" | ^"pe'u" | ^"ki'e" | ^"doi") ~ &word_boundary }
+CU_core = @{ ( ^"cu") ~ &word_boundary }
+DOhU_core = @{ ( ^"dohu") ~ &word_boundary }
+FA_core = @{ ( ^"fi'a" | ^"fa" | ^"fe" | ^"fi" | ^"fo" | ^"fu") ~ &word_boundary }
+FAhO_core = @{ ( ^"faho") ~ &word_boundary }
+FEhU_core = @{ ( ^"fehu") ~ &word_boundary }
+FIhO_core = @{ ( ^"fiho") ~ &word_boundary }
+GA_core = @{ ( ^"ga" | ^"ge" | ^"go" | ^"gu") ~ &word_boundary }
+GAhO_core = @{ ( ^"kehi" | ^"gaho") ~ &word_boundary }
+GEhU_core = @{ ( ^"gehu") ~ &word_boundary }
+GI_core = @{ ( ^"gi") ~ &word_boundary }
+GIhA_core = @{ ( ^"gi'a" | ^"gi'e" | ^"gi'i" | ^"gi'o" | ^"gi'u") ~ &word_boundary }
+GIhI_core = @{ ( ^"gihi") ~ &word_boundary }
+GOI_core = @{ ( ^"po'e" | ^"po'u" | ^"no'u" | ^"goi" | ^"pe" | ^"po" | ^"ne") ~ &word_boundary }
+GOhA_core = @{ ( ^"go'i" | ^"go'o" | ^"nei" | ^"ra'o" | ^"du" | ^"mo") ~ &word_boundary }
+I_core = @{ ( ^"i") ~ &word_boundary }
+JOI_core = @{ ( ^"jo'e" | ^"joi" | ^"fa'u" | ^"ku'a") ~ &word_boundary }
+KE_core = @{ ( ^"ke") ~ &word_boundary }
+KEhE_core = @{ ( ^"kehe") ~ &word_boundary }
+KEI_core = @{ ( ^"kei") ~ &word_boundary }
+KOhA_core = @{ (^"zo'e" | ^"zu'i" | ^"ke'a" | ^"mi'o" | ^"ko'a" | ^"ko'e" | ^"ko'i"
+               | ^"ko'o" | ^"ko'u" | ^"fo'a" | ^"fo'e" | ^"fo'i" | ^"fo'o" | ^"fo'u"
+               | ^"vo'a" | ^"vo'e" | ^"vo'i" | ^"vo'o" | ^"vo'u"
+               | ^"mi" | ^"do" | ^"ti" | ^"ta" | ^"tu" | ^"ri" | ^"ra" | ^"ru" | ^"ko"
+               | ^"ma" | ^"da" | ^"de" | ^"di") ~ &word_boundary }
+KU_core = @{ ( ^"ku") ~ &word_boundary }
+KUhO_core = @{ ( ^"kuho") ~ &word_boundary }
+LAhE_core = @{ ( ^"la'e" | ^"lu'e") ~ &word_boundary }
+LE_core = @{ ( ^"le'i" | ^"lo'i" | ^"la'i" | ^"lei" | ^"loi" | ^"lai" | ^"le" | ^"lo" | ^"la") ~ &word_boundary }
+LEhU_core = @{ ( ^"lehu") ~ &word_boundary }
+LI_core = @{ ( ^"li") ~ &word_boundary }
+LIhU_core = @{ ( ^"lihu") ~ &word_boundary }
+LOhU_core = @{ ( ^"lohu") ~ &word_boundary }
+LU_core = @{ ( ^"lu") ~ &word_boundary }
+LUhU_core = @{ ( ^"luhu") ~ &word_boundary }
+NA_core = @{ ( ^"na") ~ &word_boundary }
+NAhE_core = @{ ( ^"na'e" | ^"to'e" | ^"no'e" | ^"je'a") ~ &word_boundary }
+NIhO_core = @{ ( ^"niho") ~ &word_boundary }
+NOI_core = @{ ( ^"poi" | ^"noi" | ^"voi") ~ &word_boundary }
+NU_core = @{ ( ^"je'i" | ^"mu'e" | ^"pu'u" | ^"zu'o" | ^"li'i" | ^"su'u" | ^"du'u" | ^"nu" | ^"ka" | ^"ni") ~ &word_boundary }
+PA_core = @{ (^"dau" | ^"fei" | ^"jai" | ^"rei" | ^"vai" | ^"so'a" | ^"so'e" | ^"so'i"
+               | ^"so'u" | ^"za'u" | ^"su'o" | ^"ji'i" | ^"xo" | ^"pi"
+               | ^"pa" | ^"re" | ^"ci" | ^"vo" | ^"mu" | ^"xa" | ^"ze" | ^"bi" | ^"so" | ^"no"
+               | ^"ro") ~ &word_boundary }
+ROI_core = @{ ( ^"roi") ~ &word_boundary }
+SE_core = @{ ( ^"se" | ^"te" | ^"ve" | ^"xe") ~ &word_boundary }
+SEI_core = @{ ( ^"sei") ~ &word_boundary }
+SEhU_core = @{ ( ^"sehu") ~ &word_boundary }
+TO_core = @{ ( ^"to") ~ &word_boundary }
+TOI_core = @{ ( ^"toi") ~ &word_boundary }
+UI_core = @{ (^"u'i" | ^"u'u" | ^"ru'e" | ^"ju'o" | ^"pe'i" | ^"sa'e" | ^"ta'o"
+               | ^"zo'o" | ^"a'u" | ^"o'o" | ^"u'a" | ^"u'e" | ^"cai"
+               | ^"ui" | ^"oi" | ^"ie" | ^"ii" | ^"uu" | ^"ua" | ^"ue" | ^"uo"
+               | ^"ia" | ^"iu" | ^"ei" | ^"xu"
+               | ^"i'e" | ^"be'e" | ^"be'u" | ^"di'ai" | ^"fau'u" | ^"ge'e"
+               | ^"li'a" | ^"ni'au" | ^"pei" | ^"o'i" | ^"su'a") ~ &word_boundary }
+VAU_core = @{ ( ^"vau") ~ &word_boundary }
+VUhO_core = @{ ( ^"vuho") ~ &word_boundary }
+Y_core = @{ ( ("y" | "Y")+) ~ &word_boundary }
+NAI_core = @{ ( ^"nai") ~ &word_boundary }
+PU_core   = @{ (^"pu" | ^"ca" | ^"ba") ~ &word_boundary }
+CAhA_core = @{ (^"ka'e" | ^"ca'a" | ^"nu'a" | ^"ja'ai") ~ &word_boundary }
+ZAhO_core = @{ (^"pu'o" | ^"co'a" | ^"za'o" | ^"ca'o" | ^"co'u" | ^"mo'u"
+               | ^"ba'o" | ^"de'a" | ^"di'a") ~ &word_boundary }
+ZI_core   = @{ (^"zi" | ^"za" | ^"zu") ~ &word_boundary }
+VA_core   = @{ (^"vi" | ^"va" | ^"vu") ~ &word_boundary }
+TAhE_core = @{ (^"ta'e" | ^"di'i" | ^"na'o" | ^"ru'i") ~ &word_boundary }
+ME_core   = @{ (^"me") ~ &word_boundary }
+ZO_core = @{ ( ^"zo") ~ &word_boundary }
+ZOI_core = @{ ( ^"zoi") ~ &word_boundary }
+
+// 汎用 cmavo フォールバック(未知だが語形が正しい cmavo を許容)
+CMAVO_core = @{ ( cmavo) ~ &word_boundary }
+CMEVLA_core = @{ ( cmevla) ~ &word_boundary }
+BRIVLA_core = @{ ( BRIVLA) ~ &word_boundary }
+
+// ---------------------------------------------------------------------
+// クラスラッパー(コア + 後続ポーズの自己消費)
+// ---------------------------------------------------------------------
+A_clause = { A_core }
+BAI_clause = { BAI_core }
+BE_clause = { BE_core }
+BEI_clause = { BEI_core }
+BEhO_clause = { BEhO_core }
+BO_clause = { BO_core }
+BOI_clause = { BOI_core }
+BRIVLA_clause = { BRIVLA_core }
+CMAVO_clause = { CMAVO_core }
+CMEVLA_clause = { CMEVLA_core }
+CO_clause = { CO_core }
+COI_clause = { COI_core }
+CU_clause = { CU_core }
+DOhU_clause = { DOhU_core }
+FA_clause = { FA_core }
+FAhO_clause = { FAhO_core }
+FEhU_clause = { FEhU_core }
+FIhO_clause = { FIhO_core }
+GA_clause = { GA_core }
+GAhO_clause = { GAhO_core }
+GEhU_clause = { GEhU_core }
+GI_clause = { GI_core }
+GIhA_clause = { GIhA_core }
+GIhI_clause = { GIhI_core }
+GOI_clause = { GOI_core }
+GOhA_clause = { GOhA_core }
+I_clause = { I_core }
+JOI_clause = { JOI_core }
+KE_clause = { KE_core }
+KEI_clause = { KEI_core }
+KEhE_clause = { KEhE_core }
+KOhA_clause = { KOhA_core }
+KU_clause = { KU_core }
+KUhO_clause = { KUhO_core }
+LAhE_clause = { LAhE_core }
+LE_clause = { LE_core }
+LEhU_clause = { LEhU_core }
+LI_clause = { LI_core }
+LIhU_clause = { LIhU_core }
+LOhU_clause = { LOhU_core }
+LU_clause = { LU_core }
+LUhU_clause = { LUhU_core }
+NA_clause = { NA_core }
+NAI_clause = { NAI_core }
+NAhE_clause = { NAhE_core }
+NIhO_clause = { NIhO_core }
+NOI_clause = { NOI_core }
+NU_clause = { NU_core }
+PA_clause = { PA_core }
+ROI_clause = { ROI_core }
+SE_clause = { SE_core }
+SEI_clause = { SEI_core }
+SEhU_clause = { SEhU_core }
+TO_clause = { TO_core }
+TOI_clause = { TOI_core }
+PU_clause   = { PU_core }
+CAhA_clause = { CAhA_core }
+ZAhO_clause = { ZAhO_core }
+ZI_clause   = { ZI_core }
+VA_clause   = { VA_core }
+TAhE_clause = { TAhE_core }
+ME_clause   = { ME_core }
+UI_clause = { UI_core }
+VAU_clause = { VAU_core }
+VUhO_clause = { VUhO_core }
+Y_clause = { Y_core }
+ZO_clause = { ZO_core }
+ZOI_clause = { ZOI_core }

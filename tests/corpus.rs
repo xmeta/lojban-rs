@@ -1,0 +1,197 @@
+//! Tatoeba(https://tatoeba.org)収録のロジバン実文によるコーパステスト
+//!
+//! 実際に母語話者・学習者が書いた文でパーサーの実用性を検証する。
+//! CC BY 2.0 FR ライセンスの文を引用。
+
+use lojban::grammar::{LojbanParser, Rule};
+use pest::Parser;
+
+/// 既知の未対応・非標準文(解析に失敗することが正)
+const KNOWN_FAILURES: &[&str] = &[
+    // SU(消去)は未実装
+    "su",
+    // 非標準形の借用語(zantufa でも受理されない)
+    "rutrpinia",
+    "rutrxanonaskuamosa",
+];
+
+#[test]
+fn 既知の失敗例は拒否される() {
+    for s in KNOWN_FAILURES {
+        assert!(
+            LojbanParser::parse(Rule::text, s).is_err(),
+            "既知の失敗例が受理された: {s}"
+        );
+    }
+}
+
+#[test]
+fn tatoeba_実文コーパス() {
+    let corpus: &[&str] = &[
+        ".a'onai",
+        ".a'u",
+        ".a'ucai",
+        ".a'usai",
+        ".e'enai",
+        ".e'ese'a",
+        ".einai",
+        ".eiro'u",
+        ".i'acai",
+        ".i'e",
+        ".i'unai",
+        ".iacu'i",
+        ".iepei",
+        ".o'anai",
+        ".o'i",
+        ".oi",
+        ".oicairo'aro'ero'iro'oro'ure'e",
+        ".oiro'a",
+        ".u'anaicai",
+        ".u'ibe'u",
+        ".u'unai",
+        ".ua",
+        ".ue",
+        ".uecai",
+        ".ui",
+        ".uo",
+        ".y",
+        "a'enai",
+        "a'unai",
+        "a'unaicai",
+        "be'e",
+        "be'u",
+        "bredi",
+        "ca'o",
+        "carvi",
+        "cidja",
+        "cizra",
+        "co'o",
+        "di'ai",
+        "dormijysai",
+        "drani",
+        "fau'u",
+        "fe'o",
+        "fenki",
+        "fi'i",
+        "fonxa",
+        "frili",
+        "ge'e",
+        "i'e",
+        "iebu'o",
+        "ienaisai",
+        "iesai",
+        "jaurcarvi",
+        "je'upei",
+        "ju'oinai",
+        "ju'oipei",
+        "karce",
+        "ki'ecai",
+        "kukte",
+        "la'anai",
+        "li'a",
+        "nandu",
+        "nei",
+        "ni'au",
+        "nonselsmu",
+        "nu'e",
+        "nu'epei",
+        "o'i",
+        "oi",
+        "pei",
+        "peizo'onai",
+        "prane",
+        "racli",
+        "rigni",
+        "rolcumja'e",
+        "rutrxanana",
+        "si'ercarvi",
+        "simsa",
+        "smucau",
+        "ta'onai",
+        "tolzdi",
+        "u'esai",
+        "u'usai",
+        "uanaisai",
+        "ue'ipei",
+        "uidai",
+        "uidaisai",
+        "uisai",
+        "uusai",
+        "vecnu",
+        "vi'osai",
+        "vindu",
+        "xamgu",
+        "zabna",
+        "zo'o",
+        "zo'onai",
+        "zu'i",
+    ];
+    let mut failures = Vec::new();
+    for s in corpus {
+        if let Err(e) = LojbanParser::parse(Rule::text, s) {
+            failures.push(format!("{s} :: {}", e.variant.message()));
+        }
+    }
+    assert!(failures.is_empty(), "解析失敗 {}件:\n{}", failures.len(), failures.join("\n"));
+}
+
+/// CLL 風の厳選例文(各構文のカバレッジ強化)
+const CURATED: &[&str] = &[
+    "le nu do klama cu mlatu",
+    "mi djica lo nu do gleki",
+    "le prenu poi tavla cu melbi",
+    "le du'u mi klama cu melbi",
+    "le se du'u mi klama cu melbi",
+    "mi me le mlatu",
+    "la alis. cu me mi",
+    "lo smuci ku pe mi",
+    "le gerku pe lo pendo cu batci",
+    "fa mi tavla fe do",
+    "fi le zdani fe do fa mi klama",
+    "sei mi gleki do klama",
+    "ta'e mi cadzu",
+    "ru'i le mlatu cu bajra",
+    "ka'e do kakne",
+    "mi ca ba klama",
+    "do pu ca'o tavla mi",
+    "mi ba zi vitke do",
+    "vi le zdani cu mlatu",
+    "coi doi pendo",
+    "ki'e la alis.",
+    "je'e doi dirba",
+    "mu'o ge'e coi",
+    "pe'u do cusku zo'e",
+    "fi'i do klama le zdani",
+    "xu do su'a djica",
+    "ie mi fanva",
+    "ue le ci gerku cu melbi",
+    "uu do bilma",
+    "ju'o mi kenin",
+    "le mlatu ku cu cadzu",
+    "zo'e cu tavla zo'e",
+    "ma tavla do",
+    "do viska ma",
+    "mi dunda ti ma",
+    "le re mlatu cu melbi",
+    "re lo ci gerku cu batci",
+    "pa prenu cu klama",
+    "ro da prami ro de",
+    "mi nelci le nu sipna",
+    "le ka melbi cu se stidi mi",
+    "le cmalu nixli cu melbi",
+    "melbi cmalu nixli ckule",
+    "mi viska le cmalu nixli",
+    "ta cu mlatu",
+    "ti ta mi",
+];
+
+#[test]
+fn 厳選例文コーパス() {
+    let mut failures = Vec::new();
+    for s in CURATED {
+        if let Err(e) = LojbanParser::parse(Rule::text, s) {
+            failures.push(format!("{s} :: {}", e.variant.message()));
+        }
+    }
+    assert!(failures.is_empty(), "解析失敗 {}件:\n{}", failures.len(), failures.join("\n"));
+}

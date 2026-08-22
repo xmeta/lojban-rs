@@ -1,0 +1,17 @@
+[package]
+name = "lojban"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+pest = "2"
+pest_derive = "2"
+clap = { version = "4", features = ["derive"] }
+
+[lib]
+name = "lojban"
+path = "src/lib.rs"
+
+[[bin]]
+name = "lojban"
+path = "src/main.rs"

@@ -1,0 +1,115 @@
+//! 解析木の文字列化ユーティリティ
+//!
+//! pest の解析結果([`Pairs`])を S 式または整形ツリーへ変換する。
+//! `EOI` は構造上のマーカーであるため出力から除外する。
+
+use std::fmt::Write;
+
+use pest::iterators::{Pair, Pairs};
+
+use crate::grammar::Rule;
+
+/// S 式形式で出力する。
+///
+/// 葉ノードは `(rule "text")`、内部ノードは `(rule (child) ...)` の形式。
+pub fn to_sexpr(pairs: Pairs<'_, Rule>, _input: &str) -> String {
+    let mut out = String::new();
+    for pair in pairs {
+        write_pair(pair, &mut out);
+    }
+    out
+}
+
+fn visible_children<'a>(pair: &'a Pair<'a, Rule>) -> Vec<Pair<'a, Rule>> {
+    pair.clone()
+        .into_inner()
+        .filter(|p| p.as_rule() != Rule::EOI)
+        .collect()
+}
+
+fn write_pair(pair: Pair<'_, Rule>, out: &mut String) {
+    let children = visible_children(&pair);
+    if children.is_empty() {
+        let _ = write!(out, "({:?} {})", pair.as_rule(), quote(pair.as_str()));
+    } else {
+        let _ = write!(out, "({:?}", pair.as_rule());
+        for child in children {
+            out.push(' ');
+            write_pair(child, out);
+        }
+        out.push(')');
+    }
+}
+
+/// インデント付き整形ツリーで出力する。
+///
+/// 各行は `rule_name: "テキスト"` 形式。
+pub fn to_tree_string(pairs: Pairs<'_, Rule>, _input: &str) -> String {
+    let mut out = String::new();
+    for pair in pairs {
+        write_tree(pair, 0, &mut out);
+    }
+    out
+}
+
+fn write_tree(pair: Pair<'_, Rule>, depth: usize, out: &mut String) {
+    if pair.as_rule() == Rule::EOI {
+        return;
+    }
+    let indent = "  ".repeat(depth);
+    let _ = writeln!(out, "{}{:?}: {:?}", indent, pair.as_rule(), pair.as_str());
+    for inner in pair.into_inner() {
+        write_tree(inner, depth + 1, out);
+    }
+}
+
+/// 文字列をダブルクォートで囲み、制御文字をエスケープする。
+fn quote(s: &str) -> String {
+    let mut out = String::with_capacity(s.len() + 2);
+    out.push('"');
+    for c in s.chars() {
+        match c {
+            '"' => out.push_str("\\\""),
+            '\\' => out.push_str("\\\\"),
+            '\n' => out.push_str("\\n"),
+            '\r' => out.push_str("\\r"),
+            '\t' => out.push_str("\\t"),
+            c if c.is_control() => {
+                let _ = write!(out, "\\u{{{:x}}}", c as u32);
+            }
+            c => out.push(c),
+        }
+    }
+    out.push('"');
+    out
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::grammar::{LojbanParser, Rule};
+    use pest::Parser;
+
+    #[test]
+    fn sexpr_単語() {
+        let input = "mi";
+        let pairs = LojbanParser::parse(Rule::word, input).unwrap();
+        let s = to_sexpr(pairs, input);
+        assert_eq!(s, "(word (CMAVO_clause (CMAVO_core \"mi\")))");
+    }
+
+    #[test]
+    fn tree_単語() {
+        let input = "gerku";
+        let pairs = LojbanParser::parse(Rule::word, input).unwrap();
+        let s = to_tree_string(pairs, input);
+        assert!(s.contains("word: \"gerku\""));
+        assert!(s.contains("BRIVLA_clause"), "{s}");
+        assert!(!s.contains("EOI"));
+    }
+
+    #[test]
+    fn quote_エスケープ() {
+        assert_eq!(quote("a\"b\\c\nd"), "\"a\\\"b\\\\c\\nd\"");
+    }
+}
