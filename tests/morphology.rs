@@ -11,7 +11,9 @@ fn accepts(rule: Rule, input: &str) -> bool {
 
 #[test]
 fn koha_代名詞等() {
-    for w in ["mi", "do", "ti", "ta", "tu", "ri", "ra", "ru", "ko", "zo'e", "ma", "da", "de", "di"] {
+    for w in [
+        "mi", "do", "ti", "ta", "tu", "ri", "ra", "ru", "ko", "zo'e", "ma", "da", "de", "di",
+    ] {
         assert!(accepts(Rule::KOhA_clause, w), "KOhA should accept {w:?}");
     }
     assert!(!accepts(Rule::KOhA_clause, "le"));
@@ -49,11 +51,13 @@ fn 各種クラス() {
 #[test]
 fn gismu_基本形() {
     for w in [
-        "gerku", "blanu", "claxu", "bakni", "slabu", "cipni", "kerfa", "mlatu",
-        "prenu", "tavla", "viska", "zdani", "cadzu", "prami", "klama", "djica",
-        "remna", "kakne", "limna", "melbi",
+        "gerku", "blanu", "claxu", "bakni", "slabu", "cipni", "kerfa", "mlatu", "prenu", "tavla",
+        "viska", "zdani", "cadzu", "prami", "klama", "djica", "remna", "kakne", "limna", "melbi",
     ] {
-        assert!(accepts(Rule::BRIVLA_clause, w), "BRIVLA should accept {w:?}");
+        assert!(
+            accepts(Rule::BRIVLA_clause, w),
+            "BRIVLA should accept {w:?}"
+        );
     }
 }
 

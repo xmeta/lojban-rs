@@ -1,7 +1,11 @@
 [package]
 name = "lojban"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
+description = "A Lojban (constructed language) PEG parser library and CLI, ported from zantufa grammar"
+license = "MIT OR Apache-2.0"
+keywords = ["lojban", "parser", "peg", "language", "grammar"]
+categories = ["text-processing", "parser-implementations"]
 
 [dependencies]
 pest = "2"

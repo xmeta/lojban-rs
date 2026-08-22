@@ -132,7 +132,12 @@ fn tatoeba_実文コーパス() {
             failures.push(format!("{s} :: {}", e.variant.message()));
         }
     }
-    assert!(failures.is_empty(), "解析失敗 {}件:\n{}", failures.len(), failures.join("\n"));
+    assert!(
+        failures.is_empty(),
+        "解析失敗 {}件:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
 }
 
 /// CLL 風の厳選例文(各構文のカバレッジ強化)
@@ -193,5 +198,10 @@ fn 厳選例文コーパス() {
             failures.push(format!("{s} :: {}", e.variant.message()));
         }
     }
-    assert!(failures.is_empty(), "解析失敗 {}件:\n{}", failures.len(), failures.join("\n"));
+    assert!(
+        failures.is_empty(),
+        "解析失敗 {}件:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
 }
