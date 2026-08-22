@@ -34,7 +34,8 @@ term  = { tagged | sumti }
 tagged = { FA_clause ~ sp1 ~ sumti }
 
 sumti      = { sumti_core ~ (sp1 ~ relative_clauses)? }
-sumti_core = _{ KOhA_clause | desc | quant_desc | quant_selbri | number | abstraction }
+sumti_core = _{ KOhA_clause | desc | quant_desc | quant_selbri | number | abstraction
+               | lu_quote | zo_quote }
 quant_selbri = { number ~ sp1 ~ selbri ~ (sp1 ~ KU_clause)? }
 
 desc        = { LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
@@ -78,10 +79,16 @@ ke_group   = { KE_clause ~ sp1 ~ selbri ~ (sp1 ~ KEhE_clause)? }
 // BE…BEI による項連結(selbri への内部項の付加。be'o による明示閉鎖も許容)
 linked_args = { BE_clause ~ sp1 ~ sumti ~ (sp1 ~ BEI_clause ~ sp1 ~ sumti)* ~ (sp1 ~ BEhO_clause)? }
 
+// 引用(LU...LUhU / ZO+単語は sumti、LOhU...LEhU は free。ZOI は未対応)
+lu_quote   = { LU_clause ~ sp0 ~ content ~ sp0 ~ LUhU_clause }
+zo_quote   = { ZO_clause ~ sp1 ~ word }
+lohu_quote = { LOhU_clause ~ sp0 ~ (!LEhU_clause ~ word) ~ (sp1 ~ !LEhU_clause ~ word)*
+               ~ sp0 ~ LEhU_clause }
+
 frees_s   = _{ free ~ (sp1 ~ free)* }
 frees_m   = _{ (sp1 ~ free)+ }
 free      = { free_unit ~ (sp1 ~ free_unit)* }
-free_unit = { ui_free | sei_free | to_quote | vocative }
+free_unit = { ui_free | sei_free | to_quote | vocative | lohu_quote }
 ui_free  = { UI_clause ~ (sp1 ~ NAI_clause)? }
 sei_free = { SEI_clause ~ sp1 ~ sentence ~ (sp1 ~ SEhU_clause)? }
 to_quote = { TO_clause ~ (sp0 ~ (word ~ (sp1 ~ word)*)?)? ~ (sp1 ~ TOI_clause)? }
@@ -292,12 +299,12 @@ KU_core = @{ ( ^"ku") ~ &word_boundary }
 KUhO_core = @{ ( ^"kuho") ~ &word_boundary }
 LAhE_core = @{ ( ^"la'e" | ^"lu'e") ~ &word_boundary }
 LE_core = @{ ( ^"le'i" | ^"lo'i" | ^"la'i" | ^"lei" | ^"loi" | ^"lai" | ^"le" | ^"lo" | ^"la") ~ &word_boundary }
-LEhU_core = @{ ( ^"lehu") ~ &word_boundary }
+LEhU_core = @{ ( ^"le'u" | ^"lehu") ~ &word_boundary }
 LI_core = @{ ( ^"li") ~ &word_boundary }
-LIhU_core = @{ ( ^"lihu") ~ &word_boundary }
-LOhU_core = @{ ( ^"lohu") ~ &word_boundary }
+LIhU_core = @{ ( ^"li'u" | ^"lihu") ~ &word_boundary }
+LOhU_core = @{ ( ^"lo'u" | ^"lohu") ~ &word_boundary }
 LU_core = @{ ( ^"lu") ~ &word_boundary }
-LUhU_core = @{ ( ^"luhu") ~ &word_boundary }
+LUhU_core = @{ ( ^"li'u" | ^"lihu") ~ &word_boundary }
 NA_core = @{ ( ^"na") ~ &word_boundary }
 NAhE_core = @{ ( ^"na'e" | ^"to'e" | ^"no'e" | ^"je'a") ~ &word_boundary }
 NIhO_core = @{ ( ^"niho") ~ &word_boundary }

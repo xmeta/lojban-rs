@@ -162,3 +162,30 @@ fn beo_明示閉鎖() {
     assert!(s.contains("BEhO_core \"be'o\""), "{s}");
     assert!(s.contains("KOhA_core \"do\""), "{s}");
 }
+
+#[test]
+fn zo_による単語引用() {
+    let s = parse_ok("mi cusku zo coi");
+    assert!(s.contains("ZO_core \"zo\""), "{s}");
+    assert!(s.contains("CMAVO_core \"coi\""), "{s}");
+}
+
+#[test]
+fn 引用は項として機能する() {
+    let s = parse_ok("zo coi cu cmavo");
+    assert!(s.contains("zo_quote"), "{s}");
+}
+
+#[test]
+fn lu_による文引用() {
+    let s = parse_ok("lu mi klama lihu");
+    assert!(s.contains("LU_core \"lu\""), "{s}");
+    assert!(s.contains("LUhU_core"), "{s}");
+}
+
+#[test]
+fn lohu_による誤文引用は_free() {
+    let s = parse_ok("mi gleki lohu coi lehu");
+    assert!(s.contains("LOhU_core"), "{s}");
+    assert!(s.contains("free"), "{s}");
+}
