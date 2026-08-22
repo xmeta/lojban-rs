@@ -15,6 +15,7 @@ guskant 氏の **zantufa-1.9999.peg** を Rust/pest 向けに移植したもの�
 - **統語論**(コアサブセット)
   - 文(sentence): 項(terms)+ `cu` + 述語(bridi_tail)
   - sumti: 代名詞(KOhA)/ 冠詞句(le lo la…)/ 量化描述(`ro lo remna`)/ 数詞
+    / 文字参照(BY `xy` `abu` 等。項と数式の被演算子)
     / 接続(`e` `a` `o` `u` + `nai`、`joi` 系)
   - selbri: tanru(名詞句修飾)/ `na` 否定 / `na'e to'e` スケール反転 / `se te ve xe` 変換
     / `co` 逆順 / tanru 接続(`melbi je cmalu`、`je bo`)/ 述語連鎖(`gi'e` `gi'a` …)
@@ -60,7 +61,7 @@ println!("{}", tree::to_sexpr(pairs, "mi viska le gerku"));
 ## 開発
 
 ```console
-$ cargo test      # 全テスト(74件=単体70+doc 4、実文157文を含む)
+$ cargo test      # 全テスト(77件=単体73+doc 4、実文158文を含む)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 $ cargo bench    # 性能ベンチマーク(criterion)
@@ -114,7 +115,8 @@ src/
 - 接続詞は基本形対応済み(`bo` グルーピング・BIhI 間隔接続 `bi'o bi'i mi'i` を含む)。GUhEK 等の詳細制御は未実装
 - 数理表現(mex)は LI…LOhO の項と描述内数量詞(`le re su'i ci gerku`)に対応
   (`vei … ve'o` 括弧、`ki'o` `ma'u` `ni'u`)。演算子は左結合の単純連鎖
-- lerfu(BY/BU)、消去(SI/SU)未実装
+- lerfu は BY 語形(`by` `xy` `abu` 等)に対応。BU による任意語の文字化は未対応
+- 消去(SI/SU)は意味論的な木変換を要するため未実装
 - 引用は `lu … li'u`(入れ子可)/ `zo` / `lo'u … le'u` / `zoi DELIM 本文 DELIM` に対応。
   ZOI は区切り語対応を解析前スキャンで検証し、本文は解析木上 `zo'e` に正規化される
   (pest に後方参照がないための設計。未閉鎖・不一致はエラー)
