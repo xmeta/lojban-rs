@@ -12,6 +12,15 @@ use crate::grammar::Rule;
 /// S 式形式で出力する。
 ///
 /// 葉ノードは `(rule "text")`、内部ノードは `(rule (child) ...)` の形式。
+///
+/// ```
+/// use lojban::{grammar::{LojbanParser, Rule}, tree};
+/// use pest::Parser;
+///
+/// let pairs = LojbanParser::parse(Rule::text, "mi klama").unwrap();
+/// let s = tree::to_sexpr(pairs, "mi klama");
+/// assert!(s.starts_with("(text"), "{s}");
+/// ```
 pub fn to_sexpr(pairs: Pairs<'_, Rule>, _input: &str) -> String {
     let mut out = String::new();
     for pair in pairs {
@@ -44,6 +53,15 @@ fn write_pair(pair: Pair<'_, Rule>, out: &mut String) {
 /// インデント付き整形ツリーで出力する。
 ///
 /// 各行は `rule_name: "テキスト"` 形式。
+///
+/// ```
+/// use lojban::{grammar::{LojbanParser, Rule}, tree};
+/// use pest::Parser;
+///
+/// let pairs = LojbanParser::parse(Rule::text, "mi klama").unwrap();
+/// let s = tree::to_tree_string(pairs, "mi klama");
+/// assert!(s.contains("text:"), "{s}");
+/// ```
 pub fn to_tree_string(pairs: Pairs<'_, Rule>, _input: &str) -> String {
     let mut out = String::new();
     for pair in pairs {
@@ -63,7 +81,72 @@ fn write_tree(pair: Pair<'_, Rule>, depth: usize, out: &mut String) {
     }
 }
 
-/// 文字列をダブルクォートで囲み、制御文字をエスケープする。
+/// 解析木を JSON 文字列として出力する。
+///
+/// 各ノードは `{"rule": "...", "text": "...", "children": [...]}` 形式。
+///
+/// ```
+/// use lojban::{grammar::{LojbanParser, Rule}, tree};
+/// use pest::Parser;
+///
+/// let pairs = LojbanParser::parse(Rule::text, "mi klama").unwrap();
+/// let j = tree::to_json(pairs, "mi klama");
+/// assert!(j.starts_with("{\"rule\":\"text\""), "{j}");
+/// ```
+pub fn to_json(pairs: Pairs<'_, Rule>, _input: &str) -> String {
+    let mut out = String::new();
+    for pair in pairs {
+        write_json(&pair, &mut out);
+    }
+    out
+}
+
+fn write_json(pair: &Pair<'_, Rule>, out: &mut String) {
+    if pair.as_rule() == Rule::EOI {
+        return;
+    }
+    let _ = write!(
+        out,
+        "{{\"rule\":\"{:?}\",\"text\":{}",
+        pair.as_rule(),
+        json_escape(pair.as_str())
+    );
+    let children = visible_children(pair);
+    if !children.is_empty() {
+        out.push_str(",\"children\":[");
+        for (i, c) in children.iter().enumerate() {
+            if i > 0 {
+                out.push(',');
+            }
+            write_json(c, out);
+        }
+        out.push(']');
+    }
+    out.push('}');
+}
+
+/// JSON 文字列リテラルとして安全な形で出力する。
+fn json_escape(s: &str) -> String {
+    let mut out = String::with_capacity(s.len() + 2);
+    out.push('"');
+    for c in s.chars() {
+        match c {
+            '"' => out.push_str("\\\""),
+            '\\' => out.push_str("\\\\"),
+            '\n' => out.push_str("\\n"),
+            '\r' => out.push_str("\\r"),
+            '\t' => out.push_str("\\t"),
+            c if c.is_control() => {
+                let _ = write!(out, "\\u{{{:04x}}}", c as u32);
+            }
+            c => out.push(c),
+        }
+    }
+    out.push('"');
+    out
+}
+
+/// インデント付き整形ツリーで出力する。
 fn quote(s: &str) -> String {
     let mut out = String::with_capacity(s.len() + 2);
     out.push('"');
@@ -106,6 +189,16 @@ mod tests {
         assert!(s.contains("word: \"gerku\""));
         assert!(s.contains("BRIVLA_clause"), "{s}");
         assert!(!s.contains("EOI"));
+    }
+
+    #[test]
+    fn json_単語() {
+        let input = "mi";
+        let pairs = LojbanParser::parse(Rule::word, input).unwrap();
+        let j = to_json(pairs, input);
+        assert!(j.contains("\"rule\":\"word\""), "{j}");
+        assert!(j.contains("CMAVO_clause"), "{j}");
+        assert!(!j.contains("EOI"), "{j}");
     }
 
     #[test]

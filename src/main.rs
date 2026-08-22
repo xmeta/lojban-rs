@@ -15,6 +15,9 @@ struct Args {
     /// S 式形式で出力する
     #[arg(long)]
     sexpr: bool,
+    /// JSON 形式で出力する
+    #[arg(long)]
+    json: bool,
 }
 
 fn main() -> ExitCode {
@@ -38,7 +41,9 @@ fn main() -> ExitCode {
 
     match lojban::parse(&input) {
         Ok(pairs) => {
-            if args.sexpr {
+            if args.json {
+                println!("{}", tree::to_json(pairs, &input));
+            } else if args.sexpr {
                 println!("{}", tree::to_sexpr(pairs, &input));
             } else {
                 println!("{}", tree::to_tree_string(pairs, &input));

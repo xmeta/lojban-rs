@@ -24,6 +24,15 @@ pub use grammar::{LojbanParser, Rule};
 /// 元テキストではなく正規化テキストに基づく(ZOI を含む入力のみ)。
 /// 返値のライフタイム制約上、正規化テキストは意図的にリークして
 /// プロセス終了まで保持される(ZOI を含む入力のみ・1回あたり入力長分)。
+///
+/// # Examples
+///
+/// ```
+/// use lojban::parse;
+///
+/// let pairs = parse("mi tavla do").unwrap();
+/// assert!(pairs.count() >= 1);
+/// ```
 pub fn parse(text: &str) -> Result<Pairs<'_, Rule>, Error<Rule>> {
     let normalized = normalize_zoi(text).map_err(|msg| {
         let end = text.len();
