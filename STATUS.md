@@ -1,8 +1,16 @@
 # 開発ステータス
 
-## 現在の状態: v0.13 完成(全テストグリーン)
+## 現在の状態: v0.14 完成(全テストグリーン)
 
-- ライブラリ11 / 形態論11 / 統語54 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計86テスト全パス
+- ライブラリ11 / 形態論11 / 統語56 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計88テスト全パス
+
+## v0.14 で追加
+- 掃除: tree API の未使用引数 _input を削除(破壊的変更)、LICENSE-APACHE の
+  プレースホルダ解消、MSRV(rust-version = "1.74")指定
+- GUhA 先接続述語(gu'e … gi、NAhE 併用可。camxes selbri_6 準拠)
+- GAhO 間隔端点(ga'o bi'o ke'i 形。camxes joik 準拠)
+- コーパス拡充: Tatoeba API から取得した実文のうち受理できる 63 文を追加。
+  未受理分の多くは無ポーズ結合語(loka/lonu 等)で設計上の拒否対象
 
 ## v0.13 で追加
 - 依存なし簡易ファザー(tests/fuzz.rs): xorshift 乱数入力・コーパス文変異・
