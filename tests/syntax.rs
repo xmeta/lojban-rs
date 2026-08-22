@@ -303,3 +303,41 @@ fn 不完全な接続は拒否される() {
     // 接続先のない je
     assert!(LojbanParser::parse(Rule::text, "mi viska je").is_err());
 }
+
+#[test]
+fn bai_タグの項() {
+    let s = parse_ok("mi tavla do bau la lojban.");
+    assert!(s.contains("BAI_core \"bau\""), "{s}");
+}
+
+#[test]
+fn bai_タグの文頭() {
+    let s = parse_ok("mu'i le nu do klama mi gleki");
+    assert!(s.contains("BAI_core \"mu'i\""), "{s}");
+    let s = parse_ok("mi ba zi vitke do mu'i le nu penmi");
+    assert!(s.contains("BAI_core \"mu'i\""), "{s}");
+}
+
+#[test]
+fn nahe_述語スケール反転() {
+    let s = parse_ok("mi na'e prami do");
+    assert!(s.contains("NAhE_core \"na'e\""), "{s}");
+    let s = parse_ok("ta to'e melbi");
+    assert!(s.contains("NAhE_core \"to'e\""), "{s}");
+}
+
+#[test]
+fn 接続詞のboグルーピング() {
+    let s = parse_ok("mi joi bo do klama");
+    assert!(s.contains("BO_core \"bo\""), "{s}");
+    let s = parse_ok("ta melbi je bo cmalu zdani");
+    assert!(s.contains("BO_core \"bo\""), "{s}");
+}
+
+#[test]
+fn bihi_間隔接続() {
+    let s = parse_ok("mi klama pa bi'o re");
+    assert!(s.contains("BIhI_core \"bi'o\""), "{s}");
+    // 連鎖先のない間隔接続は拒否
+    assert!(LojbanParser::parse(Rule::text, "mi klama bi'o").is_err());
+}
