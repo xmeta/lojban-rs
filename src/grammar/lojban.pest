@@ -37,8 +37,8 @@ term  = { tagged | sumti }
 tagged = { FA_clause ~ sp1 ~ sumti | BAI_clause ~ sp1 ~ sumti }
 
 sumti      = { sumti_core ~ (sp1 ~ relative_clauses)? ~ (sp1 ~ ek_joik ~ sp1 ~ sumti)* }
-sumti_core = _{ KOhA_clause | desc | quant_desc | quant_selbri | number | abstraction
-               | lu_quote | zo_quote | gek_sumti | li_mex | zoi_quote }
+sumti_core = _{ KOhA_clause | desc | BY_clause | quant_desc | quant_selbri | number | abstraction
+               | lu_quote | zo_quote | gek_sumti | li_mex | zoi_quote | BY_clause }
 quant_selbri = { number ~ sp1 ~ selbri ~ (sp1 ~ KU_clause)? }
 
 desc        = { LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
@@ -86,7 +86,7 @@ linked_args = { BE_clause ~ sp1 ~ sumti ~ (sp1 ~ BEI_clause ~ sp1 ~ sumti)* ~ (s
 
 // 数理表現(mex)。LI...LOhO で sumti 化。演算子は左結合の単純連鎖、括弧は vei...ve'o
 mex         = { mex_operand ~ (sp1 ~ VUhU_clause ~ sp1 ~ mex_operand)* }
-mex_operand = _{ number | vei_group }
+mex_operand = _{ number | vei_group | BY_clause }
 vei_group   = { VEI_clause ~ sp0 ~ mex ~ (sp0 ~ VEhO_clause)? }
 li_mex      = { LI_clause ~ sp0 ~ mex ~ (sp0 ~ LOhO_clause)? }
 // ZOI 引用。本文は lib.rs の前処理で zo'e に正規化される(PEG に後方参照がないため)
@@ -319,6 +319,11 @@ VUhU_core = @{ ( ^"su'i" | ^"vu'u" | ^"pi'i" | ^"fe'i" | ^"gei" | ^"de'o" | ^"te
 VEI_core  = @{ ( ^"vei") ~ &word_boundary }
 VEhO_core = @{ ( ^"ve'o" | ^"veho") ~ &word_boundary }
 LOhO_core = @{ ( ^"lo'o" | ^"loho") ~ &word_boundary }
+BY_core   = @{ (^"by" | ^"cy" | ^"dy" | ^"fy" | ^"gy" | ^"jy" | ^"ky" | ^"ly"
+              | ^"my" | ^"ny" | ^"py" | ^"ry" | ^"sy" | ^"ty" | ^"vy" | ^"xy"
+              | ^"zy" | ^"abu" | ^"ebu" | ^"ibu" | ^"obu" | ^"ubu" | ^"ybu")
+              ~ &word_boundary }
+BU_core   = @{ ( ^"bu") ~ &word_boundary }
 JA_core = @{ ( ^"ja" | ^"je" | ^"jo" | ^"ju") ~ &word_boundary }
 // 結合形(.ijanai 等)用: 語境界ガードなしの素の JA
 JA_bare = _{ ^"ja" | ^"je" | ^"jo" | ^"ju" }
@@ -418,6 +423,8 @@ VUhU_clause = { VUhU_core }
 VEI_clause  = { VEI_core }
 VEhO_clause = { VEhO_core }
 LOhO_clause = { LOhO_core }
+BY_clause   = { BY_core }
+BU_clause   = { BU_core }
 JA_clause = { JA_core }
 JOI_clause = { JOI_core }
 KE_clause = { KE_core }

@@ -395,3 +395,24 @@ fn zoi_による任意テキスト引用() {
     let s = parse_ok("zoi gy English text gy cu gliru");
     assert!(s.contains("ZOI_core \"zoi\""), "{s}");
 }
+
+#[test]
+fn lerfu_文字参照は項() {
+    let s = parse_ok("mi viska xy");
+    assert!(s.contains("BY_core \"xy\""), "{s}");
+    let s = parse_ok("abu prami do");
+    assert!(s.contains("BY_core \"abu\""), "{s}");
+}
+
+#[test]
+fn lerfu_数式内() {
+    let s = parse_ok("li xy su'i re du li vo");
+    assert!(s.contains("BY_core \"xy\""), "{s}");
+}
+
+#[test]
+fn quant_selbri_は従来形のみ() {
+    // 注: quant_selbri への mex 埋め込みは文字参照との貪欲競合のため不採用
+    let s = parse_ok("pa prenu cu klama");
+    assert!(s.contains("PA_core \"pa\""), "{s}");
+}
