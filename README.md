@@ -63,6 +63,7 @@ println!("{}", tree::to_sexpr(pairs, "mi viska le gerku"));
 $ cargo test      # 全テスト(74件=単体70+doc 4、実文157文を含む)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
+$ cargo bench    # 性能ベンチマーク(criterion)
 ```
 
 ## アーキテクチャ

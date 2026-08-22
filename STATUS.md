@@ -7,6 +7,10 @@
 ## v0.9 で追加
 - JSON 出力: CLI `--json` とライブラリ関数 `tree::to_json`
 - doc test 導入(parse / to_sexpr / to_tree_string / to_json の使用例がそのままテストに)
+- ベンチマーク導入(criterion、`cargo bench`)。基準値:
+  - parse 短文 約280µs / 描述+関係節 約716µs / 複合(接続詞・引用・mex)約815µs
+  - 形態論 gismu 約12µs / **lujvo 約930µs(rafsi 分解のバックトラックが重い。将来の最適化候補)**
+  - 出力 to_sexpr 約721µs / to_json 約733µs
 
 ## v0.8 で追加
 - ZOI 引用(zoi DELIM 本文 DELIM): parse() 前処理で区切り語の対応を検証し、
