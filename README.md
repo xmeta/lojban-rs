@@ -61,7 +61,7 @@ println!("{}", tree::to_sexpr(pairs, "mi viska le gerku"));
 ## 開発
 
 ```console
-$ cargo test      # 全テスト(80件=単体76+doc 4、実文158文を含む)
+$ cargo test      # 全テスト(82件=単体78+doc 4、実文159文を含む)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 $ cargo bench    # 性能ベンチマーク(criterion)
@@ -115,7 +115,7 @@ src/
 - 接続詞は基本形対応済み(`bo` グルーピング・BIhI 間隔接続 `bi'o bi'i mi'i` を含む)。GUhEK 等の詳細制御は未実装
 - 数理表現(mex)は LI…LOhO の項と描述内数量詞(`le re su'i ci gerku`)に対応
   (`vei … ve'o` 括弧、`ki'o` `ma'u` `ni'u`)。演算子は左結合の単純連鎖
-- lerfu は BY 語形(`by` `xy` `abu` 等)に対応。BU による任意語の文字化は未対応
+- lerfu は BY 語形(`by` `xy` `abu` 等)と BU 文字化(任意の語 + `bu`)に対応
 - 消去(SI/SU)対応: 解析前に意味論を適用(`si`=直前語消去、`su`=文頭まで遡って消去。
   引用内と `zo` 直後は保護)。解析木は消去後の文に基づく
 - 引用は `lu … li'u`(入れ子可)/ `zo` / `lo'u … le'u` / `zoi DELIM 本文 DELIM` に対応。
