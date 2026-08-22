@@ -1,3 +1,5 @@
+English | [日本語](README.md)
+
 # lojban — ロジバン PEG パーサー(Rust)
 
 ロジバン(人工言語 Lojban)のテキストを解析する PEG パーサーです。
@@ -55,7 +57,7 @@ $ echo "coi la alis." | lojban
 use lojban::{parse, tree};
 
 let pairs = parse("mi viska le gerku")?;
-println!("{}", tree::to_sexpr(pairs, "mi viska le gerku"));
+println!("{}", tree::to_sexpr(pairs));
 ```
 
 ## 開発
@@ -113,7 +115,8 @@ src/
 
 ## 既知の制限・ロードマップ
 
-- 接続詞は基本形対応済み(`bo` グルーピング・BIhI 間隔接続 `bi'o bi'i mi'i` を含む)。GUhEK 等の詳細制御は未実装
+- 接続詞は基本形対応済み(`bo` グルーピング・BIhI 間隔接続・述語先接続 GUhA を含む)。
+  先接続演算子(MAhO)等の数理詳細は未実装
 - 数理表現(mex)は LI…LOhO の項と描述内数量詞(`le re su'i ci gerku`)に対応
   (`vei … ve'o` 括弧、`ki'o` `ma'u` `ni'u`)。演算子は左結合の単純連鎖
 - lerfu は BY 語形(`by` `xy` `abu` 等)と BU 文字化(任意の語 + `bu`)に対応
