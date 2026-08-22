@@ -16,8 +16,8 @@ guskant 氏の **zantufa-1.9999.peg** を Rust/pest 向けに移植したもの�
   - 文(sentence): 項(terms)+ `cu` + 述語(bridi_tail)
   - sumti: 代名詞(KOhA)/ 冠詞句(le lo la…)/ 量化描述(`ro lo remna`)/ 数詞
     / 接続(`e` `a` `o` `u` + `nai`、`joi` 系)
-  - selbri: tanru(名詞句修飾)/ `na` 否定 / `se te ve xe` 変換 / `co` 逆順
-    / tanru 接続(`melbi je cmalu`)/ 述語連鎖(`gi'e` `gi'a` …)
+  - selbri: tanru(名詞句修飾)/ `na` 否定 / `na'e to'e` スケール反転 / `se te ve xe` 変換
+    / `co` 逆順 / tanru 接続(`melbi je cmalu`、`je bo`)/ 述語連鎖(`gi'e` `gi'a` …)
   - `be … bei … be'o` 項連結(linked sumti)
   - 抽象(`nu ka ni zu'o …`)/ `ke … ke'e` グルーピング
   - 引用(`lu … li'u` 文引用 / `zo` 単語引用 = sumti。`lo'u … le'u` 誤文引用 = 自由修飾語)
@@ -57,7 +57,7 @@ println!("{}", tree::to_sexpr(pairs, "mi viska le gerku"));
 ## 開発
 
 ```console
-$ cargo test      # 全テスト(56件、実文151文を含む)
+$ cargo test      # 全テスト(61件、実文153文を含む)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 ```
@@ -95,17 +95,17 @@ src/
 |---|---|
 | `tests/morphology.rs` | 語形認識(gismu/lujvo/cmevla/ストレス等) |
 | `tests/syntax.rs` | 統語構造の検証 |
-| `tests/corpus.rs` | **Tatoeba 実文97文**(CC BY 2.0 FR)+ CLL 風厳選例文54文 |
+| `tests/corpus.rs` | **Tatoeba 実文97文**(CC BY 2.0 FR)+ CLL 風厳選例文56文 |
 
 実文コーパスは [Tatoeba](https://tatoeba.org) のロジバン文を使用しています。
 
 ## 既知の制限・ロードマップ
 
-- 接続詞は基本形のみ対応。`bo` グルーピング(`joi bo` 等)、間隔接続(BIhI `bi'o bi'i`)は未実装
+- 接続詞は基本形対応済み(`bo` グルーピング・BIhI 間隔接続 `bi'o bi'i mi'i` を含む)。GUhEK 等の詳細制御は未実装
 - 数理表現(mex)、lerfu(BY/BU)、消去(SI/SU)未実装
 - 引用は `lu … li'u` / `zo` / `lo'u … le'u` のみ対応。ZOI と入れ子引用は未対応
   (pest に後方参照がなく、純粋な PEG では区切り語の再照合ができないため)
-- タグ(`FA / BAI`)は FA のみ統語接続済み
+- タグは FA と BAI(bau mu'i 等。項と文頭に接続)に対応
 - cmavo 語彙は標準 CLL 系の主要語に絞り込み(実験的 cmavo は未収録。
   `lojban.pest` の各 `*_core` に選択肢を追加するだけで拡張可能)
 - zantufa が許す「無ポーズ隣接単語」(例: `mibroda` = mi+broda)は不受理。
