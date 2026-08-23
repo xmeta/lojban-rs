@@ -43,6 +43,10 @@ The parser engine is [pest](https://pest.rs); the grammar in
     and GAhO interval endpoints (`ga'o bi'o ke'i`)
 - **Output**: pretty-printed tree / S-expressions / JSON
   (`{"rule","text","children"}` format)
+- **lujvo construction** (per CLL 4.11/4.12): assembles new words from rafsi
+  sequences applying hyphen rules (r/n/y), the tosmabru test, and medial
+  cluster legality (CLL 3.6), with official scoring. Via `--build-lujvo`
+  or `lojban::lujvo::build()`
 
 ## Usage
 
@@ -58,6 +62,10 @@ $ lojban "le mlatu cu cadzu" --json
 
 # Read from stdin
 $ echo "coi la alis." | lojban
+
+# Build a lujvo (CLL 4.11 hyphen rules + tosmabru test + CLL 4.12 scoring)
+$ lojban --build-lujvo "zba sai"
+zbasai (score 5847)
 ```
 
 ### Library API
