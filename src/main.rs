@@ -21,10 +21,33 @@ struct Args {
     /// lujvo を生成する(rafsi を空白またはカンマ区切りで指定)
     #[arg(long)]
     build_lujvo: Option<String>,
+    /// lujvo を rafsi 列に分解して表示
+    #[arg(long)]
+    split_lujvo: Option<String>,
 }
 
 fn main() -> ExitCode {
     let args = Args::parse();
+
+    if let Some(word) = args.split_lujvo {
+        return match lojban::lujvo::decompose(&word) {
+            Ok(parts) => {
+                for p in parts {
+                    match p {
+                        lojban::lujvo::Part::Rafsi { text, form } => {
+                            println!("{text} ({form:?})")
+                        }
+                        lojban::lujvo::Part::Hyphen(c) => println!("-{c}- [hyphen]"),
+                    }
+                }
+                ExitCode::SUCCESS
+            }
+            Err(e) => {
+                eprintln!("エラー: {e}");
+                ExitCode::from(1)
+            }
+        };
+    }
 
     if let Some(spec) = args.build_lujvo {
         let parts: Vec<&str> = spec

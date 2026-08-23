@@ -350,6 +350,201 @@ pub fn build(rafsi: &[&str]) -> Result<Built, BuildError> {
     })
 }
 
+/// 分解結果の要素
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Part {
+    /// rafsi 本体
+    Rafsi { text: String, form: Form },
+    /// 挿入されたハイフン(y / r / n)
+    Hyphen(char),
+}
+
+/// 分解の失敗
+#[derive(Debug, PartialEq, Eq)]
+pub struct DecomposeError(pub String);
+
+impl fmt::Display for DecomposeError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "lujvo として分解できない語形: {:?}", self.0)
+    }
+}
+
+struct Decomp<'a> {
+    b: &'a [u8],
+}
+
+impl<'a> Decomp<'a> {
+    /// 位置 pos から残りを分解できるか(バックトラック探索)
+    fn seg(&self, pos: usize, parts: &mut Vec<Part>, first: bool) -> bool {
+        if pos == self.b.len() {
+            return !first;
+        }
+        // y ハイフン
+        if self.b[pos] == b'y' {
+            parts.push(Part::Hyphen('y'));
+            if self.seg(pos + 1, parts, false) {
+                return true;
+            }
+            parts.pop();
+            return false;
+        }
+        let rem = self.b.len() - pos;
+        // 末尾の 5文字形(gismu)
+        if rem == 5 {
+            if let Ok(f) = classify(&self.b[pos..].iter().map(|&c| c as char).collect::<String>()) {
+                if matches!(f, Form::FinalCvccv | Form::FinalCcvcv) {
+                    parts.push(Part::Rafsi {
+                        text: String::from_utf8_lossy(&self.b[pos..]).into_owned(),
+                        form: f,
+                    });
+                    return true;
+                }
+            }
+        }
+        // CVV(アポストロフィ付き、4文字)
+        if rem >= 4
+            && self.b[pos + 1] != b'y'
+            && is_c(self.b[pos])
+            && is_v(self.b[pos + 1])
+            && self.b[pos + 2] == b'\''
+            && is_v(self.b[pos + 3])
+        {
+            if let Some(res) = self.try_cvv(pos, 4, parts) {
+                return res;
+            }
+        }
+        // CVV(3文字)
+        if rem >= 3 && is_c(self.b[pos]) && is_v(self.b[pos + 1]) && is_v(self.b[pos + 2]) {
+            if let Some(res) = self.try_cvv(pos, 3, parts) {
+                return res;
+            }
+        }
+        // CCV(初期子音ペアが正当なもののみ)
+        if rem >= 3
+            && is_c(self.b[pos])
+            && is_c(self.b[pos + 1])
+            && is_v(self.b[pos + 2])
+            && is_initial_pair(self.b[pos], self.b[pos + 1])
+        {
+            parts.push(Part::Rafsi {
+                text: String::from_utf8_lossy(&self.b[pos..pos + 3]).into_owned(),
+                form: Form::Ccv,
+            });
+            if self.seg(pos + 3, parts, false) {
+                return true;
+            }
+            parts.pop();
+        }
+        // CVC(非末尾。次が子音か y のみ)
+        if rem >= 4 && is_c(self.b[pos]) && is_v(self.b[pos + 1]) && is_c(self.b[pos + 2]) {
+            parts.push(Part::Rafsi {
+                text: String::from_utf8_lossy(&self.b[pos..pos + 3]).into_owned(),
+                form: Form::Cvc,
+            });
+            if self.seg(pos + 3, parts, false) {
+                return true;
+            }
+            parts.pop();
+        }
+        // 4文字形(CVCC / CCVC)+ y
+        if rem >= 5
+            && self.b[pos + 4] == b'y'
+            && ((is_c(self.b[pos])
+                && is_v(self.b[pos + 1])
+                && is_c(self.b[pos + 2])
+                && is_c(self.b[pos + 3]))
+                || (is_c(self.b[pos])
+                    && is_c(self.b[pos + 1])
+                    && is_v(self.b[pos + 2])
+                    && is_c(self.b[pos + 3])))
+        {
+            parts.push(Part::Rafsi {
+                text: String::from_utf8_lossy(&self.b[pos..pos + 4]).into_owned(),
+                form: Form::Long4,
+            });
+            if self.seg(pos + 4, parts, false) {
+                return true;
+            }
+            parts.pop();
+        }
+        false
+    }
+
+    /// CVV 形 rafsi の試行。後続は語末・r/n ハイフン+子音・(2語目以降の例外として)
+    /// 母音なし直接 CCV 継接(saicli 型)のいずれかでなければならない
+    fn try_cvv(&self, pos: usize, clen: usize, parts: &mut Vec<Part>) -> Option<bool> {
+        let after = pos + clen;
+        let text = String::from_utf8_lossy(&self.b[pos..after]).into_owned();
+        if after == self.b.len() {
+            // 語末の CVV は正当な終端形
+            parts.push(Part::Rafsi {
+                text,
+                form: if clen == 4 { Form::CvvApo } else { Form::Cvv },
+            });
+            let ok = self.seg(after, parts, false);
+            if !ok {
+                parts.pop();
+            }
+            return Some(ok);
+        }
+        let n = self.b[after];
+        if (n == b'r' || n == b'n') && after + 1 < self.b.len() && is_c(self.b[after + 1]) {
+            parts.push(Part::Rafsi {
+                text: text.clone(),
+                form: if clen == 4 { Form::CvvApo } else { Form::Cvv },
+            });
+            parts.push(Part::Hyphen(n as char));
+            if self.seg(after + 1, parts, false) {
+                return Some(true);
+            }
+            parts.pop();
+            parts.pop();
+        }
+        // saicli 型: CVV + CCV 直結(ハイフン不要)。次の 3 文字が CCV で
+        // その後に続く場合のみ許容
+        if is_c(n) && self.b.len() >= after + 3 {
+            parts.push(Part::Rafsi {
+                text: text.clone(),
+                form: if clen == 4 { Form::CvvApo } else { Form::Cvv },
+            });
+            let ok = self.seg(after, parts, false);
+            if !ok {
+                parts.pop();
+            }
+            return Some(ok);
+        }
+        None
+    }
+}
+
+/// lujvo を rafsi 列とハイフンに分解する。
+///
+/// [`build`] の逆操作であり、生成テストで双方向の整合を検証している。
+/// 入力は本プロジェクトの文法で brivla として受理される語であること。
+pub fn decompose(lujvo: &str) -> Result<Vec<Part>, DecomposeError> {
+    let d = Decomp {
+        b: lujvo.as_bytes(),
+    };
+    let mut parts = Vec::new();
+    if d.seg(0, &mut parts, true) {
+        // gismu 単体は lujvo ではない(構成要素が1つの最終形だけ)なら拒否
+        if parts.len() == 1
+            && matches!(
+                parts[0],
+                Part::Rafsi {
+                    form: Form::FinalCvccv | Form::FinalCcvcv,
+                    ..
+                }
+            )
+        {
+            return Err(DecomposeError(lujvo.into()));
+        }
+        Ok(parts)
+    } else {
+        Err(DecomposeError(lujvo.into()))
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -424,6 +619,108 @@ mod tests {
                 "生成語 {built} が brivla として受理されない"
             );
         }
+    }
+
+    #[test]
+    fn 分解_既知例() {
+        use Part::*;
+        assert_eq!(
+            decompose("gerzda").unwrap(),
+            vec![
+                Rafsi {
+                    text: "ger".into(),
+                    form: Form::Cvc
+                },
+                Rafsi {
+                    text: "zda".into(),
+                    form: Form::Ccv
+                },
+            ]
+        );
+        assert_eq!(
+            decompose("sairzbata'u").unwrap(),
+            vec![
+                Rafsi {
+                    text: "sai".into(),
+                    form: Form::Cvv
+                },
+                Hyphen('r'),
+                Rafsi {
+                    text: "zba".into(),
+                    form: Form::Ccv
+                },
+                Rafsi {
+                    text: "ta'u".into(),
+                    form: Form::CvvApo
+                },
+            ]
+        );
+        assert_eq!(
+            decompose("tosymabru").unwrap(),
+            vec![
+                Rafsi {
+                    text: "tos".into(),
+                    form: Form::Cvc
+                },
+                Hyphen('y'),
+                Rafsi {
+                    text: "mabru".into(),
+                    form: Form::FinalCvccv
+                },
+            ]
+        );
+        assert_eq!(
+            decompose("zbazbasysarji").unwrap(),
+            vec![
+                Rafsi {
+                    text: "zba".into(),
+                    form: Form::Ccv
+                },
+                Rafsi {
+                    text: "zbas".into(),
+                    form: Form::Long4
+                },
+                Hyphen('y'),
+                Rafsi {
+                    text: "sarji".into(),
+                    form: Form::FinalCvccv
+                },
+            ]
+        );
+    }
+
+    #[test]
+    fn 分解_roundtrip() {
+        // build の逆写像として decompose が機能することを全パターンで検証
+        let cases: &[&[&str]] = &[
+            &["zba", "sai"],
+            &["nun", "nau"],
+            &["sai", "zba", "ta'u"],
+            &["zba", "zbas", "sarji"],
+            &["tos", "mabru"],
+            &["ger", "zda"],
+            &["kes", "dirgo"],
+            &["zan", "ru'e", "gei"],
+        ];
+        for rafsi in cases {
+            let built = build(rafsi).unwrap();
+            let parts = decompose(&built.word).unwrap();
+            let texts: Vec<&str> = parts
+                .iter()
+                .filter_map(|p| match p {
+                    Part::Rafsi { text, .. } => Some(text.as_str()),
+                    _ => None,
+                })
+                .collect();
+            assert_eq!(&texts, rafsi, "word={}", built.word);
+        }
+    }
+
+    #[test]
+    fn 分解_失敗系() {
+        // gismu 単体は lujvo ではない
+        assert!(decompose("gerku").is_err());
+        assert!(decompose("qqqqq").is_err());
     }
 
     #[test]
