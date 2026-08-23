@@ -840,3 +840,25 @@ fn 数理演算子_maho() {
     let s = parse_ok("li re ma'o ny ci du li vo");
     assert!(s.contains("MAhO_core"), "{s}");
 }
+
+#[test]
+fn 前置スコープ_zou() {
+    let s = parse_ok("su'o da zo'u da prami mi");
+    assert!(s.contains("ZOhU_core \"zo'u\""), "{s}");
+    // 前置スコープ + 先接続文
+    let s = parse_ok("ro da zo'u ganai da broda gi da brode");
+    assert!(s.contains("ZOhU_core"), "{s}");
+    assert!(s.contains("gek_sentence"), "{s}");
+}
+
+#[test]
+fn 抽象内の前置スコープ() {
+    let s = parse_ok("mi jinvi lo du'u su'o da zo'u da nenri");
+    assert!(s.contains("ZOhU_core"), "{s}");
+}
+
+#[test]
+fn 演算子終端_tehu() {
+    let s = parse_ok("li re na'u zmadu te'u ci du li mu");
+    assert!(s.contains("TEhU_core"), "{s}");
+}

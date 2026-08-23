@@ -31,7 +31,10 @@ UINAI_joint = @{ (^"ta'onai" | ^"ja'onai" | ^"ku'inai" | ^"po'onai"
                 | ^"da'inai" | ^"je'unai" | ^"la'anai" | ^"za'anai"
                 | ^"ga'inai" | ^"zu'unai" | ^"ba'anai" | ^"ju'onai"
                 | ^"cu'inai") ~ &word_boundary }
-item    = { gek_sentence | sentence | free | Y_clause | fragment | tense_item }
+item    = { gek_sentence | prenex_sentence | sentence | free | Y_clause
+          | fragment | tense_item }
+// 前置スコープ(su'o da zo'u … / ro da zo'u …)。論理の量化を文に前置する
+prenex_sentence = { terms ~ sp1 ~ ZOhU_clause ~ sp1 ~ inner_sentence }
 fragment  = { terms ~ (sp1 ~ VAU_clause)? ~ (sp1 ~ free)? }
 tense_item = { tense_mark }
 
@@ -67,7 +70,7 @@ quant_desc  = { number ~ sp1 ~ LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)?
 number      = { PA_clause ~ (sp1 ~ PA_clause)* ~ (sp1 ~ BOI_clause)?
               | PA_seq }
 abstraction = { abstr_head ~ sp1 ~ inner_sentence ~ (sp1 ~ KEI_clause)? }
-inner_sentence = _{ gek_sentence | sentence }
+inner_sentence = _{ gek_sentence | prenex_sentence | sentence }
 abstr_head  = _{ SEDUHU_joint | NU_clause }
 sumti_tail  = _{ (mex ~ sp1)? ~ selbri }
 
@@ -114,7 +117,8 @@ tanru_unit = {
      !("ija" | "ije" | "ijo" | "iju")
    ~ !(GANAI_joint | GINAI_joint | SEBAI_joint | SEDUHU_joint | IBO_joint
      | MAI_core | UI_clause | NAhU_clause | MOhE_clause | UINAI_joint
-     | VEhA_clause | VIhA_clause | PEhO_clause | MAhO_clause | KUhE_clause)
+     | VEhA_clause | VIhA_clause | PEhO_clause | MAhO_clause | KUhE_clause
+     | TEhU_clause | ZOhU_clause)
    ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
    // 注: 「i+字母」で始まる語(.ije / .ijanai 等の文連結結合形)は tanru の先頭に来ないため除外。
    // 母音始まりの語そのもの(.a'onai 等)は述語のみの文として正当なので許容する
@@ -134,8 +138,8 @@ linked_args = { BE_clause ~ sp1 ~ sumti ~ (sp1 ~ BEI_clause ~ sp1 ~ sumti)* ~ (s
 // 数理表現(mex)。LI...LOhO で sumti 化。演算子は左結合の単純連鎖、括弧は vei...ve'o
 mex         = { mex_operand ~ (sp1 ~ mex_operator ~ sp1 ~ mex_operand)* }
 mex_operator = _{ (SE_clause ~ sp1)? ~ VUhU_clause
-                 | NAhU_clause ~ sp1 ~ tanru
-                 | MAhO_clause ~ sp1 ~ mex
+                 | NAhU_clause ~ sp1 ~ tanru ~ (sp1 ~ TEhU_clause)?
+                 | MAhO_clause ~ sp1 ~ mex ~ (sp1 ~ TEhU_clause)?
                  | BIhI_clause }
 mex_operand = _{ number | vei_group | BY_clause | MOhE_clause ~ sp1 ~ sumti
                 | peho_group }
@@ -400,6 +404,7 @@ NAhU_core = @{ (^"na'u" | ^"nahu") ~ &word_boundary }
 PEhO_core = @{ (^"peho" | ^"pe'o") ~ &word_boundary }
 MAhO_core = @{ (^"maho" | ^"ma'o") ~ &word_boundary }
 KUhE_core = @{ (^"kuhe" | ^"ku'e") ~ &word_boundary }
+TEhU_core = @{ (^"tehu" | ^"te'u") ~ &word_boundary }
 MOhE_core = @{ (^"mo'e" | ^"mohe") ~ &word_boundary }
 VEI_core  = @{ ( ^"vei") ~ &word_boundary }
 VEhO_core = @{ ( ^"ve'o" | ^"veho") ~ &word_boundary }
@@ -407,6 +412,7 @@ NAhU_clause = { NAhU_core }
 PEhO_clause = { PEhO_core }
 MAhO_clause = { MAhO_core }
 KUhE_clause = { KUhE_core }
+TEhU_clause = { TEhU_core }
 MOhE_clause = { MOhE_core }
 LOhO_core = @{ ( ^"lo'o" | ^"loho") ~ &word_boundary }
 BY_core   = @{ (^"by" | ^"cy" | ^"dy" | ^"fy" | ^"gy" | ^"jy" | ^"ky" | ^"ly"
@@ -503,6 +509,7 @@ PU_core   = @{ (^"pu" | ^"ca" | ^"ba") ~ &word_boundary }
 KI_core   = @{ ( ^"ki") ~ &word_boundary }
 CAhA_core = @{ (^"ka'e" | ^"ca'a" | ^"nu'a" | ^"ja'ai") ~ &word_boundary }
 CUhE_core = @{ (^"cu'e" | ^"cuhe") ~ &word_boundary }
+ZOhU_core = @{ (^"zohu" | ^"zo'u") ~ &word_boundary }
 ZAhO_core = @{ (^"pu'o" | ^"co'a" | ^"za'o" | ^"ca'o" | ^"co'u" | ^"mo'u"
                | ^"ba'o" | ^"de'a" | ^"di'a") ~ &word_boundary }
 ZI_core   = @{ (^"ze'i" | ^"zehi" | ^"ze'a" | ^"zeha" | ^"ze'u" | ^"zehu"
@@ -604,6 +611,7 @@ PU_clause   = { PU_core }
 KI_clause   = { KI_core }
 CAhA_clause = { CAhA_core }
 CUhE_clause = { CUhE_core }
+ZOhU_clause = { ZOhU_core }
 ZAhO_clause = { ZAhO_core }
 ZI_clause   = { ZI_core }
 ZEhA_clause = { ZEhA_core }
