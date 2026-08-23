@@ -752,3 +752,38 @@ fn 時制固定_ki() {
     let s = parse_ok("mi ba ki klama");
     assert!(s.contains("KI_core \"ki\""), "{s}");
 }
+
+#[test]
+fn 時制後の述語マーク() {
+    let s = parse_ok("ti ba se citka");
+    assert!(s.contains("SE_core \"se\""), "{s}");
+    let s = parse_ok("ko'a pu zi je'a citka");
+    assert!(s.contains("NAhE_core \"je'a\""), "{s}");
+}
+
+#[test]
+fn 抽象内の先接続() {
+    let s = parse_ok("mi troci lo ka ganai broda gi brode");
+    assert!(s.contains("gek_sentence"), "{s}");
+}
+
+#[test]
+fn 談話標識_zuu_baa() {
+    let s = parse_ok("zu'u do klama");
+    assert!(s.contains("UI_core \"zu'u\""), "{s}");
+    let s = parse_ok("ba'a mi snada");
+    assert!(s.contains("UI_core \"ba'a\""), "{s}");
+}
+
+#[test]
+fn 結合感情否定_uinai() {
+    let s = parse_ok("ta'onai mi co'a jgari");
+    assert!(s.contains("UINAI_joint"), "{s}");
+}
+
+#[test]
+fn 連結数詞() {
+    let s = parse_ok("de'i li renono mi klama");
+    assert!(s.contains("LI_core"), "{s}");
+    assert!(s.contains("renono"), "{s}");
+}

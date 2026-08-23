@@ -26,6 +26,11 @@ sep     = { I_clause ~ (sp1 ~ JA_clause)? ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clau
 IJ_joint = { ^"i" ~ !space_char ~ JA_bare ~ (NAI_clause)? ~ &word_boundary }
 // I+BO の結合表記(.ibo = 目的接続。.ijebo = I+JE+BO)
 IBO_joint = @{ (^"ibo" | ^"ijebo") ~ &word_boundary }
+// UI+NAI の結合表記(ta'onai ba'anai 等の談話標識否定形)
+UINAI_joint = @{ (^"ta'onai" | ^"ja'onai" | ^"ku'inai" | ^"po'onai"
+                | ^"da'inai" | ^"je'unai" | ^"la'anai" | ^"za'anai"
+                | ^"ga'inai" | ^"zu'unai" | ^"ba'anai" | ^"ju'onai"
+                | ^"cu'inai") ~ &word_boundary }
 item    = { gek_sentence | sentence | free | Y_clause | fragment | tense_item }
 fragment  = { terms ~ (sp1 ~ VAU_clause)? }
 tense_item = { tense_mark }
@@ -59,21 +64,23 @@ lahe_sumti = { LAhE_clause ~ sp1 ~ sumti ~ (sp1 ~ GEhU_clause)? }
 
 desc        = { LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
 quant_desc  = { number ~ sp1 ~ LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
-number      = { PA_clause ~ (sp1 ~ PA_clause)* ~ (sp1 ~ BOI_clause)? }
-abstraction = { abstr_head ~ sp1 ~ sentence ~ (sp1 ~ KEI_clause)? }
+number      = { PA_clause ~ (sp1 ~ PA_clause)* ~ (sp1 ~ BOI_clause)?
+              | PA_seq }
+abstraction = { abstr_head ~ sp1 ~ inner_sentence ~ (sp1 ~ KEI_clause)? }
+inner_sentence = _{ gek_sentence | sentence }
 abstr_head  = _{ SEDUHU_joint | NU_clause }
 sumti_tail  = _{ (mex ~ sp1)? ~ selbri }
 
 relative_clauses = { relative_clause ~ (sp1 ~ relative_clause)* }
 relative_clause  = {
-    NOI_clause ~ sp1 ~ sentence ~ (sp1 ~ KUhO_clause)?
+    NOI_clause ~ sp1 ~ inner_sentence ~ (sp1 ~ KUhO_clause)?
   | GOI_clause ~ sp1 ~ sumti ~ (sp1 ~ GEhU_clause)?
 }
 
 bridi_tail = { selbri ~ tail_terms ~ (sp1 ~ gihek_link ~ sp1 ~ bridi_tail)* }
 tail_terms = { (sp1 ~ term)* ~ (sp1 ~ VAU_clause)? }
 
-selbri  = { s_marks? ~ sp1? ~ tense_marks? ~ sp1? ~ tanru ~ co_tail?
+selbri  = { s_marks? ~ sp1? ~ tense_marks? ~ sp1? ~ s_marks? ~ sp1? ~ tanru ~ co_tail?
           | (NAhE_clause ~ sp1)? ~ guhek_selbri }
 // 述語の先接続(gu'e X gi Y 等。camxes の selbri_6 相当)
 guhek_selbri = { GUhA_clause ~ (sp1 ~ NAI_clause)? ~ sp1 ~ selbri ~ sp1 ~ gi_joint
@@ -100,7 +107,7 @@ tanru      = { tanru_unit ~ (sp1 ~ tanru_link ~ sp1 ~ tanru_unit | sp1 ~ tanru_u
 tanru_unit = {
      !("ija" | "ije" | "ijo" | "iju")
    ~ !(GANAI_joint | GINAI_joint | SEBAI_joint | SEDUHU_joint | IBO_joint
-     | MAI_core | UI_clause | NAhU_clause | MOhE_clause)
+     | MAI_core | UI_clause | NAhU_clause | MOhE_clause | UINAI_joint)
    ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
    // 注: 「i+字母」で始まる語(.ije / .ijanai 等の文連結結合形)は tanru の先頭に来ないため除外。
    // 母音始まりの語そのもの(.a'onai 等)は述語のみの文として正当なので許容する
@@ -110,7 +117,7 @@ tanru_unit = {
    | ke_group
    | me_form
 }
-nu_form    = { s_marks? ~ sp1? ~ abstr_head ~ sp1 ~ sentence ~ (sp1 ~ KEI_clause)? }
+nu_form    = { s_marks? ~ sp1? ~ abstr_head ~ sp1 ~ inner_sentence ~ (sp1 ~ KEI_clause)? }
 me_form    = { ME_clause ~ sp1 ~ sumti }
 ke_group   = { KE_clause ~ sp1 ~ selbri ~ (sp1 ~ KEhE_clause)? }
 
@@ -158,8 +165,8 @@ free      = { free_unit ~ (sp1 ~ free_unit)* }
 free_unit = { ui_free | mai_free | sei_free | to_quote | vocative | lohu_quote
            | SI_clause | SU_clause }
 mai_free  = { MAI_clause }
-ui_free  = { UI_clause ~ (sp1 ~ CAI_clause)? ~ (sp1 ~ NAI_clause)? }
-sei_free = { SEI_clause ~ sp1 ~ sentence ~ (sp1 ~ SEhU_clause)? }
+ui_free  = { UINAI_joint | UI_clause ~ (sp1 ~ CAI_clause)? ~ (sp1 ~ NAI_clause)? }
+sei_free = { SEI_clause ~ sp1 ~ inner_sentence ~ (sp1 ~ SEhU_clause)? }
 to_quote = { TO_clause ~ (sp0 ~ (word ~ (sp1 ~ word)*)?)? ~ (sp1 ~ TOI_clause)? }
 
 vocative     = { COI_clause ~ (sp1 ~ vocative_arg)? ~ (sp1 ~ DOhU_clause)? }
@@ -427,11 +434,14 @@ NU_core = @{ ( ^"je'i" | ^"mu'e" | ^"pu'u" | ^"zu'o" | ^"li'i" | ^"su'u" | ^"du'
 // SE+NU の結合表記(報話で高頻度の sedu'u)。素の形が先だと境界先読みで失敗するため
 // joint を先に試行(教訓6)。tanru_unit の BRIVLA ガードにも追加(fu'ivla 誤認防止)
 SEDUHU_joint = @{ (^"sedu'u" | ^"seduhu") ~ &word_boundary }
-PA_core = @{ (^"dau" | ^"fei" | ^"jai" | ^"rei" | ^"vai" | ^"so'a" | ^"so'e" | ^"so'i"
+PA_word  = _{ (^"dau" | ^"fei" | ^"jai" | ^"rei" | ^"vai" | ^"so'a" | ^"so'e" | ^"so'i"
                | ^"so'u" | ^"za'u" | ^"su'o" | ^"suhe" | ^"su'e" | ^"daha" | ^"da'a"
                | ^"ji'i" | ^"xo" | ^"pi"
                | ^"pa" | ^"re" | ^"ci" | ^"vo" | ^"mu" | ^"xa" | ^"ze" | ^"bi" | ^"so" | ^"no"
-               | ^"ro" | ^"ki'o" | ^"ma'u" | ^"ni'u") ~ &word_boundary }
+               | ^"ro" | ^"ki'o" | ^"ma'u" | ^"ni'u") }
+PA_core  = @{ PA_word ~ &word_boundary }
+// 無ポーズ連結数詞(renono = 1200 等)
+PA_seq   = @{ PA_word+ ~ &word_boundary }
 ROI_core = @{ ( ^"roi") ~ &word_boundary }
 SE_core = @{ ( ^"se" | ^"te" | ^"ve" | ^"xe") ~ &word_boundary }
 // SE+BAI の結合表記(pi'o va'u mu'i cau ja'e cu'u ba'i ki'u ri'a ka'a の se 変換)
@@ -451,6 +461,7 @@ UI_core = @{ (^"u'i" | ^"u'u" | ^"ru'e" | ^"ju'o" | ^"pe'i" | ^"sa'e" | ^"ta'o"
               | ^"gahi" | ^"ga'i" | ^"uho" | ^"u'o" | ^"ihi" | ^"i'i"
               | ^"oha" | ^"o'a" | ^"ehi" | ^"e'i" | ^"kahu" | ^"ka'u"
               | ^"ruha" | ^"ru'a" | ^"jiha" | ^"ji'a"
+              | ^"zuhu" | ^"zu'u" | ^"baha" | ^"ba'a"
                | ^"zo'o" | ^"a'u" | ^"o'o" | ^"u'a" | ^"u'e" | ^"cai"
                | ^"ui" | ^"oi" | ^"ie" | ^"ii" | ^"uu" | ^"ua" | ^"ue" | ^"uo"
                | ^"ia" | ^"iu" | ^"ei" | ^"xu"
