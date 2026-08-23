@@ -36,7 +36,7 @@ guskant 氏の **zantufa-1.9999.peg** を Rust/pest 向けに移植したもの�
     分離形 `ga nai … gi nai` を含む)
   - **時制・相**(PU `pu ca ba` / CAhA `ka'e ca'a …` / ZAhO `co'a ca'o ba'o …`
     / ZI `zi za zu` / VA `vi va vu` / TAhE `ta'e di'i na'o ru'i` /
-    疑問 `cu'e`)
+    疑問 `cu'e`)と **空間間隔**(VEhA `ve'i ne'i le zdani` / VIhA `vi'a ca'u`)
   - **空間・移動時制**(FAhA 方位 `ca'u ti'a zu'a ga'u ni'a …`、
     MOhI 移動指定 `mo'i ca'u`)、**時制間隔**(ZEhA `pu bi'o ba` / `ca bi'i ba`)、
     **sumti を取る時制タグ**
@@ -148,8 +148,9 @@ src/
   先接続演算子(MAhO)等の数理詳細は未実装
 - 数理表現(mex)は LI…LOhO の項と描述内数量詞(`le re su'i ci gerku`)に対応
   (`vei … ve'o` 括弧、`ki'o` `ma'u` `ni'u`)。演算子は左結合の単純連鎖で、
-  SE 変換(`se pi'i`)・NAhU 派生演算子(`na'u zmadu`)・BIhI 間隔、
-  被演算子の mo'e+sumti(`mo'e ti`)に対応
+  SE 変換(`se pi'i`)・NAhU 派生演算子(`na'u zmadu`)・MAhO(`ma'o ny`)・
+  BIhI 間隔、被演算子の mo'e+sumti(`mo'e ti`)、先置形式
+  (`peho su'i re ci [kuhe]`)に対応
 - lerfu は BY 語形(`by` `xy` `abu` 等)と BU 文字化(任意の語 + `bu`)に対応
 - 消去(SI/SU)対応: 解析前に意味論を適用(`si`=直前語消去、`su`=文頭まで遡って消去。
   引用内と `zo` 直後は保護)。解析木は消去後の文に基づく

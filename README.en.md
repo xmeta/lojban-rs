@@ -42,7 +42,8 @@ The parser engine is [pest](https://pest.rs); the grammar in
     / ZI `zi za zu` / VA `vi va vu` / TAhE `ta'e di'i na'o ru'i`)
   - **Spatial & motion tense** (FAhA directions `ca'u ti'a zu'a ga'u ni'a …`,
     MOhI motion marking as in `mo'i ca'u`), **time intervals** (ZEhA as in
-    `pu bi'o ba` / `ca bi'i ba`), and **tense tags taking a sumti**
+    `pu bi'o ba` / `ca bi'i ba`), **space intervals** (VEhA/VIhA as in
+    `ve'i ne'i le zdani` / `vi'a ca'u`), and **tense tags taking a sumti**
     (`mi ca le cabdei cu klama` / `vi ne'i le zdani` / durations `ze'a lo cacra`)
   - **Term reinforcement**: LAhE reference (`la'e di'u` / `lu'e le cukta`),
     term-position negation with `naku` (NA KU), KOhA completion
@@ -161,7 +162,8 @@ The real-sentence corpus uses Lojban sentences from [Tatoeba](https://tatoeba.or
   quantifiers (`le re su'i ci gerku`) with `vei … ve'o` parentheses and
   `ki'o` `ma'u` `ni'u`. Operators form simple left-associative chains and
   support SE conversion (`se pi'i`), NAhU-derived operators (`na'u zmadu`),
-  BIhI intervals, and mo'e+sumti operands (`mo'e ti`)
+  MAhO (`ma'o ny`), BIhI intervals, mo'e+sumti operands (`mo'e ti`), and the
+  forethought form (`peho su'i re ci [kuhe]`)
 - lerfu supports BY words (`by`, `xy`, `abu`, …) and BU conversion
   (any word followed by `bu`)
 - Erasure (SI/SU): semantics are applied before parsing (`si` erases the

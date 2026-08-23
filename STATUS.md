@@ -1,8 +1,16 @@
 # 開発ステータス
 
-## 現在の状態: v0.28 完成(全テストグリーン)
+## 現在の状態: v0.29 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語96 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計137テスト全パス
+- ライブラリ20 / 形態論11 / 統語99 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計140テスト全パス
+
+## v0.29 で追加(空間間隔と先置数理)
+- VEhA/VIhA 空間間隔を tense_mark に追加。語形は camxes の文法ソースを
+  取得して原典確認(記憶ではなく検証: VEhA=ve'a ve'i ve'e ve'u /
+  VIhA=vi'a vi'e vi'i vi'u)。FAhA(+nai) を後続可(ve'i ne'i le zdani)
+- PEhO 先置数理(peho su'i re ci [kuhe])。教訓: number の空白連結が
+  第2被演算子を取り込むため、先置用の被演算子は単一形に制限(fore_operand)
+- MAhO(mex→演算子)を中置演算子として追加(li re ma'o ny ci)
 
 ## v0.28 で追加(Tatoeba 再取得による実測検証)
 - Tatoeba API から jbo 文を再取得(全1000文、既存重複除外の 884 文を実測):
@@ -237,5 +245,5 @@
    `x = @{ (^"mi" | ^"mi'a") ~ &wb }` が "mi'a" を拒否することで確認済み)
 
 ## 次の拡張候補
-- VEhA/VIhA 空間間隔(CLL 10 要確認)、PEhO 先置 mex、MAhO(mex→演算子)、
-  実験的 cmavo への方針決定(ki'ai 等の収録可否)
+- 実験的 cmavo への方針決定(ki'ai 等の収録可否)、TEhU/FUhE/FUhO 等
+  数理の詳細、JAI+BAI 変換タグ(jai se bau)
