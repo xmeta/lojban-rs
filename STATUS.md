@@ -1,8 +1,16 @@
 # 開発ステータス
 
-## 現在の状態: v0.26 完成(全テストグリーン)
+## 現在の状態: v0.27 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語89 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計130テスト全パス
+- ライブラリ20 / 形態論11 / 統語94 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計135テスト全パス
+
+## v0.27 で追加(会話文バッテリー24文による実測ギャップ修正)
+- selbri で時制の後の述語マークを許容(ti ba se citka / pu zi je'a citka)
+- 埋め込み文(抽象/nu_form/sei/関係節)に先接続文を許容
+  (lo ka ganai broda gi brode)。inner_sentence 規則を新設
+- UI に zu'u(対比)/ ba'a(期待)を追加
+- UINAI_joint: 談話標識+NAI の結合形(ta'onai ba'anai ku'inai 等13語)
+- PA_seq: 無ポーズ連結数詞(li renono = 1200)。分離形の解析木形状は不変
 
 ## v0.26 で追加
 - mex 演算子の拡張: NAhU+tanru(na'u zmadu)、SE 変換 VUhU(se pi'i)、
@@ -218,5 +226,5 @@
    `x = @{ (^"mi" | ^"mi'a") ~ &wb }` が "mi'a" を拒否することで確認済み)
 
 ## 次の拡張候補
-- VEhA/VIhA 空間間隔、PEhO 先置 mex、MAhO(mex→演算子)、
+- VEhA/VIhA 空間間隔(CLL 10 要確認)、PEhO 先置 mex、MAhO(mex→演算子)、
   コーパス拡充(Tatoeba 再取得による受理率計測)
