@@ -1,8 +1,19 @@
 # 開発ステータス
 
-## 現在の状態: v0.20 完成(全テストグリーン)
+## 現在の状態: v0.21 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語71 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計112テスト全パス
+- ライブラリ20 / 形態論11 / 統語74 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計115テスト全パス
+
+## v0.21 で追加
+- 先接続詞の NAI 完成: GA+NAI の結合形(ganai genai gonai gunai)と分離形
+  (ga nai)、GI 側も ginai / gi nai を受理(guhek_selbri の gi も同様)。
+  ganai … gi … は if-then の標準形
+- SE+BAI の結合タグ(SEBAI_joint): sepi'o seva'u semu'i secau seja'e
+  secu'u seba'i seki'u seri'a seka'a(+h 表記)。項位置(文頭タグ含む)で受理
+- 教訓: 結合 cmavo 語は fu'ivla 形と紛らわしいため tanru_unit の BRIVLA に
+  ガードが必要(.ije の先例を GANAI/GINAI/SEBAI に拡張)。ガードがないと
+  gek 内側の文が ginai を tanru として取り込み、PEG シーケンスは
+  成功済み要素を短く再試行しないため全体が失敗する
 
 ## v0.20 で追加
 - JAhA(肯定 ja'a)を s_mark に追加(na の対。ja'a go'i 等の応答表現)
@@ -166,5 +177,5 @@
    `x = @{ (^"mi" | ^"mi'a") ~ &wb }` が "mi'a" を拒否することで確認済み)
 
 ## 次の拡張候補
-- ZEhA 時制間隔(zi'i bi'o bi'i mi'i)、GUhEK 等の先接続詳細制御、
-  NAhU/MOhI 由来の詳細時制、結合 cmavo クラスタ(seki'u 等の無ポーズ隣接)
+- ZEhA 時制間隔(zi'i bi'o bi'i mi'i)、NAhU/MOhI 由来の詳細時制、
+  その他の結合 cmavo クラスタ(ganai 以外の GA 系複合など)

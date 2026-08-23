@@ -33,7 +33,8 @@ The parser engine is [pest](https://pest.rs); the grammar in
     terms and predicates (`xu do su'a djica`) are also accepted)
   - Vocatives (`coi …`) / sentence connectives (`.i`, `ni'o`, including joined
     forms such as `.ije` `.ijanai`)
-  - Forethought connectives (`ge … gi` for sumti and sentences)
+  - Forethought connectives (`ge … gi` for sumti and sentences, including
+    joined NAI forms `ganai … ginai` and separated `ga nai … gi nai`)
   - **Tense & aspect** (PU `pu ca ba` / CAhA `ka'e ca'a …` / ZAhO `co'a ca'o ba'o …`
     / ZI `zi za zu` / VA `vi va vu` / TAhE `ta'e di'i na'o ru'i`)
   - **Spatial & motion tense** (FAhA directions `ca'u ti'a zu'a ga'u ni'a …`,
@@ -166,7 +167,8 @@ The real-sentence corpus uses Lojban sentences from [Tatoeba](https://tatoeba.or
   pre-parse scan and the body is normalized to `zo'e` in the parse tree
   (pest has no backreferences; unclosed/mismatched delimiters are errors)
 - Tags: FA and BAI (`bau`, `mu'i`, …; attached to terms and sentence fronts),
-  SE-converted modals (`se ki'u …`), FIhO modal tags with elidable `fe'u`
+  SE-converted modals (separated `se ki'u …` and joined `sepi'o` `seva'u`
+  `semu'i`, …), FIhO modal tags with elidable `fe'u`
   (`fi'o dunda [fe'u] do`), and tense-mark chains followed by a sumti
   (`pu le cabdei ku` / `vi ne'i le zdani`), in term position either before or
   after the selbri. Selbri marks include the affirmative `ja'a` alongside

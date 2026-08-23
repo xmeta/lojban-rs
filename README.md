@@ -28,7 +28,8 @@ guskant 氏の **zantufa-1.9999.peg** を Rust/pest 向けに移植したもの�
   - 自由修飾語(感情標識 `ui` 等、`xu` 疑問、`sei` 挿入、`to … toi` 注釈。
     連鎖(`mu'o ge'e coi`)や項・述語間の挿入(`xu do su'a djica`)も許容)
   - 呼格(`coi …`)/ 文連結(`.i` `ni'o`、`.ije` `.ijanai` 等の結合表記を含む)
-  - 先接続詞(`ge … gi`: 項と文の接続)
+  - 先接続詞(`ge … gi`: 項と文の接続。NAI 結合形 `ganai … ginai` と
+    分離形 `ga nai … gi nai` を含む)
   - **時制・相**(PU `pu ca ba` / CAhA `ka'e ca'a …` / ZAhO `co'a ca'o ba'o …`
     / ZI `zi za zu` / VA `vi va vu` / TAhE `ta'e di'i na'o ru'i`)
   - **空間・移動時制**(FAhA 方位 `ca'u ti'a zu'a ga'u ni'a …`、
@@ -147,7 +148,8 @@ src/
 - 引用は `lu … li'u`(入れ子可)/ `zo` / `lo'u … le'u` / `zoi DELIM 本文 DELIM` に対応。
   ZOI は区切り語対応を解析前スキャンで検証し、本文は解析木上 `zo'e` に正規化される
   (pest に後方参照がないための設計。未閉鎖・不一致はエラー)
-- タグは FA と BAI(bau mu'i 等。項と文頭に接続)に加え、SE 変換(`se ki'u …`)、
+- タグは FA と BAI(bau mu'i 等。項と文頭に接続)に加え、SE 変換(分離形 `se ki'u …`
+  と結合形 `sepi'o` `seva'u` `semu'i` 等)、
   FIhO モダルタグ(`fi'o dunda [fe'u] do`)、時制マーク連鎖+sumti
   (`pu le cabdei ku` / `vi ne'i le zdani`)に対応。selbri の前後どちらの項位置でも可。
   述語マークは否定 `na` に対して肯定 `ja'a`(`ja'a go'i` 等)に対応
