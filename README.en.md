@@ -29,9 +29,11 @@ The parser engine is [pest](https://pest.rs); the grammar in
   - Quotations (`lu … li'u` text quotes / `zo` word quotes as sumti;
     `lo'u … le'u` error quotes as free modifiers)
   - Relative clauses (`poi / noi`) / possessives (`pe / po / goi`)
-  - Free modifiers (attitudinals such as `ui`, `xu` questions, `sei` inserts,
-    `to … toi` parentheticals; chains (`mu'o ge'e coi`) and insertion between
-    terms and predicates (`xu do su'a djica`) are also accepted)
+  - Free modifiers (attitudinals such as `ui` with the intensity scale
+    `cai sai ru'e cu'i`, `xu` questions, `sei` inserts, `to … toi`
+    parentheticals, utterance ordinals `pamai` etc.; chains (`mu'o ge'e coi`)
+    and insertion between terms and predicates (`xu do su'a djica`) are also
+    accepted)
   - Vocatives (`coi …`) / sentence connectives (`.i`, `ni'o`, including joined
     forms such as `.ije` `.ijanai` `.ibo` `.ijebo`, and `.i bo` grouping)
   - Forethought connectives (`ge … gi` for sumti and sentences, including

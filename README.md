@@ -26,7 +26,8 @@ guskant 氏の **zantufa-1.9999.peg** を Rust/pest 向けに移植したもの�
     / `ke … ke'e` グルーピング
   - 引用(`lu … li'u` 文引用 / `zo` 単語引用 = sumti。`lo'u … le'u` 誤文引用 = 自由修飾語)
   - 関係節(`poi / noi`)/ 所有(`pe / po / goi`)
-  - 自由修飾語(感情標識 `ui` 等、`xu` 疑問、`sei` 挿入、`to … toi` 注釈。
+  - 自由修飾語(感情標識 `ui` 等(+強度 `cai sai ru'e cu'i`)、`xu` 疑問、
+    `sei` 挿入、`to … toi` 注釈、発話序数 `pamai` 等。
     連鎖(`mu'o ge'e coi`)や項・述語間の挿入(`xu do su'a djica`)も許容)
   - 呼格(`coi …`)/ 文連結(`.i` `ni'o`、`.ije` `.ijanai` `.ibo` `.ijebo`
     等の結合表記、`.i bo` グルーピングを含む)

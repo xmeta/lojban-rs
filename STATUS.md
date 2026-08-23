@@ -1,8 +1,15 @@
 # 開発ステータス
 
-## 現在の状態: v0.23 完成(全テストグリーン)
+## 現在の状態: v0.24 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語80 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計121テスト全パス
+- ライブラリ20 / 形態論11 / 統語83 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計124テスト全パス
+
+## v0.24 で追加
+- MAI 発話序数(pamai〜nomai の結合形): .i 直後と文末の自由修飾語として受理。
+  fu'ivla 誤認防止のため tanru ガードに追加
+- CAI 強度標識(cai sai ru'e cu'i、h 表記併用): ui_free で UI 語に後続
+  (ui sai / ui cu'i)
+- BOI 数終端詞を number 規則に接続(li re boi su'i ci …)。省略可
 
 ## v0.23 で追加
 - SEDUHU_joint(結合形 sedu'u): 従来は fu'ivla として tanru に誤取り込みされる
@@ -194,5 +201,4 @@
    `x = @{ (^"mi" | ^"mi'a") ~ &wb }` が "mi'a" を拒否することで確認済み)
 
 ## 次の拡張候補
-- NAhU/MOhI 由来の詳細時制、VEhA/VIhA 空間間隔、MAI 発話序数、
-  BOI 数終端詞の接続
+- NAhU/MOhI 由来の詳細時制、VEhA/VIhA 空間間隔、UI/COI/BAI 語彙の追加充実
