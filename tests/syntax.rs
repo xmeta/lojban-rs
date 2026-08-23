@@ -814,3 +814,29 @@ fn 呼格_naiと_miai() {
         "{s}"
     );
 }
+
+#[test]
+fn 空間間隔_veha_viha() {
+    // VEhA + FAhA をタグとして(sumti を取る)
+    let s = parse_ok("mi ve'i ne'i le zdani cu klama");
+    assert!(s.contains("VEhA_core \"ve'i\""), "{s}");
+    assert!(s.contains("FAhA_core \"ne'i\""), "{s}");
+    // selbri 頭: VIhA + FAhA
+    let s = parse_ok("lo gerku cu vi'a ca'u batci");
+    assert!(s.contains("VIhA_core \"vi'a\""), "{s}");
+}
+
+#[test]
+fn 先置数理_peho() {
+    let s = parse_ok("li peho su'i re ci kuhe du li mu");
+    assert!(s.contains("PEhO_core"), "{s}");
+    // kuhe 省略形
+    let s = parse_ok("li peho pi'i vo mu du li xa");
+    assert!(s.contains("PEhO_core"), "{s}");
+}
+
+#[test]
+fn 数理演算子_maho() {
+    let s = parse_ok("li re ma'o ny ci du li vo");
+    assert!(s.contains("MAhO_core"), "{s}");
+}

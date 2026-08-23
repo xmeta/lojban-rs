@@ -96,7 +96,13 @@ tense_mark  = _{ PU_clause | CAhA_clause | ZAhO_clause | ZI_clause | VA_clause
                | MOhI_clause ~ sp1 ~ FAhA_clause | FAhA_clause
                | NA_clause ~ sp1 ~ KU_clause | NAKU_joint
                | CUhE_clause | KI_clause
-               | time_interval }
+               | time_interval
+               | space_interval }
+
+// 空間間隔(VEhA/VIhA)。FAhA を後続可(ve'i ne'i le zdani 等)
+space_interval = _{ VEhA_clause ~ (sp1 ~ VIhA_clause)?
+                     ~ (sp1 ~ FAhA_clause ~ (sp1 ~ NAI_clause)?)?
+                  | VIhA_clause ~ (sp1 ~ FAhA_clause ~ (sp1 ~ NAI_clause)?)? }
 
 // 時制間隔(ZEhA): オフセット(PU/ZI)を間隔詞の両端に置く
 // (pu bi'o ba = 過去から未来へ渡る、ca bi'i ba = 現在と未来の間、等)
@@ -107,7 +113,8 @@ tanru      = { tanru_unit ~ (sp1 ~ tanru_link ~ sp1 ~ tanru_unit | sp1 ~ tanru_u
 tanru_unit = {
      !("ija" | "ije" | "ijo" | "iju")
    ~ !(GANAI_joint | GINAI_joint | SEBAI_joint | SEDUHU_joint | IBO_joint
-     | MAI_core | UI_clause | NAhU_clause | MOhE_clause | UINAI_joint)
+     | MAI_core | UI_clause | NAhU_clause | MOhE_clause | UINAI_joint
+     | VEhA_clause | VIhA_clause | PEhO_clause | MAhO_clause | KUhE_clause)
    ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
    // 注: 「i+字母」で始まる語(.ije / .ijanai 等の文連結結合形)は tanru の先頭に来ないため除外。
    // 母音始まりの語そのもの(.a'onai 等)は述語のみの文として正当なので許容する
@@ -128,8 +135,16 @@ linked_args = { BE_clause ~ sp1 ~ sumti ~ (sp1 ~ BEI_clause ~ sp1 ~ sumti)* ~ (s
 mex         = { mex_operand ~ (sp1 ~ mex_operator ~ sp1 ~ mex_operand)* }
 mex_operator = _{ (SE_clause ~ sp1)? ~ VUhU_clause
                  | NAhU_clause ~ sp1 ~ tanru
+                 | MAhO_clause ~ sp1 ~ mex
                  | BIhI_clause }
-mex_operand = _{ number | vei_group | BY_clause | MOhE_clause ~ sp1 ~ sumti }
+mex_operand = _{ number | vei_group | BY_clause | MOhE_clause ~ sp1 ~ sumti
+                | peho_group }
+// 先置数理(peho su'i re ci = 2+3)。kuhe による明示閉鎖は省略可。
+// 被演算子は連結数詞を展開しない単一形(re ci を2桁数と読む number との競合回避)
+peho_group  = { PEhO_clause ~ sp1 ~ mex_operator ~ sp1 ~ fore_operand
+               ~ sp1 ~ fore_operand ~ (sp1 ~ KUhE_clause)? }
+fore_operand = _{ PA_seq | PA_clause | vei_group | BY_clause
+                 | MOhE_clause ~ sp1 ~ sumti | peho_group }
 vei_group   = { VEI_clause ~ sp0 ~ mex ~ (sp0 ~ VEhO_clause)? }
 li_mex      = { LI_clause ~ sp0 ~ mex ~ (sp0 ~ LOhO_clause)? }
 // 文字化(任意の語 + bu で文字参照)。sumti_core の先頭で試行し
@@ -382,10 +397,16 @@ BIhI_core = @{ ( ^"bi'o" | ^"bi'i" | ^"mi'i") ~ &word_boundary }
 VUhU_core = @{ ( ^"su'i" | ^"vu'u" | ^"pi'i" | ^"fe'i" | ^"gei" | ^"de'o" | ^"te'o"
                | ^"re'a" | ^"va'a" | ^"pa'i" | ^"si'i" | ^"fu'u") ~ &word_boundary }
 NAhU_core = @{ (^"na'u" | ^"nahu") ~ &word_boundary }
+PEhO_core = @{ (^"peho" | ^"pe'o") ~ &word_boundary }
+MAhO_core = @{ (^"maho" | ^"ma'o") ~ &word_boundary }
+KUhE_core = @{ (^"kuhe" | ^"ku'e") ~ &word_boundary }
 MOhE_core = @{ (^"mo'e" | ^"mohe") ~ &word_boundary }
 VEI_core  = @{ ( ^"vei") ~ &word_boundary }
 VEhO_core = @{ ( ^"ve'o" | ^"veho") ~ &word_boundary }
 NAhU_clause = { NAhU_core }
+PEhO_clause = { PEhO_core }
+MAhO_clause = { MAhO_core }
+KUhE_clause = { KUhE_core }
 MOhE_clause = { MOhE_core }
 LOhO_core = @{ ( ^"lo'o" | ^"loho") ~ &word_boundary }
 BY_core   = @{ (^"by" | ^"cy" | ^"dy" | ^"fy" | ^"gy" | ^"jy" | ^"ky" | ^"ly"
@@ -488,6 +509,12 @@ ZI_core   = @{ (^"ze'i" | ^"zehi" | ^"ze'a" | ^"zeha" | ^"ze'u" | ^"zehu"
               | ^"zi" | ^"za" | ^"zu") ~ &word_boundary }
 ZEhA_core = @{ (^"zi'i" | ^"zihi" | ^"bi'o" | ^"biho"
               | ^"bi'i" | ^"bihi" | ^"mi'i" | ^"mihi") ~ &word_boundary }
+// 空間間隔: VEhA=大きさ(ve'i 微小〜 ve'e 全空間) / VIhA=次元(vi'i 線〜 vi'e 時空)
+// (camxes の語形リストを原典確認済み: VEhA=vehu/veha/vehi/vehe, VIhA=vihi/viha/vihu/vihe)
+VEhA_core = @{ (^"ve'i" | ^"vehi" | ^"ve'a" | ^"veha"
+              | ^"ve'e" | ^"vehe" | ^"ve'u" | ^"vehu") ~ &word_boundary }
+VIhA_core = @{ (^"vi'i" | ^"vihi" | ^"vi'a" | ^"viha"
+              | ^"vi'u" | ^"vihu" | ^"vi'e" | ^"vihe") ~ &word_boundary }
 VA_core   = @{ (^"vi" | ^"va" | ^"vu") ~ &word_boundary }
 TAhE_core = @{ (^"ta'e" | ^"di'i" | ^"na'o" | ^"ru'i") ~ &word_boundary }
 ME_core   = @{ (^"me") ~ &word_boundary }
@@ -580,6 +607,8 @@ CUhE_clause = { CUhE_core }
 ZAhO_clause = { ZAhO_core }
 ZI_clause   = { ZI_core }
 ZEhA_clause = { ZEhA_core }
+VEhA_clause = { VEhA_core }
+VIhA_clause = { VIhA_core }
 VA_clause   = { VA_core }
 TAhE_clause = { TAhE_core }
 ME_clause   = { ME_core }
