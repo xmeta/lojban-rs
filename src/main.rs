@@ -18,10 +18,30 @@ struct Args {
     /// JSON 形式で出力する
     #[arg(long)]
     json: bool,
+    /// lujvo を生成する(rafsi を空白またはカンマ区切りで指定)
+    #[arg(long)]
+    build_lujvo: Option<String>,
 }
 
 fn main() -> ExitCode {
     let args = Args::parse();
+
+    if let Some(spec) = args.build_lujvo {
+        let parts: Vec<&str> = spec
+            .split(|c: char| c == ',' || c.is_ascii_whitespace())
+            .filter(|s| !s.is_empty())
+            .collect();
+        return match lojban::lujvo::build(&parts) {
+            Ok(built) => {
+                println!("{} (score {})", built.word, built.score());
+                ExitCode::SUCCESS
+            }
+            Err(e) => {
+                eprintln!("エラー: {e}");
+                ExitCode::from(1)
+            }
+        };
+    }
 
     let input = match args.text {
         Some(t) => t,

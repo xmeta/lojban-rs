@@ -4,6 +4,7 @@
 //! zantufa-1.9999.peg(guskant/gerna_cipra)を参考に移植する。
 
 pub mod grammar;
+pub mod lujvo;
 pub mod tree;
 
 use std::borrow::Cow;
