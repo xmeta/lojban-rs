@@ -22,16 +22,19 @@ guskant 氏の **zantufa-1.9999.peg** を Rust/pest 向けに移植したもの�
   - selbri: tanru(名詞句修飾)/ `na` 否定 / `na'e to'e` スケール反転 / `se te ve xe` 変換
     / `co` 逆順 / tanru 接続(`melbi je cmalu`、`je bo`)/ 述語連鎖(`gi'e` `gi'a` …)
   - `be … bei … be'o` 項連結(linked sumti)
-  - 抽象(`nu ka ni zu'o …`)/ `ke … ke'e` グルーピング
+  - 抽象(`nu ka ni zu'o …`、SE 変換 `se du'u` / 結合形 `sedu'u`)
+    / `ke … ke'e` グルーピング
   - 引用(`lu … li'u` 文引用 / `zo` 単語引用 = sumti。`lo'u … le'u` 誤文引用 = 自由修飾語)
   - 関係節(`poi / noi`)/ 所有(`pe / po / goi`)
   - 自由修飾語(感情標識 `ui` 等、`xu` 疑問、`sei` 挿入、`to … toi` 注釈。
     連鎖(`mu'o ge'e coi`)や項・述語間の挿入(`xu do su'a djica`)も許容)
-  - 呼格(`coi …`)/ 文連結(`.i` `ni'o`、`.ije` `.ijanai` 等の結合表記を含む)
+  - 呼格(`coi …`)/ 文連結(`.i` `ni'o`、`.ije` `.ijanai` `.ibo` `.ijebo`
+    等の結合表記、`.i bo` グルーピングを含む)
   - 先接続詞(`ge … gi`: 項と文の接続。NAI 結合形 `ganai … ginai` と
     分離形 `ga nai … gi nai` を含む)
   - **時制・相**(PU `pu ca ba` / CAhA `ka'e ca'a …` / ZAhO `co'a ca'o ba'o …`
-    / ZI `zi za zu` / VA `vi va vu` / TAhE `ta'e di'i na'o ru'i`)
+    / ZI `zi za zu` / VA `vi va vu` / TAhE `ta'e di'i na'o ru'i` /
+    疑問 `cu'e`)
   - **空間・移動時制**(FAhA 方位 `ca'u ti'a zu'a ga'u ni'a …`、
     MOhI 移動指定 `mo'i ca'u`)、**時制間隔**(ZEhA `pu bi'o ba` / `ca bi'i ba`)、
     **sumti を取る時制タグ**

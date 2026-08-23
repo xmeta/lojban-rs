@@ -1,8 +1,19 @@
 # 開発ステータス
 
-## 現在の状態: v0.22 完成(全テストグリーン)
+## 現在の状態: v0.23 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語76 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計117テスト全パス
+- ライブラリ20 / 形態論11 / 統語80 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計121テスト全パス
+
+## v0.23 で追加
+- SEDUHU_joint(結合形 sedu'u): 従来は fu'ivla として tanru に誤取り込みされる
+  サイレント誤解析だったため、abstraction/nu_form の頭に joint を追加し、
+  tanru BRIVLA ガードにも登録。項位置(sedu'u broda cu jitfa 等)では抽象として解析。
+  なお selbri 直後(cusku sedu'u broda)は PEG の選択順序で nu_form 側が
+  先着する(受理集合は正しく、グルーピングのみ selbri 側になる既知挙動)
+- 文接続の BO: 分離形 .i bo と結合形 .ibo / .ijebo(IBO_joint)。
+  母音始まり fu'ivla 形態が ibo を奪うため tanru ガードに追加
+- 時制疑問 cu'e(CUhE)を tense_mark に追加
+- 述語連鎖の bo グルーピング(gi'e bo)。tanru_link/ek_joik と対称化
 
 ## v0.22 で追加
 - ZEhA 時制間隔(zi'i bi'o bi'i mi'i、h 表記併用): PU/ZI オフセットを両端に
@@ -183,5 +194,5 @@
    `x = @{ (^"mi" | ^"mi'a") ~ &wb }` が "mi'a" を拒否することで確認済み)
 
 ## 次の拡張候補
-- NAhU/MOhI 由来の詳細時制、I+BO 等のその他の結合 cmavo クラスタ(.ibo)、
-  VEhA/VIhA 空間間隔
+- NAhU/MOhI 由来の詳細時制、VEhA/VIhA 空間間隔、MAI 発話序数、
+  BOI 数終端詞の接続

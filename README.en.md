@@ -24,7 +24,8 @@ The parser engine is [pest](https://pest.rs); the grammar in
     / `co` inversion / tanru connectives (`melbi je cmalu`, `je bo`) /
     bridi-tail chains (`gi'e` `gi'a` …)
   - `be … bei … be'o` linked sumti
-  - Abstractions (`nu ka ni zu'o …`) / `ke … ke'e` grouping
+  - Abstractions (`nu ka ni zu'o …`, SE conversion `se du'u` and the joined
+    form `sedu'u`) / `ke … ke'e` grouping
   - Quotations (`lu … li'u` text quotes / `zo` word quotes as sumti;
     `lo'u … le'u` error quotes as free modifiers)
   - Relative clauses (`poi / noi`) / possessives (`pe / po / goi`)
@@ -32,7 +33,7 @@ The parser engine is [pest](https://pest.rs); the grammar in
     `to … toi` parentheticals; chains (`mu'o ge'e coi`) and insertion between
     terms and predicates (`xu do su'a djica`) are also accepted)
   - Vocatives (`coi …`) / sentence connectives (`.i`, `ni'o`, including joined
-    forms such as `.ije` `.ijanai`)
+    forms such as `.ije` `.ijanai` `.ibo` `.ijebo`, and `.i bo` grouping)
   - Forethought connectives (`ge … gi` for sumti and sentences, including
     joined NAI forms `ganai … ginai` and separated `ga nai … gi nai`)
   - **Tense & aspect** (PU `pu ca ba` / CAhA `ka'e ca'a …` / ZAhO `co'a ca'o ba'o …`
