@@ -1,8 +1,18 @@
 # 開発ステータス
 
-## 現在の状態: v0.29 完成(全テストグリーン)
+## 現在の状態: v0.30 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語99 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計140テスト全パス
+- ライブラリ20 / 形態論11 / 統語102 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計143テスト全パス
+
+## v0.30 で追加
+- ZOhU 前置スコープ(su'o da zo'u … / ro da zo'u ganai … gi …)。
+  item レベルと inner_sentence(抽象内)の両方で受理
+- TEhU 演算子終端(li re na'u zmadu te'u ci)。NAhU/MAhO 枝に省略可で接続
+- 方針決定: 実験的 cmavo(ki'ai dei'a xa'o 等)は引き続き非収録
+  (CLL 標準語彙主義を維持。Tatoeba 残存未受理の主因と割り切る)
+- パフォーマンス教訓: item 失敗パスで再試行される選択肢に完全な terms を
+  置くと rafsi バックトラックが乗じて指数時間になる(fuzz 5s → 55s を実測)。
+  prenex の項は量化詞+代名詞の単純形に制限して解決
 
 ## v0.29 で追加(空間間隔と先置数理)
 - VEhA/VIhA 空間間隔を tense_mark に追加。語形は camxes の文法ソースを
@@ -245,5 +255,5 @@
    `x = @{ (^"mi" | ^"mi'a") ~ &wb }` が "mi'a" を拒否することで確認済み)
 
 ## 次の拡張候補
-- 実験的 cmavo への方針決定(ki'ai 等の収録可否)、TEhU/FUhE/FUhO 等
-  数理の詳細、JAI+BAI 変換タグ(jai se bau)
+- JAI 変換(jai cau / jai gau)、FUhE/FUhO 先置論理、
+  ベンチマーク再計測(v0.9.1 比較の更新)
