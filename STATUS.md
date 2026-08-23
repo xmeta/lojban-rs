@@ -1,8 +1,17 @@
 # 開発ステータス
 
-## 現在の状態: v0.24 完成(全テストグリーン)
+## 現在の状態: v0.25 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語83 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計124テスト全パス
+- ライブラリ20 / 形態論11 / 統語86 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計127テスト全パス
+
+## v0.25 で追加(語彙拡充バッチ)
+- UI: ku'i ja'o po'o da'i je'u la'a za'a ga'i u'o i'i o'a e'i ka'u ru'a ji'a
+  (h 表記併用)。ku'i(しかし)/ po'o(のみ)は実文最高頻度クラスの談話標識
+- COI: vi'o ke'o / BAI: ci'u pu'a ji'e ji'u ji'o ra'a / JOI: jo'u /
+  PA: su'e da'a
+- tanru BRIVLA ガードに UI_clause を一括登録。UI_core は語境界付き完全一致
+  なので正規の brivla に影響せず、今後の UI 語彙追加は自動保護される
+  (個別列挙の時代終わり。joints/GANAI/SEBAI/SEDUHU/IBO/MAI は従来どおり個別)
 
 ## v0.24 で追加
 - MAI 発話序数(pamai〜nomai の結合形): .i 直後と文末の自由修飾語として受理。
@@ -201,4 +210,4 @@
    `x = @{ (^"mi" | ^"mi'a") ~ &wb }` が "mi'a" を拒否することで確認済み)
 
 ## 次の拡張候補
-- NAhU/MOhI 由来の詳細時制、VEhA/VIhA 空間間隔、UI/COI/BAI 語彙の追加充実
+- NAhU/MOhI 由来の詳細時制、VEhA/VIhA 空間間隔、mex の演算子強化(MAhO/NAhU)
