@@ -633,3 +633,42 @@ fn bai_nai_否定タグ() {
     let s = parse_ok("mu'i nai le nu do gleki mi cu prami do");
     assert!(s.contains("NAI_clause"), "{s}");
 }
+
+#[test]
+fn 結合_sedu() {
+    // 結合形 sedu'u を fu'ivla として誤認しない(項位置では抽象、
+    // selbri 直後は PEG の優先順位で nu_form として取り込まれる)
+    let s = parse_ok("mi cusku sedu'u broda");
+    assert!(s.contains("SEDUHU_joint"), "{s}");
+    let s = parse_ok("sedu'u broda cu jitfa");
+    assert!(s.contains("abstraction"), "{s}");
+    // 分離形 se du'u は従来どおり s_marks 経由
+    let s = parse_ok("mi cusku se du'u broda");
+    assert!(
+        s.contains("SE_core \"se\"") && s.contains("NU_core \"du'u\""),
+        "{s}"
+    );
+}
+
+#[test]
+fn 文接続_ibo() {
+    let s = parse_ok("mi klama .ibo do cadzu");
+    assert!(s.contains("IBO_joint"), "{s}");
+    let s = parse_ok("mi klama .ijebo do cadzu");
+    assert!(s.contains("IBO_joint"), "{s}");
+    // 分離形 .i bo
+    let s = parse_ok("mi klama .i bo do cadzu");
+    assert!(s.contains("BO_clause"), "{s}");
+}
+
+#[test]
+fn 時制疑問_cue() {
+    let s = parse_ok("do cu'e klama");
+    assert!(s.contains("CUhE_core \"cu'e\""), "{s}");
+}
+
+#[test]
+fn 述語連鎖_bo_グルーピング() {
+    let s = parse_ok("mi nelci gi'e bo citka");
+    assert!(s.contains("GIhA_core") && s.contains("BO_core"), "{s}");
+}

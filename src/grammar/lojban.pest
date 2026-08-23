@@ -20,10 +20,12 @@ text = { SOI ~ sp0 ~ content? ~ sp0 ~ EOI }
 
 content = { lead? ~ item ~ (sp1 ~ sep ~ sp1 ~ item)* }
 lead    = _{ sep ~ sp1 }
-sep     = { I_clause ~ (sp1 ~ JA_clause)? ~ (sp1 ~ NAI_clause)?
-          | IJ_joint | NIhO_clause }
+sep     = { I_clause ~ (sp1 ~ JA_clause)? ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clause)?
+          | IBO_joint | IJ_joint | NIhO_clause }
 // .ije / .ijanai 等の結合表記(I+JA が一語に綴られる)
 IJ_joint = { ^"i" ~ !space_char ~ JA_bare ~ (NAI_clause)? ~ &word_boundary }
+// I+BO の結合表記(.ibo = 目的接続。.ijebo = I+JE+BO)
+IBO_joint = @{ (^"ibo" | ^"ijebo") ~ &word_boundary }
 item    = { gek_sentence | sentence | free | Y_clause | fragment | tense_item }
 fragment  = { terms ~ (sp1 ~ VAU_clause)? }
 tense_item = { tense_mark }
@@ -58,7 +60,8 @@ lahe_sumti = { LAhE_clause ~ sp1 ~ sumti ~ (sp1 ~ GEhU_clause)? }
 desc        = { LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
 quant_desc  = { number ~ sp1 ~ LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
 number      = { PA_clause ~ (sp1 ~ PA_clause)* }
-abstraction = { NU_clause ~ sp1 ~ sentence ~ (sp1 ~ KEI_clause)? }
+abstraction = { abstr_head ~ sp1 ~ sentence ~ (sp1 ~ KEI_clause)? }
+abstr_head  = _{ SEDUHU_joint | NU_clause }
 sumti_tail  = _{ (mex ~ sp1)? ~ selbri }
 
 relative_clauses = { relative_clause ~ (sp1 ~ relative_clause)* }
@@ -85,6 +88,7 @@ tense_mark  = _{ PU_clause | CAhA_clause | ZAhO_clause | ZI_clause | VA_clause
                | TAhE_clause | ROI_clause | BAI_clause ~ (sp1 ~ NAI_clause)?
                | MOhI_clause ~ sp1 ~ FAhA_clause | FAhA_clause
                | NA_clause ~ sp1 ~ KU_clause | NAKU_joint
+               | CUhE_clause
                | time_interval }
 
 // 時制間隔(ZEhA): オフセット(PU/ZI)を間隔詞の両端に置く
@@ -94,7 +98,8 @@ tense_offset  = _{ PU_clause | ZI_clause }
 
 tanru      = { tanru_unit ~ (sp1 ~ tanru_link ~ sp1 ~ tanru_unit | sp1 ~ tanru_unit)* }
 tanru_unit = {
-     !("ija" | "ije" | "ijo" | "iju") ~ !(GANAI_joint | GINAI_joint | SEBAI_joint)
+     !("ija" | "ije" | "ijo" | "iju")
+   ~ !(GANAI_joint | GINAI_joint | SEBAI_joint | SEDUHU_joint | IBO_joint)
    ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
    // 注: 「i+字母」で始まる語(.ije / .ijanai 等の文連結結合形)は tanru の先頭に来ないため除外。
    // 母音始まりの語そのもの(.a'onai 等)は述語のみの文として正当なので許容する
@@ -104,7 +109,7 @@ tanru_unit = {
    | ke_group
    | me_form
 }
-nu_form    = { s_marks? ~ sp1? ~ NU_clause ~ sp1 ~ sentence ~ (sp1 ~ KEI_clause)? }
+nu_form    = { s_marks? ~ sp1? ~ abstr_head ~ sp1 ~ sentence ~ (sp1 ~ KEI_clause)? }
 me_form    = { ME_clause ~ sp1 ~ sumti }
 ke_group   = { KE_clause ~ sp1 ~ selbri ~ (sp1 ~ KEhE_clause)? }
 
@@ -128,7 +133,7 @@ zoi_token   = @{ (ASCII_ALPHANUMERIC | "." | "," | "!" | "?" | "'")+ }
 ek_joik      = _{ (A_clause | JOI_clause) ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clause)?
                 | (GAhO_clause ~ sp1)? ~ BIhI_clause ~ (sp1 ~ GAhO_clause)?
                   ~ (sp1 ~ NAI_clause)? }
-gihek_link   = _{ GIhA_clause ~ (sp1 ~ NAI_clause)? }
+gihek_link   = _{ GIhA_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clause)? }
 tanru_link   = _{ JA_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clause)? }
 // 先接続は GA+NAI の結合形(ganai)と分離形(ga nai)の両方、
 // GI 側も gi / ginai / gi nai を受理(CLL 14 の論理接続)
@@ -407,6 +412,9 @@ NAhE_core = @{ ( ^"na'e" | ^"to'e" | ^"no'e" | ^"je'a") ~ &word_boundary }
 NIhO_core = @{ ( ^"ni'o" | ^"niho") ~ &word_boundary }
 NOI_core = @{ ( ^"poi" | ^"noi" | ^"voi") ~ &word_boundary }
 NU_core = @{ ( ^"je'i" | ^"mu'e" | ^"pu'u" | ^"zu'o" | ^"li'i" | ^"su'u" | ^"du'u" | ^"nu" | ^"ka" | ^"ni") ~ &word_boundary }
+// SE+NU の結合表記(報話で高頻度の sedu'u)。素の形が先だと境界先読みで失敗するため
+// joint を先に試行(教訓6)。tanru_unit の BRIVLA ガードにも追加(fu'ivla 誤認防止)
+SEDUHU_joint = @{ (^"sedu'u" | ^"seduhu") ~ &word_boundary }
 PA_core = @{ (^"dau" | ^"fei" | ^"jai" | ^"rei" | ^"vai" | ^"so'a" | ^"so'e" | ^"so'i"
                | ^"so'u" | ^"za'u" | ^"su'o" | ^"ji'i" | ^"xo" | ^"pi"
                | ^"pa" | ^"re" | ^"ci" | ^"vo" | ^"mu" | ^"xa" | ^"ze" | ^"bi" | ^"so" | ^"no"
@@ -436,6 +444,7 @@ Y_core = @{ ( ("y" | "Y")+) ~ &word_boundary }
 NAI_core = @{ ( ^"nai") ~ &word_boundary }
 PU_core   = @{ (^"pu" | ^"ca" | ^"ba") ~ &word_boundary }
 CAhA_core = @{ (^"ka'e" | ^"ca'a" | ^"nu'a" | ^"ja'ai") ~ &word_boundary }
+CUhE_core = @{ (^"cu'e" | ^"cuhe") ~ &word_boundary }
 ZAhO_core = @{ (^"pu'o" | ^"co'a" | ^"za'o" | ^"ca'o" | ^"co'u" | ^"mo'u"
                | ^"ba'o" | ^"de'a" | ^"di'a") ~ &word_boundary }
 ZI_core   = @{ (^"ze'i" | ^"zehi" | ^"ze'a" | ^"zeha" | ^"ze'u" | ^"zehu"
@@ -527,6 +536,7 @@ TO_clause = { TO_core }
 TOI_clause = { TOI_core }
 PU_clause   = { PU_core }
 CAhA_clause = { CAhA_core }
+CUhE_clause = { CUhE_core }
 ZAhO_clause = { ZAhO_core }
 ZI_clause   = { ZI_core }
 ZEhA_clause = { ZEhA_core }
