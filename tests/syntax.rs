@@ -672,3 +672,28 @@ fn 述語連鎖_bo_グルーピング() {
     let s = parse_ok("mi nelci gi'e bo citka");
     assert!(s.contains("GIhA_core") && s.contains("BO_core"), "{s}");
 }
+
+#[test]
+fn 発話序数_mai() {
+    // .i 直後
+    let s = parse_ok(".i pamai mi klama");
+    assert!(s.contains("MAI_core \"pamai\""), "{s}");
+    // 文末(自由修飾語)
+    let s = parse_ok("mi klama pamai");
+    assert!(s.contains("MAI_core"), "{s}");
+}
+
+#[test]
+fn 感情強度_cai() {
+    let s = parse_ok("ui sai do gleki");
+    assert!(s.contains("UI_core \"ui\""), "{s}");
+    assert!(s.contains("CAI_core \"sai\""), "{s}");
+    let s = parse_ok("mi gleki ui cu'i");
+    assert!(s.contains("CAI_core \"cu'i\""), "{s}");
+}
+
+#[test]
+fn 数終端_boi() {
+    let s = parse_ok("li re boi su'i ci du li mu");
+    assert!(s.contains("BOI_core \"boi\""), "{s}");
+}

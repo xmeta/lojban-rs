@@ -59,7 +59,7 @@ lahe_sumti = { LAhE_clause ~ sp1 ~ sumti ~ (sp1 ~ GEhU_clause)? }
 
 desc        = { LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
 quant_desc  = { number ~ sp1 ~ LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
-number      = { PA_clause ~ (sp1 ~ PA_clause)* }
+number      = { PA_clause ~ (sp1 ~ PA_clause)* ~ (sp1 ~ BOI_clause)? }
 abstraction = { abstr_head ~ sp1 ~ sentence ~ (sp1 ~ KEI_clause)? }
 abstr_head  = _{ SEDUHU_joint | NU_clause }
 sumti_tail  = _{ (mex ~ sp1)? ~ selbri }
@@ -99,7 +99,8 @@ tense_offset  = _{ PU_clause | ZI_clause }
 tanru      = { tanru_unit ~ (sp1 ~ tanru_link ~ sp1 ~ tanru_unit | sp1 ~ tanru_unit)* }
 tanru_unit = {
      !("ija" | "ije" | "ijo" | "iju")
-   ~ !(GANAI_joint | GINAI_joint | SEBAI_joint | SEDUHU_joint | IBO_joint)
+   ~ !(GANAI_joint | GINAI_joint | SEBAI_joint | SEDUHU_joint | IBO_joint
+     | MAI_core)
    ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
    // 注: 「i+字母」で始まる語(.ije / .ijanai 等の文連結結合形)は tanru の先頭に来ないため除外。
    // 母音始まりの語そのもの(.a'onai 等)は述語のみの文として正当なので許容する
@@ -151,9 +152,10 @@ lohu_quote = { LOhU_clause ~ sp0 ~ (!LEhU_clause ~ word) ~ (sp1 ~ !LEhU_clause ~
 frees_s   = _{ free ~ (sp1 ~ free)* }
 frees_m   = _{ (sp1 ~ free)+ }
 free      = { free_unit ~ (sp1 ~ free_unit)* }
-free_unit = { ui_free | sei_free | to_quote | vocative | lohu_quote
+free_unit = { ui_free | mai_free | sei_free | to_quote | vocative | lohu_quote
            | SI_clause | SU_clause }
-ui_free  = { UI_clause ~ (sp1 ~ NAI_clause)? }
+mai_free  = { MAI_clause }
+ui_free  = { UI_clause ~ (sp1 ~ CAI_clause)? ~ (sp1 ~ NAI_clause)? }
 sei_free = { SEI_clause ~ sp1 ~ sentence ~ (sp1 ~ SEhU_clause)? }
 to_quote = { TO_clause ~ (sp0 ~ (word ~ (sp1 ~ word)*)?)? ~ (sp1 ~ TOI_clause)? }
 
@@ -442,6 +444,11 @@ VAU_core = @{ ( ^"vau") ~ &word_boundary }
 VUhO_core = @{ ( ^"vu'o" | ^"vuho") ~ &word_boundary }
 Y_core = @{ ( ("y" | "Y")+) ~ &word_boundary }
 NAI_core = @{ ( ^"nai") ~ &word_boundary }
+// 発話序数(PA+mai の結合形。.i pamai … / 文末 … pamai)
+MAI_core = @{ (^"pamai" | ^"remai" | ^"cimai" | ^"vomai" | ^"mumai"
+              | ^"xamai" | ^"zemai" | ^"bimai" | ^"somai" | ^"nomai") ~ &word_boundary }
+// 感情強度(CAI): cai=最強 / sai=強 / ru'e=弱 / cu'i=中立
+CAI_core = @{ (^"cai" | ^"sai" | ^"ru'e" | ^"ruhe" | ^"cu'i" | ^"cuhi") ~ &word_boundary }
 PU_core   = @{ (^"pu" | ^"ca" | ^"ba") ~ &word_boundary }
 CAhA_core = @{ (^"ka'e" | ^"ca'a" | ^"nu'a" | ^"ja'ai") ~ &word_boundary }
 CUhE_core = @{ (^"cu'e" | ^"cuhe") ~ &word_boundary }
@@ -523,6 +530,8 @@ LUhU_clause = { LUhU_core }
 NA_clause = { NA_core }
 JAhA_clause = { JAhA_core }
 NAI_clause = { NAI_core }
+MAI_clause = { MAI_core }
+CAI_clause = { CAI_core }
 NAhE_clause = { NAhE_core }
 NIhO_clause = { NIhO_core }
 NOI_clause = { NOI_core }
