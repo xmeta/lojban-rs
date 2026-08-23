@@ -697,3 +697,34 @@ fn 数終端_boi() {
     let s = parse_ok("li re boi su'i ci du li mu");
     assert!(s.contains("BOI_core \"boi\""), "{s}");
 }
+
+#[test]
+fn 談話標識_語彙拡充() {
+    for w in ["ku'i", "ja'o", "po'o", "da'i", "je'u"] {
+        let s = parse_ok(&format!("{w} mi klama"));
+        assert!(s.contains(&format!("UI_core \"{w}\"")), "{s}");
+    }
+    // 文中挿入(項と述語の間)
+    let s = parse_ok("mi ku'i cadzu");
+    assert!(s.contains("UI_core \"ku'i\""), "{s}");
+}
+
+#[test]
+fn 感情語彙_追加() {
+    let s = parse_ok("u'o mi klama");
+    assert!(s.contains("UI_core \"u'o\""), "{s}");
+    let s = parse_ok("mi gleki ga'i");
+    assert!(s.contains("UI_core \"ga'i\""), "{s}");
+}
+
+#[test]
+fn 語彙拡充_coi_bai_joi_pa() {
+    let s = parse_ok("vi'o mi klama");
+    assert!(s.contains("COI_core \"vi'o\""), "{s}");
+    let s = parse_ok("ci'u le nu broda mi co'a gleki");
+    assert!(s.contains("BAI_core \"ci'u\""), "{s}");
+    let s = parse_ok("mi jo'u do klama");
+    assert!(s.contains("JOI_core \"jo'u\""), "{s}");
+    let s = parse_ok("su'e re prenu cu klama");
+    assert!(s.contains("PA_core \"su'e\""), "{s}");
+}

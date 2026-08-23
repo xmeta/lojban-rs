@@ -100,7 +100,7 @@ tanru      = { tanru_unit ~ (sp1 ~ tanru_link ~ sp1 ~ tanru_unit | sp1 ~ tanru_u
 tanru_unit = {
      !("ija" | "ije" | "ijo" | "iju")
    ~ !(GANAI_joint | GINAI_joint | SEBAI_joint | SEDUHU_joint | IBO_joint
-     | MAI_core)
+     | MAI_core | UI_clause)
    ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
    // 注: 「i+字母」で始まる語(.ije / .ijanai 等の文連結結合形)は tanru の先頭に来ないため除外。
    // 母音始まりの語そのもの(.a'onai 等)は述語のみの文として正当なので許容する
@@ -333,7 +333,9 @@ A_core = @{ ( "a" | "e" | "o" | "u") ~ &word_boundary }
 BAI_core = @{ (^"bau" | ^"bai" | ^"cau" | ^"cu'u" | ^"mu'i" | ^"mu'u" | ^"ni'i"
                | ^"ri'a" | ^"ta'i" | ^"ki'u" | ^"kai" | ^"pa'u" | ^"se'o" | ^"si'u"
                | ^"va'o" | ^"zu'e" | ^"ja'e" | ^"ra'i" | ^"ri'i" | ^"de'i" | ^"du'o"
-               | ^"fau" | ^"ka'a") ~ &word_boundary }
+               | ^"fau" | ^"ka'a" | ^"cihu" | ^"ci'u" | ^"pu'a"
+               | ^"jihe" | ^"ji'e" | ^"jihu" | ^"ji'u" | ^"jiho" | ^"ji'o"
+               | ^"raha" | ^"ra'a") ~ &word_boundary }
 BE_core = @{ ( ^"be") ~ &word_boundary }
 BEI_core = @{ ( ^"bei") ~ &word_boundary }
 BEhO_core = @{ ( ^"be'o" | ^"beho") ~ &word_boundary }
@@ -341,7 +343,8 @@ BO_core = @{ ( ^"bo") ~ &word_boundary }
 BOI_core = @{ ( ^"boi") ~ &word_boundary }
 CO_core = @{ ( ^"co") ~ &word_boundary }
 COI_core = @{ (^"coi" | ^"co'o" | ^"je'e" | ^"ju'i" | ^"re'i" | ^"nu'e" | ^"fi'i"
-               | ^"fe'o" | ^"mu'o" | ^"mi'e" | ^"ta'a" | ^"pe'u" | ^"ki'e" | ^"doi") ~ &word_boundary }
+               | ^"fe'o" | ^"mu'o" | ^"mi'e" | ^"ta'a" | ^"pe'u" | ^"ki'e"
+               | ^"viho" | ^"vi'o" | ^"keho" | ^"ke'o" | ^"doi") ~ &word_boundary }
 CU_core = @{ ( ^"cu") ~ &word_boundary }
 DOhU_core = @{ ( ^"do'u" | ^"dohu") ~ &word_boundary }
 FA_core = @{ ( ^"fi'a" | ^"fa" | ^"fe" | ^"fi" | ^"fo" | ^"fu") ~ &word_boundary }
@@ -381,7 +384,7 @@ SU_core   = @{ ( ^"su") ~ &word_boundary }
 JA_core = @{ ( ^"ja" | ^"je" | ^"jo" | ^"ju") ~ &word_boundary }
 // 結合形(.ijanai 等)用: 語境界ガードなしの素の JA
 JA_bare = _{ ^"ja" | ^"je" | ^"jo" | ^"ju" }
-JOI_core = @{ ( ^"jo'e" | ^"joi" | ^"fa'u" | ^"ku'a") ~ &word_boundary }
+JOI_core = @{ ( ^"jo'e" | ^"joi" | ^"fa'u" | ^"ku'a" | ^"johu" | ^"jo'u") ~ &word_boundary }
 KE_core = @{ ( ^"ke") ~ &word_boundary }
 KEhE_core = @{ ( ^"ke'e" | ^"kehe") ~ &word_boundary }
 KEI_core = @{ ( ^"kei") ~ &word_boundary }
@@ -418,7 +421,8 @@ NU_core = @{ ( ^"je'i" | ^"mu'e" | ^"pu'u" | ^"zu'o" | ^"li'i" | ^"su'u" | ^"du'
 // joint を先に試行(教訓6)。tanru_unit の BRIVLA ガードにも追加(fu'ivla 誤認防止)
 SEDUHU_joint = @{ (^"sedu'u" | ^"seduhu") ~ &word_boundary }
 PA_core = @{ (^"dau" | ^"fei" | ^"jai" | ^"rei" | ^"vai" | ^"so'a" | ^"so'e" | ^"so'i"
-               | ^"so'u" | ^"za'u" | ^"su'o" | ^"ji'i" | ^"xo" | ^"pi"
+               | ^"so'u" | ^"za'u" | ^"su'o" | ^"suhe" | ^"su'e" | ^"daha" | ^"da'a"
+               | ^"ji'i" | ^"xo" | ^"pi"
                | ^"pa" | ^"re" | ^"ci" | ^"vo" | ^"mu" | ^"xa" | ^"ze" | ^"bi" | ^"so" | ^"no"
                | ^"ro" | ^"ki'o" | ^"ma'u" | ^"ni'u") ~ &word_boundary }
 ROI_core = @{ ( ^"roi") ~ &word_boundary }
@@ -435,6 +439,11 @@ TO_core = @{ ( ^"to") ~ &word_boundary }
 TOI_core = @{ ( ^"toi") ~ &word_boundary }
 UI_core = @{ (^"u'i" | ^"u'u" | ^"ru'e" | ^"ju'o" | ^"pe'i" | ^"sa'e" | ^"ta'o"
               | ^"e'o" | ^"e'e" | ^"a'e" | ^"i'a" | ^"buho" | ^"bu'o"
+              | ^"kuhi" | ^"ku'i" | ^"ja'o" | ^"po'o" | ^"dahi" | ^"da'i"
+              | ^"jehu" | ^"je'u" | ^"laha" | ^"la'a" | ^"zaha" | ^"za'a"
+              | ^"gahi" | ^"ga'i" | ^"uho" | ^"u'o" | ^"ihi" | ^"i'i"
+              | ^"oha" | ^"o'a" | ^"ehi" | ^"e'i" | ^"kahu" | ^"ka'u"
+              | ^"ruha" | ^"ru'a" | ^"jiha" | ^"ji'a"
                | ^"zo'o" | ^"a'u" | ^"o'o" | ^"u'a" | ^"u'e" | ^"cai"
                | ^"ui" | ^"oi" | ^"ie" | ^"ii" | ^"uu" | ^"ua" | ^"ue" | ^"uo"
                | ^"ia" | ^"iu" | ^"ei" | ^"xu"
