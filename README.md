@@ -147,7 +147,9 @@ src/
 - 接続詞は基本形対応済み(`bo` グルーピング・BIhI 間隔接続・述語先接続 GUhA を含む)。
   先接続演算子(MAhO)等の数理詳細は未実装
 - 数理表現(mex)は LI…LOhO の項と描述内数量詞(`le re su'i ci gerku`)に対応
-  (`vei … ve'o` 括弧、`ki'o` `ma'u` `ni'u`)。演算子は左結合の単純連鎖
+  (`vei … ve'o` 括弧、`ki'o` `ma'u` `ni'u`)。演算子は左結合の単純連鎖で、
+  SE 変換(`se pi'i`)・NAhU 派生演算子(`na'u zmadu`)・BIhI 間隔、
+  被演算子の mo'e+sumti(`mo'e ti`)に対応
 - lerfu は BY 語形(`by` `xy` `abu` 等)と BU 文字化(任意の語 + `bu`)に対応
 - 消去(SI/SU)対応: 解析前に意味論を適用(`si`=直前語消去、`su`=文頭まで遡って消去。
   引用内と `zo` 直後は保護)。解析木は消去後の文に基づく

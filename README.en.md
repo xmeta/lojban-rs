@@ -159,7 +159,9 @@ The real-sentence corpus uses Lojban sentences from [Tatoeba](https://tatoeba.or
   Forethought operators (MAhO) and other mex details are not implemented
 - mex arithmetic is supported as LI…LOhO sumti and inside description
   quantifiers (`le re su'i ci gerku`) with `vei … ve'o` parentheses and
-  `ki'o` `ma'u` `ni'u`. Operators form simple left-associative chains
+  `ki'o` `ma'u` `ni'u`. Operators form simple left-associative chains and
+  support SE conversion (`se pi'i`), NAhU-derived operators (`na'u zmadu`),
+  BIhI intervals, and mo'e+sumti operands (`mo'e ti`)
 - lerfu supports BY words (`by`, `xy`, `abu`, …) and BU conversion
   (any word followed by `bu`)
 - Erasure (SI/SU): semantics are applied before parsing (`si` erases the

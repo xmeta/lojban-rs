@@ -1,8 +1,16 @@
 # 開発ステータス
 
-## 現在の状態: v0.25 完成(全テストグリーン)
+## 現在の状態: v0.26 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語86 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計127テスト全パス
+- ライブラリ20 / 形態論11 / 統語89 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計130テスト全パス
+
+## v0.26 で追加
+- mex 演算子の拡張: NAhU+tanru(na'u zmadu)、SE 変換 VUhU(se pi'i)、
+  BIhI 間隔演算子。被演算子に MOhE+sumti(mo'e ti)を追加
+- 時制固定 ki(KI)を tense_mark に追加(解析レベルのマーカー。固定意味論は非モデル)
+- 教訓: 二項 na'u 演算子には被演算子が2つ必要(li re na'u zmadu ci の形。
+  li の入れ子は li_mex が mex を包含しないため不可 — CLL 同様 loho/boi での
+  明示閉鎖が必要な領域)
 
 ## v0.25 で追加(語彙拡充バッチ)
 - UI: ku'i ja'o po'o da'i je'u la'a za'a ga'i u'o i'i o'a e'i ka'u ru'a ji'a
@@ -210,4 +218,5 @@
    `x = @{ (^"mi" | ^"mi'a") ~ &wb }` が "mi'a" を拒否することで確認済み)
 
 ## 次の拡張候補
-- NAhU/MOhI 由来の詳細時制、VEhA/VIhA 空間間隔、mex の演算子強化(MAhO/NAhU)
+- VEhA/VIhA 空間間隔、PEhO 先置 mex、MAhO(mex→演算子)、
+  コーパス拡充(Tatoeba 再取得による受理率計測)
