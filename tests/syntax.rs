@@ -728,3 +728,27 @@ fn 語彙拡充_coi_bai_joi_pa() {
     let s = parse_ok("su'e re prenu cu klama");
     assert!(s.contains("PA_core \"su'e\""), "{s}");
 }
+
+#[test]
+fn mex_nahu_演算子() {
+    let s = parse_ok("li re na'u zmadu ci du li vo");
+    assert!(s.contains("NAhU_core \"na'u\""), "{s}");
+    // SE 変換演算子
+    let s = parse_ok("li re se pi'i ci du li xa");
+    assert!(
+        s.contains("SE_core \"se\"") && s.contains("VUhU_core \"pi'i\""),
+        "{s}"
+    );
+}
+
+#[test]
+fn mex_moe_被演算子() {
+    let s = parse_ok("li mo'e ti su'i re du li ci");
+    assert!(s.contains("MOhE_core \"mo'e\""), "{s}");
+}
+
+#[test]
+fn 時制固定_ki() {
+    let s = parse_ok("mi ba ki klama");
+    assert!(s.contains("KI_core \"ki\""), "{s}");
+}

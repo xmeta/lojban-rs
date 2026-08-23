@@ -88,7 +88,7 @@ tense_mark  = _{ PU_clause | CAhA_clause | ZAhO_clause | ZI_clause | VA_clause
                | TAhE_clause | ROI_clause | BAI_clause ~ (sp1 ~ NAI_clause)?
                | MOhI_clause ~ sp1 ~ FAhA_clause | FAhA_clause
                | NA_clause ~ sp1 ~ KU_clause | NAKU_joint
-               | CUhE_clause
+               | CUhE_clause | KI_clause
                | time_interval }
 
 // 時制間隔(ZEhA): オフセット(PU/ZI)を間隔詞の両端に置く
@@ -100,7 +100,7 @@ tanru      = { tanru_unit ~ (sp1 ~ tanru_link ~ sp1 ~ tanru_unit | sp1 ~ tanru_u
 tanru_unit = {
      !("ija" | "ije" | "ijo" | "iju")
    ~ !(GANAI_joint | GINAI_joint | SEBAI_joint | SEDUHU_joint | IBO_joint
-     | MAI_core | UI_clause)
+     | MAI_core | UI_clause | NAhU_clause | MOhE_clause)
    ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
    // 注: 「i+字母」で始まる語(.ije / .ijanai 等の文連結結合形)は tanru の先頭に来ないため除外。
    // 母音始まりの語そのもの(.a'onai 等)は述語のみの文として正当なので許容する
@@ -118,8 +118,11 @@ ke_group   = { KE_clause ~ sp1 ~ selbri ~ (sp1 ~ KEhE_clause)? }
 linked_args = { BE_clause ~ sp1 ~ sumti ~ (sp1 ~ BEI_clause ~ sp1 ~ sumti)* ~ (sp1 ~ BEhO_clause)? }
 
 // 数理表現(mex)。LI...LOhO で sumti 化。演算子は左結合の単純連鎖、括弧は vei...ve'o
-mex         = { mex_operand ~ (sp1 ~ VUhU_clause ~ sp1 ~ mex_operand)* }
-mex_operand = _{ number | vei_group | BY_clause }
+mex         = { mex_operand ~ (sp1 ~ mex_operator ~ sp1 ~ mex_operand)* }
+mex_operator = _{ (SE_clause ~ sp1)? ~ VUhU_clause
+                 | NAhU_clause ~ sp1 ~ tanru
+                 | BIhI_clause }
+mex_operand = _{ number | vei_group | BY_clause | MOhE_clause ~ sp1 ~ sumti }
 vei_group   = { VEI_clause ~ sp0 ~ mex ~ (sp0 ~ VEhO_clause)? }
 li_mex      = { LI_clause ~ sp0 ~ mex ~ (sp0 ~ LOhO_clause)? }
 // 文字化(任意の語 + bu で文字参照)。sumti_core の先頭で試行し
@@ -370,8 +373,12 @@ I_core = @{ ( ^"i") ~ &word_boundary }
 BIhI_core = @{ ( ^"bi'o" | ^"bi'i" | ^"mi'i") ~ &word_boundary }
 VUhU_core = @{ ( ^"su'i" | ^"vu'u" | ^"pi'i" | ^"fe'i" | ^"gei" | ^"de'o" | ^"te'o"
                | ^"re'a" | ^"va'a" | ^"pa'i" | ^"si'i" | ^"fu'u") ~ &word_boundary }
+NAhU_core = @{ (^"na'u" | ^"nahu") ~ &word_boundary }
+MOhE_core = @{ (^"mo'e" | ^"mohe") ~ &word_boundary }
 VEI_core  = @{ ( ^"vei") ~ &word_boundary }
 VEhO_core = @{ ( ^"ve'o" | ^"veho") ~ &word_boundary }
+NAhU_clause = { NAhU_core }
+MOhE_clause = { MOhE_core }
 LOhO_core = @{ ( ^"lo'o" | ^"loho") ~ &word_boundary }
 BY_core   = @{ (^"by" | ^"cy" | ^"dy" | ^"fy" | ^"gy" | ^"jy" | ^"ky" | ^"ly"
               | ^"my" | ^"ny" | ^"py" | ^"ry" | ^"sy" | ^"ty" | ^"vy" | ^"xy"
@@ -459,6 +466,7 @@ MAI_core = @{ (^"pamai" | ^"remai" | ^"cimai" | ^"vomai" | ^"mumai"
 // 感情強度(CAI): cai=最強 / sai=強 / ru'e=弱 / cu'i=中立
 CAI_core = @{ (^"cai" | ^"sai" | ^"ru'e" | ^"ruhe" | ^"cu'i" | ^"cuhi") ~ &word_boundary }
 PU_core   = @{ (^"pu" | ^"ca" | ^"ba") ~ &word_boundary }
+KI_core   = @{ ( ^"ki") ~ &word_boundary }
 CAhA_core = @{ (^"ka'e" | ^"ca'a" | ^"nu'a" | ^"ja'ai") ~ &word_boundary }
 CUhE_core = @{ (^"cu'e" | ^"cuhe") ~ &word_boundary }
 ZAhO_core = @{ (^"pu'o" | ^"co'a" | ^"za'o" | ^"ca'o" | ^"co'u" | ^"mo'u"
@@ -553,6 +561,7 @@ SEhU_clause = { SEhU_core }
 TO_clause = { TO_core }
 TOI_clause = { TOI_core }
 PU_clause   = { PU_core }
+KI_clause   = { KI_core }
 CAhA_clause = { CAhA_core }
 CUhE_clause = { CUhE_core }
 ZAhO_clause = { ZAhO_core }
