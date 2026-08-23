@@ -35,7 +35,7 @@ frees_mid  = _{ free ~ (sp1 ~ free)* }
 terms = { term ~ (sp1 ~ term)* }
 term  = { tagged | na_ku | sumti }
 tagged = { FA_clause ~ sp1 ~ sumti
-         | (SE_clause ~ sp1)? ~ BAI_clause ~ sp1 ~ sumti
+         | (SE_clause ~ sp1)? ~ BAI_clause ~ (sp1 ~ NAI_clause)? ~ sp1 ~ sumti
          | SEBAI_joint ~ sp1 ~ sumti
          | FIhO_clause ~ sp1 ~ selbri ~ (sp1 ~ FEhU_clause)? ~ sp1 ~ sumti
          | tense_tags ~ sp1 ~ sumti ~ (sp1 ~ KU_clause)? }
@@ -82,9 +82,15 @@ s_mark  = { NA_clause | JAhA_clause | SE_clause | NAhE_clause }
 // 時制・相・方位の連続(zantufa の tag/tense の簡略版。ku による明示閉鎖も許容)
 tense_marks = _{ tense_mark ~ (sp1 ~ tense_mark)* ~ (sp1 ~ KU_clause)? }
 tense_mark  = _{ PU_clause | CAhA_clause | ZAhO_clause | ZI_clause | VA_clause
-               | TAhE_clause | ROI_clause | BAI_clause
+               | TAhE_clause | ROI_clause | BAI_clause ~ (sp1 ~ NAI_clause)?
                | MOhI_clause ~ sp1 ~ FAhA_clause | FAhA_clause
-               | NA_clause ~ sp1 ~ KU_clause | NAKU_joint }
+               | NA_clause ~ sp1 ~ KU_clause | NAKU_joint
+               | time_interval }
+
+// 時制間隔(ZEhA): オフセット(PU/ZI)を間隔詞の両端に置く
+// (pu bi'o ba = 過去から未来へ渡る、ca bi'i ba = 現在と未来の間、等)
+time_interval = _{ (tense_offset ~ sp1)? ~ ZEhA_clause ~ (sp1 ~ tense_offset)? }
+tense_offset  = _{ PU_clause | ZI_clause }
 
 tanru      = { tanru_unit ~ (sp1 ~ tanru_link ~ sp1 ~ tanru_unit | sp1 ~ tanru_unit)* }
 tanru_unit = {
@@ -434,6 +440,8 @@ ZAhO_core = @{ (^"pu'o" | ^"co'a" | ^"za'o" | ^"ca'o" | ^"co'u" | ^"mo'u"
                | ^"ba'o" | ^"de'a" | ^"di'a") ~ &word_boundary }
 ZI_core   = @{ (^"ze'i" | ^"zehi" | ^"ze'a" | ^"zeha" | ^"ze'u" | ^"zehu"
               | ^"zi" | ^"za" | ^"zu") ~ &word_boundary }
+ZEhA_core = @{ (^"zi'i" | ^"zihi" | ^"bi'o" | ^"biho"
+              | ^"bi'i" | ^"bihi" | ^"mi'i" | ^"mihi") ~ &word_boundary }
 VA_core   = @{ (^"vi" | ^"va" | ^"vu") ~ &word_boundary }
 TAhE_core = @{ (^"ta'e" | ^"di'i" | ^"na'o" | ^"ru'i") ~ &word_boundary }
 ME_core   = @{ (^"me") ~ &word_boundary }
@@ -521,6 +529,7 @@ PU_clause   = { PU_core }
 CAhA_clause = { CAhA_core }
 ZAhO_clause = { ZAhO_core }
 ZI_clause   = { ZI_core }
+ZEhA_clause = { ZEhA_core }
 VA_clause   = { VA_core }
 TAhE_clause = { TAhE_core }
 ME_clause   = { ME_core }

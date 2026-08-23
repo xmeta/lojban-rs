@@ -615,3 +615,21 @@ fn 結合_sebai_タグ() {
     let s = parse_ok("seva'u do mi klama");
     assert!(s.contains("SEBAI_joint \"seva'u\""), "{s}");
 }
+
+#[test]
+fn 時制間隔_zeha() {
+    let s = parse_ok("mi pu bi'o ba klama");
+    assert!(s.contains("ZEhA_core \"bi'o\""), "{s}");
+    let s = parse_ok("mi ca bi'i ba tavla do");
+    assert!(s.contains("ZEhA_core \"bi'i\""), "{s}");
+}
+
+#[test]
+fn bai_nai_否定タグ() {
+    let s = parse_ok("mi klama ri'a nai le nu carvi");
+    assert!(s.contains("BAI_core \"ri'a\""), "{s}");
+    assert!(s.contains("NAI_clause"), "{s}");
+    // 文頭タグ位置
+    let s = parse_ok("mu'i nai le nu do gleki mi cu prami do");
+    assert!(s.contains("NAI_clause"), "{s}");
+}
