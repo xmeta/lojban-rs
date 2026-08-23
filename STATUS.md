@@ -1,8 +1,15 @@
 # 開発ステータス
 
-## 現在の状態: v0.18 完成(全テストグリーン)
+## 現在の状態: v0.19 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語62 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計103テスト全パス
+- ライブラリ20 / 形態論11 / 統語65 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計106テスト全パス
+
+## v0.19 で追加
+- sumti を取る時制タグ(CLL 9): tagged に「時制マーク連鎖 + sumti(+ku 閉鎖)」を
+  追加。selbri 前の項位置(mi ca le cabdei cu klama)と後の項位置
+  (mi klama ca le cabdei)の両方で受理。時制マーク語彙と sumti 開始語彙は
+  クラス分離しているため最長一致の曖昧性なし
+- ZI クラスに期間形 ze'i ze'a ze'u(h 表記併用)を追加(ze'a lo cacra 等)
 
 ## v0.18 で追加
 - 空間・移動時制: FAhA(ca'u ti'a zu'a ga'u ni'a ru'u ne'i pa'o te'e ne'a re'o、
@@ -150,5 +157,5 @@
    `x = @{ (^"mi" | ^"mi'a") ~ &wb }` が "mi'a" を拒否することで確認済み)
 
 ## 次の拡張候補
-- sumti を取る時制タグ(`pu le cabdei` / `vi ne'i le zdani`)、ZEhA 時制間隔、
-  GUhEK 等の先接続詳細制御
+- ZEhA 時制間隔(zi'i bi'o bi'i mi'i)、GUhEK 等の先接続詳細制御、
+  NAhU/MOhI 由来の詳細時制

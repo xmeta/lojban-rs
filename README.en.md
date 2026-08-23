@@ -37,7 +37,8 @@ The parser engine is [pest](https://pest.rs); the grammar in
   - **Tense & aspect** (PU `pu ca ba` / CAhA `ka'e ca'a …` / ZAhO `co'a ca'o ba'o …`
     / ZI `zi za zu` / VA `vi va vu` / TAhE `ta'e di'i na'o ru'i`)
   - **Spatial & motion tense** (FAhA directions `ca'u ti'a zu'a ga'u ni'a …`,
-    MOhI motion marking as in `mo'i ca'u`)
+    MOhI motion marking as in `mo'i ca'u`) and **tense tags taking a sumti**
+    (`mi ca le cabdei cu klama` / `vi ne'i le zdani` / durations `ze'a lo cacra`)
   - **Term reinforcement**: LAhE reference (`la'e di'u` / `lu'e le cukta`),
     term-position negation with `naku` (NA KU), KOhA completion
     (`mi'a` `ma'a` `do'o` `di'u`, etc.)
@@ -163,9 +164,9 @@ The real-sentence corpus uses Lojban sentences from [Tatoeba](https://tatoeba.or
   `zoi DELIM body DELIM`. For ZOI, delimiter matching is validated by a
   pre-parse scan and the body is normalized to `zo'e` in the parse tree
   (pest has no backreferences; unclosed/mismatched delimiters are errors)
-- Tags: FA and BAI (`bau`, `mu'i`, …; attached to terms and sentence fronts).
-  Tense marks (PU/FAhA, etc.) work as bare chains only; tags taking a sumti
-  (as in `pu le cabdei`) are not implemented
+- Tags: FA and BAI (`bau`, `mu'i`, …; attached to terms and sentence fronts),
+  plus tense-mark chains followed by a sumti (`pu le cabdei ku` /
+  `vi ne'i le zdani`), in term position either before or after the selbri
 - cmavo vocabulary covers the main standard CLL words (experimental cmavo are
   not included; extend by adding alternatives to each `*_core` in `lojban.pest`)
 - Pause-less adjacent words allowed by zantufa (e.g. `mibroda` = mi+broda)
