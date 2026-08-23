@@ -34,7 +34,11 @@ frees_mid  = _{ free ~ (sp1 ~ free)* }
 
 terms = { term ~ (sp1 ~ term)* }
 term  = { tagged | na_ku | sumti }
-tagged = { FA_clause ~ sp1 ~ sumti | BAI_clause ~ sp1 ~ sumti }
+tagged = { FA_clause ~ sp1 ~ sumti | BAI_clause ~ sp1 ~ sumti
+         | tense_tags ~ sp1 ~ sumti ~ (sp1 ~ KU_clause)? }
+// 時制マーク連鎖をタグとして使う(pu le cabdei / vi ne'i le zdani 等)。
+// 時制マーク語彙と sumti 開始語彙はクラスが分離しているため最長一致で曖昧性なし
+tense_tags = _{ tense_mark ~ (sp1 ~ tense_mark)* }
 // naku(NA KU)による項位置の否定。結合表記(naku 一語)も IJ_joint 同様に対応
 na_ku      = { NAKU_joint | NA_clause ~ sp1 ~ KU_clause }
 NAKU_joint = { ^"naku" ~ &word_boundary }
@@ -405,7 +409,8 @@ PU_core   = @{ (^"pu" | ^"ca" | ^"ba") ~ &word_boundary }
 CAhA_core = @{ (^"ka'e" | ^"ca'a" | ^"nu'a" | ^"ja'ai") ~ &word_boundary }
 ZAhO_core = @{ (^"pu'o" | ^"co'a" | ^"za'o" | ^"ca'o" | ^"co'u" | ^"mo'u"
                | ^"ba'o" | ^"de'a" | ^"di'a") ~ &word_boundary }
-ZI_core   = @{ (^"zi" | ^"za" | ^"zu") ~ &word_boundary }
+ZI_core   = @{ (^"ze'i" | ^"zehi" | ^"ze'a" | ^"zeha" | ^"ze'u" | ^"zehu"
+              | ^"zi" | ^"za" | ^"zu") ~ &word_boundary }
 VA_core   = @{ (^"vi" | ^"va" | ^"vu") ~ &word_boundary }
 TAhE_core = @{ (^"ta'e" | ^"di'i" | ^"na'o" | ^"ru'i") ~ &word_boundary }
 ME_core   = @{ (^"me") ~ &word_boundary }

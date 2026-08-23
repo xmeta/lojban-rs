@@ -501,3 +501,32 @@ fn naku_項否定() {
 fn 素のnaは項になれない() {
     assert!(lojban::parse("na le gerku cu batci").is_err());
 }
+
+#[test]
+fn 時制タグ_sumti付き() {
+    // selbri 前の項位置
+    let s = parse_ok("mi ca le cabdei cu klama");
+    assert!(s.contains("PU_core \"ca\""), "{s}");
+    assert!(s.contains("tagged"), "{s}");
+    assert!(s.contains("LE_core \"le\""), "{s}");
+    // selbri 後の項位置
+    let s = parse_ok("mi klama ca le cabdei");
+    assert!(s.contains("PU_core \"ca\""), "{s}");
+}
+
+#[test]
+fn 空間タグと_ku_閉鎖() {
+    // VA + FAhA の連鎖タグ
+    let s = parse_ok("mi vi ne'i le zdani cu klama");
+    assert!(s.contains("VA_core \"vi\""), "{s}");
+    assert!(s.contains("FAhA_core \"ne'i\""), "{s}");
+    // ku による明示閉鎖
+    let s = parse_ok("mi klama pu le cabdei ku");
+    assert!(s.contains("KU_core"), "{s}");
+}
+
+#[test]
+fn 期間_zei() {
+    let s = parse_ok("mi ze'a lo cacra cu tavla do");
+    assert!(s.contains("ZI_core \"ze'a\""), "{s}");
+}
