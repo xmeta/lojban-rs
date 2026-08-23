@@ -32,7 +32,7 @@ UINAI_joint = @{ (^"ta'onai" | ^"ja'onai" | ^"ku'inai" | ^"po'onai"
                 | ^"ga'inai" | ^"zu'unai" | ^"ba'anai" | ^"ju'onai"
                 | ^"cu'inai") ~ &word_boundary }
 item    = { gek_sentence | sentence | free | Y_clause | fragment | tense_item }
-fragment  = { terms ~ (sp1 ~ VAU_clause)? }
+fragment  = { terms ~ (sp1 ~ VAU_clause)? ~ (sp1 ~ free)? }
 tense_item = { tense_mark }
 
 sentence   = { frees_s? ~ sp1? ~ tense_marks? ~ sp1? ~ (terms_full | bridi_tail) ~ frees_m? }
@@ -169,7 +169,8 @@ ui_free  = { UINAI_joint | UI_clause ~ (sp1 ~ CAI_clause)? ~ (sp1 ~ NAI_clause)?
 sei_free = { SEI_clause ~ sp1 ~ inner_sentence ~ (sp1 ~ SEhU_clause)? }
 to_quote = { TO_clause ~ (sp0 ~ (word ~ (sp1 ~ word)*)?)? ~ (sp1 ~ TOI_clause)? }
 
-vocative     = { COI_clause ~ (sp1 ~ vocative_arg)? ~ (sp1 ~ DOhU_clause)? }
+vocative     = { COI_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ vocative_arg)?
+               ~ (sp1 ~ DOhU_clause)? }
 vocative_arg = _{ CMEVLA_clause | desc }
 
 // 語ラッパー(後続ポーズを自己消費)
@@ -408,7 +409,7 @@ KEI_core = @{ ( ^"kei") ~ &word_boundary }
 KOhA_core = @{ (^"zo'e" | ^"zu'i" | ^"ke'a" | ^"mi'o" | ^"ko'a" | ^"ko'e" | ^"ko'i"
                | ^"ko'o" | ^"ko'u" | ^"fo'a" | ^"fo'e" | ^"fo'i" | ^"fo'o" | ^"fo'u"
                | ^"vo'a" | ^"vo'e" | ^"vo'i" | ^"vo'o" | ^"vo'u"
-               | ^"mi'a" | ^"ma'a" | ^"do'o" | ^"tu'a" | ^"dei"
+               | ^"mi'ai" | ^"miahi" | ^"mi'a" | ^"ma'a" | ^"do'o" | ^"tu'a" | ^"dei"
                | ^"di'u" | ^"dihu" | ^"de'u" | ^"dehu" | ^"da'u" | ^"dahu"
                | ^"mi" | ^"do" | ^"ti" | ^"ta" | ^"tu" | ^"ri" | ^"ra" | ^"ru" | ^"ko"
                | ^"ma" | ^"da" | ^"de" | ^"di") ~ &word_boundary }
@@ -462,6 +463,7 @@ UI_core = @{ (^"u'i" | ^"u'u" | ^"ru'e" | ^"ju'o" | ^"pe'i" | ^"sa'e" | ^"ta'o"
               | ^"oha" | ^"o'a" | ^"ehi" | ^"e'i" | ^"kahu" | ^"ka'u"
               | ^"ruha" | ^"ru'a" | ^"jiha" | ^"ji'a"
               | ^"zuhu" | ^"zu'u" | ^"baha" | ^"ba'a"
+              | ^"ai" | ^"au" | ^"kiaha" | ^"ki'a"
                | ^"zo'o" | ^"a'u" | ^"o'o" | ^"u'a" | ^"u'e" | ^"cai"
                | ^"ui" | ^"oi" | ^"ie" | ^"ii" | ^"uu" | ^"ua" | ^"ue" | ^"uo"
                | ^"ia" | ^"iu" | ^"ei" | ^"xu"

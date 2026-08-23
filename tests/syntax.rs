@@ -787,3 +787,30 @@ fn 連結数詞() {
     assert!(s.contains("LI_core"), "{s}");
     assert!(s.contains("renono"), "{s}");
 }
+
+#[test]
+fn 感情標識_ai_au_kia() {
+    let s = parse_ok(".ai mi klama");
+    assert!(s.contains("UI_core \"ai\""), "{s}");
+    let s = parse_ok("au forca");
+    assert!(s.contains("UI_core \"au\""), "{s}");
+    let s = parse_ok("ki'a do cusku ma");
+    assert!(s.contains("UI_core \"ki'a\""), "{s}");
+}
+
+#[test]
+fn 呼格_naiと_miai() {
+    let s = parse_ok("ju'i nai do klama");
+    assert!(
+        s.contains("COI_core \"ju'i\"") && s.contains("NAI_clause"),
+        "{s}"
+    );
+    let s = parse_ok("nabmi mi'ai");
+    assert!(s.contains("KOhA_core \"mi'ai\""), "{s}");
+    // フラグメント+自由修飾語
+    let s = parse_ok("mi'a uu");
+    assert!(
+        s.contains("KOhA_core \"mi'a\"") && s.contains("UI_core \"uu\""),
+        "{s}"
+    );
+}
