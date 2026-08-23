@@ -34,8 +34,12 @@ frees_mid  = _{ free ~ (sp1 ~ free)* }
 
 terms = { term ~ (sp1 ~ term)* }
 term  = { tagged | na_ku | sumti }
-tagged = { FA_clause ~ sp1 ~ sumti | BAI_clause ~ sp1 ~ sumti
+tagged = { FA_clause ~ sp1 ~ sumti
+         | (SE_clause ~ sp1)? ~ BAI_clause ~ sp1 ~ sumti
+         | FIhO_clause ~ sp1 ~ selbri ~ (sp1 ~ FEhU_clause)? ~ sp1 ~ sumti
          | tense_tags ~ sp1 ~ sumti ~ (sp1 ~ KU_clause)? }
+// 注: FIhO の fe'u は省略可(selbri は tail_terms を含まないため、
+//     直後の sumti との境界が自明)
 // 時制マーク連鎖をタグとして使う(pu le cabdei / vi ne'i le zdani 等)。
 // 時制マーク語彙と sumti 開始語彙はクラスが分離しているため最長一致で曖昧性なし
 tense_tags = _{ tense_mark ~ (sp1 ~ tense_mark)* }
@@ -72,7 +76,7 @@ guhek_selbri = { GUhA_clause ~ (sp1 ~ NAI_clause)? ~ sp1 ~ selbri ~ sp1 ~ GI_cla
                  ~ sp1 ~ selbri }
 co_tail = _{ sp1 ~ CO_clause ~ sp1 ~ s_marks? ~ tanru }
 s_marks = _{ s_mark ~ (sp1 ~ s_mark)* }
-s_mark  = { NA_clause | SE_clause | NAhE_clause }
+s_mark  = { NA_clause | JAhA_clause | SE_clause | NAhE_clause }
 
 // 時制・相・方位の連続(zantufa の tag/tense の簡略版。ku による明示閉鎖も許容)
 tense_marks = _{ tense_mark ~ (sp1 ~ tense_mark)* ~ (sp1 ~ KU_clause)? }
@@ -365,14 +369,16 @@ KEI_core = @{ ( ^"kei") ~ &word_boundary }
 KOhA_core = @{ (^"zo'e" | ^"zu'i" | ^"ke'a" | ^"mi'o" | ^"ko'a" | ^"ko'e" | ^"ko'i"
                | ^"ko'o" | ^"ko'u" | ^"fo'a" | ^"fo'e" | ^"fo'i" | ^"fo'o" | ^"fo'u"
                | ^"vo'a" | ^"vo'e" | ^"vo'i" | ^"vo'o" | ^"vo'u"
-               | ^"mi'a" | ^"ma'a" | ^"do'o"
+               | ^"mi'a" | ^"ma'a" | ^"do'o" | ^"tu'a" | ^"dei"
                | ^"di'u" | ^"dihu" | ^"de'u" | ^"dehu" | ^"da'u" | ^"dahu"
                | ^"mi" | ^"do" | ^"ti" | ^"ta" | ^"tu" | ^"ri" | ^"ra" | ^"ru" | ^"ko"
                | ^"ma" | ^"da" | ^"de" | ^"di") ~ &word_boundary }
 KU_core = @{ ( ^"ku") ~ &word_boundary }
 KUhO_core = @{ ( ^"ku'o" | ^"kuho") ~ &word_boundary }
 LAhE_core = @{ ( ^"la'e" | ^"lu'e") ~ &word_boundary }
-LE_core = @{ ( ^"le'i" | ^"lo'i" | ^"la'i" | ^"lei" | ^"loi" | ^"lai" | ^"le" | ^"lo" | ^"la") ~ &word_boundary }
+LE_core = @{ ( ^"le'i" | ^"lo'i" | ^"la'i" | ^"lei" | ^"loi" | ^"lai"
+              | ^"lo'e" | ^"lehe" | ^"le'e"
+              | ^"le" | ^"lo" | ^"la") ~ &word_boundary }
 LEhU_core = @{ ( ^"le'u" | ^"lehu") ~ &word_boundary }
 LI_core = @{ ( ^"li") ~ &word_boundary }
 // li'u は LU と LOhU に共通する終端詞のため、LIhU/LUhU 両クラスが同一語形を持つ(zantufa の命名踏襲)
@@ -381,6 +387,7 @@ LOhU_core = @{ ( ^"lo'u" | ^"lohu") ~ &word_boundary }
 LU_core = @{ ( ^"lu") ~ &word_boundary }
 LUhU_core = @{ ( ^"li'u" | ^"lihu") ~ &word_boundary }
 NA_core = @{ ( ^"na") ~ &word_boundary }
+JAhA_core = @{ ( ^"ja'a" | ^"jaha") ~ &word_boundary }
 NAhE_core = @{ ( ^"na'e" | ^"to'e" | ^"no'e" | ^"je'a") ~ &word_boundary }
 NIhO_core = @{ ( ^"ni'o" | ^"niho") ~ &word_boundary }
 NOI_core = @{ ( ^"poi" | ^"noi" | ^"voi") ~ &word_boundary }
@@ -396,6 +403,7 @@ SEhU_core = @{ ( ^"se'u" | ^"sehu") ~ &word_boundary }
 TO_core = @{ ( ^"to") ~ &word_boundary }
 TOI_core = @{ ( ^"toi") ~ &word_boundary }
 UI_core = @{ (^"u'i" | ^"u'u" | ^"ru'e" | ^"ju'o" | ^"pe'i" | ^"sa'e" | ^"ta'o"
+              | ^"e'o" | ^"e'e" | ^"a'e" | ^"i'a" | ^"buho" | ^"bu'o"
                | ^"zo'o" | ^"a'u" | ^"o'o" | ^"u'a" | ^"u'e" | ^"cai"
                | ^"ui" | ^"oi" | ^"ie" | ^"ii" | ^"uu" | ^"ua" | ^"ue" | ^"uo"
                | ^"ia" | ^"iu" | ^"ei" | ^"xu"
@@ -481,6 +489,7 @@ LOhU_clause = { LOhU_core }
 LU_clause = { LU_core }
 LUhU_clause = { LUhU_core }
 NA_clause = { NA_core }
+JAhA_clause = { JAhA_core }
 NAI_clause = { NAI_core }
 NAhE_clause = { NAhE_core }
 NIhO_clause = { NIhO_core }

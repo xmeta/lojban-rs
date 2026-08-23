@@ -530,3 +530,53 @@ fn 期間_zei() {
     let s = parse_ok("mi ze'a lo cacra cu tavla do");
     assert!(s.contains("ZI_core \"ze'a\""), "{s}");
 }
+
+#[test]
+fn 肯定_jaha() {
+    let s = parse_ok("mi ja'a klama");
+    assert!(s.contains("JAhA_core \"ja'a\""), "{s}");
+    // 応答表現 ja'a go'i
+    let s = parse_ok("ja'a go'i");
+    assert!(s.contains("JAhA_core"), "{s}");
+    assert!(s.contains("GOhA_core \"go'i\""), "{s}");
+}
+
+#[test]
+fn koha_tua_dei() {
+    let s = parse_ok("mi djica tu'a do");
+    assert!(s.contains("KOhA_core \"tu'a\""), "{s}");
+    let s = parse_ok("dei jetnu");
+    assert!(s.contains("KOhA_core \"dei\""), "{s}");
+}
+
+#[test]
+fn 記述詞_lohe() {
+    let s = parse_ok("lo'e gerku cu batci");
+    assert!(s.contains("LE_core \"lo'e\""), "{s}");
+}
+
+#[test]
+fn 感情標識_追加語彙() {
+    let s = parse_ok("e'o ko cusku");
+    assert!(s.contains("UI_core \"e'o\""), "{s}");
+    let s = parse_ok("mi gleki bu'o");
+    assert!(s.contains("UI_core \"bu'o\""), "{s}");
+}
+
+#[test]
+fn fio_モダルタグ() {
+    // fe'u による明示閉鎖
+    let s = parse_ok("ti fi'o dunda fe'u do cukta");
+    assert!(s.contains("FIhO_core"), "{s}");
+    assert!(s.contains("FEhU_core"), "{s}");
+    // fe'u 省略形(selbri は tail_terms を含まないため境界が自明)
+    let s = parse_ok("ti fi'o dunda do cukta");
+    assert!(s.contains("FIhO_core"), "{s}");
+}
+
+#[test]
+fn se_bai_変換タグ() {
+    let s = parse_ok("mi se ki'u le nu do sidju cu snada");
+    assert!(s.contains("SE_core \"se\""), "{s}");
+    assert!(s.contains("BAI_core \"ki'u\""), "{s}");
+}
