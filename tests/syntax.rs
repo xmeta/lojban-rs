@@ -452,3 +452,52 @@ fn gaho_間隔端点() {
     // 従来形(GAhO 省略)も後方互換
     assert!(s.contains("BIhI_core \"bi'o\""), "{s}");
 }
+
+#[test]
+fn 空間時制_faha() {
+    // 文頭の時制マーク位置
+    let s = parse_ok("mi pu ca'u klama le zdani");
+    assert!(s.contains("FAhA_core \"ca'u\""), "{s}");
+    // selbri 頭の時制マーク位置
+    let s = parse_ok("le gerku cu ne'a batci le mlatu");
+    assert!(s.contains("FAhA_core \"ne'a\""), "{s}");
+}
+
+#[test]
+fn 移動時制_mohi() {
+    let s = parse_ok("mi mo'i ca'u klama");
+    assert!(s.contains("MOhI_core \"mo'i\""), "{s}");
+    assert!(s.contains("FAhA_core"), "{s}");
+}
+
+#[test]
+fn lahe_項修飾() {
+    let s = parse_ok("mi nelci lu'e le cukta");
+    assert!(s.contains("LAhE_core \"lu'e\""), "{s}");
+    let s = parse_ok("la'e di'u cu xamgu");
+    assert!(s.contains("LAhE_core \"la'e\""), "{s}");
+    assert!(s.contains("KOhA_core \"di'u\""), "{s}");
+}
+
+#[test]
+fn koha_補完語() {
+    for w in ["mi'a", "ma'a", "do'o", "di'u"] {
+        let s = parse_ok(&format!("{w} klama"));
+        assert!(s.contains(&format!("KOhA_core \"{w}\"")), "{s}");
+    }
+}
+
+#[test]
+fn naku_項否定() {
+    let s = parse_ok("naku le gerku cu batci le mlatu");
+    assert!(s.contains("NAKU_joint"), "{s}");
+    let s = parse_ok("mi naku klama");
+    assert!(s.contains("NAKU_joint"), "{s}");
+    let s = parse_ok("mi na ku klama");
+    assert!(s.contains("NA_clause") && s.contains("KU_core"), "{s}");
+}
+
+#[test]
+fn 素のnaは項になれない() {
+    assert!(lojban::parse("na le gerku cu batci").is_err());
+}

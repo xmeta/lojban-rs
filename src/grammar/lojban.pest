@@ -33,13 +33,18 @@ terms_full = { terms ~ (sp1 ~ CU_clause)? ~ sp1 ~ frees_mid? ~ bridi_tail }
 frees_mid  = _{ free ~ (sp1 ~ free)* }
 
 terms = { term ~ (sp1 ~ term)* }
-term  = { tagged | sumti }
+term  = { tagged | na_ku | sumti }
 tagged = { FA_clause ~ sp1 ~ sumti | BAI_clause ~ sp1 ~ sumti }
+// naku(NA KU)による項位置の否定。結合表記(naku 一語)も IJ_joint 同様に対応
+na_ku      = { NAKU_joint | NA_clause ~ sp1 ~ KU_clause }
+NAKU_joint = { ^"naku" ~ &word_boundary }
 
 sumti      = { sumti_core ~ (sp1 ~ relative_clauses)? ~ (sp1 ~ ek_joik ~ sp1 ~ sumti)* }
-sumti_core = _{ bu_lerfu | KOhA_clause | desc | BY_clause | quant_desc | quant_selbri | number | abstraction
+sumti_core = _{ bu_lerfu | KOhA_clause | lahe_sumti | desc | BY_clause | quant_desc | quant_selbri | number | abstraction
                | lu_quote | zo_quote | gek_sumti | li_mex | zoi_quote | BY_clause }
 quant_selbri = { number ~ sp1 ~ selbri ~ (sp1 ~ KU_clause)? }
+// LAhE 項修飾(la'e = 参照先 / lu'e = 参照元)。ge'u による明示閉鎖も許容
+lahe_sumti = { LAhE_clause ~ sp1 ~ sumti ~ (sp1 ~ GEhU_clause)? }
 
 desc        = { LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
 quant_desc  = { number ~ sp1 ~ LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
@@ -68,7 +73,9 @@ s_mark  = { NA_clause | SE_clause | NAhE_clause }
 // 時制・相・方位の連続(zantufa の tag/tense の簡略版。ku による明示閉鎖も許容)
 tense_marks = _{ tense_mark ~ (sp1 ~ tense_mark)* ~ (sp1 ~ KU_clause)? }
 tense_mark  = _{ PU_clause | CAhA_clause | ZAhO_clause | ZI_clause | VA_clause
-               | TAhE_clause | ROI_clause | BAI_clause }
+               | TAhE_clause | ROI_clause | BAI_clause
+               | MOhI_clause ~ sp1 ~ FAhA_clause | FAhA_clause
+               | NA_clause ~ sp1 ~ KU_clause | NAKU_joint }
 
 tanru      = { tanru_unit ~ (sp1 ~ tanru_link ~ sp1 ~ tanru_unit | sp1 ~ tanru_unit)* }
 tanru_unit = {
@@ -311,6 +318,10 @@ COI_core = @{ (^"coi" | ^"co'o" | ^"je'e" | ^"ju'i" | ^"re'i" | ^"nu'e" | ^"fi'i
 CU_core = @{ ( ^"cu") ~ &word_boundary }
 DOhU_core = @{ ( ^"do'u" | ^"dohu") ~ &word_boundary }
 FA_core = @{ ( ^"fi'a" | ^"fa" | ^"fe" | ^"fi" | ^"fo" | ^"fu") ~ &word_boundary }
+FAhA_core = @{ (^"ca'u" | ^"cahu" | ^"ti'a" | ^"tiha" | ^"zu'a" | ^"zuha"
+              | ^"ga'u" | ^"gahu" | ^"ni'a" | ^"niha" | ^"ru'u" | ^"ruhu"
+              | ^"ne'i" | ^"pa'o" | ^"paho" | ^"te'e" | ^"ne'a" | ^"re'o") ~ &word_boundary }
+MOhI_core = @{ ( ^"mo'i" | ^"mohi") ~ &word_boundary }
 FAhO_core = @{ ( ^"fa'o" | ^"faho") ~ &word_boundary }
 FEhU_core = @{ ( ^"fe'u" | ^"fehu") ~ &word_boundary }
 FIhO_core = @{ ( ^"fi'o" | ^"fiho") ~ &word_boundary }
@@ -344,9 +355,14 @@ JOI_core = @{ ( ^"jo'e" | ^"joi" | ^"fa'u" | ^"ku'a") ~ &word_boundary }
 KE_core = @{ ( ^"ke") ~ &word_boundary }
 KEhE_core = @{ ( ^"ke'e" | ^"kehe") ~ &word_boundary }
 KEI_core = @{ ( ^"kei") ~ &word_boundary }
+// 注: アポストロフィ付き形は必ずその素の接頭辞(mi/do/di 等)より先に置く。
+//      素の形が先だと境界先読みで失敗した際に後続の長い形が試されない
+//      (pest の文字列選択のクセ。最小再現済み。既存語もこの順序に従っていた)
 KOhA_core = @{ (^"zo'e" | ^"zu'i" | ^"ke'a" | ^"mi'o" | ^"ko'a" | ^"ko'e" | ^"ko'i"
                | ^"ko'o" | ^"ko'u" | ^"fo'a" | ^"fo'e" | ^"fo'i" | ^"fo'o" | ^"fo'u"
                | ^"vo'a" | ^"vo'e" | ^"vo'i" | ^"vo'o" | ^"vo'u"
+               | ^"mi'a" | ^"ma'a" | ^"do'o"
+               | ^"di'u" | ^"dihu" | ^"de'u" | ^"dehu" | ^"da'u" | ^"dahu"
                | ^"mi" | ^"do" | ^"ti" | ^"ta" | ^"tu" | ^"ri" | ^"ra" | ^"ru" | ^"ko"
                | ^"ma" | ^"da" | ^"de" | ^"di") ~ &word_boundary }
 KU_core = @{ ( ^"ku") ~ &word_boundary }
@@ -419,6 +435,8 @@ COI_clause = { COI_core }
 CU_clause = { CU_core }
 DOhU_clause = { DOhU_core }
 FA_clause = { FA_core }
+FAhA_clause = { FAhA_core }
+MOhI_clause = { MOhI_core }
 FAhO_clause = { FAhO_core }
 FEhU_clause = { FEhU_core }
 FIhO_clause = { FIhO_core }
