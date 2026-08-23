@@ -4,6 +4,11 @@
 
 - ライブラリ11 / 形態論11 / 統語56 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計88テスト全パス
 
+## v0.17 で追加
+- lujvo 分解(decompose()、CLI --split-lujvo): バックトラック型セグメンテーションで
+  rafsi 列+ハイフンへ分解。gismu 単体は拒否。build → decompose の
+  roundtrip テストで双方向の整合を保証
+
 ## v0.16 で追加
 - lujvo 生成アルゴリズム(src/lujvo.rs、CLI --build-lujvo):
   CLL 4.11 のハイフン規則(r/n ハイフン、不許容語中クラスタへの y 挿入、

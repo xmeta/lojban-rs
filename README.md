@@ -34,9 +34,11 @@ guskant 氏の **zantufa-1.9999.peg** を Rust/pest 向けに移植したもの�
   - 数量詞+述語の項(`pa prenu cu klama`)、描述内数量詞(`le ci gerku`)
   - `me` 述語、項のみのフラグメント(`mi` 単独)、単独感情標識(`.ui`)
 - **出力**: 整形ツリー / S 式 / JSON(`{"rule","text","children"}` 形式)
-- **lujvo 生成**(CLL 4.11/4.12 準拠): rafsi 列からハイフン規則(r/n/y)・
+- **lujvo 生成・分解**(CLL 4.11/4.12 準拠): rafsi 列からハイフン規則(r/n/y)・
   tosmabru 検査・語中クラスタ規則(CLL 3.6)を適用して新語を合成し、
-  公式スコアを算出。`--build-lujvo` または `lojban::lujvo::build()`
+  公式スコアを算出(`--build-lujvo` / `lojban::lujvo::build()`)。
+  逆方向の分解も対応(`--split-lujvo` / `lojban::lujvo::decompose()`)。
+  build → decompose の roundtrip をテストで保証
 
 ## 使い方
 
@@ -56,6 +58,13 @@ $ echo "coi la alis." | lojban
 # lujvo(新語)を生成(CLL 4.11 のハイフン規則 + tosmabru 検査 + 4.12 スコア)
 $ lojban --build-lujvo "zba sai"
 zbasai (score 5847)
+
+# lujvo を rafsi 列に分解
+$ lojban --split-lujvo "sairzbata'u"
+sai (Cvv)
+-r- [hyphen]
+zba (Ccv)
+ta'u (CvvApo)
 ```
 
 ### ライブラリ API
