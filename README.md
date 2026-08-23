@@ -35,7 +35,8 @@ guskant 氏の **zantufa-1.9999.peg** を Rust/pest 向けに移植したもの�
     MOhI 移動指定 `mo'i ca'u`)と **sumti を取る時制タグ**
     (`mi ca le cabdei cu klama` / `vi ne'i le zdani` / 期間 `ze'a lo cacra`)
   - **項の補強**: LAhE 参照(`la'e di'u` / `lu'e le cukta`)、
-    `naku`(NA KU)による項位置の否定、KOhA 補完(`mi'a` `ma'a` `do'o` `di'u` 等)
+    `naku`(NA KU)による項位置の否定、KOhA 補完(`mi'a` `ma'a` `do'o` `di'u`
+    `tu'a` `dei` 等)、記述詞 `lo'e` / `le'e`
   - 数量詞+述語の項(`pa prenu cu klama`)、描述内数量詞(`le ci gerku`)
   - `me` 述語、項のみのフラグメント(`mi` 単独)、単独感情標識(`.ui`)
 - **出力**: 整形ツリー / S 式 / JSON(`{"rule","text","children"}` 形式)
@@ -146,8 +147,10 @@ src/
 - 引用は `lu … li'u`(入れ子可)/ `zo` / `lo'u … le'u` / `zoi DELIM 本文 DELIM` に対応。
   ZOI は区切り語対応を解析前スキャンで検証し、本文は解析木上 `zo'e` に正規化される
   (pest に後方参照がないための設計。未閉鎖・不一致はエラー)
-- タグは FA と BAI(bau mu'i 等。項と文頭に接続)に加え、時制マーク連鎖+sumti
-  (`pu le cabdei ku` / `vi ne'i le zdani`)に対応。selbri の前後どちらの項位置でも可
+- タグは FA と BAI(bau mu'i 等。項と文頭に接続)に加え、SE 変換(`se ki'u …`)、
+  FIhO モダルタグ(`fi'o dunda [fe'u] do`)、時制マーク連鎖+sumti
+  (`pu le cabdei ku` / `vi ne'i le zdani`)に対応。selbri の前後どちらの項位置でも可。
+  述語マークは否定 `na` に対して肯定 `ja'a`(`ja'a go'i` 等)に対応
 - 述語の先接続(GUhA `gu'e … gi`、NAhE 併用可)と間隔端点の GAhO(`ga'o bi'o ke'i`)に対応
 - cmavo 語彙は標準 CLL 系の主要語に絞り込み(実験的 cmavo は未収録。
   `lojban.pest` の各 `*_core` に選択肢を追加するだけで拡張可能)

@@ -41,7 +41,8 @@ The parser engine is [pest](https://pest.rs); the grammar in
     (`mi ca le cabdei cu klama` / `vi ne'i le zdani` / durations `ze'a lo cacra`)
   - **Term reinforcement**: LAhE reference (`la'e di'u` / `lu'e le cukta`),
     term-position negation with `naku` (NA KU), KOhA completion
-    (`mi'a` `ma'a` `do'o` `di'u`, etc.)
+    (`mi'a` `ma'a` `do'o` `di'u` `tu'a` `dei`, etc.),
+    description articles `lo'e` / `le'e`
   - Quantifier + selbri terms (`pa prenu cu klama`), quantifiers inside descriptions
     (`le ci gerku`)
   - `me` predicates, term-only fragments (bare `mi`), bare attitudinals (`.ui`)
@@ -165,8 +166,11 @@ The real-sentence corpus uses Lojban sentences from [Tatoeba](https://tatoeba.or
   pre-parse scan and the body is normalized to `zo'e` in the parse tree
   (pest has no backreferences; unclosed/mismatched delimiters are errors)
 - Tags: FA and BAI (`bau`, `mu'i`, …; attached to terms and sentence fronts),
-  plus tense-mark chains followed by a sumti (`pu le cabdei ku` /
-  `vi ne'i le zdani`), in term position either before or after the selbri
+  SE-converted modals (`se ki'u …`), FIhO modal tags with elidable `fe'u`
+  (`fi'o dunda [fe'u] do`), and tense-mark chains followed by a sumti
+  (`pu le cabdei ku` / `vi ne'i le zdani`), in term position either before or
+  after the selbri. Selbri marks include the affirmative `ja'a` alongside
+  negator `na` (as in `ja'a go'i`)
 - cmavo vocabulary covers the main standard CLL words (experimental cmavo are
   not included; extend by adding alternatives to each `*_core` in `lojban.pest`)
 - Pause-less adjacent words allowed by zantufa (e.g. `mibroda` = mi+broda)

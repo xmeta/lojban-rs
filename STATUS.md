@@ -1,8 +1,17 @@
 # 開発ステータス
 
-## 現在の状態: v0.19 完成(全テストグリーン)
+## 現在の状態: v0.20 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語65 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計106テスト全パス
+- ライブラリ20 / 形態論11 / 統語71 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計112テスト全パス
+
+## v0.20 で追加
+- JAhA(肯定 ja'a)を s_mark に追加(na の対。ja'a go'i 等の応答表現)
+- KOhA に tu'a(抽象化持ち上げ)/ dei(この発話)を追加
+- LE に lo'e / le'e(典型例・完全集合の記述詞)を追加
+- UI に e'o e'e a'e i'a bu'o を追加
+- tagged を拡張: SE+BAI 変換タグ(se ki'u …)と FIhO モダルタグ
+  (fi'o selbri [fe'u] sumti。fe'u は省略可 — selbri は tail_terms を
+  含まないため直後 sumti との境界が自明)
 
 ## v0.19 で追加
 - sumti を取る時制タグ(CLL 9): tagged に「時制マーク連鎖 + sumti(+ku 閉鎖)」を
@@ -158,4 +167,4 @@
 
 ## 次の拡張候補
 - ZEhA 時制間隔(zi'i bi'o bi'i mi'i)、GUhEK 等の先接続詳細制御、
-  NAhU/MOhI 由来の詳細時制
+  NAhU/MOhI 由来の詳細時制、結合 cmavo クラスタ(seki'u 等の無ポーズ隣接)
