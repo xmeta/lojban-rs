@@ -38,7 +38,8 @@ The parser engine is [pest](https://pest.rs); the grammar in
   - **Tense & aspect** (PU `pu ca ba` / CAhA `ka'e ca'a …` / ZAhO `co'a ca'o ba'o …`
     / ZI `zi za zu` / VA `vi va vu` / TAhE `ta'e di'i na'o ru'i`)
   - **Spatial & motion tense** (FAhA directions `ca'u ti'a zu'a ga'u ni'a …`,
-    MOhI motion marking as in `mo'i ca'u`) and **tense tags taking a sumti**
+    MOhI motion marking as in `mo'i ca'u`), **time intervals** (ZEhA as in
+    `pu bi'o ba` / `ca bi'i ba`), and **tense tags taking a sumti**
     (`mi ca le cabdei cu klama` / `vi ne'i le zdani` / durations `ze'a lo cacra`)
   - **Term reinforcement**: LAhE reference (`la'e di'u` / `lu'e le cukta`),
     term-position negation with `naku` (NA KU), KOhA completion
@@ -166,7 +167,8 @@ The real-sentence corpus uses Lojban sentences from [Tatoeba](https://tatoeba.or
   `zoi DELIM body DELIM`. For ZOI, delimiter matching is validated by a
   pre-parse scan and the body is normalized to `zo'e` in the parse tree
   (pest has no backreferences; unclosed/mismatched delimiters are errors)
-- Tags: FA and BAI (`bau`, `mu'i`, …; attached to terms and sentence fronts),
+- Tags: FA and BAI (`bau`, `mu'i`, …; attached to terms and sentence fronts,
+  negatable with NAI as in `ri'a nai`),
   SE-converted modals (separated `se ki'u …` and joined `sepi'o` `seva'u`
   `semu'i`, …), FIhO modal tags with elidable `fe'u`
   (`fi'o dunda [fe'u] do`), and tense-mark chains followed by a sumti

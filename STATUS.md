@@ -1,8 +1,14 @@
 # 開発ステータス
 
-## 現在の状態: v0.21 完成(全テストグリーン)
+## 現在の状態: v0.22 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語74 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計115テスト全パス
+- ライブラリ20 / 形態論11 / 統語76 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計117テスト全パス
+
+## v0.22 で追加
+- ZEhA 時制間隔(zi'i bi'o bi'i mi'i、h 表記併用): PU/ZI オフセットを両端に
+  置く time_interval 規則を tense_mark に追加(pu bi'o ba / ca bi'i ba 等)
+- BAI タグの NAI 否定: 項位置(ri'a nai le nu …)と文頭タグ位置
+  (mu'i nai le nu …)の両方で受理
 
 ## v0.21 で追加
 - 先接続詞の NAI 完成: GA+NAI の結合形(ganai genai gonai gunai)と分離形
@@ -177,5 +183,5 @@
    `x = @{ (^"mi" | ^"mi'a") ~ &wb }` が "mi'a" を拒否することで確認済み)
 
 ## 次の拡張候補
-- ZEhA 時制間隔(zi'i bi'o bi'i mi'i)、NAhU/MOhI 由来の詳細時制、
-  その他の結合 cmavo クラスタ(ganai 以外の GA 系複合など)
+- NAhU/MOhI 由来の詳細時制、I+BO 等のその他の結合 cmavo クラスタ(.ibo)、
+  VEhA/VIhA 空間間隔

@@ -33,7 +33,8 @@ guskant 氏の **zantufa-1.9999.peg** を Rust/pest 向けに移植したもの�
   - **時制・相**(PU `pu ca ba` / CAhA `ka'e ca'a …` / ZAhO `co'a ca'o ba'o …`
     / ZI `zi za zu` / VA `vi va vu` / TAhE `ta'e di'i na'o ru'i`)
   - **空間・移動時制**(FAhA 方位 `ca'u ti'a zu'a ga'u ni'a …`、
-    MOhI 移動指定 `mo'i ca'u`)と **sumti を取る時制タグ**
+    MOhI 移動指定 `mo'i ca'u`)、**時制間隔**(ZEhA `pu bi'o ba` / `ca bi'i ba`)、
+    **sumti を取る時制タグ**
     (`mi ca le cabdei cu klama` / `vi ne'i le zdani` / 期間 `ze'a lo cacra`)
   - **項の補強**: LAhE 参照(`la'e di'u` / `lu'e le cukta`)、
     `naku`(NA KU)による項位置の否定、KOhA 補完(`mi'a` `ma'a` `do'o` `di'u`
@@ -148,8 +149,8 @@ src/
 - 引用は `lu … li'u`(入れ子可)/ `zo` / `lo'u … le'u` / `zoi DELIM 本文 DELIM` に対応。
   ZOI は区切り語対応を解析前スキャンで検証し、本文は解析木上 `zo'e` に正規化される
   (pest に後方参照がないための設計。未閉鎖・不一致はエラー)
-- タグは FA と BAI(bau mu'i 等。項と文頭に接続)に加え、SE 変換(分離形 `se ki'u …`
-  と結合形 `sepi'o` `seva'u` `semu'i` 等)、
+- タグは FA と BAI(bau mu'i 等。項と文頭に接続。`ri'a nai` のような NAI 否定可)
+  に加え、SE 変換(分離形 `se ki'u …` と結合形 `sepi'o` `seva'u` `semu'i` 等)、
   FIhO モダルタグ(`fi'o dunda [fe'u] do`)、時制マーク連鎖+sumti
   (`pu le cabdei ku` / `vi ne'i le zdani`)に対応。selbri の前後どちらの項位置でも可。
   述語マークは否定 `na` に対して肯定 `ja'a`(`ja'a go'i` 等)に対応
