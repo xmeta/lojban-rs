@@ -33,8 +33,13 @@ UINAI_joint = @{ (^"ta'onai" | ^"ja'onai" | ^"ku'inai" | ^"po'onai"
                 | ^"cu'inai") ~ &word_boundary }
 item    = { gek_sentence | prenex_sentence | sentence | free | Y_clause
           | fragment | tense_item }
-// 前置スコープ(su'o da zo'u … / ro da zo'u …)。論理の量化を文に前置する
-prenex_sentence = { terms ~ sp1 ~ ZOhU_clause ~ sp1 ~ inner_sentence }
+// 前置スコープ(su'o da zo'u … / ro da zo'u …)。論理の量化を文に前置する。
+// 項は「量化詞+代名詞」の単純形に制限(完全な terms を使うと
+// item 失敗パスのたびに rafsi バックトラックが再試行され
+// ファジングで指数時間になるため。v0.30 教訓)
+prenex_sentence = { prenex_terms ~ sp1 ~ ZOhU_clause ~ sp1 ~ inner_sentence }
+prenex_terms    = _{ prenex_term ~ (sp1 ~ prenex_term)* }
+prenex_term     = _{ PA_seq | PA_clause | KOhA_clause }
 fragment  = { terms ~ (sp1 ~ VAU_clause)? ~ (sp1 ~ free)? }
 tense_item = { tense_mark }
 
