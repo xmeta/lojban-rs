@@ -31,6 +31,10 @@ guskant 氏の **zantufa-1.9999.peg** を Rust/pest 向けに移植したもの�
   - 先接続詞(`ge … gi`: 項と文の接続)
   - **時制・相**(PU `pu ca ba` / CAhA `ka'e ca'a …` / ZAhO `co'a ca'o ba'o …`
     / ZI `zi za zu` / VA `vi va vu` / TAhE `ta'e di'i na'o ru'i`)
+  - **空間・移動時制**(FAhA 方位 `ca'u ti'a zu'a ga'u ni'a …`、
+    MOhI 移動指定 `mo'i ca'u`)
+  - **項の補強**: LAhE 参照(`la'e di'u` / `lu'e le cukta`)、
+    `naku`(NA KU)による項位置の否定、KOhA 補完(`mi'a` `ma'a` `do'o` `di'u` 等)
   - 数量詞+述語の項(`pa prenu cu klama`)、描述内数量詞(`le ci gerku`)
   - `me` 述語、項のみのフラグメント(`mi` 単独)、単独感情標識(`.ui`)
 - **出力**: 整形ツリー / S 式 / JSON(`{"rule","text","children"}` 形式)
@@ -141,7 +145,8 @@ src/
 - 引用は `lu … li'u`(入れ子可)/ `zo` / `lo'u … le'u` / `zoi DELIM 本文 DELIM` に対応。
   ZOI は区切り語対応を解析前スキャンで検証し、本文は解析木上 `zo'e` に正規化される
   (pest に後方参照がないための設計。未閉鎖・不一致はエラー)
-- タグは FA と BAI(bau mu'i 等。項と文頭に接続)に対応
+- タグは FA と BAI(bau mu'i 等。項と文頭に接続)に対応。時制マーク(PU/FAhA 等)は
+  単独連鎖のみで、`pu le cabdei` のような sumti を取るタグは未実装
 - 述語の先接続(GUhA `gu'e … gi`、NAhE 併用可)と間隔端点の GAhO(`ga'o bi'o ke'i`)に対応
 - cmavo 語彙は標準 CLL 系の主要語に絞り込み(実験的 cmavo は未収録。
   `lojban.pest` の各 `*_core` に選択肢を追加するだけで拡張可能)
