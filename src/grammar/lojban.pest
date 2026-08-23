@@ -36,6 +36,7 @@ terms = { term ~ (sp1 ~ term)* }
 term  = { tagged | na_ku | sumti }
 tagged = { FA_clause ~ sp1 ~ sumti
          | (SE_clause ~ sp1)? ~ BAI_clause ~ sp1 ~ sumti
+         | SEBAI_joint ~ sp1 ~ sumti
          | FIhO_clause ~ sp1 ~ selbri ~ (sp1 ~ FEhU_clause)? ~ sp1 ~ sumti
          | tense_tags ~ sp1 ~ sumti ~ (sp1 ~ KU_clause)? }
 // 注: FIhO の fe'u は省略可(selbri は tail_terms を含まないため、
@@ -72,7 +73,7 @@ tail_terms = { (sp1 ~ term)* ~ (sp1 ~ VAU_clause)? }
 selbri  = { s_marks? ~ sp1? ~ tense_marks? ~ sp1? ~ tanru ~ co_tail?
           | (NAhE_clause ~ sp1)? ~ guhek_selbri }
 // 述語の先接続(gu'e X gi Y 等。camxes の selbri_6 相当)
-guhek_selbri = { GUhA_clause ~ (sp1 ~ NAI_clause)? ~ sp1 ~ selbri ~ sp1 ~ GI_clause
+guhek_selbri = { GUhA_clause ~ (sp1 ~ NAI_clause)? ~ sp1 ~ selbri ~ sp1 ~ gi_joint
                  ~ sp1 ~ selbri }
 co_tail = _{ sp1 ~ CO_clause ~ sp1 ~ s_marks? ~ tanru }
 s_marks = _{ s_mark ~ (sp1 ~ s_mark)* }
@@ -87,7 +88,8 @@ tense_mark  = _{ PU_clause | CAhA_clause | ZAhO_clause | ZI_clause | VA_clause
 
 tanru      = { tanru_unit ~ (sp1 ~ tanru_link ~ sp1 ~ tanru_unit | sp1 ~ tanru_unit)* }
 tanru_unit = {
-     !("ija" | "ije" | "ijo" | "iju") ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
+     !("ija" | "ije" | "ijo" | "iju") ~ !(GANAI_joint | GINAI_joint | SEBAI_joint)
+   ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
    // 注: 「i+字母」で始まる語(.ije / .ijanai 等の文連結結合形)は tanru の先頭に来ないため除外。
    // 母音始まりの語そのもの(.a'onai 等)は述語のみの文として正当なので許容する
    | GOhA_clause ~ (sp1 ~ linked_args)?
@@ -122,8 +124,12 @@ ek_joik      = _{ (A_clause | JOI_clause) ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clau
                   ~ (sp1 ~ NAI_clause)? }
 gihek_link   = _{ GIhA_clause ~ (sp1 ~ NAI_clause)? }
 tanru_link   = _{ JA_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clause)? }
-gek_sentence = { GA_clause ~ sp1 ~ sentence ~ sp1 ~ GI_clause ~ sp1 ~ sentence }
-gek_sumti    = { GA_clause ~ sp1 ~ sumti ~ sp1 ~ GI_clause ~ sp1 ~ sumti }
+// 先接続は GA+NAI の結合形(ganai)と分離形(ga nai)の両方、
+// GI 側も gi / ginai / gi nai を受理(CLL 14 の論理接続)
+ga_joint = _{ GANAI_joint | GA_clause ~ (sp1 ~ NAI_clause)? }
+gi_joint = _{ GINAI_joint | GI_clause ~ (sp1 ~ NAI_clause)? }
+gek_sentence = { ga_joint ~ sp1 ~ sentence ~ sp1 ~ gi_joint ~ sp1 ~ sentence }
+gek_sumti    = { ga_joint ~ sp1 ~ sumti ~ sp1 ~ gi_joint ~ sp1 ~ sumti }
 
 // 引用(LU...LUhU / ZO+単語は sumti、LOhU...LEhU は free。ZOI は未対応)
 lu_quote   = { LU_clause ~ sp0 ~ content ~ sp0 ~ LUhU_clause }
@@ -334,6 +340,9 @@ FAhO_core = @{ ( ^"fa'o" | ^"faho") ~ &word_boundary }
 FEhU_core = @{ ( ^"fe'u" | ^"fehu") ~ &word_boundary }
 FIhO_core = @{ ( ^"fi'o" | ^"fiho") ~ &word_boundary }
 GA_core = @{ ( ^"ga" | ^"ge" | ^"go" | ^"gu") ~ &word_boundary }
+// GA+NAI / GI+NAI の結合表記(ganai … ginai 等。IJ_joint 同様の一体化形)
+GANAI_joint = @{ (^"ganai" | ^"genai" | ^"gonai" | ^"gunai") ~ &word_boundary }
+GINAI_joint = @{ (^"ginai") ~ &word_boundary }
 GAhO_core = @{ ( ^"ke'i" | ^"kehi" | ^"ga'o" | ^"gaho") ~ &word_boundary }
 GEhU_core = @{ ( ^"ge'u" | ^"gehu") ~ &word_boundary }
 GI_core = @{ ( ^"gi") ~ &word_boundary }
@@ -398,6 +407,12 @@ PA_core = @{ (^"dau" | ^"fei" | ^"jai" | ^"rei" | ^"vai" | ^"so'a" | ^"so'e" | ^
                | ^"ro" | ^"ki'o" | ^"ma'u" | ^"ni'u") ~ &word_boundary }
 ROI_core = @{ ( ^"roi") ~ &word_boundary }
 SE_core = @{ ( ^"se" | ^"te" | ^"ve" | ^"xe") ~ &word_boundary }
+// SE+BAI の結合表記(pi'o va'u mu'i cau ja'e cu'u ba'i ki'u ri'a ka'a の se 変換)
+SEBAI_joint = @{ (^"sepi'o" | ^"sepiho" | ^"seva'u" | ^"sevahu"
+                | ^"semu'i" | ^"semuhi" | ^"secau"
+                | ^"seja'e" | ^"secu'u" | ^"secuhu"
+                | ^"seba'i" | ^"sebahi" | ^"seki'u" | ^"sekihu"
+                | ^"seri'a" | ^"seka'a") ~ &word_boundary }
 SEI_core = @{ ( ^"sei") ~ &word_boundary }
 SEhU_core = @{ ( ^"se'u" | ^"sehu") ~ &word_boundary }
 TO_core = @{ ( ^"to") ~ &word_boundary }

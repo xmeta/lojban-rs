@@ -580,3 +580,38 @@ fn se_bai_変換タグ() {
     assert!(s.contains("SE_core \"se\""), "{s}");
     assert!(s.contains("BAI_core \"ki'u\""), "{s}");
 }
+
+#[test]
+fn 先接続_ganai() {
+    // 結合表記 ganai … gi …(if-then の標準形)
+    let s = parse_ok("ganai do klama gi mi cadzu");
+    assert!(s.contains("gek_sentence"), "{s}");
+    assert!(s.contains("GANAI_joint"), "{s}");
+    // 分離表記 ga nai
+    let s = parse_ok("ga nai do klama gi mi cadzu");
+    assert!(s.contains("GA_core \"ga\""), "{s}");
+    assert!(s.contains("NAI_clause"), "{s}");
+    // 後半否定: 分離形 gi nai は GI+NAI、結合形 ginai は GINAI_joint
+    let s = parse_ok("ganai do klama gi nai mi cadzu");
+    assert!(
+        s.contains("GI_core \"gi\"") && s.contains("NAI_clause"),
+        "{s}"
+    );
+    let s = parse_ok("ganai do klama ginai mi cadzu");
+    assert!(s.contains("GINAI_joint"), "{s}");
+}
+
+#[test]
+fn 先接続_sumti_gek() {
+    let s = parse_ok("mi viska ge lo gerku gi lo mlatu");
+    assert!(s.contains("gek_sumti"), "{s}");
+}
+
+#[test]
+fn 結合_sebai_タグ() {
+    let s = parse_ok("mi pilno sepi'o lo xarju");
+    assert!(s.contains("SEBAI_joint \"sepi'o\""), "{s}");
+    // 文頭のタグ位置でも受理
+    let s = parse_ok("seva'u do mi klama");
+    assert!(s.contains("SEBAI_joint \"seva'u\""), "{s}");
+}
