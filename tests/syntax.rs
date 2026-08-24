@@ -862,3 +862,14 @@ fn 演算子終端_tehu() {
     let s = parse_ok("li re na'u zmadu te'u ci du li mu");
     assert!(s.contains("TEhU_core"), "{s}");
 }
+
+#[test]
+fn jai_変換() {
+    // JAI + タグ + tanru_unit(camxes tanru_unit_2 準拠)
+    let s = parse_ok("mi jai gau zdani");
+    assert!(s.contains("JAI_core \"jai\""), "{s}");
+    assert!(s.contains("BAI_core \"gau\""), "{s}");
+    // タグ省略形
+    let s = parse_ok("mi jai zdani");
+    assert!(s.contains("JAI_core"), "{s}");
+}

@@ -132,6 +132,11 @@ tanru_unit = {
    | nu_form
    | ke_group
    | me_form
+   // JAI 変換(jai gau … / jai cau …): タグ付き項を x1 に繰り上げる
+   // (camxes tanru_unit_2 の JAI tag? tanru_unit_2 準拠)
+   // 注: (sp1 ~ tense_mark)? は失敗時に sp1 の消費も取り消すため
+   //     分岐で書く(教訓5の裏面)
+   | JAI_clause ~ (sp1 ~ tense_mark ~ sp1 ~ tanru_unit | sp1 ~ tanru_unit)
 }
 nu_form    = { s_marks? ~ sp1? ~ abstr_head ~ sp1 ~ inner_sentence ~ (sp1 ~ KEI_clause)? }
 me_form    = { ME_clause ~ sp1 ~ sumti }
@@ -368,7 +373,7 @@ A_core = @{ ( "a" | "e" | "o" | "u") ~ &word_boundary }
 BAI_core = @{ (^"bau" | ^"bai" | ^"cau" | ^"cu'u" | ^"mu'i" | ^"mu'u" | ^"ni'i"
                | ^"ri'a" | ^"ta'i" | ^"ki'u" | ^"kai" | ^"pa'u" | ^"se'o" | ^"si'u"
                | ^"va'o" | ^"zu'e" | ^"ja'e" | ^"ra'i" | ^"ri'i" | ^"de'i" | ^"du'o"
-               | ^"fau" | ^"ka'a" | ^"cihu" | ^"ci'u" | ^"pu'a"
+               | ^"fau" | ^"ka'a" | ^"gau" | ^"cihu" | ^"ci'u" | ^"pu'a"
                | ^"jihe" | ^"ji'e" | ^"jihu" | ^"ji'u" | ^"jiho" | ^"ji'o"
                | ^"raha" | ^"ra'a") ~ &word_boundary }
 BE_core = @{ ( ^"be") ~ &word_boundary }
@@ -467,7 +472,9 @@ NU_core = @{ ( ^"je'i" | ^"mu'e" | ^"pu'u" | ^"zu'o" | ^"li'i" | ^"su'u" | ^"du'
 // SE+NU の結合表記(報話で高頻度の sedu'u)。素の形が先だと境界先読みで失敗するため
 // joint を先に試行(教訓6)。tanru_unit の BRIVLA ガードにも追加(fu'ivla 誤認防止)
 SEDUHU_joint = @{ (^"sedu'u" | ^"seduhu") ~ &word_boundary }
-PA_word  = _{ (^"dau" | ^"fei" | ^"jai" | ^"rei" | ^"vai" | ^"so'a" | ^"so'e" | ^"so'i"
+// 注: かつて16進桁の jai を収録していたが、JAI 変換(tanru_unit)と
+//     衝突するため削除(v0.31。dau fei rei vai は残置)
+PA_word  = _{ (^"dau" | ^"fei" | ^"rei" | ^"vai" | ^"so'a" | ^"so'e" | ^"so'i"
                | ^"so'u" | ^"za'u" | ^"su'o" | ^"suhe" | ^"su'e" | ^"daha" | ^"da'a"
                | ^"ji'i" | ^"xo" | ^"pi"
                | ^"pa" | ^"re" | ^"ci" | ^"vo" | ^"mu" | ^"xa" | ^"ze" | ^"bi" | ^"so" | ^"no"
@@ -530,6 +537,7 @@ VIhA_core = @{ (^"vi'i" | ^"vihi" | ^"vi'a" | ^"viha"
 VA_core   = @{ (^"vi" | ^"va" | ^"vu") ~ &word_boundary }
 TAhE_core = @{ (^"ta'e" | ^"di'i" | ^"na'o" | ^"ru'i") ~ &word_boundary }
 ME_core   = @{ (^"me") ~ &word_boundary }
+JAI_core  = @{ ( ^"jai") ~ &word_boundary }
 ZO_core = @{ ( ^"zo") ~ &word_boundary }
 ZOI_core = @{ ( ^"zoi") ~ &word_boundary }
 
@@ -625,6 +633,7 @@ VIhA_clause = { VIhA_core }
 VA_clause   = { VA_core }
 TAhE_clause = { TAhE_core }
 ME_clause   = { ME_core }
+JAI_clause  = { JAI_core }
 UI_clause = { UI_core }
 VAU_clause = { VAU_core }
 VUhO_clause = { VUhO_core }
