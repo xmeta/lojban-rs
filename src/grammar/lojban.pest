@@ -206,10 +206,13 @@ lohu_quote = { LOhU_clause ~ sp0 ~ (!LEhU_clause ~ word) ~ (sp1 ~ !LEhU_clause ~
 frees_s   = _{ free ~ (sp1 ~ free)* }
 frees_m   = _{ (sp1 ~ free)+ }
 free      = { free_unit ~ (sp1 ~ free_unit)* }
-free_unit = { ui_free | mai_free | soi_free | sei_free | to_quote | vocative | lohu_quote
-           | SI_clause | SU_clause }
+free_unit = { ui_free | mai_free | soi_free | sei_free | xi_free | daho_free
+           | to_quote | vocative | lohu_quote | SI_clause | SU_clause }
 mai_free  = { MAI_clause }
 soi_free  = { SOI_clause ~ sp1 ~ sumti ~ (sp1 ~ sumti)? ~ (sp1 ~ SEhU_clause)? }
+// 添字(broda xi re / xi vei re su'i ci)。camxes: XI (number|lerfu)|XI VEI mex VEhO?
+xi_free   = { XI_clause ~ sp1 ~ (number | BY_clause | vei_group) }
+daho_free = { DAhO_clause }
 ui_free  = { UINAI_joint | UI_clause ~ (sp1 ~ CAI_clause)? ~ (sp1 ~ NAI_clause)? }
 sei_free = { SEI_clause ~ sp1 ~ inner_sentence ~ (sp1 ~ SEhU_clause)? }
 to_quote = { TO_clause ~ (sp0 ~ (word ~ (sp1 ~ word)*)?)? ~ (sp1 ~ TOI_clause)? }
@@ -560,6 +563,8 @@ MOI_core  = @{ (^"mei" | ^"moi" | ^"sihe" | ^"si'e"
 MEhU_core = @{ (^"mehu" | ^"me'u") ~ &word_boundary }
 ZEI_core  = @{ ( ^"zei") ~ &word_boundary }
 SOI_core  = @{ ( ^"soi") ~ &word_boundary }
+XI_core   = @{ ( ^"xi") ~ &word_boundary }
+DAhO_core = @{ (^"daho" | ^"da'o") ~ &word_boundary }
 ZO_core = @{ ( ^"zo") ~ &word_boundary }
 ZOI_core = @{ ( ^"zoi") ~ &word_boundary }
 
@@ -660,6 +665,8 @@ MOI_clause  = { MOI_core }
 MEhU_clause = { MEhU_core }
 ZEI_clause  = { ZEI_core }
 SOI_clause  = { SOI_core }
+XI_clause   = { XI_core }
+DAhO_clause = { DAhO_core }
 UI_clause = { UI_core }
 VAU_clause = { VAU_core }
 VUhO_clause = { VUhO_core }

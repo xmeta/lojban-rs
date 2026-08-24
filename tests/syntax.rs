@@ -911,3 +911,18 @@ fn soi_入れ替え() {
     let s = parse_ok("do se prami mi soi vo'a");
     assert!(s.contains("SOI_core"), "{s}");
 }
+
+#[test]
+fn 添字_xi() {
+    let s = parse_ok("mi viska lo gerku xi re");
+    assert!(s.contains("XI_core \"xi\""), "{s}");
+    // 文字語への添字
+    let s = parse_ok("mi nelci li xy xi pa");
+    assert!(s.contains("XI_core"), "{s}");
+}
+
+#[test]
+fn daho_自由修飾語() {
+    let s = parse_ok("su'o da zo'u da klama .i da'o");
+    assert!(s.contains("DAhO_core \"da'o\""), "{s}");
+}
