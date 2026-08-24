@@ -36,6 +36,7 @@
 | VUhU | `su'i` `vu'u` `pi'i` `fe'i` `gei` `de'o` `te'o` `re'a` `va'a` `pa'i` `si'i` `fu'u` | ✅ |
 | NAhU | `na'u` `nahu` | ✅ |
 | FIhU | `fihu` `fi'u` | ✅ |
+| BIhE | `bihe` `bi'e` | ✅ |
 | PEhO | `peho` `pe'o` | ✅ |
 | MAhO | `maho` `ma'o` | ✅ |
 | KUhE | `kuhe` `ku'e` | ✅ |
@@ -118,6 +119,6 @@
 | CMEVLA |  | ✅ |
 | BRIVLA |  | ✅ |
 
-計 111 クラス定義 / 109 クラスが統語に接続。
+計 112 クラス定義 / 110 クラスが統語に接続。
 未接続の LIhU は LUhU と同語形のための予備定義(設計上未使用)。
 結合表記(joint)は次セクション。

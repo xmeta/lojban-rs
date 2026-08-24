@@ -152,7 +152,7 @@ tanru_unit = {
      | VEhA_clause | VIhA_clause | PEhO_clause | MAhO_clause | KUhE_clause
      | TEhU_clause | ZOhU_clause | MOI_clause | MEhU_clause
      | NUhI_clause | NUhU_clause | FUhE_clause | FUhO_clause | CEhE_clause
-     | PEhE_clause | LAHEDI_joint | ROROI_joint)
+     | PEhE_clause | LAHEDI_joint | ROROI_joint | BIhE_clause)
    ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
    // 注: 「i+字母」で始まる語(.ije / .ijanai 等の文連結結合形)は tanru の先頭に来ないため除外。
    // 母音始まりの語そのもの(.a'onai 等)は述語のみの文として正当なので許容する
@@ -183,7 +183,9 @@ ke_group   = { KE_clause ~ sp1 ~ selbri ~ (sp1 ~ KEhE_clause)? }
 linked_args = { BE_clause ~ sp1 ~ sumti ~ (sp1 ~ BEI_clause ~ sp1 ~ sumti)* ~ (sp1 ~ BEhO_clause)? }
 
 // 数理表現(mex)。LI...LOhO で sumti 化。演算子は左結合の単純連鎖、括弧は vei...ve'o
-mex         = { mex_operand ~ (sp1 ~ mex_operator ~ sp1 ~ mex_operand)* }
+// BIhE 以降は残り全体を 1 オペランドとして右結合(camxes mex_1 準拠)
+mex         = { mex_items ~ (sp1 ~ BIhE_clause ~ sp1 ~ mex_operator ~ sp1 ~ mex)? }
+mex_items   = _{ mex_operand ~ (sp1 ~ mex_operator ~ sp1 ~ mex_operand)* }
 mex_operator = _{ (SE_clause ~ sp1)? ~ VUhU_clause | FIhU_clause
                  | NAhU_clause ~ sp1 ~ tanru ~ (sp1 ~ TEhU_clause)?
                  | MAhO_clause ~ sp1 ~ mex ~ (sp1 ~ TEhU_clause)?
@@ -465,6 +467,8 @@ VUhU_core = @{ ( ^"su'i" | ^"vu'u" | ^"pi'i" | ^"fe'i" | ^"gei" | ^"de'o" | ^"te
 NAhU_core = @{ (^"na'u" | ^"nahu") ~ &word_boundary }
 // 除算スラッシュ(pa fi'u re = 1/2)
 FIhU_core = @{ (^"fihu" | ^"fi'u") ~ &word_boundary }
+// 演算子強調(bi'e: 直後の演算子を右側にグルーピング)
+BIhE_core = @{ (^"bihe" | ^"bi'e") ~ &word_boundary }
 PEhO_core = @{ (^"peho" | ^"pe'o") ~ &word_boundary }
 MAhO_core = @{ (^"maho" | ^"ma'o") ~ &word_boundary }
 KUhE_core = @{ (^"kuhe" | ^"ku'e") ~ &word_boundary }
@@ -475,6 +479,7 @@ VEhO_core = @{ ( ^"ve'o" | ^"veho") ~ &word_boundary }
 NAhU_clause = { NAhU_core }
 PEhO_clause = { PEhO_core }
 FIhU_clause = { FIhU_core }
+BIhE_clause = { BIhE_core }
 MAhO_clause = { MAhO_core }
 KUhE_clause = { KUhE_core }
 TEhU_clause = { TEhU_core }

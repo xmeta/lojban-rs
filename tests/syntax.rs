@@ -1029,3 +1029,13 @@ fn mex_fihu_と_前置単項() {
     let s = parse_ok("li va'a pa du li ni'u pa");
     assert!(s.contains("VUhU_core \"va'a\""), "{s}");
 }
+
+#[test]
+fn bixe_演算子強調() {
+    // 2 + (3 × 4): bi'e 以降が右結合
+    let s = parse_ok("li re su'i ci bi'e pi'i vo du li pano");
+    assert!(s.contains("BIhE_core \"bi'e\""), "{s}");
+    // vei 内でも有効
+    let s = parse_ok("li vei re bi'e pi'i ci ve'o su'i vo du li xa");
+    assert!(s.contains("BIhE_core"), "{s}");
+}
