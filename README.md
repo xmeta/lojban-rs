@@ -48,6 +48,11 @@ guskant 氏の **zantufa-1.9999.peg** を Rust/pest 向けに移植したもの�
     `naku`(NA KU)による項位置の否定、KOhA 補完(`mi'a` `ma'a` `do'o` `di'u`
     `tu'a` `dei` 等)、記述詞 `lo'e` / `le'e`
   - 数量詞+述語の項(`pa prenu cu klama`)、描述内数量詞(`le ci gerku`)
+  - **前置スコープ**(`su'o da zo'u da prami mi`)/ **項set**(`nu'i X Y [nu'u]`)
+    / **項グループ接続**(`pe'e je`)/ 項の明示区切り(`ce'e`)
+  - MOI 述語への be 連結(`lo re moi be le ci gerku`)/ JAI 変換(`jai gau …`)
+  - 談話標識の追加: 強調 `ba'e`、添字 `xi re`、`da'o`、
+    結合形 `la'edi'u`(直前発話の参照先)/ `roroi`(常に)
   - `me` 述語(+省略可の `me'u`)、数詞述語 MOI(`mi re moi` / `mi ci mei`)、
     項のみのフラグメント(`mi` 単独)、単独感情標識(`.ui`)
 - **出力**: 整形ツリー / S 式 / JSON(`{"version":1,"rule","text","children"}` 形式。ルートに版数付き)

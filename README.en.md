@@ -56,6 +56,13 @@ The parser engine is [pest](https://pest.rs); the grammar in
     description articles `lo'e` / `le'e`
   - Quantifier + selbri terms (`pa prenu cu klama`), quantifiers inside descriptions
     (`le ci gerku`)
+  - **Prenex quantifier scope** (`su'o da zo'u da prami mi`) / **termsets**
+    (`nu'i X Y [nu'u]`) / **term-group connection** (`pe'e je`) /
+    explicit term separator (`ce'e`)
+  - be-linked MOI predicates (`lo re moi be le ci gerku`) / JAI conversion
+    (`jai gau …`)
+  - More discursives: emphasis `ba'e`, subscripts `xi re`, `da'o`,
+    joined forms `la'edi'u` / `roroi`
   - `me` predicates (with elidable `me'u`), number predicates MOI
     (`mi re moi` / `mi ci mei`), term-only fragments (bare `mi`),
     bare attitudinals (`.ui`)
