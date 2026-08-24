@@ -64,8 +64,12 @@ na_ku      = { NAKU_joint | NA_clause ~ sp1 ~ KU_clause }
 NAKU_joint = { ^"naku" ~ &word_boundary }
 
 sumti      = { sumti_core ~ (sp1 ~ relative_clauses)? ~ (sp1 ~ ek_joik ~ sp1 ~ sumti)* }
-sumti_core = _{ bu_lerfu | KOhA_clause | lahe_sumti | desc | BY_clause | quant_desc | quant_selbri | number | abstraction
+// 注: 裸の数詞項は直後が MOI 述語(re moi 等)なら項としない。
+//     PEG の繰り返しは成功で確定するため、ここで拒否しないと
+//     bridi_tail 側の「数詞+MOI」述語が届かない
+sumti_core = _{ bu_lerfu | KOhA_clause | lahe_sumti | desc | BY_clause | quant_desc | quant_selbri | bare_number | abstraction
                | lu_quote | zo_quote | gek_sumti | li_mex | zoi_quote | BY_clause }
+bare_number = _{ number ~ !(sp1 ~ MOI_clause) }
 quant_selbri = { number ~ sp1 ~ selbri ~ (sp1 ~ KU_clause)? }
 // LAhE 項修飾(la'e = 参照先 / lu'e = 参照元)。ge'u による明示閉鎖も許容
 lahe_sumti = { LAhE_clause ~ sp1 ~ sumti ~ (sp1 ~ GEhU_clause)? }
@@ -77,7 +81,10 @@ number      = { PA_clause ~ (sp1 ~ PA_clause)* ~ (sp1 ~ BOI_clause)?
 abstraction = { abstr_head ~ sp1 ~ inner_sentence ~ (sp1 ~ KEI_clause)? }
 inner_sentence = _{ gek_sentence | prenex_sentence | sentence }
 abstr_head  = _{ SEDUHU_joint | NU_clause }
-sumti_tail  = _{ (mex ~ sp1)? ~ selbri }
+// 注: (mex ~ sp1)? ~ selbri だと、mex が成功した後に selbri が失敗した際に
+//     グループ成功が確定し「selbri 単独」 reading に戻れない
+//     (le re moi prenu で発覚)。分岐で書く(教訓5の裏面)
+sumti_tail  = _{ mex ~ sp1 ~ selbri | selbri }
 
 relative_clauses = { relative_clause ~ (sp1 ~ relative_clause)* }
 relative_clause  = {
@@ -123,7 +130,7 @@ tanru_unit = {
    ~ !(GANAI_joint | GINAI_joint | SEBAI_joint | SEDUHU_joint | IBO_joint
      | MAI_core | UI_clause | NAhU_clause | MOhE_clause | UINAI_joint
      | VEhA_clause | VIhA_clause | PEhO_clause | MAhO_clause | KUhE_clause
-     | TEhU_clause | ZOhU_clause)
+     | TEhU_clause | ZOhU_clause | MOI_clause | MEhU_clause)
    ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
    // 注: 「i+字母」で始まる語(.ije / .ijanai 等の文連結結合形)は tanru の先頭に来ないため除外。
    // 母音始まりの語そのもの(.a'onai 等)は述語のみの文として正当なので許容する
@@ -137,9 +144,12 @@ tanru_unit = {
    // 注: (sp1 ~ tense_mark)? は失敗時に sp1 の消費も取り消すため
    //     分岐で書く(教訓5の裏面)
    | JAI_clause ~ (sp1 ~ tense_mark ~ sp1 ~ tanru_unit | sp1 ~ tanru_unit)
+   // 数詞・文字+MOI(re moi 序数 / ci mei 集合数 等。camxes 準拠)
+   | number ~ sp1 ~ MOI_clause
+   | BY_clause ~ sp1 ~ MOI_clause
 }
 nu_form    = { s_marks? ~ sp1? ~ abstr_head ~ sp1 ~ inner_sentence ~ (sp1 ~ KEI_clause)? }
-me_form    = { ME_clause ~ sp1 ~ sumti }
+me_form    = { ME_clause ~ sp1 ~ sumti ~ (sp1 ~ MEhU_clause)? ~ (sp1 ~ MOI_clause)? }
 ke_group   = { KE_clause ~ sp1 ~ selbri ~ (sp1 ~ KEhE_clause)? }
 
 // BE…BEI による項連結(selbri への内部項の付加。be'o による明示閉鎖も許容)
@@ -538,6 +548,10 @@ VA_core   = @{ (^"vi" | ^"va" | ^"vu") ~ &word_boundary }
 TAhE_core = @{ (^"ta'e" | ^"di'i" | ^"na'o" | ^"ru'i") ~ &word_boundary }
 ME_core   = @{ (^"me") ~ &word_boundary }
 JAI_core  = @{ ( ^"jai") ~ &word_boundary }
+// 数詞→述語変換(moi 序数 / mei 集合数 / si'e 割合 / cu'o 可能性 / va'e 尺度)
+MOI_core  = @{ (^"mei" | ^"moi" | ^"sihe" | ^"si'e"
+              | ^"cuho" | ^"cu'o" | ^"vahe" | ^"va'e") ~ &word_boundary }
+MEhU_core = @{ (^"mehu" | ^"me'u") ~ &word_boundary }
 ZO_core = @{ ( ^"zo") ~ &word_boundary }
 ZOI_core = @{ ( ^"zoi") ~ &word_boundary }
 
@@ -634,6 +648,8 @@ VA_clause   = { VA_core }
 TAhE_clause = { TAhE_core }
 ME_clause   = { ME_core }
 JAI_clause  = { JAI_core }
+MOI_clause  = { MOI_core }
+MEhU_clause = { MEhU_core }
 UI_clause = { UI_core }
 VAU_clause = { VAU_core }
 VUhO_clause = { VUhO_core }

@@ -873,3 +873,23 @@ fn jai_変換() {
     let s = parse_ok("mi jai zdani");
     assert!(s.contains("JAI_core"), "{s}");
 }
+
+#[test]
+fn 数詞_moi_述語() {
+    let s = parse_ok("mi re moi");
+    assert!(s.contains("MOI_core \"moi\""), "{s}");
+    let s = parse_ok("mi ci mei");
+    assert!(s.contains("MOI_core \"mei\""), "{s}");
+    // 描述内の tanru
+    let s = parse_ok("le re moi prenu cu klama");
+    assert!(s.contains("MOI_core"), "{s}");
+}
+
+#[test]
+fn me_meu() {
+    let s = parse_ok("ti me mi me'u");
+    assert!(s.contains("MEhU_core \"me'u\""), "{s}");
+    // me'u 省略形は従来どおり
+    let s = parse_ok("ti me mi");
+    assert!(s.contains("ME_core \"me\""), "{s}");
+}
