@@ -926,3 +926,12 @@ fn daho_自由修飾語() {
     let s = parse_ok("su'o da zo'u da klama .i da'o");
     assert!(s.contains("DAhO_core \"da'o\""), "{s}");
 }
+
+#[test]
+fn 自由修飾語_先接続() {
+    let s = parse_ok("xu ganai broda gi brode");
+    assert!(s.contains("gek_sentence"), "{s}");
+    assert!(s.contains("UI_core \"xu\""), "{s}");
+    let s = parse_ok("pe'i ganai mi klama gi mi cadzu");
+    assert!(s.contains("gek_sentence"), "{s}");
+}

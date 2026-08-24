@@ -195,7 +195,10 @@ tanru_link   = _{ JA_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clause)? }
 // GI 側も gi / ginai / gi nai を受理(CLL 14 の論理接続)
 ga_joint = _{ GANAI_joint | GA_clause ~ (sp1 ~ NAI_clause)? }
 gi_joint = _{ GINAI_joint | GI_clause ~ (sp1 ~ NAI_clause)? }
-gek_sentence = { ga_joint ~ sp1 ~ sentence ~ sp1 ~ gi_joint ~ sp1 ~ sentence }
+// 自由修飾語を先置できる(xu ganai … gi … / pe'i ganai … gi …)。
+// 内側も inner_sentence(gek/prenex 入れ子可)
+gek_sentence = { frees_s? ~ sp1? ~ ga_joint ~ sp1 ~ inner_sentence
+                ~ sp1 ~ gi_joint ~ sp1 ~ inner_sentence }
 gek_sumti    = { ga_joint ~ sp1 ~ sumti ~ sp1 ~ gi_joint ~ sp1 ~ sumti }
 
 // 引用(LU...LUhU / ZO+単語は sumti、LOhU...LEhU は free。ZOI は lib.rs 前処理で対応)
