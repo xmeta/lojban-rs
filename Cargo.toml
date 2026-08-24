@@ -1,6 +1,6 @@
 [package]
 name = "lojban"
-version = "0.46.0"
+version = "0.47.0"
 edition = "2021"
 rust-version = "1.74"
 description = "A Lojban (constructed language) PEG parser library and CLI, ported from zantufa grammar"

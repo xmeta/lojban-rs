@@ -74,6 +74,9 @@ $ lojban "le mlatu cu cadzu" --json
 # stdin から入力
 $ echo "coi la alis." | lojban
 
+# ファイルから入力
+$ lojban -f corpus.txt
+
 # lujvo(新語)を生成(CLL 4.11 のハイフン規則 + tosmabru 検査 + 4.12 スコア)
 $ lojban --build-lujvo "zba sai"
 zbasai (score 5847)
