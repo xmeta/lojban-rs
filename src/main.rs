@@ -160,8 +160,15 @@ fn main() -> ExitCode {
                 continue;
             }
             match lojban::parse(line) {
-                Ok(_) => {
-                    if !args.quiet {
+                Ok(pairs) => {
+                    if args.quiet {
+                        // 無出力
+                    } else if args.json {
+                        // 1行 = 1オブジェクト(JSONL)
+                        println!("{}", tree::to_json(pairs));
+                    } else if args.sexpr {
+                        println!("{}", tree::to_sexpr(pairs));
+                    } else {
                         println!("{}: ok", i + 1);
                     }
                 }
