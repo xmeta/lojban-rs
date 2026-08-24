@@ -19,8 +19,9 @@ guskant 氏の **zantufa-1.9999.peg** を Rust/pest 向けに移植したもの�
   - sumti: 代名詞(KOhA)/ 冠詞句(le lo la…)/ 量化描述(`ro lo remna`)/ 数詞
     / 文字参照(BY `xy` `abu` 等。項と数式の被演算子)
     / 接続(`e` `a` `o` `u` + `nai`、`joi` 系)
-  - selbri: tanru(名詞句修飾)/ `na` 否定 / `na'e to'e` スケール反転 / `se te ve xe` 変換
-    / `co` 逆順 / tanru 接続(`melbi je cmalu`、`je bo`)/ 述語連鎖(`gi'e` `gi'a` …)
+  - selbri: tanru(名詞句修飾)/ `na` 否定 / `ja'a` 肯定 / `na'e to'e` スケール反転
+    / `se te ve xe` 変換 / `co` 逆順 / tanru 接続(`melbi je cmalu`、`je bo`)
+    / 述語連鎖(`gi'e` `gi'a` …、`gi'e bo`)/ JAI 変換(`jai gau …`)
   - `be … bei … be'o` 項連結(linked sumti)
   - 抽象(`nu ka ni zu'o …`、SE 変換 `se du'u` / 結合形 `sedu'u`)
     / `ke … ke'e` グルーピング
@@ -28,7 +29,8 @@ guskant 氏の **zantufa-1.9999.peg** を Rust/pest 向けに移植したもの�
   - 関係節(`poi / noi`)/ 所有(`pe / po / goi`)
   - 自由修飾語(感情標識 `ui` 等(+強度 `cai sai ru'e cu'i`)、談話標識
     `ku'i` `ja'o` `po'o` `da'i` `je'u` 等、`xu` 疑問、`sei` 挿入、
-    `to … toi` 注釈、`soi … vo'a vo'e` 入れ替え、発話序数 `pamai` 等。
+    `to … toi` 注釈、`soi … vo'a vo'e` 入れ替え、発話序数 `pamai`、
+    添字 `xi re`、`da'o` 等。
     連鎖(`mu'o ge'e coi`)や項・述語間の挿入(`xu do su'a djica`)も許容)
   - **zei 複合語**(`zdani zei sinxa`): 完全な語を lujvo 相当に連結
   - 呼格(`coi …`)/ 文連結(`.i` `ni'o`、`.ije` `.ijanai` `.ibo` `.ijebo`
@@ -94,7 +96,7 @@ println!("{}", tree::to_sexpr(pairs));
 ## 開発
 
 ```console
-$ cargo test      # 全テスト(88件=単体84+doc 4、実文223文を含む)
+$ cargo test      # 全テスト(150件=単体146+doc 4、実文283文を含む)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 $ cargo bench    # 性能ベンチマーク(criterion)
@@ -124,7 +126,9 @@ src/
 ## 性能
 
 同一文章での簡易ベンチマークでは、リファレンス実装 camxes.js(JS)の
-約 5〜8 倍の速度で解析できる(詳細・注意書きは [docs/comparison.md](docs/comparison.md))。
+約 5〜8 倍の速度で解析できる(v0.9 時点の計測。その後の機能拡張で
+解析コストは増加しており、最新の絶対値は `cargo bench` を参照。
+詳細・注意書きは [docs/comparison.md](docs/comparison.md))。
 再現: `cargo run --release --example speed_check`
 
 ## 参考資料
@@ -140,14 +144,15 @@ src/
 | `tests/morphology.rs` | 語形認識(gismu/lujvo/cmevla/ストレス等) |
 | `tests/syntax.rs` | 統語構造の検証 |
 | `tests/fuzz.rs` | 簡易ファジング(ランダム・変異・深さ掃引)。重量版は `cargo test -- --ignored` |
-| `tests/corpus.rs` | **Tatoeba 実文160文**(CC BY 2.0 FR)+ CLL 風厳選例文63文 |
+| `tests/corpus.rs` | **実文283文**(Tatoeba 実文220文、CC BY 2.0 FR + CLL 風厳選例文63文) |
 
 実文コーパスは [Tatoeba](https://tatoeba.org) のロジバン文を使用しています。
 
 ## 既知の制限・ロードマップ
 
-- 接続詞は基本形対応済み(`bo` グルーピング・BIhI 間隔接続・述語先接続 GUhA を含む)。
-  先接続演算子(MAhO)等の数理詳細は未実装
+- 接続詞は基本形対応済み(`bo` グルーピング・BIhI 間隔接続・述語先接続 GUhA、
+  先接続 `ganai … ginai`(分離形 `ga nai … gi nai` 含む)、MAhO 演算子)。
+  未対応は FUhE/FUhO 先置論理と項set(NUhI)
 - 数理表現(mex)は LI…LOhO の項と描述内数量詞(`le re su'i ci gerku`)に対応
   (`vei … ve'o` 括弧、`ki'o` `ma'u` `ni'u`)。演算子は左結合の単純連鎖で、
   SE 変換(`se pi'i`)・NAhU 派生演算子(`na'u zmadu`)・MAhO(`ma'o ny`)・

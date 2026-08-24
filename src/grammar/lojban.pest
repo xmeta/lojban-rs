@@ -14,7 +14,8 @@
 // ---------------------------------------------------------------------
 // 統語層(zantufa の text/statement/sentence/sumti/selbri 構造をコアサブセット
 // として移植。トークン間のポーズは sp1 で明示接続する。
-// 接続詞(gek/ek/gihek/joik)・mex・引用(LU/ZO/ZOI/LOhU)は将来拡張)
+// 接続詞(gek/ek/gihek/joik)・mex・引用(LU/ZO/ZOI/LOhU)も実装済み。
+// 以降の拡張履歴は STATUS.md を参照)
 // ---------------------------------------------------------------------
 text = { SOI ~ sp0 ~ content? ~ sp0 ~ EOI }
 
@@ -197,7 +198,7 @@ gi_joint = _{ GINAI_joint | GI_clause ~ (sp1 ~ NAI_clause)? }
 gek_sentence = { ga_joint ~ sp1 ~ sentence ~ sp1 ~ gi_joint ~ sp1 ~ sentence }
 gek_sumti    = { ga_joint ~ sp1 ~ sumti ~ sp1 ~ gi_joint ~ sp1 ~ sumti }
 
-// 引用(LU...LUhU / ZO+単語は sumti、LOhU...LEhU は free。ZOI は未対応)
+// 引用(LU...LUhU / ZO+単語は sumti、LOhU...LEhU は free。ZOI は lib.rs 前処理で対応)
 lu_quote   = { LU_clause ~ sp0 ~ content ~ sp0 ~ LUhU_clause }
 zo_quote   = { ZO_clause ~ sp1 ~ word }
 lohu_quote = { LOhU_clause ~ sp0 ~ (!LEhU_clause ~ word) ~ (sp1 ~ !LEhU_clause ~ word)*

@@ -21,8 +21,9 @@ The parser engine is [pest](https://pest.rs); the grammar in
     (`ro lo remna`) / numerals / letterals (BY: `xy`, `abu`, …; usable as sumti and
     as mex operands) / connectives (`e` `a` `o` `u` + `nai`, JOI series)
   - selbri: tanru / `na` negation / `na'e to'e` scale flipping / `se te ve xe` conversion
-    / `co` inversion / tanru connectives (`melbi je cmalu`, `je bo`) /
-    bridi-tail chains (`gi'e` `gi'a` …)
+    / `ja'a` affirmation / `co` inversion / tanru connectives
+    (`melbi je cmalu`, `je bo`) / bridi-tail chains (`gi'e` `gi'a` …,
+    `gi'e bo`) / JAI conversion (`jai gau …`)
   - `be … bei … be'o` linked sumti
   - Abstractions (`nu ka ni zu'o …`, SE conversion `se du'u` and the joined
     form `sedu'u`) / `ke … ke'e` grouping
@@ -32,7 +33,8 @@ The parser engine is [pest](https://pest.rs); the grammar in
   - Free modifiers (attitudinals such as `ui` with the intensity scale
     `cai sai ru'e cu'i`, discursives `ku'i` `ja'o` `po'o` `da'i` `je'u` etc.,
     `xu` questions, `sei` inserts, `to … toi` parentheticals,
-    `soi … vo'a vo'e` swaps, utterance ordinals `pamai` etc.; chains
+    `soi … vo'a vo'e` swaps, utterance ordinals `pamai`, subscripts `xi re`,
+    `da'o`, etc.; chains
     (`mu'o ge'e coi`) and insertion between terms and predicates
     (`xu do su'a djica`) are also accepted)
   - **ZEI compounds** (`zdani zei sinxa`): full words joined into a
@@ -107,7 +109,7 @@ println!("{}", tree::to_sexpr(pairs));
 ## Development
 
 ```console
-$ cargo test      # all tests (88 = 84 unit + 4 doc; includes 223 corpus sentences)
+$ cargo test      # all tests (150 = 146 unit + 4 doc; includes 283 corpus sentences)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 $ cargo bench    # performance benchmarks (criterion)
@@ -137,7 +139,9 @@ Sections of the grammar file:
 ## Performance
 
 In a simple same-sentence benchmark this parser runs about **5–8× faster**
-than the reference implementation camxes.js (JavaScript). See
+than the reference implementation camxes.js (JavaScript) — measured at v0.9;
+parsing costs have since grown with the expanded feature set, so see
+`cargo bench` for current absolute numbers. See
 [docs/comparison.md](docs/comparison.md) for details and caveats.
 Reproduce with: `cargo run --release --example speed_check`
 
@@ -154,15 +158,16 @@ Reproduce with: `cargo run --release --example speed_check`
 | `tests/morphology.rs` | Word recognition (gismu/lujvo/cmevla/stress, etc.) |
 | `tests/syntax.rs` | Syntactic structure verification |
 | `tests/fuzz.rs` | Lightweight fuzzing (random input, mutations, nesting sweep). Heavy variants: `cargo test -- --ignored` |
-| `tests/corpus.rs` | **160 real Tatoeba sentences** (CC BY 2.0 FR) + 63 curated CLL-style examples |
+| `tests/corpus.rs` | **283 real-world sentences** (220 Tatoeba sentences, CC BY 2.0 FR + 63 curated CLL-style examples) |
 
 The real-sentence corpus uses Lojban sentences from [Tatoeba](https://tatoeba.org).
 
 ## Known Limitations & Roadmap
 
 - Connectives are supported in their basic forms (including `bo` grouping,
-  BIhI interval connectives `bi'o bi'i mi'i`, and forethought selbri GUhA).
-  Forethought operators (MAhO) and other mex details are not implemented
+  BIhI interval connectives, forethought selbri GUhA, forethought
+  `ganai … ginai` and separated `ga nai … gi nai`, and MAhO operators).
+  FUhE/FUhO forethought logic and termsets (NUhI) are not implemented
 - mex arithmetic is supported as LI…LOhO sumti and inside description
   quantifiers (`le re su'i ci gerku`) with `vei … ve'o` parentheses and
   `ki'o` `ma'u` `ni'u`. Operators form simple left-associative chains and
