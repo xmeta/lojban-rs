@@ -184,12 +184,15 @@ linked_args = { BE_clause ~ sp1 ~ sumti ~ (sp1 ~ BEI_clause ~ sp1 ~ sumti)* ~ (s
 
 // 数理表現(mex)。LI...LOhO で sumti 化。演算子は左結合の単純連鎖、括弧は vei...ve'o
 mex         = { mex_operand ~ (sp1 ~ mex_operator ~ sp1 ~ mex_operand)* }
-mex_operator = _{ (SE_clause ~ sp1)? ~ VUhU_clause
+mex_operator = _{ (SE_clause ~ sp1)? ~ VUhU_clause | FIhU_clause
                  | NAhU_clause ~ sp1 ~ tanru ~ (sp1 ~ TEhU_clause)?
                  | MAhO_clause ~ sp1 ~ mex ~ (sp1 ~ TEhU_clause)?
                  | BIhI_clause }
 mex_operand = _{ number | vei_group | BY_clause | MOhE_clause ~ sp1 ~ sumti
-                | peho_group }
+                | peho_group
+                // 前置単項演算子(va'a pa = -1 等)。通常の位置では
+                // 数詞が先に一致するため既存解析に影響しない
+                | VUhU_clause ~ sp1 ~ mex_operand }
 // 先置数理(peho su'i re ci = 2+3)。kuhe による明示閉鎖は省略可。
 // 被演算子は連結数詞を展開しない単一形(re ci を2桁数と読む number との競合回避)
 peho_group  = { PEhO_clause ~ sp1 ~ mex_operator ~ sp1 ~ fore_operand
@@ -460,6 +463,8 @@ BIhI_core = @{ ( ^"bi'o" | ^"bi'i" | ^"mi'i") ~ &word_boundary }
 VUhU_core = @{ ( ^"su'i" | ^"vu'u" | ^"pi'i" | ^"fe'i" | ^"gei" | ^"de'o" | ^"te'o"
                | ^"re'a" | ^"va'a" | ^"pa'i" | ^"si'i" | ^"fu'u") ~ &word_boundary }
 NAhU_core = @{ (^"na'u" | ^"nahu") ~ &word_boundary }
+// 除算スラッシュ(pa fi'u re = 1/2)
+FIhU_core = @{ (^"fihu" | ^"fi'u") ~ &word_boundary }
 PEhO_core = @{ (^"peho" | ^"pe'o") ~ &word_boundary }
 MAhO_core = @{ (^"maho" | ^"ma'o") ~ &word_boundary }
 KUhE_core = @{ (^"kuhe" | ^"ku'e") ~ &word_boundary }
@@ -469,6 +474,7 @@ VEI_core  = @{ ( ^"vei") ~ &word_boundary }
 VEhO_core = @{ ( ^"ve'o" | ^"veho") ~ &word_boundary }
 NAhU_clause = { NAhU_core }
 PEhO_clause = { PEhO_core }
+FIhU_clause = { FIhU_core }
 MAhO_clause = { MAhO_core }
 KUhE_clause = { KUhE_core }
 TEhU_clause = { TEhU_core }

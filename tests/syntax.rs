@@ -1021,3 +1021,11 @@ fn 結合形と談話標識_バッテリー6() {
     let s = parse_ok("ba'e do viska mi");
     assert!(s.contains("BAhE_core \"ba'e\""), "{s}");
 }
+
+#[test]
+fn mex_fihu_と_前置単項() {
+    let s = parse_ok("li pa fi'u re du li pimu");
+    assert!(s.contains("FIhU_core"), "{s}");
+    let s = parse_ok("li va'a pa du li ni'u pa");
+    assert!(s.contains("VUhU_core \"va'a\""), "{s}");
+}
