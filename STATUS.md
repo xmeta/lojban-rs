@@ -1,10 +1,10 @@
 # 開発ステータス
 
-## 現在の状態: v0.84 完成(全テストグリーン)
+## 現在の状態: v0.85 完成(全テストグリーン)
 
 - ライブラリ20 / 形態論11 / 統語122 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / doc 11 / fuzz 3(+ignore 2) = 計196テスト全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.84.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.85.0)
 
 ## v0.83 で追加(Tatoeba 定期再検証)
 - 未収録 689 文を --lines パイプラインで検証: 94%(647/689)を維持
@@ -31,12 +31,17 @@
 
 - ライブラリ20 / 形態論11 / 統語122 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / doc 11 / fuzz 3(+ignore 2) = 計196テスト全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.84.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.85.0)
 ## v0.79 で追加(語種判定・統計のライブラリ化)
 - lojban::classify_word(単語の語種判定)と lojban::word_stats
   (WordStats 構造体による語種別集計)を公開 API 化(doc test 付き)。
   main.rs の --classify/--stats は委譲に切り替わり、
   CLI が薄いラッパーのみの構成になった
+
+## v0.85 で追加(Tatoeba 定期再検証)
+- 未収録 689 文で受理率 94%(647/689)を維持(v0.38 以降 11 回連続同率)。
+  v0.84 の pi'o 追加は今回のサンプルに該当文がなく影響なし
+  (Tatoeba の単純文では pi'o 使用が稀)。失敗 42 文は既知カテゴリのみ
 
 ## v0.84 で追加
 - tree::leaf_spans を追加: 葉ノード(規則・原文・バイト位置)の列挙。
