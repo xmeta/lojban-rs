@@ -453,6 +453,22 @@ const CURATED: &[&str] = &[
     "do latcribe",
     "zgikrxumpa ko",
     "barda u'e",
+    // v0.78: Tatoeba 定期再検証分
+    "mi gleve'u",
+    "ko'a lazni",
+    "ko troci",
+    "mutce nandu",
+    "ca jaurcarvi",
+    "mi prityxanpre",
+    "e'u klama",
+    "roda smaji",
+    "xu blabi",
+    "ne'i lenku",
+    "fonjudri mi",
+    "ma bedja'a",
+    ".ii nai",
+    "desku .iicai",
+    ".e'unai .u'anai",
 ];
 
 #[test]
