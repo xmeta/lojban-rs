@@ -10,9 +10,8 @@ use std::process::ExitCode;
 use clap::Parser as ClapParser;
 
 use lojban::grammar::Rule;
+use lojban::lujvo;
 use lojban::tree;
-use lojban::{lujvo, LojbanParser};
-use pest::Parser;
 
 #[derive(ClapParser, Debug)]
 #[command(
@@ -122,7 +121,10 @@ fn run_classify(raw: &str, json: bool) -> ExitCode {
         .map(|w| w.trim_start_matches(['.', ',', '!', '?']))
         .filter(|w| !w.is_empty())
         .collect();
-    let classes: Vec<(&str, &str)> = words.iter().map(|w| (*w, classify_word(w))).collect();
+    let classes: Vec<(&str, &str)> = words
+        .iter()
+        .map(|w| (*w, lojban::classify_word(w)))
+        .collect();
     if json {
         let items: Vec<String> = classes
             .iter()
@@ -217,7 +219,7 @@ fn run_stats(input: &str) -> ExitCode {
         .filter(|w| !w.is_empty())
     {
         total += 1;
-        *tally.entry(classify_word(tok)).or_insert(0usize) += 1;
+        *tally.entry(lojban::classify_word(tok)).or_insert(0usize) += 1;
     }
     let g = |k: &str| tally.get(k).copied().unwrap_or(0);
     // 解析が成功する場合のみ文数を付与(失敗時はフィールド自体を省略)
@@ -311,20 +313,4 @@ fn count_sentences(pairs: &mut pest::iterators::Pairs<'_, Rule>) -> usize {
         n += count_sentences(&mut pair.into_inner());
     }
     n
-}
-
-/// 単語1語の語種を判定する(--classify / --stats 共用)
-fn classify_word(word: &str) -> &'static str {
-    [
-        (Rule::jbocme, "cmevla"),
-        (Rule::zifcme, "cmevla"),
-        (Rule::gismu, "gismu"),
-        (Rule::lujvo, "lujvo"),
-        (Rule::fuhivla, "fu'ivla"),
-        (Rule::cmavo, "cmavo"),
-    ]
-    .into_iter()
-    .find(|(rule, _)| LojbanParser::parse(*rule, word).is_ok())
-    .map(|(_, name)| name)
-    .unwrap_or("unknown")
 }

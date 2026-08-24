@@ -84,6 +84,87 @@ pub fn friendly_error(e: &Error<Rule>) -> String {
     s
 }
 
+/// 単語1語の語種を判定する。
+///
+/// 戻り値は `gismu` / `lujvo` / `fu'ivla` / `cmevla` / `cmavo` /
+/// `unknown` のいずれか。先頭のポーズ文字(`. , ! ?`)は呼び出し側で
+/// 除去しておくことを推奨。
+///
+/// # Examples
+///
+/// ```
+/// use lojban::classify_word;
+///
+/// assert_eq!(classify_word("klama"), "gismu");
+/// assert_eq!(classify_word("zbasai"), "lujvo");
+/// assert_eq!(classify_word("mi"), "cmavo");
+/// ```
+pub fn classify_word(word: &str) -> &'static str {
+    use grammar::{LojbanParser, Rule};
+    use pest::Parser;
+    [
+        (Rule::jbocme, "cmevla"),
+        (Rule::zifcme, "cmevla"),
+        (Rule::gismu, "gismu"),
+        (Rule::lujvo, "lujvo"),
+        (Rule::fuhivla, "fu'ivla"),
+        (Rule::cmavo, "cmavo"),
+    ]
+    .into_iter()
+    .find(|(rule, _)| LojbanParser::parse(*rule, word).is_ok())
+    .map(|(_, name)| name)
+    .unwrap_or("unknown")
+}
+
+/// 語種別トークン統計。
+///
+/// 入力を空白とポーズ文字(`. , ! ?`)で分割し、各トークンを
+/// [`classify_word`](classify_word()) で分類した件数を保持する。
+/// 解析成否に依存しないため、コーパスの粗視調査に使える。
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
+pub struct WordStats {
+    /// トークン総数
+    pub tokens: usize,
+    pub gismu: usize,
+    pub lujvo: usize,
+    /// fu'ivla(fi'ivla 表記のフィールド名)
+    pub fuivla: usize,
+    pub cmevla: usize,
+    pub cmavo: usize,
+    pub unknown: usize,
+}
+
+/// テキスト全体の語種別トークン統計を計算する。
+///
+/// # Examples
+///
+/// ```
+/// use lojban::word_stats;
+///
+/// let s = word_stats("mi klama do .i la alis. cadzu");
+/// assert_eq!(s.tokens, 7);
+/// assert_eq!(s.gismu, 2);
+/// assert_eq!(s.cmevla, 1);
+/// ```
+pub fn word_stats(text: &str) -> WordStats {
+    let mut st = WordStats::default();
+    for tok in text
+        .split(|c: char| c.is_ascii_whitespace() || matches!(c, '.' | ',' | '!' | '?'))
+        .filter(|w| !w.is_empty())
+    {
+        st.tokens += 1;
+        match classify_word(tok) {
+            "gismu" => st.gismu += 1,
+            "lujvo" => st.lujvo += 1,
+            "fu'ivla" => st.fuivla += 1,
+            "cmevla" => st.cmevla += 1,
+            "cmavo" => st.cmavo += 1,
+            _ => st.unknown += 1,
+        }
+    }
+    st
+}
+
 /// ロジバンテキストを解析する。
 ///
 /// 成功時は解析木([`Pairs`])を返す。失敗時は行・列・期待要素を含む
