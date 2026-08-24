@@ -60,8 +60,11 @@ fn friendly_error(e: &pest::error::Error<Rule>) -> String {
 #[derive(ClapParser, Debug)]
 #[command(name = "lojban", version, about = "ロジバン PEG パーサー")]
 struct Args {
-    /// 解析するロジバンテキスト(未指定なら stdin)
+    /// 解析するロジバンテキスト(未指定なら stdin または --file)
     text: Option<String>,
+    /// ロジバンテキストを読むファイル
+    #[arg(short = 'f', long)]
+    file: Option<String>,
     /// S 式形式で出力する
     #[arg(long)]
     sexpr: bool,
@@ -122,7 +125,12 @@ fn main() -> ExitCode {
         };
     }
 
-    let input = match args.text {
+    let input = match args.text.or_else(|| match &args.file {
+        Some(path) => std::fs::read_to_string(path)
+            .map_err(|e| eprintln!("エラー: {path} を読めませんでした: {e}"))
+            .ok(),
+        None => None,
+    }) {
         Some(t) => t,
         None => {
             let mut buf = String::new();
