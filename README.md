@@ -85,6 +85,9 @@ $ lojban -f corpus.txt
 # バッチ検証(成功時は無出力、終了コードで判定)
 $ lojban -q "mi klama do" && echo OK
 
+# 行単位バッチ検証(1行 = 1文。失敗行は行番号付きで報告)
+$ lojban --lines -q -f corpus.txt
+
 # lujvo(新語)を生成(CLL 4.11 のハイフン規則 + tosmabru 検査 + 4.12 スコア)
 $ lojban --build-lujvo "zba sai"
 zbasai (score 5847)
