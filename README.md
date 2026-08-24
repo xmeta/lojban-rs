@@ -125,10 +125,10 @@ src/
 
 ## 性能
 
-同一文章での簡易ベンチマークでは、リファレンス実装 camxes.js(JS)の
-約 5〜8 倍の速度で解析できる(v0.9 時点の計測。その後の機能拡張で
-解析コストは増加しており、最新の絶対値は `cargo bench` を参照。
-詳細・注意書きは [docs/comparison.md](docs/comparison.md))。
+同一文章での簡易ベンチマークでは、リファレンス実装 camxes.js(JS)より
+高速(v0.37 再計測で約 3.6〜4.5 倍。v0.9 時点は 5〜8 倍だったが、
+機能拡張に伴い解析コストは増加)。詳細・注意書きは
+[docs/comparison.md](docs/comparison.md)、絶対値は `cargo bench`。
 再現: `cargo run --release --example speed_check`
 
 ## 参考資料

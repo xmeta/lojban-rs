@@ -138,11 +138,11 @@ Sections of the grammar file:
 
 ## Performance
 
-In a simple same-sentence benchmark this parser runs about **5–8× faster**
-than the reference implementation camxes.js (JavaScript) — measured at v0.9;
-parsing costs have since grown with the expanded feature set, so see
-`cargo bench` for current absolute numbers. See
-[docs/comparison.md](docs/comparison.md) for details and caveats.
+In a simple same-sentence benchmark this parser is faster than the
+reference implementation camxes.js (JavaScript): about **3.6–4.5×** in the
+v0.37 re-measurement (it was 5–8× at v0.9; parsing costs have grown with
+the expanded feature set). See [docs/comparison.md](docs/comparison.md)
+for details and caveats, and `cargo bench` for absolute numbers.
 Reproduce with: `cargo run --release --example speed_check`
 
 ## References
