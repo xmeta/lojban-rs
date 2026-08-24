@@ -1,8 +1,18 @@
 # 開発ステータス
 
-## 現在の状態: v0.35 完成(全テストグリーン)
+## 現在の状態: v0.36 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語110 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計153テスト全パス
+- ライブラリ20 / 形態論11 / 統語112 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計155テスト全パス
+
+## v0.36 で追加(バッテリー#4: 引用・入れ子9文を実測)
+- 項set NUhI/NUhU(nu'i X Y [nu'u])を term に追加
+- FUhE/FUhO 感情スコープ標識を自由修飾語に追加(camxes indicators 準拠)
+- tail_terms が自由修飾語と項の混在を許容(mi cusku .ui do /
+  cusku pe'i lo xamgu / 述語直後の sei 文)。free の各選択肢は
+  先頭トークンが異なる literal のため失敗パスは安価(fuzz 劣化なし)
+- 調査メモ: 「la alis. cusku …」は説明詞 greedy 読みが確定する曖昧形で
+  cu による明示が必要(参考実装と同じ挙動)。バッテリー文のうち
+  入れ子抽象2件は無効ロジバン(nu の内容は文であるべき)だった
 
 ## v0.35 で追加(バッテリー#3: 抽象・質問・タグ多用文14文を実測、12文が既存で通過)
 - gek_sentence に frees_s? を先置(xu ganai … gi … / pe'i ganai … gi …)。
@@ -310,6 +320,5 @@
    `x = @{ (^"mi" | ^"mi'a") ~ &wb }` が "mi'a" を拒否することで確認済み)
 
 ## 次の拡張候補
-- FUhE/FUhO 先置論理、NUhI 項set、CEhE 空間間隔方向、
-- docs/comparison.md の再計測(camxes.js 現行版との比較更新)、
-- 解析木の JSON スキーマ整備(バージョン付与)
+- docs/comparison.md の再計測、解析木 JSON スキーマのバージョン付与、
+- CEhE 空間間隔方向、terms 間(項と項の間)の自由修飾語混在
