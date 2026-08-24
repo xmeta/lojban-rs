@@ -77,6 +77,9 @@ struct Args {
     /// HTML(入れ子リスト)形式で出力する
     #[arg(long)]
     html: bool,
+    /// 出力せず成否のみで終了する(バッチ検証用。エラーは stderr に出る)
+    #[arg(short = 'q', long)]
+    quiet: bool,
     /// lujvo を生成する(rafsi を空白またはカンマ区切りで指定)
     #[arg(long)]
     build_lujvo: Option<String>,
@@ -148,7 +151,9 @@ fn main() -> ExitCode {
 
     match lojban::parse(&input) {
         Ok(pairs) => {
-            if args.json {
+            if args.quiet {
+                // 成功時は無出力(終了コード 0)
+            } else if args.json {
                 println!("{}", tree::to_json(pairs));
             } else if args.dot {
                 println!("{}", tree::to_dot(pairs));

@@ -85,7 +85,7 @@ sumti      = { sumti_core ~ (sp1 ~ relative_clauses)?
 //     PEG の繰り返しは成功で確定するため、ここで拒否しないと
 //     bridi_tail 側の「数詞+MOI」述語が届かない
 sumti_core = _{ bu_lerfu | KOhA_clause | lahe_sumti | desc | BY_clause | quant_desc | quant_selbri | bare_number | abstraction
-               | lu_quote | zo_quote | gek_sumti | li_mex | zoi_quote | BY_clause }
+               | lu_quote | zo_quote | gek_sumti | li_mex | zoi_quote }
 bare_number = _{ number ~ !(sp1 ~ MOI_clause) }
 quant_selbri = { number ~ sp1 ~ selbri ~ (sp1 ~ KU_clause)? }
 // LAhE 項修飾(la'e = 参照先 / lu'e = 参照元)。ge'u による明示閉鎖も許容
