@@ -1,8 +1,29 @@
 # 開発ステータス
 
-## 現在の状態: v0.30 完成(全テストグリーン)
+## 現在の状態: v0.31 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語102 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計143テスト全パス
+- ライブラリ20 / 形態論11 / 統語103 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計145テスト全パス
+
+## v0.31 で追加
+- JAI 変換を tanru_unit に追加(jai gau zdani / jai zdani。camxes tanru_unit_2 準拠)。
+  BAI に gau(行為者)を追加
+- PA から16進桁 jai を削除(quant_selbri が「jai + selbri」を数量詞として
+  横取りし JAI 変換と衝突するため。dau fei rei vai は残置)
+- 教訓5の裏面を確認: (sp1 ~ X)? は X 失敗時に sp1 の消費も取り消すため、
+  直後に必須要素が続く場合は分岐で書く(JAI 枝で実測)
+- ベンチマーク再計測(v0.9.1 比較、sample_size=20 の参考値):
+  | 項目 | v0.9.1 | v0.31 |
+  |---|---|---|
+  | parse 短文 | 153µs | 約410µs |
+  | parse 描述+関係節 | 405µs | 約1.03ms |
+  | parse 複合 | 518µs | 約1.14ms |
+  | morphology gismu | 12µs | 約16µs |
+  | morphology lujvo | 679µs | 約1.27ms |
+  | output to_sexpr | 469µs | 約1.40ms |
+  | output to_json | 415µs | 約2.0ms |
+  v0.9.1 以降に選択肢を大幅拡張した代償として 2〜4 倍程度の解析コスト増。
+  機能カバレッジとのトレードオフとして受入れ、最適化は
+  アーキテクチャ変更(Packrat 等)が必要な領域とする(v0.9.1 教訓の再確認)
 
 ## v0.30 で追加
 - ZOhU 前置スコープ(su'o da zo'u … / ro da zo'u ganai … gi …)。
@@ -255,5 +276,5 @@
    `x = @{ (^"mi" | ^"mi'a") ~ &wb }` が "mi'a" を拒否することで確認済み)
 
 ## 次の拡張候補
-- JAI 変換(jai cau / jai gau)、FUhE/FUhO 先置論理、
-  ベンチマーク再計測(v0.9.1 比較の更新)
+- FUhE/FUhO 先置論理、MOI(tanru 内 moi)、CEhE/ZEI 等の残り selma'o、
+  エラーメッセージの行番号・列位置改善
