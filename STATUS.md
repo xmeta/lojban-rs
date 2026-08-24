@@ -706,6 +706,29 @@
 - 数量詞+selbri の項(pa prenu)、描述内数量詞(le ci gerku)
 - me 述語、du'u 抽象、se du'u 変換、UI 語彙10個追加
 
+## v1.0 に向けて
+
+v0.86 時点での到達度と、v1.0 判定の基準を整理する。
+
+### 到達度
+- CLL コア構文は網羅(意図的未収録 11 selma'o を除き、coverage.md 参照)
+- Tatoeba 実文受理率 94%×11 回の実測安定性
+- テスト 196 件(9 スイート)+ 重量ファジング合格×5 回
+- ライブラリ API(parse/friendly_error/classify_word/word_stats/tree×6/lujvo×3)
+- CLI(解析5形式・lujvo 3コマンド・classify/stats・バッチモード)
+- ドキュメント(README 日英 + docs 6点)
+
+### v1.0 の判定基準(案)
+1. 公開 API の凍結宣言(セマンティックバージョニングへの完全移行)
+2. 上記到達度の維持を 3 回以上の定期検証で連続確認(現時点でほぼ満たす)
+3. 意図的未収録 selma'o の最終承認(将来追加は 1.x での機能追加とする)
+4. クリーンビルド・クロスプラットフォーム確認(Linux 以外の検証)
+
+### 残る任意タスク
+- シェル補完(clap_complete、依存追加の判断が必要)
+- HTML 出力の折りたたみ状態制御の高度化
+- SA 等の非対応構文の方針は収録判断に含める
+
 ## 実装済み
 - pest + clap ベース(Cargo.toml / src/lib.rs / src/main.rs / src/tree.rs)
 - 形態論: zantufa 由来の語形認識(音節・ストレス・rafsi・cmevla)
@@ -734,6 +757,29 @@
 - Tatoeba 再検証の定期実施、HTML 出力への DOT 拡張、
 - crates.io 公開はユーザー判断で見送り中(方針変更時は版数同期済みのため即対応可)
 
+
+## v1.0 に向けて
+
+v0.86 時点での到達度と、v1.0 判定の基準を整理する。
+
+### 到達度
+- CLL コア構文は網羅(意図的未収録 11 selma'o を除き、coverage.md 参照)
+- Tatoeba 実文受理率 94%×11 回の実測安定性
+- テスト 196 件(9 スイート)+ 重量ファジング合格×5 回
+- ライブラリ API(parse/friendly_error/classify_word/word_stats/tree×6/lujvo×3)
+- CLI(解析5形式・lujvo 3コマンド・classify/stats・バッチモード)
+- ドキュメント(README 日英 + docs 6点)
+
+### v1.0 の判定基準(案)
+1. 公開 API の凍結宣言(セマンティックバージョニングへの完全移行)
+2. 上記到達度の維持を 3 回以上の定期検証で連続確認(現時点でほぼ満たす)
+3. 意図的未収録 selma'o の最終承認(将来追加は 1.x での機能追加とする)
+4. クリーンビルド・クロスプラットフォーム確認(Linux 以外の検証)
+
+### 残る任意タスク
+- シェル補完(clap_complete、依存追加の判断が必要)
+- HTML 出力の折りたたみ状態制御の高度化
+- SA 等の非対応構文の方針は収録判断に含める
 
 ## 実装済み
 - pest + clap ベース(Cargo.toml / src/lib.rs / src/main.rs / src/tree.rs)
