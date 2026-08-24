@@ -1,8 +1,13 @@
 # 開発ステータス
 
-## 現在の状態: v0.34 完成(全テストグリーン)
+## 現在の状態: v0.35 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語109 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計152テスト全パス
+- ライブラリ20 / 形態論11 / 統語110 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計153テスト全パス
+
+## v0.35 で追加(バッテリー#3: 抽象・質問・タグ多用文14文を実測、12文が既存で通過)
+- gek_sentence に frees_s? を先置(xu ganai … gi … / pe'i ganai … gi …)。
+  内側を inner_sentence に統一し gek/prenex の入れ子も許容
+- 残り2件の失敗は本修正で解消。バッテリー残存失敗なし
 
 ## v0.34 で追加
 - XI 添字(lo gerku xi re / li xy xi pa)と DAhO を自由修飾語として追加
@@ -306,4 +311,5 @@
 
 ## 次の拡張候補
 - FUhE/FUhO 先置論理、NUhI 項set、CEhE 空間間隔方向、
-- docs/comparison.md の再計測(camxes.js 現行版との比較更新)
+- docs/comparison.md の再計測(camxes.js 現行版との比較更新)、
+- 解析木の JSON スキーマ整備(バージョン付与)
