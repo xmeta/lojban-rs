@@ -13,6 +13,7 @@
   (camxes 語彙との照合で BIhE/CEI/FEhE/FOI/FUhA/JOhI/LAU/TEI/TUhU/
   NUhA/RAhO/SA/ZIhE の12クラスと理由を明記)
 
+## v0.52 で追加
 - CLI に --lines を追加: 入力を行単位で個別解析(1行 = 1文)。
   失敗行は行番号と日本語ヒント付きで stderr に報告し、-q 併用で無出力。
   lojban --lines -q -f corpus.txt でコーパス検証がワンパイプラインに
