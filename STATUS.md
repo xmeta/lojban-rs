@@ -1,8 +1,16 @@
 # 開発ステータス
 
-## 現在の状態: v0.33 完成(全テストグリーン)
+## 現在の状態: v0.34 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語107 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計150テスト全パス
+- ライブラリ20 / 形態論11 / 統語109 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計152テスト全パス
+
+## v0.34 で追加
+- XI 添字(lo gerku xi re / li xy xi pa)と DAhO を自由修飾語として追加
+  (camxes xi_clause 準拠。XI + number/BY/vei)
+- README 最終棚卸し: テスト数(88→150)・コーパス数(223→283)の更新、
+  MAhO「未実装」記述の削除(v0.29 で実装済み)、実際の未対応
+  (FUhE/FUhO、NUhI 項set)への差し替え、性能主張への計測時点注記、
+  文法ファイル内の陳腐化コメント(ZOI 未対応表記等)の修正
 
 ## v0.33 で追加
 - zei 複合語(zdani zei sinxa)。tanru_unit の先頭選択肢に置き
@@ -297,5 +305,5 @@
    `x = @{ (^"mi" | ^"mi'a") ~ &wb }` が "mi'a" を拒否することで確認済み)
 
 ## 次の拡張候補
-- FUhE/FUhO 先置論理、XI 添字、DAhO、CEhE 空間間隔方向、
-- README の機能一覧と実装状況の最終棚卸し
+- FUhE/FUhO 先置論理、NUhI 項set、CEhE 空間間隔方向、
+- docs/comparison.md の再計測(camxes.js 現行版との比較更新)
