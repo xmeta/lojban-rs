@@ -2,7 +2,8 @@
 name = "lojban"
 version = "0.87.0"
 edition = "2021"
-rust-version = "1.74"
+# 実効 MSRV は依存 pest 2.9 の要求(1.83)に従う。1.74 宣言は実測と不一致だった
+rust-version = "1.83"
 description = "A Lojban (constructed language) PEG parser library and CLI, ported from zantufa grammar"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
