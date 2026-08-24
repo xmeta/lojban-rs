@@ -147,7 +147,18 @@ fn stats_語種集計() {
     let (code, out, err) = run(&["--stats", "-f", dir.to_str().unwrap()], None);
     assert_eq!(code, 0, "{err}");
     assert!(out.contains("\"tokens\":10"), "{out}");
+    // 解析成功時は文数も付与
+    assert!(out.contains("\"sentences\":2"), "{out}");
     assert!(out.contains("\"gismu\":3"), "{out}");
     assert!(out.contains("\"cmevla\":1"), "{out}");
     let _ = std::fs::remove_file(&dir);
+}
+
+#[test]
+fn classify_複数語() {
+    let (code, out, err) = run(&["--classify", "klama zbasai mi", "--json"], None);
+    assert_eq!(code, 0, "{err}");
+    assert!(out.starts_with('['), "{out}");
+    assert!(out.contains("\"word\":\"klama\""), "{out}");
+    assert!(out.contains("\"class\":\"lujvo\""), "{out}");
 }

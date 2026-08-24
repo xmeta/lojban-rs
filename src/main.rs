@@ -51,13 +51,27 @@ fn main() -> ExitCode {
     let args = Args::parse();
 
     if let Some(raw) = args.classify {
-        // 先頭のポーズ文字(. , ! ?)を除去
-        let word = raw.trim_start_matches(['.', ',', '!', '?']);
-        let class = classify_word(word);
+        // 空白・カンマ区切りで複数語に対応
+        let words: Vec<&str> = raw
+            .split(|c: char| c.is_ascii_whitespace() || c == ',')
+            .map(|w| w.trim_start_matches(['.', ',', '!', '?']))
+            .filter(|w| !w.is_empty())
+            .collect();
+        let classes: Vec<(&str, &str)> = words.iter().map(|w| (*w, classify_word(w))).collect();
         if args.json {
-            println!("{{\"word\":\"{word}\",\"class\":\"{class}\"}}");
+            let items: Vec<String> = classes
+                .iter()
+                .map(|(w, c)| format!("{{\"word\":\"{w}\",\"class\":\"{c}\"}}"))
+                .collect();
+            if items.len() == 1 {
+                println!("{}", items[0]);
+            } else {
+                println!("[{}]", items.join(","));
+            }
         } else {
-            println!("{word}: {class}");
+            for (w, c) in &classes {
+                println!("{w}: {c}");
+            }
         }
         return ExitCode::SUCCESS;
     }
@@ -161,16 +175,33 @@ fn main() -> ExitCode {
             *tally.entry(classify_word(tok)).or_insert(0usize) += 1;
         }
         let g = |k: &str| tally.get(k).copied().unwrap_or(0);
-        println!(
-            "{{\"tokens\":{},\"gismu\":{},\"lujvo\":{},\"fu'ivla\":{},\"cmevla\":{},\"cmavo\":{},\"unknown\":{}}}",
-            total,
-            g("gismu"),
-            g("lujvo"),
-            g("fu'ivla"),
-            g("cmevla"),
-            g("cmavo"),
-            g("unknown")
-        );
+        // 解析が成功する場合のみ文数を付与(失敗時はフィールド自体を省略)
+        let sentences = lojban::parse(&input)
+            .ok()
+            .map(|pairs| count_sentences(&mut pairs.into_iter()));
+        match sentences {
+            Some(n) => println!(
+                "{{\"tokens\":{},\"sentences\":{},\"gismu\":{},\"lujvo\":{},\"fu'ivla\":{},\"cmevla\":{},\"cmavo\":{},\"unknown\":{}}}",
+                total,
+                n,
+                g("gismu"),
+                g("lujvo"),
+                g("fu'ivla"),
+                g("cmevla"),
+                g("cmavo"),
+                g("unknown")
+            ),
+            None => println!(
+                "{{\"tokens\":{},\"gismu\":{},\"lujvo\":{},\"fu'ivla\":{},\"cmevla\":{},\"cmavo\":{},\"unknown\":{}}}",
+                total,
+                g("gismu"),
+                g("lujvo"),
+                g("fu'ivla"),
+                g("cmevla"),
+                g("cmavo"),
+                g("unknown")
+            ),
+        }
         return ExitCode::SUCCESS;
     }
 
@@ -228,6 +259,18 @@ fn main() -> ExitCode {
             ExitCode::from(1)
         }
     }
+}
+
+/// 解析木中の sentence ノード数を数える(--stats 用)
+fn count_sentences(pairs: &mut pest::iterators::Pairs<'_, lojban::grammar::Rule>) -> usize {
+    let mut n = 0usize;
+    for pair in pairs.by_ref() {
+        if pair.as_rule() == lojban::grammar::Rule::sentence {
+            n += 1;
+        }
+        n += count_sentences(&mut pair.into_inner());
+    }
+    n
 }
 
 /// 単語1語の語種を判定する(--classify / --stats 共用)
