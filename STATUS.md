@@ -1,10 +1,17 @@
 # 開発ステータス
 
-## 現在の状態: v0.57 完成(全テストグリーン)
+## 現在の状態: v0.58 完成(全テストグリーン)
 
 - ライブラリ20 / 形態論11 / 統語119 / coverage_doc 1 / コーパス3 / doc 6 / fuzz 3(+ignore 2) = 計163テスト全パス
 - コーパス 333 文(Tatoeba 実文受理率 94% を維持)
 - Cargo.toml の版数を STATUS 版数に同期(0.53.0)
+
+## v0.58 で追加(docs/parsing-guide.md 新設)
+- 出力に現れる主要規則(text〜free_unit)の意味を解説する
+  解析木リファレンスを新設。JSON の rule 名の実質的な仕様書。
+  これでドキュメントスイートが揃った
+  (coverage.md=文法語彙 / json-schema.md=出力形式 /
+  parsing-guide.md=木構造 / comparison.md=性能)
 
 ## v0.57 で追加
 - --build-lujvo / --split-lujvo に --json 出力を追加
