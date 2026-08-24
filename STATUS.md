@@ -1,8 +1,19 @@
 # 開発ステータス
 
-## 現在の状態: v0.31 完成(全テストグリーン)
+## 現在の状態: v0.32 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語103 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計145テスト全パス
+- ライブラリ20 / 形態論11 / 統語105 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計148テスト全パス
+
+## v0.32 で追加
+- 数詞述語 MOI(mei moi si'e cu'o va'e、h 表記併用)を tanru_unit に追加
+  (mi re moi / mi ci mei / le re moi prenu。camxes の語形リストを原典確認)
+- me_form に省略可能な me'u と後続 MOI を追加(camxes: ME sumti MEhU? MOI?)
+- 教訓5裏面の2例目を修正:
+  1. 裸数詞項が直後 MOI を取らないよう否定先読みでガード
+     (PEG 繰り返しは成功で確定し bridi_tail 側へ戻れないため)
+  2. sumti_tail を (mex sp1)? selbri から明示分岐へ
+     (mex 成功後に selbri 失敗すると「selbri 単独」に戻れない。
+     le re moi prenu で発覚)
 
 ## v0.31 で追加
 - JAI 変換を tanru_unit に追加(jai gau zdani / jai zdani。camxes tanru_unit_2 準拠)。
@@ -276,5 +287,5 @@
    `x = @{ (^"mi" | ^"mi'a") ~ &wb }` が "mi'a" を拒否することで確認済み)
 
 ## 次の拡張候補
-- FUhE/FUhO 先置論理、MOI(tanru 内 moi)、CEhE/ZEI 等の残り selma'o、
-  エラーメッセージの行番号・列位置改善
+- FUhE/FUhO 先置論理、ZEI(zei による lujvo 合成)、SOI 入れ替え、
+- エラーメッセージの行番号・列位置改善

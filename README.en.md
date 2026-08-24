@@ -51,7 +51,9 @@ The parser engine is [pest](https://pest.rs); the grammar in
     description articles `lo'e` / `le'e`
   - Quantifier + selbri terms (`pa prenu cu klama`), quantifiers inside descriptions
     (`le ci gerku`)
-  - `me` predicates, term-only fragments (bare `mi`), bare attitudinals (`.ui`)
+  - `me` predicates (with elidable `me'u`), number predicates MOI
+    (`mi re moi` / `mi ci mei`), term-only fragments (bare `mi`),
+    bare attitudinals (`.ui`)
   - Forethought selbri connectives (GUhA `gu'e … gi`, optionally with NAhE)
     and GAhO interval endpoints (`ga'o bi'o ke'i`)
 - **Output**: pretty-printed tree / S-expressions / JSON
