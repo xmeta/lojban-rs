@@ -67,7 +67,8 @@ tense_tags = _{ tense_mark ~ (sp1 ~ tense_mark)* }
 na_ku      = { NAKU_joint | NA_clause ~ sp1 ~ KU_clause }
 NAKU_joint = { ^"naku" ~ &word_boundary }
 
-sumti      = { sumti_core ~ (sp1 ~ relative_clauses)? ~ (sp1 ~ ek_joik ~ sp1 ~ sumti)* }
+sumti      = { sumti_core ~ (sp1 ~ relative_clauses)?
+              ~ ((sp1 ~ ek_joik | sp1 ~ VUhO_clause) ~ sp1 ~ sumti)* }
 // 注: 裸の数詞項は直後が MOI 述語(re moi 等)なら項としない。
 //     PEG の繰り返しは成功で確定するため、ここで拒否しないと
 //     bridi_tail 側の「数詞+MOI」述語が届かない
@@ -218,7 +219,7 @@ frees_s   = _{ free ~ (sp1 ~ free)* }
 frees_m   = _{ (sp1 ~ free)+ }
 free      = { free_unit ~ (sp1 ~ free_unit)* }
 free_unit = { ui_free | mai_free | soi_free | sei_free | xi_free | daho_free
-           | fuhe_free | fuho_free
+           | fuhe_free | fuho_free | faho_free
            | to_quote | vocative | lohu_quote | SI_clause | SU_clause }
 mai_free  = { MAI_clause }
 soi_free  = { SOI_clause ~ sp1 ~ sumti ~ (sp1 ~ sumti)? ~ (sp1 ~ SEhU_clause)? }
@@ -227,6 +228,7 @@ xi_free   = { XI_clause ~ sp1 ~ (number | BY_clause | vei_group) }
 daho_free = { DAhO_clause }
 fuhe_free = { FUhE_clause }
 fuho_free = { FUhO_clause }
+faho_free = { FAhO_clause }
 ui_free  = { UINAI_joint | UI_clause ~ (sp1 ~ CAI_clause)? ~ (sp1 ~ NAI_clause)? }
 sei_free = { SEI_clause ~ sp1 ~ inner_sentence ~ (sp1 ~ SEhU_clause)? }
 to_quote = { TO_clause ~ (sp0 ~ (word ~ (sp1 ~ word)*)?)? ~ (sp1 ~ TOI_clause)? }

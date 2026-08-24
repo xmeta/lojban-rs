@@ -977,3 +977,13 @@ fn moi_be_連結() {
     assert!(s.contains("MOI_core \"moi\""), "{s}");
     assert!(s.contains("BE_core \"be\""), "{s}");
 }
+
+#[test]
+fn faho_と_vuo() {
+    // fa'o = テキストの明示終端
+    let s = parse_ok("mi klama fa'o");
+    assert!(s.contains("FAhO_core"), "{s}");
+    // vu'o = 項を連結して関係節を共有
+    let s = parse_ok("mi vu'o do poi tavla mi cu prami");
+    assert!(s.contains("VUhO_core \"vu'o\""), "{s}");
+}
