@@ -1,10 +1,17 @@
 # 開発ステータス
 
-## 現在の状態: v0.60 完成(全テストグリーン)
+## 現在の状態: v0.61 完成(全テストグリーン)
 
 - ライブラリ20 / 形態論11 / 統語119 / coverage_doc 1 / コーパス3 / doc 6 / fuzz 3(+ignore 2) = 計163テスト全パス
 - コーパス 333 文(Tatoeba 実文受理率 94% を維持)
 - Cargo.toml の版数を STATUS 版数に同期(0.53.0)
+
+## v0.61 で追加(バッテリー#8: mex 深組み合わせ8文を実測)
+- FIhU 除算演算子(fi'u)を mex_operator に追加(pa fi'u re = 1/2)
+- 前置単項 VUhU(va'a pa 等)を被演算子として許可。数詞が先に一致する
+  選択順序のため既存解析は不変(fuzz タイミング劣化なし)
+- coverage.md 再生成(111 クラス / 109 接続)
+- 未対応のまま: 連結 vei 群(要演算子)、mex 内 xi 添字
 
 ## v0.60 で追加(節目: --classify 語種判定コマンド)
 - lojban --classify <word>: gismu / lujvo / fu'ivla / cmevla / cmavo /
