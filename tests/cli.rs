@@ -188,3 +188,11 @@ fn 引用を含む長文の_json() {
     assert_eq!(code, 0, "{err}");
     assert!(out.starts_with("{\"version\":1,"), "{out}");
 }
+
+#[test]
+fn json出力に位置情報が含まれる() {
+    let (code, out, err) = run(&["mi klama", "--json"], None);
+    assert_eq!(code, 0, "{err}");
+    assert!(out.contains("\"start\":0"), "{out}");
+    assert!(out.contains("\"end\":8"), "{out}");
+}

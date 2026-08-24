@@ -109,11 +109,14 @@ fn write_json(pair: &Pair<'_, Rule>, out: &mut String) {
     if pair.as_rule() == Rule::EOI {
         return;
     }
+    let span = pair.as_span();
     let _ = write!(
         out,
-        "{{\"rule\":\"{:?}\",\"text\":{}",
+        "{{\"rule\":\"{:?}\",\"text\":{},\"start\":{},\"end\":{}",
         pair.as_rule(),
-        json_escape(pair.as_str())
+        json_escape(pair.as_str()),
+        span.start(),
+        span.end()
     );
     let children = visible_children(pair);
     if !children.is_empty() {
