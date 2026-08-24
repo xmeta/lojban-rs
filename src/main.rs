@@ -33,6 +33,9 @@ struct Args {
     /// 入力を行単位で個別解析する(1行 = 1文。失敗行は行番号付きで報告)
     #[arg(long)]
     lines: bool,
+    /// 語種別のトークン統計を出力する(解析成否に依存しない)
+    #[arg(long)]
+    stats: bool,
     /// 語種を判定する(gismu / lujvo / fu'ivla / cmevla / cmavo / unknown)
     #[arg(long)]
     classify: Option<String>,
@@ -48,22 +51,9 @@ fn main() -> ExitCode {
     let args = Args::parse();
 
     if let Some(raw) = args.classify {
-        use lojban::grammar::{LojbanParser, Rule};
-        use pest::Parser;
         // 先頭のポーズ文字(. , ! ?)を除去
         let word = raw.trim_start_matches(['.', ',', '!', '?']);
-        let class = [
-            (Rule::jbocme, "cmevla"),
-            (Rule::zifcme, "cmevla"),
-            (Rule::gismu, "gismu"),
-            (Rule::lujvo, "lujvo"),
-            (Rule::fuhivla, "fu'ivla"),
-            (Rule::cmavo, "cmavo"),
-        ]
-        .into_iter()
-        .find(|(rule, _)| LojbanParser::parse(*rule, word).is_ok())
-        .map(|(_, name)| name)
-        .unwrap_or("unknown");
+        let class = classify_word(word);
         if args.json {
             println!("{{\"word\":\"{word}\",\"class\":\"{class}\"}}");
         } else {
@@ -160,6 +150,30 @@ fn main() -> ExitCode {
         }
     };
 
+    if args.stats {
+        let mut tally = std::collections::BTreeMap::new();
+        let mut total = 0usize;
+        for tok in input
+            .split(|c: char| c.is_ascii_whitespace() || matches!(c, '.' | ',' | '!' | '?'))
+            .filter(|w| !w.is_empty())
+        {
+            total += 1;
+            *tally.entry(classify_word(tok)).or_insert(0usize) += 1;
+        }
+        let g = |k: &str| tally.get(k).copied().unwrap_or(0);
+        println!(
+            "{{\"tokens\":{},\"gismu\":{},\"lujvo\":{},\"fu'ivla\":{},\"cmevla\":{},\"cmavo\":{},\"unknown\":{}}}",
+            total,
+            g("gismu"),
+            g("lujvo"),
+            g("fu'ivla"),
+            g("cmevla"),
+            g("cmavo"),
+            g("unknown")
+        );
+        return ExitCode::SUCCESS;
+    }
+
     if args.lines {
         let mut all_ok = true;
         for (i, line) in input.lines().enumerate() {
@@ -214,4 +228,22 @@ fn main() -> ExitCode {
             ExitCode::from(1)
         }
     }
+}
+
+/// 単語1語の語種を判定する(--classify / --stats 共用)
+fn classify_word(word: &str) -> &'static str {
+    use lojban::grammar::{LojbanParser, Rule};
+    use pest::Parser;
+    [
+        (Rule::jbocme, "cmevla"),
+        (Rule::zifcme, "cmevla"),
+        (Rule::gismu, "gismu"),
+        (Rule::lujvo, "lujvo"),
+        (Rule::fuhivla, "fu'ivla"),
+        (Rule::cmavo, "cmavo"),
+    ]
+    .into_iter()
+    .find(|(rule, _)| LojbanParser::parse(*rule, word).is_ok())
+    .map(|(_, name)| name)
+    .unwrap_or("unknown")
 }

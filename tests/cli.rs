@@ -139,3 +139,15 @@ fn classify_語種判定() {
     assert_eq!(code, 0);
     assert!(out.contains("\"class\":\"cmevla\""), "{out}");
 }
+
+#[test]
+fn stats_語種集計() {
+    let dir = std::env::temp_dir().join("lojban_cli_test_stats.txt");
+    std::fs::write(&dir, "mi klama do .i le gerku cu cadzu la alis.").unwrap();
+    let (code, out, err) = run(&["--stats", "-f", dir.to_str().unwrap()], None);
+    assert_eq!(code, 0, "{err}");
+    assert!(out.contains("\"tokens\":10"), "{out}");
+    assert!(out.contains("\"gismu\":3"), "{out}");
+    assert!(out.contains("\"cmevla\":1"), "{out}");
+    let _ = std::fs::remove_file(&dir);
+}
