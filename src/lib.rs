@@ -2,6 +2,15 @@
 //!
 //! 文法は [`grammar`] モジュールの `lojban.pest` に定義し、
 //! zantufa-1.9999.peg(guskant/gerna_cipra)を参考に移植する。
+//!
+//! 主な公開 API:
+//! - [`parse`](parse()): テキスト → 解析木(ZOI 正規化と SI/SU 消去を内蔵)
+//! - `friendly_error`: 解析エラーの日本語サマリ生成
+//! - [`tree`](tree): 解析木の文字列化(整形ツリー / S 式 / JSON / DOT / HTML)
+//! - [`lujvo`](lujvo): lujvo の生成(CLL 4.11/4.12)と分解
+//!
+//! 出力形式の詳細は `docs/json-schema.md`(JSON)と
+//! `docs/coverage.md`(実装済み cmavo クラス一覧)を参照。
 
 pub mod grammar;
 pub mod lujvo;
@@ -14,6 +23,66 @@ use pest::iterators::Pairs;
 use pest::{Parser, Span};
 
 pub use grammar::{LojbanParser, Rule};
+
+/// 頻出する内部規則名を日本語の説明に変換する。
+fn rule_desc(rule: &Rule) -> String {
+    match rule {
+        Rule::BRIVLA_core | Rule::BRIVLA_clause => "内容語(brivla)".to_string(),
+        Rule::CMEVLA_core | Rule::CMEVLA_clause => "固有名詞(cmevla)".to_string(),
+        Rule::KOhA_core | Rule::KOhA_clause => "代名詞(sumti)".to_string(),
+        Rule::LE_core | Rule::LE_clause => "冠詞(le/lo/la)".to_string(),
+        Rule::selbri | Rule::tanru => "述語(selbri)".to_string(),
+        Rule::sumti | Rule::sumti_core => "項(sumti)".to_string(),
+        Rule::sentence => "文".to_string(),
+        Rule::sep => "文接続(.i …)".to_string(),
+        Rule::term => "項".to_string(),
+        Rule::number | Rule::PA_core | Rule::PA_seq => "数詞".to_string(),
+        Rule::PU_core
+        | Rule::CAhA_core
+        | Rule::ZAhO_core
+        | Rule::ZI_core
+        | Rule::VA_core
+        | Rule::TAhE_core
+        | Rule::ROI_core
+        | Rule::FAhA_core => "時制詞".to_string(),
+        Rule::UI_core | Rule::UINAI_joint => "感情標識".to_string(),
+        Rule::BU_core => "bu(文字化)".to_string(),
+        Rule::NU_core => "抽象(nu …)".to_string(),
+        Rule::lu_quote | Rule::zo_quote | Rule::zoi_quote | Rule::lohu_quote => "引用".to_string(),
+        other_rule => format!("{other_rule:?}"),
+    }
+}
+
+/// 解析エラーに行位置の説明と日本語ヒントを添えた文字列を返す。
+///
+/// CLI と同じ形式で、Rust から利用する場合も読みやすいエラーを提供する。
+///
+/// # Examples
+///
+/// ```
+/// use lojban::{friendly_error, parse};
+///
+/// let err = parse("mi tavla do x y z").unwrap_err();
+/// let msg = friendly_error(&err);
+/// assert!(msg.starts_with("解析エラー: 1 行"), "{msg}");
+/// ```
+pub fn friendly_error(e: &Error<Rule>) -> String {
+    let (line, col) = match e.line_col {
+        pest::error::LineColLocation::Pos((l, c)) => (l, c),
+        pest::error::LineColLocation::Span((l, c), _) => (l, c),
+    };
+    let mut s = format!("解析エラー: {line} 行 {col} 列目付近");
+    if let ErrorVariant::ParsingError { positives, .. } = &e.variant {
+        let descs: Vec<String> = positives.iter().take(4).map(rule_desc).collect();
+        if !descs.is_empty() {
+            s.push_str(&format!(
+                "\n  この位置では次の要素が可能: {}",
+                descs.join(", ")
+            ));
+        }
+    }
+    s
+}
 
 /// ロジバンテキストを解析する。
 ///
