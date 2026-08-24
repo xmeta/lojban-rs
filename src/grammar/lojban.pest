@@ -126,7 +126,8 @@ tense_offset  = _{ PU_clause | ZI_clause }
 
 tanru      = { tanru_unit ~ (sp1 ~ tanru_link ~ sp1 ~ tanru_unit | sp1 ~ tanru_unit)* }
 tanru_unit = {
-     !("ija" | "ije" | "ijo" | "iju")
+     zei_compound ~ (sp1 ~ linked_args)?
+   | !("ija" | "ije" | "ijo" | "iju")
    ~ !(GANAI_joint | GINAI_joint | SEBAI_joint | SEDUHU_joint | IBO_joint
      | MAI_core | UI_clause | NAhU_clause | MOhE_clause | UINAI_joint
      | VEhA_clause | VIhA_clause | PEhO_clause | MAhO_clause | KUhE_clause
@@ -148,6 +149,10 @@ tanru_unit = {
    | number ~ sp1 ~ MOI_clause
    | BY_clause ~ sp1 ~ MOI_clause
 }
+
+// zei による複合語(zdani zei sinxa = 「家の印」の lujvo 相当)。
+// camxes の zei_tail(any_word)+ 準拠だが語は完全な word に制限
+zei_compound = { word ~ (sp1 ~ ZEI_clause ~ sp1 ~ word)+ }
 nu_form    = { s_marks? ~ sp1? ~ abstr_head ~ sp1 ~ inner_sentence ~ (sp1 ~ KEI_clause)? }
 me_form    = { ME_clause ~ sp1 ~ sumti ~ (sp1 ~ MEhU_clause)? ~ (sp1 ~ MOI_clause)? }
 ke_group   = { KE_clause ~ sp1 ~ selbri ~ (sp1 ~ KEhE_clause)? }
@@ -201,9 +206,10 @@ lohu_quote = { LOhU_clause ~ sp0 ~ (!LEhU_clause ~ word) ~ (sp1 ~ !LEhU_clause ~
 frees_s   = _{ free ~ (sp1 ~ free)* }
 frees_m   = _{ (sp1 ~ free)+ }
 free      = { free_unit ~ (sp1 ~ free_unit)* }
-free_unit = { ui_free | mai_free | sei_free | to_quote | vocative | lohu_quote
+free_unit = { ui_free | mai_free | soi_free | sei_free | to_quote | vocative | lohu_quote
            | SI_clause | SU_clause }
 mai_free  = { MAI_clause }
+soi_free  = { SOI_clause ~ sp1 ~ sumti ~ (sp1 ~ sumti)? ~ (sp1 ~ SEhU_clause)? }
 ui_free  = { UINAI_joint | UI_clause ~ (sp1 ~ CAI_clause)? ~ (sp1 ~ NAI_clause)? }
 sei_free = { SEI_clause ~ sp1 ~ inner_sentence ~ (sp1 ~ SEhU_clause)? }
 to_quote = { TO_clause ~ (sp0 ~ (word ~ (sp1 ~ word)*)?)? ~ (sp1 ~ TOI_clause)? }
@@ -552,6 +558,8 @@ JAI_core  = @{ ( ^"jai") ~ &word_boundary }
 MOI_core  = @{ (^"mei" | ^"moi" | ^"sihe" | ^"si'e"
               | ^"cuho" | ^"cu'o" | ^"vahe" | ^"va'e") ~ &word_boundary }
 MEhU_core = @{ (^"mehu" | ^"me'u") ~ &word_boundary }
+ZEI_core  = @{ ( ^"zei") ~ &word_boundary }
+SOI_core  = @{ ( ^"soi") ~ &word_boundary }
 ZO_core = @{ ( ^"zo") ~ &word_boundary }
 ZOI_core = @{ ( ^"zoi") ~ &word_boundary }
 
@@ -650,6 +658,8 @@ ME_clause   = { ME_core }
 JAI_clause  = { JAI_core }
 MOI_clause  = { MOI_core }
 MEhU_clause = { MEhU_core }
+ZEI_clause  = { ZEI_core }
+SOI_clause  = { SOI_core }
 UI_clause = { UI_core }
 VAU_clause = { VAU_core }
 VUhO_clause = { VUhO_core }

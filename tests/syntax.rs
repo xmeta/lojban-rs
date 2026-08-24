@@ -893,3 +893,21 @@ fn me_meu() {
     let s = parse_ok("ti me mi");
     assert!(s.contains("ME_core \"me\""), "{s}");
 }
+
+#[test]
+fn zei_複合語() {
+    let s = parse_ok("mi tavla lo zdani zei sinxa");
+    assert!(s.contains("ZEI_core"), "{s}");
+    // 3語連結
+    let s = parse_ok("lo melbi zei cmalu zei noltru cu cizra");
+    assert!(s.contains("ZEI_core"), "{s}");
+}
+
+#[test]
+fn soi_入れ替え() {
+    let s = parse_ok("mi prami do soi vo'a vo'e");
+    assert!(s.contains("SOI_core \"soi\""), "{s}");
+    // se'u 省略形・sumti 1個
+    let s = parse_ok("do se prami mi soi vo'a");
+    assert!(s.contains("SOI_core"), "{s}");
+}

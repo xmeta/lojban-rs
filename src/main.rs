@@ -4,8 +4,58 @@ use std::io::Read;
 use std::process::ExitCode;
 
 use clap::Parser as ClapParser;
+use pest::error::ErrorVariant;
 
+use lojban::grammar::Rule;
 use lojban::tree;
+
+/// 頻出する内部規則名を日本語の説明に変換する
+fn rule_desc(rule: &Rule) -> String {
+    match rule {
+        Rule::BRIVLA_core | Rule::BRIVLA_clause => "内容語(brivla)".to_string(),
+        Rule::CMEVLA_core | Rule::CMEVLA_clause => "固有名詞(cmevla)".to_string(),
+        Rule::KOhA_core | Rule::KOhA_clause => "代名詞(sumti)".to_string(),
+        Rule::LE_core | Rule::LE_clause => "冠詞(le/lo/la)".to_string(),
+        Rule::selbri | Rule::tanru => "述語(selbri)".to_string(),
+        Rule::sumti | Rule::sumti_core => "項(sumti)".to_string(),
+        Rule::sentence => "文".to_string(),
+        Rule::sep => "文接続(.i …)".to_string(),
+        Rule::term => "項".to_string(),
+        Rule::number | Rule::PA_core | Rule::PA_seq => "数詞".to_string(),
+        Rule::PU_core
+        | Rule::CAhA_core
+        | Rule::ZAhO_core
+        | Rule::ZI_core
+        | Rule::VA_core
+        | Rule::TAhE_core
+        | Rule::ROI_core
+        | Rule::FAhA_core => "時制詞".to_string(),
+        Rule::UI_core | Rule::UINAI_joint => "感情標識".to_string(),
+        Rule::BU_core => "bu(文字化)".to_string(),
+        Rule::NU_core => "抽象(nu …)".to_string(),
+        Rule::lu_quote | Rule::zo_quote | Rule::zoi_quote | Rule::lohu_quote => "引用".to_string(),
+        other_rule => format!("{other_rule:?}"),
+    }
+}
+
+/// pest のエラーに行位置の説明と日本語ヒントを添える
+fn friendly_error(e: &pest::error::Error<Rule>) -> String {
+    let (line, col) = match e.line_col {
+        pest::error::LineColLocation::Pos((l, c)) => (l, c),
+        pest::error::LineColLocation::Span((l, c), _) => (l, c),
+    };
+    let mut s = format!("解析エラー: {line} 行 {col} 列目付近");
+    if let ErrorVariant::ParsingError { positives, .. } = &e.variant {
+        let descs: Vec<String> = positives.iter().take(4).map(rule_desc).collect();
+        if !descs.is_empty() {
+            s.push_str(&format!(
+                "\n  この位置では次の要素が可能: {}",
+                descs.join(", ")
+            ));
+        }
+    }
+    s
+}
 
 #[derive(ClapParser, Debug)]
 #[command(name = "lojban", version, about = "ロジバン PEG パーサー")]
@@ -94,7 +144,9 @@ fn main() -> ExitCode {
             ExitCode::SUCCESS
         }
         Err(e) => {
-            eprintln!("解析エラー: {e}");
+            let msg = friendly_error(&e);
+            eprintln!("{msg}");
+            eprintln!("{e}");
             ExitCode::from(1)
         }
     }
