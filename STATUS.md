@@ -1,10 +1,16 @@
 # 開発ステータス
 
-## 現在の状態: v0.59 完成(全テストグリーン)
+## 現在の状態: v0.60 完成(全テストグリーン)
 
 - ライブラリ20 / 形態論11 / 統語119 / coverage_doc 1 / コーパス3 / doc 6 / fuzz 3(+ignore 2) = 計163テスト全パス
 - コーパス 333 文(Tatoeba 実文受理率 94% を維持)
 - Cargo.toml の版数を STATUS 版数に同期(0.53.0)
+
+## v0.60 で追加(節目: --classify 語種判定コマンド)
+- lojban --classify <word>: gismu / lujvo / fu'ivla / cmevla / cmavo /
+  unknown を判定。既定は平文、--json で {"word","class"}。
+  既存の形態論規則をそのまま活用
+- 学習者ツール・辞書系スクリプトからの利用を想定
 
 ## v0.59 で追加(tests/cli.rs 新設: CLI エンドツーエンドテスト)
 - 実バイナリを CARGO_BIN_EXE で起動し、v0.44 以降に追加した全フラグを
