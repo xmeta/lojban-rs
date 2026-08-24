@@ -951,3 +951,14 @@ fn 感情スコープ_fuhe() {
     assert!(s.contains("FUhE_core \"fu'e\""), "{s}");
     assert!(s.contains("FUhO_core \"fu'o\""), "{s}");
 }
+
+#[test]
+fn 項間の自由修飾語() {
+    let s = parse_ok("mi .ui do tavla");
+    assert!(
+        s.contains("UI_core \".ui\"") || s.contains("UI_core \"ui\""),
+        "{s}"
+    );
+    let s = parse_ok("mi ku'i do tavla");
+    assert!(s.contains("UI_core \"ku'i\""), "{s}");
+}

@@ -48,7 +48,8 @@ sentence   = { frees_s? ~ sp1? ~ tense_marks? ~ sp1? ~ (terms_full | bridi_tail)
 terms_full = { terms ~ (sp1 ~ CU_clause)? ~ sp1 ~ frees_mid? ~ bridi_tail }
 frees_mid  = _{ free ~ (sp1 ~ free)* }
 
-terms = { term ~ (sp1 ~ term)* }
+// 項間・項前後の自由修飾語を許容(mi .ui do tavla)。tail_terms と対称
+terms = { (sp1 ~ free)* ~ term ~ ((sp1 ~ free)* ~ (sp1 ~ term))* ~ (sp1 ~ free)* }
 term  = { tagged | na_ku | termset | sumti }
 // 項set(nu'i X Y [nu'u]): 複数項を 1 対象として接続・タグ付けできる
 termset = { NUhI_clause ~ sp1 ~ terms ~ (sp1 ~ NUhU_clause)? }
