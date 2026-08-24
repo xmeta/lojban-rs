@@ -104,6 +104,7 @@
 | SOI | `soi` | ✅ |
 | XI | `xi` | ✅ |
 | CEhE | `cehe` `ce'e` | ✅ |
+| PEhE | `pehe` `pe'e` | ✅ |
 | DAhO | `daho` `da'o` | ✅ |
 | NUhI | `nuhi` `nu'i` | ✅ |
 | NUhU | `nuhu` `nu'u` | ✅ |
@@ -115,5 +116,5 @@
 | CMEVLA |  | ✅ |
 | BRIVLA |  | ✅ |
 
-計 108 クラス定義 / 106 クラスが統語に接続。
+計 109 クラス定義 / 107 クラスが統語に接続。
 未接続の LIhU は LUhU と同語形のための予備定義(設計上未使用)。

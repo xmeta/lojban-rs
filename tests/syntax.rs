@@ -993,3 +993,13 @@ fn cehe_項区切り() {
     let s = parse_ok("mi ce'e do tavla");
     assert!(s.contains("CEhE_core \"ce'e\""), "{s}");
 }
+
+#[test]
+fn pehe_項グループ接続() {
+    let s = parse_ok("mi zmadu lo klama pe'e je lo cadzu");
+    assert!(s.contains("PEhE_core \"pe'e\""), "{s}");
+    assert!(s.contains("JA_core \"je\""), "{s}");
+    // 非論理接続
+    let s = parse_ok("mi nelci lo gerku pe'e joi lo mlatu");
+    assert!(s.contains("PEhE_core"), "{s}");
+}
