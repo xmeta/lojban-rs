@@ -152,9 +152,10 @@ tanru_unit = {
    // 注: (sp1 ~ tense_mark)? は失敗時に sp1 の消費も取り消すため
    //     分岐で書く(教訓5の裏面)
    | JAI_clause ~ (sp1 ~ tense_mark ~ sp1 ~ tanru_unit | sp1 ~ tanru_unit)
-   // 数詞・文字+MOI(re moi 序数 / ci mei 集合数 等。camxes 準拠)
-   | number ~ sp1 ~ MOI_clause
-   | BY_clause ~ sp1 ~ MOI_clause
+   // 数詞・文字+MOI(re moi 序数 / ci mei 集合数 等。camxes 準拠)。
+   // moi は selbri なので be 連結も可(lo re moi be le ci gerku)
+   | number ~ sp1 ~ MOI_clause ~ (sp1 ~ linked_args)?
+   | BY_clause ~ sp1 ~ MOI_clause ~ (sp1 ~ linked_args)?
 }
 
 // zei による複合語(zdani zei sinxa = 「家の印」の lujvo 相当)。
