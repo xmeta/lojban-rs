@@ -437,6 +437,22 @@ const CURATED: &[&str] = &[
     "slabu pipno",
     "mi bilma",
     "ma nuzba",
+    // v0.74: Tatoeba 定期再検証分(--lines モードで検証)
+    "ti alzaitu",
+    "mi crida",
+    "ko spuda",
+    "to'e zdile",
+    "ca'o jaurcarvi",
+    "pu si'ercarvi",
+    "coi tam.",
+    ".ia drani",
+    "ma rinka",
+    "milxe drani",
+    "tolsi'a nanmu",
+    "zvati ma",
+    "do latcribe",
+    "zgikrxumpa ko",
+    "barda u'e",
 ];
 
 #[test]
