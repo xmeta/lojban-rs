@@ -28,8 +28,9 @@ guskant 氏の **zantufa-1.9999.peg** を Rust/pest 向けに移植したもの�
   - 関係節(`poi / noi`)/ 所有(`pe / po / goi`)
   - 自由修飾語(感情標識 `ui` 等(+強度 `cai sai ru'e cu'i`)、談話標識
     `ku'i` `ja'o` `po'o` `da'i` `je'u` 等、`xu` 疑問、`sei` 挿入、
-    `to … toi` 注釈、発話序数 `pamai` 等。
+    `to … toi` 注釈、`soi … vo'a vo'e` 入れ替え、発話序数 `pamai` 等。
     連鎖(`mu'o ge'e coi`)や項・述語間の挿入(`xu do su'a djica`)も許容)
+  - **zei 複合語**(`zdani zei sinxa`): 完全な語を lujvo 相当に連結
   - 呼格(`coi …`)/ 文連結(`.i` `ni'o`、`.ije` `.ijanai` `.ibo` `.ijebo`
     等の結合表記、`.i bo` グルーピングを含む)
   - 先接続詞(`ge … gi`: 項と文の接続。NAI 結合形 `ganai … ginai` と
