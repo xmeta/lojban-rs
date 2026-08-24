@@ -1003,3 +1003,21 @@ fn pehe_項グループ接続() {
     let s = parse_ok("mi nelci lo gerku pe'e joi lo mlatu");
     assert!(s.contains("PEhE_core"), "{s}");
 }
+
+#[test]
+fn 結合形と談話標識_バッテリー6() {
+    // LAhE+KOhA 結合形
+    let s = parse_ok("la'edi'u cu xamgu");
+    assert!(s.contains("LAHEDI_joint"), "{s}");
+    // 量化 ROI 結合形
+    let s = parse_ok("roroi mi cadzu");
+    assert!(s.contains("ROROI_joint"), "{s}");
+    // UI+NAI 追加分
+    let s = parse_ok("ji'anai mi gleki");
+    assert!(s.contains("UINAI_joint"), "{s}");
+    let s = parse_ok("ru'anai do drani");
+    assert!(s.contains("UINAI_joint"), "{s}");
+    // BAhE 強調
+    let s = parse_ok("ba'e do viska mi");
+    assert!(s.contains("BAhE_core \"ba'e\""), "{s}");
+}

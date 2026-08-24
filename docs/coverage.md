@@ -105,6 +105,7 @@
 | XI | `xi` | ✅ |
 | CEhE | `cehe` `ce'e` | ✅ |
 | PEhE | `pehe` `pe'e` | ✅ |
+| BAhE | `bahe` `ba'e` | ✅ |
 | DAhO | `daho` `da'o` | ✅ |
 | NUhI | `nuhi` `nu'i` | ✅ |
 | NUhU | `nuhu` `nu'u` | ✅ |
@@ -116,23 +117,6 @@
 | CMEVLA |  | ✅ |
 | BRIVLA |  | ✅ |
 
-計 109 クラス定義 / 107 クラスが統語に接続。
+計 110 クラス定義 / 108 クラスが統語に接続。
 未接続の LIhU は LUhU と同語形のための予備定義(設計上未使用)。
-
-## 結合表記(joint)
-
-複数の cmavo を無ポーズで綴った一体化形。いずれも tanru の BRIVLA 誤認を
-防ぐガード(`tanru_unit` 冒頭の否定先読み)とセットで管理する。
-
-| 規則 | 形 | 機能 |
-|---|---|---|
-| `IJ_joint` | `.ije` `.ijanai` 等 | 文接続 I+JA(+NAI) |
-| `IBO_joint` | `.ibo` `.ijebo` | 文接続 I+BO |
-| `NAKU_joint` | `naku` | 項位置否定 NA+KU |
-| `GANAI_joint` | `ganai genai gonai gunai` | 先接続 GA+NAI |
-| `GINAI_joint` | `ginai` | 先接続 GI+NAI |
-| `SEBAI_joint` | `sepi'o seva'u semu'i …` | SE+BAI 変換モダル |
-| `SEDUHU_joint` | `sedu'u` | SE+NU 抽象 |
-| `UINAI_joint` | `ta'onai ba'anai …` | UI+NAI 談話標識否定 |
-
-MAI(pamai 等)・CAI(cai sai ru'e cu'i)は独立クラスとして `*_core` に収録。
+結合表記(joint)は次セクション。

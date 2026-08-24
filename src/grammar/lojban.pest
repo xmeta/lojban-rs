@@ -31,7 +31,9 @@ IBO_joint = @{ (^"ibo" | ^"ijebo") ~ &word_boundary }
 UINAI_joint = @{ (^"ta'onai" | ^"ja'onai" | ^"ku'inai" | ^"po'onai"
                 | ^"da'inai" | ^"je'unai" | ^"la'anai" | ^"za'anai"
                 | ^"ga'inai" | ^"zu'unai" | ^"ba'anai" | ^"ju'onai"
-                | ^"cu'inai") ~ &word_boundary }
+                | ^"cu'inai" | ^"ji'anai" | ^"ru'anai" | ^"ehinai" | ^"e'inai"
+                | ^"ihinai" | ^"i'inai" | ^"ohanai" | ^"o'anai" | ^"kahunai"
+                | ^"ka'unai" | ^"a'unai" | ^"u'inai" | ^"u'unai") ~ &word_boundary }
 item    = { gek_sentence | prenex_sentence | sentence | free | Y_clause
           | fragment | tense_item }
 // 前置スコープ(su'o da zo'u … / ro da zo'u …)。論理の量化を文に前置する。
@@ -87,7 +89,7 @@ sumti_core = _{ bu_lerfu | KOhA_clause | lahe_sumti | desc | BY_clause | quant_d
 bare_number = _{ number ~ !(sp1 ~ MOI_clause) }
 quant_selbri = { number ~ sp1 ~ selbri ~ (sp1 ~ KU_clause)? }
 // LAhE 項修飾(la'e = 参照先 / lu'e = 参照元)。ge'u による明示閉鎖も許容
-lahe_sumti = { LAhE_clause ~ sp1 ~ sumti ~ (sp1 ~ GEhU_clause)? }
+lahe_sumti = { LAHEDI_joint | LAhE_clause ~ sp1 ~ sumti ~ (sp1 ~ GEhU_clause)? }
 
 desc        = { LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
 quant_desc  = { number ~ sp1 ~ LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
@@ -127,7 +129,7 @@ tense_mark  = _{ PU_clause | CAhA_clause | ZAhO_clause | ZI_clause | VA_clause
                | TAhE_clause | ROI_clause | BAI_clause ~ (sp1 ~ NAI_clause)?
                | MOhI_clause ~ sp1 ~ FAhA_clause | FAhA_clause
                | NA_clause ~ sp1 ~ KU_clause | NAKU_joint
-               | CUhE_clause | KI_clause
+               | CUhE_clause | KI_clause | ROROI_joint
                | time_interval
                | space_interval }
 
@@ -150,7 +152,7 @@ tanru_unit = {
      | VEhA_clause | VIhA_clause | PEhO_clause | MAhO_clause | KUhE_clause
      | TEhU_clause | ZOhU_clause | MOI_clause | MEhU_clause
      | NUhI_clause | NUhU_clause | FUhE_clause | FUhO_clause | CEhE_clause
-     | PEhE_clause)
+     | PEhE_clause | LAHEDI_joint | ROROI_joint)
    ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
    // 注: 「i+字母」で始まる語(.ije / .ijanai 等の文連結結合形)は tanru の先頭に来ないため除外。
    // 母音始まりの語そのもの(.a'onai 等)は述語のみの文として正当なので許容する
@@ -230,7 +232,7 @@ frees_s   = _{ free ~ (sp1 ~ free)* }
 frees_m   = _{ (sp1 ~ free)+ }
 free      = { free_unit ~ (sp1 ~ free_unit)* }
 free_unit = { ui_free | mai_free | soi_free | sei_free | xi_free | daho_free
-           | fuhe_free | fuho_free | faho_free
+           | fuhe_free | fuho_free | faho_free | bae_free
            | to_quote | vocative | lohu_quote | SI_clause | SU_clause }
 mai_free  = { MAI_clause }
 soi_free  = { SOI_clause ~ sp1 ~ sumti ~ (sp1 ~ sumti)? ~ (sp1 ~ SEhU_clause)? }
@@ -240,6 +242,7 @@ daho_free = { DAhO_clause }
 fuhe_free = { FUhE_clause }
 fuho_free = { FUhO_clause }
 faho_free = { FAhO_clause }
+bae_free  = { BAhE_clause }
 ui_free  = { UINAI_joint | UI_clause ~ (sp1 ~ CAI_clause)? ~ (sp1 ~ NAI_clause)? }
 sei_free = { SEI_clause ~ sp1 ~ inner_sentence ~ (sp1 ~ SEhU_clause)? }
 to_quote = { TO_clause ~ (sp0 ~ (word ~ (sp1 ~ word)*)?)? ~ (sp1 ~ TOI_clause)? }
@@ -518,6 +521,10 @@ NU_core = @{ ( ^"je'i" | ^"mu'e" | ^"pu'u" | ^"zu'o" | ^"li'i" | ^"su'u" | ^"du'
 // SE+NU の結合表記(報話で高頻度の sedu'u)。素の形が先だと境界先読みで失敗するため
 // joint を先に試行(教訓6)。tanru_unit の BRIVLA ガードにも追加(fu'ivla 誤認防止)
 SEDUHU_joint = @{ (^"sedu'u" | ^"seduhu") ~ &word_boundary }
+// LAhE+KOhA 結合形(直前の発話の参照先)
+LAHEDI_joint = @{ (^"la'edi'u") ~ &word_boundary }
+// PA+ROI の結合形(roroi = 常に)
+ROROI_joint = @{ (^"roroi") ~ &word_boundary }
 // 注: かつて16進桁の jai を収録していたが、JAI 変換(tanru_unit)と
 //     衝突するため削除(v0.31。dau fei rei vai は残置)
 PA_word  = _{ (^"dau" | ^"fei" | ^"rei" | ^"vai" | ^"so'a" | ^"so'e" | ^"so'i"
@@ -596,6 +603,9 @@ XI_core   = @{ ( ^"xi") ~ &word_boundary }
 CEhE_core = @{ (^"cehe" | ^"ce'e") ~ &word_boundary }
 // 項グループ接続(接続詞の適用範囲を項グループへ)
 PEhE_core = @{ (^"pehe" | ^"pe'e") ~ &word_boundary }
+// 強調マーカー(次の語を強調。camxes pre_clause 準拠だが
+// 受容を優先し独立した自由修飾語として受理)
+BAhE_core = @{ (^"bahe" | ^"ba'e") ~ &word_boundary }
 DAhO_core = @{ (^"daho" | ^"da'o") ~ &word_boundary }
 // 項set(複数項をまとめて接続対象にする)
 NUhI_core = @{ (^"nuhi" | ^"nu'i") ~ &word_boundary }
@@ -706,6 +716,7 @@ SOI_clause  = { SOI_core }
 XI_clause   = { XI_core }
 CEhE_clause = { CEhE_core }
 PEhE_clause = { PEhE_core }
+BAhE_clause = { BAhE_core }
 DAhO_clause = { DAhO_core }
 NUhI_clause = { NUhI_core }
 NUhU_clause = { NUhU_core }
