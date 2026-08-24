@@ -196,3 +196,18 @@ fn json出力に位置情報が含まれる() {
     assert!(out.contains("\"start\":0"), "{out}");
     assert!(out.contains("\"end\":8"), "{out}");
 }
+
+#[test]
+fn json_pretty_はインデント付き() {
+    let (code, out, err) = run(&["mi klama", "--json", "--pretty"], None);
+    assert_eq!(code, 0, "{err}");
+    assert!(out.contains('\n'), "indented");
+    assert!(out.contains("\"version\":1"), "{out}");
+}
+
+#[test]
+fn 出力形式フラグは排他的() {
+    let (code, _out, err) = run(&["mi klama", "--json", "--dot"], None);
+    assert_ne!(code, 0);
+    assert!(err.contains("cannot be used with"), "{err}");
+}

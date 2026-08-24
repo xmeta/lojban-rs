@@ -96,7 +96,7 @@ fn write_tree(pair: Pair<'_, Rule>, depth: usize, out: &mut String) {
 pub fn to_json(pairs: Pairs<'_, Rule>) -> String {
     let mut out = String::new();
     for pair in pairs {
-        write_json(&pair, &mut out);
+        write_json(&pair, &mut out, false, &mut 0);
     }
     // ルートオブジェクトにスキーマ版数を埋め込む(v0.39 以降)
     if out.starts_with('{') {
@@ -105,7 +105,7 @@ pub fn to_json(pairs: Pairs<'_, Rule>) -> String {
     out
 }
 
-fn write_json(pair: &Pair<'_, Rule>, out: &mut String) {
+fn write_json(pair: &Pair<'_, Rule>, out: &mut String, pretty: bool, depth: &mut usize) {
     if pair.as_rule() == Rule::EOI {
         return;
     }
@@ -121,18 +121,50 @@ fn write_json(pair: &Pair<'_, Rule>, out: &mut String) {
     let children = visible_children(pair);
     if !children.is_empty() {
         out.push_str(",\"children\":[");
+        *depth += 1;
         for (i, c) in children.iter().enumerate() {
             if i > 0 {
                 out.push(',');
             }
-            write_json(c, out);
+            if pretty {
+                out.push('\n');
+                let _ = write!(out, "{}", "  ".repeat(*depth));
+            }
+            write_json(c, out, pretty, depth);
         }
+        if pretty {
+            out.push('\n');
+            let _ = write!(out, "{}", "  ".repeat(*depth));
+        }
+        *depth -= 1;
         out.push(']');
     }
     out.push('}');
 }
 
 /// JSON 文字列リテラルとして安全な形で出力する。
+/// インデント付きの整形 JSON で出力する(人間が読む用)。
+///
+/// ```
+/// use lojban::{parse, tree};
+///
+/// let pairs = parse("mi klama").unwrap();
+/// let j = tree::to_json_pretty(pairs);
+/// assert!(j.contains("\n"), "indented");
+/// assert!(j.contains("\"version\":1"), "{j}");
+/// ```
+pub fn to_json_pretty(pairs: Pairs<'_, Rule>) -> String {
+    let mut out = String::new();
+    let mut depth = 0usize;
+    for pair in pairs {
+        write_json(&pair, &mut out, true, &mut depth);
+    }
+    if out.starts_with('{') {
+        out.insert_str(1, "\"version\":1,");
+    }
+    out
+}
+
 /// Graphviz DOT 形式で解析木を出力する。
 ///
 /// ノードは `rule` 名と原文をラベルに持つ。`dot -Tsvg` 等で可視化できる。

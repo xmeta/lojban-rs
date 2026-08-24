@@ -15,7 +15,12 @@ use lojban::{lujvo, LojbanParser};
 use pest::Parser;
 
 #[derive(ClapParser, Debug)]
-#[command(name = "lojban", version, about = "ロジバン PEG パーサー")]
+#[command(
+    name = "lojban",
+    version,
+    about = "ロジバン PEG パーサー",
+    group(clap::ArgGroup::new("format").args(["sexpr", "json", "dot", "html"]).multiple(false))
+)]
 struct Args {
     /// 解析するロジバンテキスト(未指定なら stdin または --file)
     text: Option<String>,
@@ -25,9 +30,12 @@ struct Args {
     /// S 式形式で出力する
     #[arg(long)]
     sexpr: bool,
-    /// JSON 形式で出力する
+    /// JSON 形式で出力する(--pretty でインデント付き)
     #[arg(long)]
     json: bool,
+    /// --json と組み合わせてインデント付きで出力する
+    #[arg(long, requires = "json")]
+    pretty: bool,
     /// Graphviz DOT 形式で出力する
     #[arg(long)]
     dot: bool,
@@ -267,7 +275,12 @@ fn run_parse(args: &Args, input: &str) -> ExitCode {
             if args.quiet {
                 // 成功時は無出力(終了コード 0)
             } else if args.json {
-                println!("{}", tree::to_json(pairs));
+                let out = if args.pretty {
+                    tree::to_json_pretty(pairs)
+                } else {
+                    tree::to_json(pairs)
+                };
+                println!("{out}");
             } else if args.dot {
                 println!("{}", tree::to_dot(pairs));
             } else if args.html {
