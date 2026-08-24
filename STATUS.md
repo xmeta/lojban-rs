@@ -1,8 +1,21 @@
 # 開発ステータス
 
-## 現在の状態: v0.41 完成(全テストグリーン)
+## 現在の状態: v0.42 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語117 / coverage_doc 1 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計159テスト全パス
+- ライブラリ20 / 形態論11 / 統語119 / coverage_doc 1 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計160テスト全パス
+
+## v0.42 で追加
+- PEhE 項グループ接続(pe'e je / pe'e joi。camxes terms_1 準拠)。
+  terms と tail_terms が共通の items 本体(silent 規則で木形状不変)を
+  共有する構造に refactorし、CEhE/PEhE が selbri 前後の両位置で機能
+- 教訓5裏面の変種を3連続で経験(項リスト refactor 中):
+  1. atom ルールの * が空マッチ可能だと fragment が常に成功する選択肢に
+     なり pest がコンパイルエラー(expression cannot fail)
+  2. (sp1 ~ atom)+ と書くと最初の項にも空白が要求される
+  3. (sp1 ~ free)* の free 失敗で sp1 が巻き戻り、直後の term が
+     空白から始められない
+  最終形: 先頭原子は sp1 なし、区切りはループ内 sp1、tail は
+  (sp1 ~ items)? で空白ごと試行
 
 ## v0.41 で追加
 - CEhE 項区切り(mi ce'e do tavla。camxes terms_2 準拠)を terms 連鎖に追加
@@ -356,5 +369,5 @@
    `x = @{ (^"mi" | ^"mi'a") ~ &wb }` が "mi'a" を拒否することで確認済み)
 
 ## 次の拡張候補
-- Tatoeba 再検証の定期実施、PEhE(joik_jek による項グループ接続)、
-- SA(sa)による文法修正構文(非対応方針の明記でも可)
+- Tatoeba 再検証の定期実施、SA(sa)非対応方針の README 明記、
+- docs/coverage.md への結合形(joint)類の追記
