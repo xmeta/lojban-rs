@@ -1,12 +1,18 @@
 # 開発ステータス
 
-## 現在の状態: v0.52 完成(全テストグリーン)
+## 現在の状態: v0.53 完成(全テストグリーン)
 
 - ライブラリ20 / 形態論11 / 統語119 / coverage_doc 1 / コーパス3 / doc 6 / fuzz 3(+ignore 2) = 計163テスト全パス
 - コーパス 333 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.52.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.53.0)
 
-## v0.52 で追加
+## v0.53 で追加
+- --lines が --json/--sexpr を尊重(1行 = 1オブジェクトの JSONL 等)。
+  lojban --lines --json -f corpus.txt でコーパス全体を JSONL 化できる
+- docs/coverage.md に「意図的に未収録の selma'o」セクションを追加
+  (camxes 語彙との照合で BIhE/CEI/FEhE/FOI/FUhA/JOhI/LAU/TEI/TUhU/
+  NUhA/RAhO/SA/ZIhE の12クラスと理由を明記)
+
 - CLI に --lines を追加: 入力を行単位で個別解析(1行 = 1文)。
   失敗行は行番号と日本語ヒント付きで stderr に報告し、-q 併用で無出力。
   lojban --lines -q -f corpus.txt でコーパス検証がワンパイプラインに
