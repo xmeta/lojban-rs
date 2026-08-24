@@ -179,7 +179,9 @@ The real-sentence corpus uses Lojban sentences from [Tatoeba](https://tatoeba.or
 - Erasure (SI/SU): semantics are applied before parsing (`si` erases the
   previous word, `su` erases back to the start of the utterance; content
   inside quotes and the word after `zo` are protected). The parse tree
-  reflects the text after erasure
+  reflects the text after erasure. The back-correction construct SA (`sa`)
+  is not supported (it would require locating the preceding matching
+  selma'o during preprocessing)
 - Quotations: `lu … li'u` (nestable), `zo`, `lo'u … le'u`, and
   `zoi DELIM body DELIM`. For ZOI, delimiter matching is validated by a
   pre-parse scan and the body is normalized to `zo'e` in the parse tree
