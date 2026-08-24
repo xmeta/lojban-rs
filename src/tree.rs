@@ -175,6 +175,59 @@ fn dot_escape(s: &str) -> String {
         .replace('\n', "\\l")
 }
 
+/// HTML の入れ子リスト(`<ul>`)として解析木を出力する。
+///
+/// 各ノードは `class="rule-<規則名>"` を持ち、`title` 属性に原文を格納する。
+///
+/// ```
+/// use lojban::{parse, tree};
+///
+/// let pairs = parse("mi klama").unwrap();
+/// let html = tree::to_html(pairs);
+/// assert!(html.starts_with("<ul class=\"tree\">"), "{html}");
+/// assert!(html.contains("rule-KOhA_core"), "{html}");
+/// ```
+pub fn to_html(pairs: Pairs<'_, Rule>) -> String {
+    let mut out = String::from("<ul class=\"tree\">\n");
+    for pair in pairs {
+        if pair.as_rule() == Rule::EOI {
+            continue;
+        }
+        write_html(&pair, &mut out);
+    }
+    out.push_str("</ul>\n");
+    out
+}
+
+fn write_html(pair: &Pair<'_, Rule>, out: &mut String) {
+    let rule = format!("{:?}", pair.as_rule());
+    let text = html_escape(pair.as_str());
+    let children = visible_children(pair);
+    if children.is_empty() {
+        let _ = writeln!(
+            out,
+            "<li><code class=\"rule-{rule}\" title=\"{text}\">{rule}</code></li>"
+        );
+        return;
+    }
+    let _ = writeln!(
+        out,
+        "<li><code class=\"rule-{rule}\" title=\"{text}\">{rule}</code>"
+    );
+    out.push_str("<ul>\n");
+    for child in children {
+        write_html(&child, out);
+    }
+    out.push_str("</ul>\n</li>\n");
+}
+
+fn html_escape(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+}
+
 fn json_escape(s: &str) -> String {
     let mut out = String::with_capacity(s.len() + 2);
     out.push('"');

@@ -71,6 +71,9 @@ struct Args {
     /// Graphviz DOT 形式で出力する
     #[arg(long)]
     dot: bool,
+    /// HTML(入れ子リスト)形式で出力する
+    #[arg(long)]
+    html: bool,
     /// lujvo を生成する(rafsi を空白またはカンマ区切りで指定)
     #[arg(long)]
     build_lujvo: Option<String>,
@@ -141,6 +144,8 @@ fn main() -> ExitCode {
                 println!("{}", tree::to_json(pairs));
             } else if args.dot {
                 println!("{}", tree::to_dot(pairs));
+            } else if args.html {
+                println!("{}", tree::to_html(pairs));
             } else if args.sexpr {
                 println!("{}", tree::to_sexpr(pairs));
             } else {
