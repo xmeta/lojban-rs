@@ -49,7 +49,9 @@ terms_full = { terms ~ (sp1 ~ CU_clause)? ~ sp1 ~ frees_mid? ~ bridi_tail }
 frees_mid  = _{ free ~ (sp1 ~ free)* }
 
 // 項間・項前後の自由修飾語を許容(mi .ui do tavla)。tail_terms と対称
-terms = { (sp1 ~ free)* ~ term ~ ((sp1 ~ free)* ~ (sp1 ~ term))* ~ (sp1 ~ free)* }
+terms = { (sp1 ~ free)* ~ term
+          ~ ((sp1 ~ free)* ~ (sp1 ~ term | sp1 ~ CEhE_clause ~ sp1 ~ term))*
+          ~ (sp1 ~ free)* }
 term  = { tagged | na_ku | termset | sumti }
 // 項set(nu'i X Y [nu'u]): 複数項を 1 対象として接続・タグ付けできる
 termset = { NUhI_clause ~ sp1 ~ terms ~ (sp1 ~ NUhU_clause)? }
@@ -139,7 +141,7 @@ tanru_unit = {
      | MAI_core | UI_clause | NAhU_clause | MOhE_clause | UINAI_joint
      | VEhA_clause | VIhA_clause | PEhO_clause | MAhO_clause | KUhE_clause
      | TEhU_clause | ZOhU_clause | MOI_clause | MEhU_clause
-     | NUhI_clause | NUhU_clause | FUhE_clause | FUhO_clause)
+     | NUhI_clause | NUhU_clause | FUhE_clause | FUhO_clause | CEhE_clause)
    ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
    // 注: 「i+字母」で始まる語(.ije / .ijanai 等の文連結結合形)は tanru の先頭に来ないため除外。
    // 母音始まりの語そのもの(.a'onai 等)は述語のみの文として正当なので許容する
@@ -581,6 +583,8 @@ MEhU_core = @{ (^"mehu" | ^"me'u") ~ &word_boundary }
 ZEI_core  = @{ ( ^"zei") ~ &word_boundary }
 SOI_core  = @{ ( ^"soi") ~ &word_boundary }
 XI_core   = @{ ( ^"xi") ~ &word_boundary }
+// 項の明示区切り(camxes terms_2: term (CEhE term)*)
+CEhE_core = @{ (^"cehe" | ^"ce'e") ~ &word_boundary }
 DAhO_core = @{ (^"daho" | ^"da'o") ~ &word_boundary }
 // 項set(複数項をまとめて接続対象にする)
 NUhI_core = @{ (^"nuhi" | ^"nu'i") ~ &word_boundary }
@@ -689,6 +693,7 @@ MEhU_clause = { MEhU_core }
 ZEI_clause  = { ZEI_core }
 SOI_clause  = { SOI_core }
 XI_clause   = { XI_core }
+CEhE_clause = { CEhE_core }
 DAhO_clause = { DAhO_core }
 NUhI_clause = { NUhI_core }
 NUhU_clause = { NUhU_core }

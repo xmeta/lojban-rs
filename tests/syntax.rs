@@ -987,3 +987,9 @@ fn faho_と_vuo() {
     let s = parse_ok("mi vu'o do poi tavla mi cu prami");
     assert!(s.contains("VUhO_core \"vu'o\""), "{s}");
 }
+
+#[test]
+fn cehe_項区切り() {
+    let s = parse_ok("mi ce'e do tavla");
+    assert!(s.contains("CEhE_core \"ce'e\""), "{s}");
+}
