@@ -80,6 +80,9 @@ struct Args {
     /// 出力せず成否のみで終了する(バッチ検証用。エラーは stderr に出る)
     #[arg(short = 'q', long)]
     quiet: bool,
+    /// 入力を行単位で個別解析する(1行 = 1文。失敗行は行番号付きで報告)
+    #[arg(long)]
+    lines: bool,
     /// lujvo を生成する(rafsi を空白またはカンマ区切りで指定)
     #[arg(long)]
     build_lujvo: Option<String>,
@@ -148,6 +151,29 @@ fn main() -> ExitCode {
             buf
         }
     };
+
+    if args.lines {
+        let mut all_ok = true;
+        for (i, line) in input.lines().enumerate() {
+            let line = line.trim();
+            if line.is_empty() {
+                continue;
+            }
+            match lojban::parse(line) {
+                Ok(_) => {
+                    if !args.quiet {
+                        println!("{}: ok", i + 1);
+                    }
+                }
+                Err(e) => {
+                    all_ok = false;
+                    let msg = friendly_error(&e);
+                    eprintln!("{}: {msg}", i + 1);
+                }
+            }
+        }
+        return ExitCode::from(if all_ok { 0 } else { 1 });
+    }
 
     match lojban::parse(&input) {
         Ok(pairs) => {
