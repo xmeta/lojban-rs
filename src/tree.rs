@@ -165,6 +165,60 @@ pub fn to_json_pretty(pairs: Pairs<'_, Rule>) -> String {
     out
 }
 
+/// 葉ノード(子を持たない可視ノード)の規則名・原文・バイト位置を列挙する。
+///
+/// エディタ統合やハイライトで「どの位置に何の語があるか」を
+/// 取り出すためのヘルパー。
+///
+/// ```
+/// use lojban::{parse, tree};
+///
+/// let pairs = parse("mi klama").unwrap();
+/// let leaves = tree::leaf_spans(pairs);
+/// assert_eq!(leaves.len(), 2);
+/// assert_eq!(leaves[0].text, "mi");
+/// assert_eq!(leaves[0].start, 0);
+/// ```
+#[derive(Debug, Clone)]
+pub struct LeafSpan {
+    pub rule: Rule,
+    pub text: String,
+    pub start: usize,
+    pub end: usize,
+}
+
+pub fn leaf_spans(pairs: Pairs<'_, Rule>) -> Vec<LeafSpan> {
+    let mut out = Vec::new();
+    for pair in pairs {
+        if pair.as_rule() == Rule::EOI {
+            continue;
+        }
+        collect_leaves(&pair, &mut out);
+    }
+    out
+}
+
+fn collect_leaves(pair: &Pair<'_, Rule>, out: &mut Vec<LeafSpan>) {
+    // 空幅ノード(tail_terms の全省略等)は語位置の情報を持たないため除外
+    if pair.as_str().is_empty() {
+        return;
+    }
+    let children = visible_children(pair);
+    if children.is_empty() {
+        let span = pair.as_span();
+        out.push(LeafSpan {
+            rule: pair.as_rule(),
+            text: pair.as_str().to_string(),
+            start: span.start(),
+            end: span.end(),
+        });
+        return;
+    }
+    for child in children {
+        collect_leaves(&child, out);
+    }
+}
+
 /// Graphviz DOT 形式で解析木を出力する。
 ///
 /// ノードは `rule` 名と原文をラベルに持つ。`dot -Tsvg` 等で可視化できる。
