@@ -132,7 +132,7 @@ See [docs/parsing-guide.md](docs/parsing-guide.md) for rule-name meanings and
 ## Development
 
 ```console
-$ cargo test      # all tests (150 = 146 unit + 4 doc; includes 283 corpus sentences)
+$ cargo test      # all tests (195 = 185 unit + 10 doc; includes 418 corpus sentences)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 $ cargo bench    # performance benchmarks (criterion)
@@ -181,7 +181,7 @@ Reproduce with: `cargo run --release --example speed_check`
 | `tests/morphology.rs` | Word recognition (gismu/lujvo/cmevla/stress, etc.) |
 | `tests/syntax.rs` | Syntactic structure verification |
 | `tests/fuzz.rs` | Lightweight fuzzing (random input, mutations, nesting sweep). Heavy variants: `cargo test -- --ignored` |
-| `tests/corpus.rs` | **283 real-world sentences** (220 Tatoeba sentences, CC BY 2.0 FR + 63 curated CLL-style examples) |
+| `tests/corpus.rs` | **418 real-world sentences** (Tatoeba sentences, CC BY 2.0 FR + curated CLL-style examples; 2 known failures excluded) |
 
 The real-sentence corpus uses Lojban sentences from [Tatoeba](https://tatoeba.org).
 

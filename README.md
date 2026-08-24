@@ -126,7 +126,7 @@ println!("{}", tree::to_json(pairs));
 ## 開発
 
 ```console
-$ cargo test      # 全テスト(150件=単体146+doc 4、実文283文を含む)
+$ cargo test      # 全テスト(195件=単体185+doc 10、実文418文を含む)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 $ cargo bench    # 性能ベンチマーク(criterion)
@@ -174,7 +174,7 @@ src/
 | `tests/morphology.rs` | 語形認識(gismu/lujvo/cmevla/ストレス等) |
 | `tests/syntax.rs` | 統語構造の検証 |
 | `tests/fuzz.rs` | 簡易ファジング(ランダム・変異・深さ掃引)。重量版は `cargo test -- --ignored` |
-| `tests/corpus.rs` | **実文283文**(Tatoeba 実文220文、CC BY 2.0 FR + CLL 風厳選例文63文) |
+| `tests/corpus.rs` | **実文418文**(Tatoeba 実文 + CLL 風厳選例文。既知失敗2文を除く) |
 
 実文コーパスは [Tatoeba](https://tatoeba.org) のロジバン文を使用しています。
 
