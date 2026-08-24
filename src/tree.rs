@@ -91,12 +91,16 @@ fn write_tree(pair: Pair<'_, Rule>, depth: usize, out: &mut String) {
 ///
 /// let pairs = LojbanParser::parse(Rule::text, "mi klama").unwrap();
 /// let j = tree::to_json(pairs);
-/// assert!(j.starts_with("{\"rule\":\"text\""), "{j}");
+/// assert!(j.starts_with("{\"version\":1,\"rule\":\"text\""), "{j}");
 /// ```
 pub fn to_json(pairs: Pairs<'_, Rule>) -> String {
     let mut out = String::new();
     for pair in pairs {
         write_json(&pair, &mut out);
+    }
+    // ルートオブジェクトにスキーマ版数を埋め込む(v0.39 以降)
+    if out.starts_with('{') {
+        out.insert_str(1, "\"version\":1,");
     }
     out
 }

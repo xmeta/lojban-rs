@@ -970,3 +970,10 @@ fn 感情標識_eu_ou() {
     let s = parse_ok("o'u mi gleki");
     assert!(s.contains("UI_core \"o'u\""), "{s}");
 }
+
+#[test]
+fn moi_be_連結() {
+    let s = parse_ok("lo re moi be lo ci gerku cu barda");
+    assert!(s.contains("MOI_core \"moi\""), "{s}");
+    assert!(s.contains("BE_core \"be\""), "{s}");
+}
