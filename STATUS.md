@@ -1,10 +1,16 @@
 # 開発ステータス
 
-## 現在の状態: v0.56 完成(全テストグリーン)
+## 現在の状態: v0.57 完成(全テストグリーン)
 
 - ライブラリ20 / 形態論11 / 統語119 / coverage_doc 1 / コーパス3 / doc 6 / fuzz 3(+ignore 2) = 計163テスト全パス
 - コーパス 333 文(Tatoeba 実文受理率 94% を維持)
 - Cargo.toml の版数を STATUS 版数に同期(0.53.0)
+
+## v0.57 で追加
+- --build-lujvo / --split-lujvo に --json 出力を追加
+  (build: word/score/hyphens/forms、split: word/parts[kind/text/form])。
+  両出力とも有効な JSON であることを実測確認
+- これで全サブコマンド・全出力経路が JSON 対応となった
 
 ## v0.56 で追加(Tatoeba 定期再検証)
 - 未収録 774 文で受理率 94%(732/774)を維持(v0.38 以降 5 回連続同率)。
