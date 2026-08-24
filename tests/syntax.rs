@@ -935,3 +935,19 @@ fn 自由修飾語_先接続() {
     let s = parse_ok("pe'i ganai mi klama gi mi cadzu");
     assert!(s.contains("gek_sentence"), "{s}");
 }
+
+#[test]
+fn 項set_nuhi() {
+    let s = parse_ok("mi zmadu nu'i la djan. le ka cuxna");
+    assert!(s.contains("NUhI_core \"nu'i\""), "{s}");
+    // nu'u による明示閉鎖
+    let s = parse_ok("mi nelci nu'i do nu'u");
+    assert!(s.contains("NUhU_core \"nu'u\""), "{s}");
+}
+
+#[test]
+fn 感情スコープ_fuhe() {
+    let s = parse_ok("fu'e ui mi klama fu'o");
+    assert!(s.contains("FUhE_core \"fu'e\""), "{s}");
+    assert!(s.contains("FUhO_core \"fu'o\""), "{s}");
+}

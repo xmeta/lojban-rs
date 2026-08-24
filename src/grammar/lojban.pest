@@ -49,7 +49,9 @@ terms_full = { terms ~ (sp1 ~ CU_clause)? ~ sp1 ~ frees_mid? ~ bridi_tail }
 frees_mid  = _{ free ~ (sp1 ~ free)* }
 
 terms = { term ~ (sp1 ~ term)* }
-term  = { tagged | na_ku | sumti }
+term  = { tagged | na_ku | termset | sumti }
+// 項set(nu'i X Y [nu'u]): 複数項を 1 対象として接続・タグ付けできる
+termset = { NUhI_clause ~ sp1 ~ terms ~ (sp1 ~ NUhU_clause)? }
 tagged = { FA_clause ~ sp1 ~ sumti
          | (SE_clause ~ sp1)? ~ BAI_clause ~ (sp1 ~ NAI_clause)? ~ sp1 ~ sumti
          | SEBAI_joint ~ sp1 ~ sumti
@@ -94,7 +96,9 @@ relative_clause  = {
 }
 
 bridi_tail = { selbri ~ tail_terms ~ (sp1 ~ gihek_link ~ sp1 ~ bridi_tail)* }
-tail_terms = { (sp1 ~ term)* ~ (sp1 ~ VAU_clause)? }
+// 述語と項の間・項間の自由修飾語を許容(mi cusku .ui do / cusku sei … do)
+tail_terms = { (sp1 ~ tail_unit)* ~ (sp1 ~ VAU_clause)? }
+tail_unit  = _{ free | term }
 
 selbri  = { s_marks? ~ sp1? ~ tense_marks? ~ sp1? ~ s_marks? ~ sp1? ~ tanru ~ co_tail?
           | (NAhE_clause ~ sp1)? ~ guhek_selbri }
@@ -132,7 +136,8 @@ tanru_unit = {
    ~ !(GANAI_joint | GINAI_joint | SEBAI_joint | SEDUHU_joint | IBO_joint
      | MAI_core | UI_clause | NAhU_clause | MOhE_clause | UINAI_joint
      | VEhA_clause | VIhA_clause | PEhO_clause | MAhO_clause | KUhE_clause
-     | TEhU_clause | ZOhU_clause | MOI_clause | MEhU_clause)
+     | TEhU_clause | ZOhU_clause | MOI_clause | MEhU_clause
+     | NUhI_clause | NUhU_clause | FUhE_clause | FUhO_clause)
    ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
    // 注: 「i+字母」で始まる語(.ije / .ijanai 等の文連結結合形)は tanru の先頭に来ないため除外。
    // 母音始まりの語そのもの(.a'onai 等)は述語のみの文として正当なので許容する
@@ -211,12 +216,15 @@ frees_s   = _{ free ~ (sp1 ~ free)* }
 frees_m   = _{ (sp1 ~ free)+ }
 free      = { free_unit ~ (sp1 ~ free_unit)* }
 free_unit = { ui_free | mai_free | soi_free | sei_free | xi_free | daho_free
+           | fuhe_free | fuho_free
            | to_quote | vocative | lohu_quote | SI_clause | SU_clause }
 mai_free  = { MAI_clause }
 soi_free  = { SOI_clause ~ sp1 ~ sumti ~ (sp1 ~ sumti)? ~ (sp1 ~ SEhU_clause)? }
 // 添字(broda xi re / xi vei re su'i ci)。camxes: XI (number|lerfu)|XI VEI mex VEhO?
 xi_free   = { XI_clause ~ sp1 ~ (number | BY_clause | vei_group) }
 daho_free = { DAhO_clause }
+fuhe_free = { FUhE_clause }
+fuho_free = { FUhO_clause }
 ui_free  = { UINAI_joint | UI_clause ~ (sp1 ~ CAI_clause)? ~ (sp1 ~ NAI_clause)? }
 sei_free = { SEI_clause ~ sp1 ~ inner_sentence ~ (sp1 ~ SEhU_clause)? }
 to_quote = { TO_clause ~ (sp0 ~ (word ~ (sp1 ~ word)*)?)? ~ (sp1 ~ TOI_clause)? }
@@ -569,6 +577,12 @@ ZEI_core  = @{ ( ^"zei") ~ &word_boundary }
 SOI_core  = @{ ( ^"soi") ~ &word_boundary }
 XI_core   = @{ ( ^"xi") ~ &word_boundary }
 DAhO_core = @{ (^"daho" | ^"da'o") ~ &word_boundary }
+// 項set(複数項をまとめて接続対象にする)
+NUhI_core = @{ (^"nuhi" | ^"nu'i") ~ &word_boundary }
+NUhU_core = @{ (^"nuhu" | ^"nu'u") ~ &word_boundary }
+// 感情標識のスコープ(camxes indicators 準拠。スコープ意味論は非モデル)
+FUhE_core = @{ (^"fuhe" | ^"fu'e") ~ &word_boundary }
+FUhO_core = @{ (^"fuho" | ^"fu'o") ~ &word_boundary }
 ZO_core = @{ ( ^"zo") ~ &word_boundary }
 ZOI_core = @{ ( ^"zoi") ~ &word_boundary }
 
@@ -671,6 +685,10 @@ ZEI_clause  = { ZEI_core }
 SOI_clause  = { SOI_core }
 XI_clause   = { XI_core }
 DAhO_clause = { DAhO_core }
+NUhI_clause = { NUhI_core }
+NUhU_clause = { NUhU_core }
+FUhE_clause = { FUhE_core }
+FUhO_clause = { FUhO_core }
 UI_clause = { UI_core }
 VAU_clause = { VAU_core }
 VUhO_clause = { VUhO_core }
