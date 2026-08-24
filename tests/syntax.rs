@@ -1039,3 +1039,12 @@ fn bixe_演算子強調() {
     let s = parse_ok("li vei re bi'e pi'i ci ve'o su'i vo du li xa");
     assert!(s.contains("BIhE_core"), "{s}");
 }
+
+#[test]
+fn fehe_空間間隔プロパティ() {
+    let s = parse_ok("mi ve'i fe'e roi le zdani cu klama");
+    assert!(s.contains("FEhE_core \"fe'e\""), "{s}");
+    // 単独形
+    let s = parse_ok("fe'e ru'i mi cadzu");
+    assert!(s.contains("FEhE_core"), "{s}");
+}

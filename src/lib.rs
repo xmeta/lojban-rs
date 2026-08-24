@@ -4,10 +4,10 @@
 //! zantufa-1.9999.peg(guskant/gerna_cipra)を参考に移植する。
 //!
 //! 主な公開 API:
-//! - [`parse`](parse()): テキスト → 解析木(ZOI 正規化と SI/SU 消去を内蔵)
+//! - [`parse`]: テキスト → 解析木(ZOI 正規化と SI/SU 消去を内蔵)
 //! - `friendly_error`: 解析エラーの日本語サマリ生成
-//! - [`tree`](tree): 解析木の文字列化(整形ツリー / S 式 / JSON / DOT / HTML)
-//! - [`lujvo`](lujvo): lujvo の生成(CLL 4.11/4.12)と分解
+//! - [`tree`]: 解析木の文字列化(整形ツリー / S 式 / JSON / DOT / HTML)
+//! - [`lujvo`]: lujvo の生成(CLL 4.11/4.12)と分解
 //!
 //! 出力形式の詳細は `docs/json-schema.md`(JSON)と
 //! `docs/coverage.md`(実装済み cmavo クラス一覧)を参照。

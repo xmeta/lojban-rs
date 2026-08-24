@@ -133,10 +133,18 @@ tense_mark  = _{ PU_clause | CAhA_clause | ZAhO_clause | ZI_clause | VA_clause
                | time_interval
                | space_interval }
 
-// 空間間隔(VEhA/VIhA)。FAhA を後続可(ve'i ne'i le zdani 等)
+// 空間間隔(VEhA/VIhA)。FAhA を後続可(ve'i ne'i le zdani 等)。
+// FEhE に続く間隔プロパティ(roi/ta'e/zaho の空間用法)も連鎖可(camxes 準拠)
 space_interval = _{ VEhA_clause ~ (sp1 ~ VIhA_clause)?
                      ~ (sp1 ~ FAhA_clause ~ (sp1 ~ NAI_clause)?)?
-                  | VIhA_clause ~ (sp1 ~ FAhA_clause ~ (sp1 ~ NAI_clause)?)? }
+                     ~ (sp1 ~ FEhE_clause ~ sp1 ~ interval_property)*
+                  | VIhA_clause ~ (sp1 ~ FAhA_clause ~ (sp1 ~ NAI_clause)?)?
+                     ~ (sp1 ~ FEhE_clause ~ sp1 ~ interval_property)*
+                  | FEhE_clause ~ sp1 ~ interval_property
+                    ~ (sp1 ~ FEhE_clause ~ sp1 ~ interval_property)* }
+interval_property = _{ (PA_seq | PA_clause)? ~ sp1?
+                       ~ (ROI_clause | TAhE_clause | ZAhO_clause)
+                       ~ (sp1 ~ NAI_clause)? }
 
 // 時制間隔(ZEhA): オフセット(PU/ZI)を間隔詞の両端に置く
 // (pu bi'o ba = 過去から未来へ渡る、ca bi'i ba = 現在と未来の間、等)
@@ -152,7 +160,7 @@ tanru_unit = {
      | VEhA_clause | VIhA_clause | PEhO_clause | MAhO_clause | KUhE_clause
      | TEhU_clause | ZOhU_clause | MOI_clause | MEhU_clause
      | NUhI_clause | NUhU_clause | FUhE_clause | FUhO_clause | CEhE_clause
-     | PEhE_clause | LAHEDI_joint | ROROI_joint | BIhE_clause)
+     | PEhE_clause | LAHEDI_joint | ROROI_joint | BIhE_clause | FEhE_clause)
    ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
    // 注: 「i+字母」で始まる語(.ije / .ijanai 等の文連結結合形)は tanru の先頭に来ないため除外。
    // 母音始まりの語そのもの(.a'onai 等)は述語のみの文として正当なので許容する
@@ -469,6 +477,8 @@ NAhU_core = @{ (^"na'u" | ^"nahu") ~ &word_boundary }
 FIhU_core = @{ (^"fihu" | ^"fi'u") ~ &word_boundary }
 // 演算子強調(bi'e: 直後の演算子を右側にグルーピング)
 BIhE_core = @{ (^"bihe" | ^"bi'e") ~ &word_boundary }
+// 空間間隔プロパティの導入(roi/ta'e/zaho を空間用法に転用)
+FEhE_core = @{ (^"fehe" | ^"fe'e") ~ &word_boundary }
 PEhO_core = @{ (^"peho" | ^"pe'o") ~ &word_boundary }
 MAhO_core = @{ (^"maho" | ^"ma'o") ~ &word_boundary }
 KUhE_core = @{ (^"kuhe" | ^"ku'e") ~ &word_boundary }
@@ -480,6 +490,7 @@ NAhU_clause = { NAhU_core }
 PEhO_clause = { PEhO_core }
 FIhU_clause = { FIhU_core }
 BIhE_clause = { BIhE_core }
+FEhE_clause = { FEhE_core }
 MAhO_clause = { MAhO_core }
 KUhE_clause = { KUhE_core }
 TEhU_clause = { TEhU_core }
