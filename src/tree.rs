@@ -130,6 +130,51 @@ fn write_json(pair: &Pair<'_, Rule>, out: &mut String) {
 }
 
 /// JSON 文字列リテラルとして安全な形で出力する。
+/// Graphviz DOT 形式で解析木を出力する。
+///
+/// ノードは `rule` 名と原文をラベルに持つ。`dot -Tsvg` 等で可視化できる。
+///
+/// ```
+/// use lojban::{parse, tree};
+///
+/// let pairs = parse("mi klama").unwrap();
+/// let dot = tree::to_dot(pairs);
+/// assert!(dot.starts_with("digraph parse"), "{dot}");
+/// assert!(dot.contains("KOhA_core"), "{dot}");
+/// ```
+pub fn to_dot(pairs: Pairs<'_, Rule>) -> String {
+    let mut out = String::from("digraph parse {\n");
+    out.push_str("  node [shape=box fontname=\"monospace\"];\n");
+    let mut counter = 0usize;
+    for pair in pairs {
+        if pair.as_rule() == Rule::EOI {
+            continue;
+        }
+        let id = write_dot(&pair, &mut out, &mut counter);
+        let _ = id;
+    }
+    out.push('}');
+    out
+}
+
+fn write_dot(pair: &Pair<'_, Rule>, out: &mut String, counter: &mut usize) -> usize {
+    let id = *counter;
+    *counter += 1;
+    let text = dot_escape(pair.as_str());
+    let _ = writeln!(out, "  n{id} [label=\"{:?}\\n{text}\"];", pair.as_rule());
+    for child in visible_children(pair) {
+        let cid = write_dot(&child, out, counter);
+        let _ = writeln!(out, "  n{id} -> n{cid};");
+    }
+    id
+}
+
+fn dot_escape(s: &str) -> String {
+    s.replace('\\', "\\\\")
+        .replace('"', "\\\"")
+        .replace('\n', "\\l")
+}
+
 fn json_escape(s: &str) -> String {
     let mut out = String::with_capacity(s.len() + 2);
     out.push('"');
