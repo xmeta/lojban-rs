@@ -47,12 +47,27 @@ fn main() -> ExitCode {
     if let Some(word) = args.split_lujvo {
         return match lojban::lujvo::decompose(&word) {
             Ok(parts) => {
-                for p in parts {
-                    match p {
-                        lojban::lujvo::Part::Rafsi { text, form } => {
-                            println!("{text} ({form:?})")
+                if args.json {
+                    let items: Vec<String> = parts
+                        .iter()
+                        .map(|p| match p {
+                            lojban::lujvo::Part::Rafsi { text, form } => format!(
+                                "{{\"kind\":\"rafsi\",\"text\":\"{text}\",\"form\":\"{form:?}\"}}"
+                            ),
+                            lojban::lujvo::Part::Hyphen(c) => {
+                                format!("{{\"kind\":\"hyphen\",\"char\":\"{c}\"}}")
+                            }
+                        })
+                        .collect();
+                    println!("{{\"word\":\"{word}\",\"parts\":[{}]}}", items.join(","));
+                } else {
+                    for p in parts {
+                        match p {
+                            lojban::lujvo::Part::Rafsi { text, form } => {
+                                println!("{text} ({form:?})")
+                            }
+                            lojban::lujvo::Part::Hyphen(c) => println!("-{c}- [hyphen]"),
                         }
-                        lojban::lujvo::Part::Hyphen(c) => println!("-{c}- [hyphen]"),
                     }
                 }
                 ExitCode::SUCCESS
@@ -71,7 +86,22 @@ fn main() -> ExitCode {
             .collect();
         return match lojban::lujvo::build(&parts) {
             Ok(built) => {
-                println!("{} (score {})", built.word, built.score());
+                if args.json {
+                    let forms: Vec<String> = built
+                        .forms
+                        .iter()
+                        .map(|f| format!("{:?}", format!("{f:?}")))
+                        .collect();
+                    println!(
+                        "{{\"word\":\"{}\",\"score\":{},\"hyphens\":{},\"forms\":[{}]}}",
+                        built.word,
+                        built.score(),
+                        built.hyphens,
+                        forms.join(",")
+                    );
+                } else {
+                    println!("{} (score {})", built.word, built.score());
+                }
                 ExitCode::SUCCESS
             }
             Err(e) => {
