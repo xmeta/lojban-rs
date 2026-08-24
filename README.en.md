@@ -64,7 +64,7 @@ The parser engine is [pest](https://pest.rs); the grammar in
 - **Output**: pretty-printed tree / S-expressions / JSON
   (`{"version":1,"rule","text","children"}` format; the root object carries a schema version)
     / Graphviz DOT (`--dot`; visualize the parse tree with `dot -Tsvg`)
-    / HTML nested lists (`--html`)
+    / HTML (standalone collapsible document, `--html`)
 - **lujvo construction & decomposition** (per CLL 4.11/4.12): assembles new
   words from rafsi sequences applying hyphen rules (r/n/y), the tosmabru test,
   and medial cluster legality (CLL 3.6), with official scoring

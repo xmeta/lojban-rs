@@ -175,50 +175,70 @@ fn dot_escape(s: &str) -> String {
         .replace('\n', "\\l")
 }
 
-/// HTML の入れ子リスト(`<ul>`)として解析木を出力する。
+/// スタンドアロン HTML 文書として解析木を出力する。
 ///
-/// 各ノードは `class="rule-<規則名>"` を持ち、`title` 属性に原文を格納する。
+/// 内部ノードは `<details>`/`<summary>` による折りたたみ付きで、
+/// スタイルは文書内に同梱される。ブラウザで開くだけで解析木を閲覧できる。
 ///
 /// ```
 /// use lojban::{parse, tree};
 ///
 /// let pairs = parse("mi klama").unwrap();
 /// let html = tree::to_html(pairs);
-/// assert!(html.starts_with("<ul class=\"tree\">"), "{html}");
+/// assert!(html.starts_with("<!DOCTYPE html>"), "{html}");
+/// assert!(html.contains("<details"), "{html}");
 /// assert!(html.contains("rule-KOhA_core"), "{html}");
 /// ```
 pub fn to_html(pairs: Pairs<'_, Rule>) -> String {
-    let mut out = String::from("<ul class=\"tree\">\n");
+    const HEAD: &str = r#"<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>lojban parse tree</title>
+<style>
+body { font-family: ui-monospace, monospace; margin: 1em; background: #fafafa; }
+ul.tree, ul { padding-left: 1.2em; list-style: none; }
+details > summary { cursor: pointer; list-style: revert; }
+code { background: #eee; padding: 0 3px; border-radius: 3px; }
+.t { color: #555; }
+</style>
+</head>
+<body>
+"#;
+    let mut out = String::from(HEAD);
+    out.push_str("<ul class=\"tree\">\n");
     for pair in pairs {
         if pair.as_rule() == Rule::EOI {
             continue;
         }
-        write_html(&pair, &mut out);
+        write_html(&pair, &mut out, 0);
     }
-    out.push_str("</ul>\n");
+    out.push_str("</ul>\n</body>\n</html>\n");
     out
 }
 
-fn write_html(pair: &Pair<'_, Rule>, out: &mut String) {
+fn write_html(pair: &Pair<'_, Rule>, out: &mut String, depth: usize) {
     let rule = format!("{:?}", pair.as_rule());
     let text = html_escape(pair.as_str());
     let children = visible_children(pair);
+    // 深さ 0〜1 は初期展開、それより深い節は折りたたみ
+    let open = if depth <= 1 { " open" } else { "" };
     if children.is_empty() {
         let _ = writeln!(
             out,
-            "<li><code class=\"rule-{rule}\" title=\"{text}\">{rule}</code></li>"
+            "<li><code class=\"rule-{rule}\" title=\"{text}\">{rule}</code> <span class=\"t\">{text}</span></li>"
         );
         return;
     }
     let _ = writeln!(
         out,
-        "<li><code class=\"rule-{rule}\" title=\"{text}\">{rule}</code>"
+        "<li><details{open}><summary><code class=\"rule-{rule}\">{rule}</code> <span class=\"t\">{text}</span></summary>"
     );
     out.push_str("<ul>\n");
     for child in children {
-        write_html(&child, out);
+        write_html(&child, out, depth + 1);
     }
-    out.push_str("</ul>\n</li>\n");
+    out.push_str("</ul>\n</details></li>\n");
 }
 
 fn html_escape(s: &str) -> String {
