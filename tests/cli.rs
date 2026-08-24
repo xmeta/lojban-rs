@@ -211,3 +211,11 @@ fn 出力形式フラグは排他的() {
     assert_ne!(code, 0);
     assert!(err.contains("cannot be used with"), "{err}");
 }
+
+#[test]
+fn html出力に位置属性が含まれる() {
+    let (code, out, err) = run(&["mi klama", "--html"], None);
+    assert_eq!(code, 0, "{err}");
+    assert!(out.contains("data-start=\"0\""), "{out}");
+    assert!(out.contains("data-end=\"8\""), "{out}");
+}

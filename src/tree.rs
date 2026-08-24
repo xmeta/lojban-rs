@@ -255,19 +255,25 @@ code { background: #eee; padding: 0 3px; border-radius: 3px; }
 fn write_html(pair: &Pair<'_, Rule>, out: &mut String, depth: usize) {
     let rule = format!("{:?}", pair.as_rule());
     let text = html_escape(pair.as_str());
+    let span = pair.as_span();
+    let pos = format!(
+        " data-start=\"{}\" data-end=\"{}\"",
+        span.start(),
+        span.end()
+    );
     let children = visible_children(pair);
     // 深さ 0〜1 は初期展開、それより深い節は折りたたみ
     let open = if depth <= 1 { " open" } else { "" };
     if children.is_empty() {
         let _ = writeln!(
             out,
-            "<li><code class=\"rule-{rule}\" title=\"{text}\">{rule}</code> <span class=\"t\">{text}</span></li>"
+            "<li><code class=\"rule-{rule}\" title=\"{text}\"{pos}>{rule}</code> <span class=\"t\">{text}</span></li>"
         );
         return;
     }
     let _ = writeln!(
         out,
-        "<li><details{open}><summary><code class=\"rule-{rule}\">{rule}</code> <span class=\"t\">{text}</span></summary>"
+        "<li><details{open}><summary><code class=\"rule-{rule}\"{pos}>{rule}</code> <span class=\"t\">{text}</span></summary>"
     );
     out.push_str("<ul>\n");
     for child in children {
