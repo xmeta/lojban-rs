@@ -962,3 +962,11 @@ fn 項間の自由修飾語() {
     let s = parse_ok("mi ku'i do tavla");
     assert!(s.contains("UI_core \"ku'i\""), "{s}");
 }
+
+#[test]
+fn 感情標識_eu_ou() {
+    let s = parse_ok("e'u do klama");
+    assert!(s.contains("UI_core \"e'u\""), "{s}");
+    let s = parse_ok("o'u mi gleki");
+    assert!(s.contains("UI_core \"o'u\""), "{s}");
+}

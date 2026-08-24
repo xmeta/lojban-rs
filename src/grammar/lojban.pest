@@ -527,7 +527,8 @@ SEhU_core = @{ ( ^"se'u" | ^"sehu") ~ &word_boundary }
 TO_core = @{ ( ^"to") ~ &word_boundary }
 TOI_core = @{ ( ^"toi") ~ &word_boundary }
 UI_core = @{ (^"u'i" | ^"u'u" | ^"ru'e" | ^"ju'o" | ^"pe'i" | ^"sa'e" | ^"ta'o"
-              | ^"e'o" | ^"e'e" | ^"a'e" | ^"i'a" | ^"buho" | ^"bu'o"
+              | ^"e'o" | ^"e'e" | ^"ehu" | ^"e'u" | ^"ohu" | ^"o'u"
+              | ^"a'e" | ^"i'a" | ^"buho" | ^"bu'o"
               | ^"kuhi" | ^"ku'i" | ^"ja'o" | ^"po'o" | ^"dahi" | ^"da'i"
               | ^"jehu" | ^"je'u" | ^"laha" | ^"la'a" | ^"zaha" | ^"za'a"
               | ^"gahi" | ^"ga'i" | ^"uho" | ^"u'o" | ^"ihi" | ^"i'i"
