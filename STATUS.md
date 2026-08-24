@@ -1,8 +1,16 @@
 # 開発ステータス
 
-## 現在の状態: v0.42 完成(全テストグリーン)
+## 現在の状態: v0.43 完成(全テストグリーン)
 
 - ライブラリ20 / 形態論11 / 統語119 / coverage_doc 1 / コーパス3 / doc 4 / fuzz 3(+ignore 2) = 計160テスト全パス
+
+## v0.43 で追加(ドキュメント整備)
+- docs/coverage.md に結合表記(joint)セクションを追加
+  (IJ/IBO/NAKU/GANAI/GINAI/SEBAI/SEDUHU/UINAI の8規則と
+  tanru_unit ガードとのセット管理の説明)。coverage_doc テストは
+  クラス表のみ検証するため追記セクションは自由
+- README(日英)に SA(sa)遡及修正構文の非対応方針を明記
+  (SI/SU 消去の記述の隣。前向きの一致 selma'o 探索が必要なため)
 
 ## v0.42 で追加
 - PEhE 項グループ接続(pe'e je / pe'e joi。camxes terms_1 準拠)。
@@ -369,5 +377,5 @@
    `x = @{ (^"mi" | ^"mi'a") ~ &wb }` が "mi'a" を拒否することで確認済み)
 
 ## 次の拡張候補
-- Tatoeba 再検証の定期実施、SA(sa)非対応方針の README 明記、
-- docs/coverage.md への結合形(joint)類の追記
+- Tatoeba 再検証の定期実施、Cargo.toml 版数と STATUS 版数の同期方針決定、
+- 解析木ビジュアライザ(HTML/Graphviz 出力)などの付加価値機能
