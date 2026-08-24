@@ -33,6 +33,9 @@ struct Args {
     /// 入力を行単位で個別解析する(1行 = 1文。失敗行は行番号付きで報告)
     #[arg(long)]
     lines: bool,
+    /// 語種を判定する(gismu / lujvo / fu'ivla / cmevla / cmavo / unknown)
+    #[arg(long)]
+    classify: Option<String>,
     /// lujvo を生成する(rafsi を空白またはカンマ区切りで指定)
     #[arg(long)]
     build_lujvo: Option<String>,
@@ -43,6 +46,31 @@ struct Args {
 
 fn main() -> ExitCode {
     let args = Args::parse();
+
+    if let Some(raw) = args.classify {
+        use lojban::grammar::{LojbanParser, Rule};
+        use pest::Parser;
+        // 先頭のポーズ文字(. , ! ?)を除去
+        let word = raw.trim_start_matches(['.', ',', '!', '?']);
+        let class = [
+            (Rule::jbocme, "cmevla"),
+            (Rule::zifcme, "cmevla"),
+            (Rule::gismu, "gismu"),
+            (Rule::lujvo, "lujvo"),
+            (Rule::fuhivla, "fu'ivla"),
+            (Rule::cmavo, "cmavo"),
+        ]
+        .into_iter()
+        .find(|(rule, _)| LojbanParser::parse(*rule, word).is_ok())
+        .map(|(_, name)| name)
+        .unwrap_or("unknown");
+        if args.json {
+            println!("{{\"word\":\"{word}\",\"class\":\"{class}\"}}");
+        } else {
+            println!("{word}: {class}");
+        }
+        return ExitCode::SUCCESS;
+    }
 
     if let Some(word) = args.split_lujvo {
         return match lojban::lujvo::decompose(&word) {

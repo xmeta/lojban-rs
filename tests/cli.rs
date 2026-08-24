@@ -115,3 +115,27 @@ fn html出力() {
     assert_eq!(code, 0, "{err}");
     assert!(out.starts_with("<!DOCTYPE html>"), "{out}");
 }
+
+#[test]
+fn classify_語種判定() {
+    let cases = [
+        ("klama", "gismu"),
+        ("zbasai", "lujvo"),
+        ("mi", "cmavo"),
+        ("qqqzzz", "unknown"),
+    ];
+    for (word, class) in cases {
+        // JSON 出力
+        let (code, out, err) = run(&["--classify", word, "--json"], None);
+        assert_eq!(code, 0, "{err}");
+        assert!(out.contains(&format!("\"class\":\"{class}\"")), "{out}");
+        // 既定は平文
+        let (code, out, _err) = run(&["--classify", word], None);
+        assert_eq!(code, 0);
+        assert!(out.contains(class), "{out}");
+    }
+    // cmevla(先頭ポーズ付き)
+    let (code, out, _err) = run(&["--classify", ".alis.", "--json"], None);
+    assert_eq!(code, 0);
+    assert!(out.contains("\"class\":\"cmevla\""), "{out}");
+}
