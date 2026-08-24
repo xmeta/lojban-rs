@@ -1,9 +1,20 @@
 # 開発ステータス
 
-## 現在の状態: v0.47 完成(全テストグリーン)
+## 現在の状態: v0.48 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語119 / coverage_doc 1 / コーパス3 / doc 6 / fuzz 3(+ignore 2) = 計162テスト全パス
-- Cargo.toml の版数を STATUS 版数に同期(0.47.0)
+- ライブラリ20 / 形態論11 / 統語120 / coverage_doc 1 / コーパス3 / doc 6 / fuzz 3(+ignore 2) = 計163テスト全パス
+- Cargo.toml の版数を STATUS 版数に同期(0.48.0)
+
+## v0.48 で追加(バッテリー#6: 呼格・対話・cmevla・副詞的談話標識13文を実測)
+- LAHEDI_joint(la'edi'u = la'e+di'u 直前発話の参照先)
+- ROROI_joint(roroi = ro+roi 常に。量化 ROI の結合形)
+- UINAI_joint を9語補完(ji'anai ru'anai e'inai i'inai o'anai ka'unai
+  a'unai u'inai u'unai)
+- BAhE(ba'e 強調マーカー)を自由修飾語として受理(camxes pre_clause 準拠。
+  次語への意味論付与は非モデル)
+- 無効テスト文の整理: 「xu la alis. klama」「coi la alis. la djan. cliva」は
+  cmevla+brivla を説明詞 tanru として取り込む曖昧形で cu 明示が必要
+  (参考実装と同じ挙動。xu la alis. cu klama は通過)
 
 ## v0.47 で追加
 - CLI に -f/--file 入力を追加(優先順位: 位置引数 > -f > stdin)
