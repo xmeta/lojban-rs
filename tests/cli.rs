@@ -162,3 +162,29 @@ fn classify_複数語() {
     assert!(out.contains("\"word\":\"klama\""), "{out}");
     assert!(out.contains("\"class\":\"lujvo\""), "{out}");
 }
+
+#[test]
+fn 空stdin_は使い方を表示して終了コード2() {
+    let (code, _out, err) = run(&[], Some(""));
+    assert_eq!(code, 2);
+    assert!(err.contains("使い方"), "{err}");
+}
+
+#[test]
+fn crlf改行でも_lines_は動作する() {
+    let (code, out, err) = run(&["--lines"], Some("mi klama do\r\nle gerku cu cadzu\r\n"));
+    assert_eq!(code, 0, "{err}");
+    assert!(out.contains("1: ok"), "{out}");
+    assert!(out.contains("2: ok"), "{out}");
+}
+
+#[test]
+fn 引用を含む長文の_json() {
+    let input = "mi cusku zo si .i lu do drani li'u se cusku";
+    let (code, out, err) = run(&["--json", "-q"], Some(input));
+    // -q は無出力なので素の --json で検証
+    let _ = (code, out, err);
+    let (code, out, err) = run(&["--json"], Some(input));
+    assert_eq!(code, 0, "{err}");
+    assert!(out.starts_with("{\"version\":1,"), "{out}");
+}

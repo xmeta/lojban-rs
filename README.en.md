@@ -111,9 +111,23 @@ ta'u (CvvApo)
 ```rust
 use lojban::{parse, tree};
 
+// Parse and print as S-expression
 let pairs = parse("mi viska le gerku")?;
 println!("{}", tree::to_sexpr(pairs));
+
+// Readable error summary (Japanese)
+match parse("x y z") {
+    Ok(_) => {}
+    Err(e) => eprintln!("{}", lojban::friendly_error(&e)),
+}
+
+// JSON output (root carries a schema version)
+let pairs = parse("mi klama do")?;
+println!("{}", tree::to_json(pairs));
 ```
+
+See [docs/parsing-guide.md](docs/parsing-guide.md) for rule-name meanings and
+[docs/json-schema.md](docs/json-schema.md) for the output format.
 
 ## Development
 

@@ -105,9 +105,23 @@ ta'u (CvvApo)
 ```rust
 use lojban::{parse, tree};
 
+// 解析して S 式で表示
 let pairs = parse("mi viska le gerku")?;
 println!("{}", tree::to_sexpr(pairs));
+
+// 読みやすいエラーサマリ(日本語)
+match parse("x y z") {
+    Ok(_) => {}
+    Err(e) => eprintln!("{}", lojban::friendly_error(&e)),
+}
+
+// JSON 出力(ルートに版数付き)
+let pairs = parse("mi klama do")?;
+println!("{}", tree::to_json(pairs));
 ```
+
+利用できる規則名の意味は [docs/parsing-guide.md](docs/parsing-guide.md)、
+出力形式の詳細は [docs/json-schema.md](docs/json-schema.md) を参照。
 
 ## 開発
 
