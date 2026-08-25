@@ -116,6 +116,10 @@ $ cargo run --example web_playground
 エラー位置と期待規則の可視化、1行1ケースで最大200件を一括検証できる
 Regression Lab（成功率・失敗診断・ケース別処理時間）を備えています。
 
+同じUIはWebAssemblyとしても動作します。`site/wasm/` の `lojban-web` クレートと
+`site/build-pages.sh` がGitHub Pages用の静的サイトを生成し、
+`.github/workflows/pages.yml` が自動デプロイします。
+
 ### ライブラリ API
 
 ```rust
@@ -142,7 +146,7 @@ println!("{}", tree::to_json(pairs));
 ## 開発
 
 ```console
-$ cargo test      # 全テスト(195件=単体185+doc 10、実文418文を含む)
+$ cargo test      # 全テスト(196件=単体185+doc 11、実文418文を含む)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 $ cargo bench    # 性能ベンチマーク(criterion)

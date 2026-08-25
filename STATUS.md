@@ -1,10 +1,24 @@
 # 開発ステータス
 
-## 現在の状態: v0.86 完成(全テストグリーン)
+## 現在の状態: v0.87 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語122 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / doc 11 / fuzz 3(+ignore 2) = 計196テスト全パス
+- ライブラリ20 / 形態論11 / 統語122 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / doc 11 / fuzz 3(+ignore 2) = 計196テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.86.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.87.0)
+
+## v0.87 で追加(Web Playground)
+- examples/web_playground.rs: 追加依存ゼロのローカル HTTP サーバー(std::net のみ)。
+  cargo run --example web_playground で http://127.0.0.1:8787 を起動
+- 機能: 解析木ビュー・単語分類・JSON・S式タブ、ノード Inspector(規則の日本語説明)、
+  エラー位置と期待規則の可視化、入力履歴(localStorage)、共有URL、コピー/ダウンロード、
+  Tree 全展開/折りたたみ、キーボード操作(Ctrl/⌘+Enter 解析、Alt+1〜4 タブ切替)、
+  パーサー処理時間表示
+- Regression Lab: 1行1ケース・最大200件の一括検証(成功率・失敗診断・ケース別処理時間)
+- 同梱形態: example 本体に加え site/wasm/(wasm-bindgen 製 WASM クレート lojban-web)。
+  site/build-pages.sh が GitHub Pages 用 dist を生成し、.github/workflows/pages.yml が
+  自動デプロイ。runtime.js により server/WASM 両モードで同一 UI が動作
+- 品質: 全テスト(196+example 5)グリーン。XSS なし(textContent ベースの DOM 構築)、
+  読み取りタイムアウト付きの堅牢なローカルサーバー
 
 ## v0.86 で追加(クリーンビルド検証と v1.0 ロードマップ)
 - cargo clean からの完全再構築で全ゲート(196テスト/clippy/fmt)が緑。
@@ -22,7 +36,8 @@
   空幅ノード(tail_terms 全省略等)は除外
 - BAI に pi'o(using)を追加。空間分離 SE+BAI 枝が BAI 語彙に依存するため、
   pi'o 欠落により se pi'o … が解析できない状態だった
-- battery ベンチを criterion に追加(混成実文5文のワークロード計測)
+- battery ベンチを criterion に追加(混成実文5文のワークロード計測)。
+  ベンチ用連結文の ve'o 不釣り合いは作成ミスとして修正
 
 ## v0.83 で追加(Tatoeba 定期再検証)
 - 未収録 689 文を --lines パイプラインで検証: 94%(647/689)を維持
@@ -47,33 +62,11 @@
 - camxes.js 比較(v0.80 再計測): 3.6/3.8/2.8 倍。
   過去 4 回の計測で比率 2.8〜4.5 倍の範囲で安定
 
-- ライブラリ20 / 形態論11 / 統語122 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / doc 11 / fuzz 3(+ignore 2) = 計196テスト全パス
-- コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.86.0)
-
-## v0.86 で追加(クリーンビルド検証と v1.0 ロードマップ)
-- cargo clean からの完全再構築で全ゲート(196テスト/clippy/fmt)が緑。
-  ビルド成果物に依存しない再現性を確認
-- 「v1.0 に向けて」節を新設: 到達度の整理と判定基準(API 凍結、
-  定期検証の継続、未収録 selma'o の最終承認、他プラットフォーム確認)
 ## v0.79 で追加(語種判定・統計のライブラリ化)
 - lojban::classify_word(単語の語種判定)と lojban::word_stats
   (WordStats 構造体による語種別集計)を公開 API 化(doc test 付き)。
   main.rs の --classify/--stats は委譲に切り替わり、
   CLI が薄いラッパーのみの構成になった
-
-## v0.85 で追加(Tatoeba 定期再検証)
-- 未収録 689 文で受理率 94%(647/689)を維持(v0.38 以降 11 回連続同率)。
-  v0.84 の pi'o 追加は今回のサンプルに該当文がなく影響なし
-  (Tatoeba の単純文では pi'o 使用が稀)。失敗 42 文は既知カテゴリのみ
-
-## v0.84 で追加
-- tree::leaf_spans を追加: 葉ノード(規則・原文・バイト位置)の列挙。
-  空幅ノード(tail_terms 全省略等)は除外
-- BAI に pi'o(using)を追加。空間分離 SE+BAI 枝が BAI 語彙に依存するため、
-  pi'o 欠落により se pi'o … が解析できない状態だった
-- battery ベンチを criterion に追加(混成実文5文のワークロード計測)。
-  ベンチ用連結文の ve'o 不釣り合いは作成ミスとして修正
 
 ## v0.78 で追加(Tatoeba 定期再検証)
 - 未収録 704 文で受理率 94%(662/704)を維持(v0.38 以降 9 回連続同率)。
@@ -778,61 +771,3 @@ v0.86 時点での到達度と、v1.0 判定の基準を整理する。
 - crates.io 公開はユーザー判断で見送り中(方針変更時は版数同期済みのため即対応可)
 
 
-## v1.0 に向けて
-
-v0.86 時点での到達度と、v1.0 判定の基準を整理する。
-
-### 到達度
-- CLL コア構文は網羅(意図的未収録 11 selma'o を除き、coverage.md 参照)
-- Tatoeba 実文受理率 94%×11 回の実測安定性
-- テスト 196 件(9 スイート)+ 重量ファジング合格×5 回
-- ライブラリ API(parse/friendly_error/classify_word/word_stats/tree×6/lujvo×3)
-- CLI(解析5形式・lujvo 3コマンド・classify/stats・バッチモード)
-- ドキュメント(README 日英 + docs 6点)
-
-### v1.0 の判定基準と進捗
-1. 公開 API の凍結宣言(セマンティックバージョニングへの完全移行) — **未着手**
-2. 上記到達度の維持を 3 回以上の定期検証で連続確認 — **11 回連続 94% で達成済み**
-3. 意図的未収録 selma'o の最終承認 — **方針文書済み(coverage.md)、承認待ち**
-4. クリーンビルド・クロスプラットフォーム確認 — **部分達成(v0.87)**:
-   - クリーンビルド: v0.86 で確認済み
-   - クロスコンパイルチェック: wasm32-unknown-unknown /
-     x86_64-pc-windows-gnu / aarch64-apple-darwin の3ターゲットで
-     cargo check 合格(wasm でのブラウザ/Node 利用も視野)
-   - MSRV 検証(v0.88): 1.74 ツールチェーンで実測した結果、
-     依存 pest 2.9 の実要件は rustc 1.83+ であり、宣言値 1.74 が
-     実態と不一致だったことが判明。rust-version を 1.83 に修正し、
-     +1.96 チェーンでのコンパイルも確認。基準4はこれで完了
-
-### 残る任意タスク
-- シェル補完(clap_complete、依存追加の判断が必要)
-- HTML 出力の折りたたみ状態制御の高度化
-- SA 等の非対応構文の方針は収録判断に含める
-
-## 実装済み
-- pest + clap ベース(Cargo.toml / src/lib.rs / src/main.rs / src/tree.rs)
-- 形態論: zantufa 由来の語形認識(音節・ストレス・rafsi・cmevla)
-- 統語コア: 文・項・sumti・selbri・tanru・関係節・抽象・自由修飾語・呼格・文連結
-- CLI: 引数/stdin、--sexpr、整形ツリー出力
-- README.md
-
-## 移植時に判明した重要ポイント(将来の拡張時に注意)
-1. 各 cmavo クラス規則には必ず語境界ガード(`&word_boundary`)が必要。
-   ないと "tavla" を "ta"+"vla" に誤分割する
-2. post_word→lojban_word→クラス規則→post_word の静的左再帰が起きるため、
-   境界チェックは `!ASCII_ALPHANUMERIC ~ !"'"` の単純形を使用
-3. pest の進行解析: 繰り返し `X*` の X が深い参照チェーンだと
-   「非進行」と誤判定される。`(sp1 ~ X)*` 形で回避
-4. ループ内の sp1 は失敗時に入力を巻き戻す。ループ直後に別規則を続ける場合は
-   明示的に `sp1?` を挟む(selbri の s_marks→tanru 間など)
-5. `X ~ sp ~ (終端詞)?` は禁止。`?` は現在位置での空マッチ成功のため sp の
-   消費が取り消されず、外側の sp1 が壊れる(li_mex/vei_group で発生)。
-   必ず `(sp ~ 終端詞)?` とグループごと optional にする
-6. cmavo クラス等の選択肢では、アポストロフィ付き形を必ずその素の接頭辞より
-   先に置く。素の形(^"mi")が先だと境界先読みで失敗した際に後続の長い形
-   (^"mi'a")が試されない(pest 文字列選択のクセ。最小再現:
-   `x = @{ (^"mi" | ^"mi'a") ~ &wb }` が "mi'a" を拒否することで確認済み)
-
-## 次の拡張候補
-- Tatoeba 再検証の定期実施、HTML 出力への DOT 拡張、
-- crates.io 公開はユーザー判断で見送り中(方針変更時は版数同期済みのため即対応可)

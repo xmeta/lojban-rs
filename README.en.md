@@ -106,6 +106,30 @@ zba (Ccv)
 ta'u (CvvApo)
 ```
 
+### Web Playground example
+
+A local web app for inspecting the parse tree, word classification, JSON, and
+S-expressions in the browser ships as an example. It has no additional
+dependencies.
+
+```console
+$ cargo run --example web_playground
+# open http://127.0.0.1:8787 in your browser
+```
+
+Input is parsed by a local Rust process and is never sent to any external
+service. The UI supports jumping from tree nodes / words to the input range,
+a history of recent successful inputs, share URLs, copy/download of the parse
+result, expand/collapse all for the tree, keyboard shortcuts, and parser
+timing display. It also provides an inspector that explains each grammar rule
+in Japanese, visualization of error positions and expected rules, and a
+Regression Lab that batch-validates up to 200 cases (one case per line) with
+a success rate, failure diagnostics, and per-case timing.
+
+The same UI also runs as WebAssembly: the `lojban-web` crate under `site/wasm/`
+and `site/build-pages.sh` produce a static site for GitHub Pages, deployed
+automatically by `.github/workflows/pages.yml`.
+
 ### Library API
 
 ```rust
@@ -132,7 +156,7 @@ See [docs/parsing-guide.md](docs/parsing-guide.md) for rule-name meanings and
 ## Development
 
 ```console
-$ cargo test      # all tests (195 = 185 unit + 10 doc; includes 418 corpus sentences)
+$ cargo test      # all tests (196 = 185 unit + 11 doc; includes 418 corpus sentences)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 $ cargo bench    # performance benchmarks (criterion)
