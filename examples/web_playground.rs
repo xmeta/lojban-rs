@@ -1,4 +1,5 @@
-use lojban::{classify_word, friendly_error, parse, tree, word_stats};
+use lojban::{classify_word, friendly_error, parse, tree, word_stats, Rule};
+use pest::error::{Error, ErrorVariant, InputLocation, LineColLocation};
 use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
 use std::time::Instant;
@@ -147,11 +148,37 @@ fn parse_response(input: &str) -> String {
                 json_string(&sexpr)
             )
         }
-        Err(error) => format!(
-            "{{\"ok\":false,\"elapsed_ms\":{elapsed_ms:.3},\"stats\":{stats_json},\"error\":{}}}",
-            json_string(&friendly_error(&error))
-        ),
+        Err(error) => {
+            let details = error_details_json(&error);
+            format!(
+                "{{\"ok\":false,\"elapsed_ms\":{elapsed_ms:.3},\"stats\":{stats_json},\"error\":{},\"details\":{details}}}",
+                json_string(&friendly_error(&error))
+            )
+        }
     }
+}
+
+fn error_details_json(error: &Error<Rule>) -> String {
+    let (start, end) = match error.location {
+        InputLocation::Pos(pos) => (pos, pos),
+        InputLocation::Span((start, end)) => (start, end),
+    };
+    let (line, column) = match error.line_col {
+        LineColLocation::Pos((line, column)) => (line, column),
+        LineColLocation::Span((line, column), _) => (line, column),
+    };
+    let expected = match &error.variant {
+        ErrorVariant::ParsingError { positives, .. } => positives
+            .iter()
+            .take(12)
+            .map(|rule| json_string(&format!("{rule:?}")))
+            .collect::<Vec<_>>()
+            .join(","),
+        ErrorVariant::CustomError { .. } => String::new(),
+    };
+    format!(
+        "{{\"start\":{start},\"end\":{end},\"line\":{line},\"column\":{column},\"expected\":[{expected}]}}"
+    )
 }
 
 fn leaf_json(leaf: &tree::LeafSpan) -> String {
@@ -220,5 +247,7 @@ mod tests {
         assert!(body.contains("\"ok\":false"), "{body}");
         assert!(body.contains("解析エラー"), "{body}");
         assert!(body.contains("\"elapsed_ms\":"), "{body}");
+        assert!(body.contains("\"details\":"), "{body}");
+        assert!(body.contains("\"expected\":["), "{body}");
     }
 }

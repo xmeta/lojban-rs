@@ -238,6 +238,20 @@ textarea {
   white-space: pre-wrap;
   font: 0.82rem/1.6 var(--code);
 }
+.error-message { font-weight: 700; }
+.error-meta { margin-top: 7px; color: #d7909d; font-size: 0.7rem; }
+.expected-heading { margin-top: 12px; color: #dca4ad; font: 0.65rem ui-sans-serif, system-ui, sans-serif; text-transform: uppercase; letter-spacing: 0.08em; }
+.expected-rules { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
+.expected-rule {
+  border: 1px solid rgba(255, 139, 155, 0.23);
+  border-radius: 999px;
+  padding: 5px 8px;
+  color: #ffd0d7;
+  background: rgba(255, 139, 155, 0.06);
+  font: 0.66rem var(--code);
+  cursor: pointer;
+}
+.expected-rule:hover { border-color: rgba(138, 184, 255, 0.4); color: #dce9ff; }
 
 .footer {
   display: flex;

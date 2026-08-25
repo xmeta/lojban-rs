@@ -398,6 +398,55 @@ function clearOutputs() {
   jsonView.textContent = '';
   sexprView.textContent = '';
 }
+
+function selectErrorLocation(details) {
+  if (!details || !Number.isInteger(details.start)) return;
+  const start = byteOffsetToIndex(source.value, details.start);
+  let end = byteOffsetToIndex(source.value, details.end ?? details.start);
+  if (end <= start && start < source.value.length) {
+    const point = source.value.codePointAt(start);
+    end = Math.min(source.value.length, start + (point > 0xffff ? 2 : 1));
+  }
+  clearRangeHighlight();
+  source.focus();
+  source.setSelectionRange(start, end);
+  selectionInfo.textContent = `error at line ${details.line}, column ${details.column} · byte ${details.start}`;
+}
+
+function renderParseError(data) {
+  errorView.replaceChildren();
+  const message = document.createElement('div');
+  message.className = 'error-message';
+  message.textContent = data.error;
+  errorView.append(message);
+
+  const details = data.details;
+  if (!details) return;
+  const meta = document.createElement('div');
+  meta.className = 'error-meta';
+  meta.textContent = `line ${details.line}, column ${details.column} · bytes ${details.start}–${details.end}`;
+  errorView.append(meta);
+
+  if (details.expected?.length) {
+    const heading = document.createElement('div');
+    heading.className = 'expected-heading';
+    heading.textContent = 'Expected grammar rules';
+    const chips = document.createElement('div');
+    chips.className = 'expected-rules';
+    for (const rule of details.expected) {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'expected-rule';
+      chip.textContent = rule;
+      chip.title = ruleDescription(rule);
+      chip.addEventListener('click', () => showInspector({ rule, text: '', start: details.start, end: details.end }, 0, ['parse error', rule]));
+      chips.append(chip);
+    }
+    errorView.append(heading, chips);
+  }
+  selectErrorLocation(details);
+}
+
 async function parseNow() {
   const requestId = ++activeRequest;
   const started = performance.now();
@@ -424,7 +473,7 @@ async function parseNow() {
       lastData = null;
       setStatus('error', 'Parse error');
       clearOutputs();
-      errorView.textContent = data.error;
+      renderParseError(data);
       errorView.hidden = false;
       return;
     }
