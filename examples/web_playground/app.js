@@ -454,6 +454,7 @@ function renderParseError(data) {
 
 async function parseNow() {
   const requestId = ++activeRequest;
+  const inputText = source.value;
   const started = performance.now();
   clearInspector();
   setStatus('pending', 'Parsing…');
@@ -461,7 +462,7 @@ async function parseNow() {
   errorView.hidden = true;
 
   try {
-    const data = await window.lojbanTransport.parse(source.value);
+    const data = await window.lojbanTransport.parse(inputText);
     if (requestId !== activeRequest) return;
     const roundTrip = performance.now() - started;
     renderStats(data.stats);
@@ -483,7 +484,7 @@ async function parseNow() {
     renderWords(data.leaves);
     jsonView.textContent = data.pretty;
     sexprView.textContent = data.sexpr;
-    saveHistory(source.value);
+    saveHistory(inputText);
   } catch (error) {
     if (requestId !== activeRequest) return;
     lastData = null;
@@ -621,7 +622,7 @@ regressionUseCurrentButton.addEventListener('click', () => {
 });
 
 clearHistoryButton.addEventListener('click', () => {
-  localStorage.removeItem(HISTORY_KEY);
+  try { localStorage.removeItem(HISTORY_KEY); } catch { /* ignore */ }
   renderHistory();
   showToast('履歴を削除しました');
 });
@@ -645,9 +646,9 @@ document.addEventListener('keydown', (event) => {
     source.focus();
     return;
   }
-  if (event.altKey && ['1', '2', '3', '4'].includes(event.key)) {
+  if (event.altKey && ['Digit1', 'Digit2', 'Digit3', 'Digit4'].includes(event.code)) {
     event.preventDefault();
-    switchTab(['tree', 'words', 'json', 'sexpr'][Number(event.key) - 1]);
+    switchTab(['tree', 'words', 'json', 'sexpr'][Number(event.code.slice(-1)) - 1]);
     return;
   }
   if (event.key === 'Escape') clearRangeHighlight();

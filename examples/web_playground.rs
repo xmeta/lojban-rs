@@ -1,8 +1,8 @@
 use lojban::{classify_word, friendly_error, parse, tree, word_stats, Rule};
 use pest::error::{Error, ErrorVariant, InputLocation, LineColLocation};
-use std::io::{Read, Write};
+use std::io::{ErrorKind, Read, Write};
 use std::net::{TcpListener, TcpStream};
-use std::time::Instant;
+use std::time::{Duration, Instant};
 
 const INDEX_HTML: &str = include_str!("web_playground/index.html");
 const APP_JS: &str = include_str!("web_playground/app.js");
@@ -29,6 +29,8 @@ fn main() -> std::io::Result<()> {
     Ok(())
 }
 fn handle_connection(stream: &mut TcpStream) -> std::io::Result<()> {
+    // 部分送信後に停止したクライアントでシングルスレッドのサーバーが固まらないよう、読み取りにタイムアウトを設定する。
+    stream.set_read_timeout(Some(Duration::from_secs(10)))?;
     let Some(request) = read_request(stream)? else {
         return Ok(());
     };
@@ -75,13 +77,26 @@ fn route_path(target: &str) -> &str {
     target.split_once('?').map_or(target, |(path, _)| path)
 }
 
+// 読み取りタイムアウト(WouldBlock / TimedOut)は None として接続切断扱いにし、サーバーは継続する。
+fn read_chunk(stream: &mut TcpStream, chunk: &mut [u8]) -> std::io::Result<Option<usize>> {
+    match stream.read(chunk) {
+        Ok(read) => Ok(Some(read)),
+        Err(error) if matches!(error.kind(), ErrorKind::WouldBlock | ErrorKind::TimedOut) => {
+            Ok(None)
+        }
+        Err(error) => Err(error),
+    }
+}
+
 fn read_request(stream: &mut TcpStream) -> std::io::Result<Option<Request>> {
     let mut data = Vec::new();
     let mut chunk = [0u8; 4096];
     let header_end;
 
     loop {
-        let read = stream.read(&mut chunk)?;
+        let Some(read) = read_chunk(stream, &mut chunk)? else {
+            return Ok(None);
+        };
         if read == 0 {
             return Ok(None);
         }
@@ -114,7 +129,9 @@ fn read_request(stream: &mut TcpStream) -> std::io::Result<Option<Request>> {
         .unwrap_or(0);
 
     while data.len() < header_end + content_length {
-        let read = stream.read(&mut chunk)?;
+        let Some(read) = read_chunk(stream, &mut chunk)? else {
+            break;
+        };
         if read == 0 {
             break;
         }

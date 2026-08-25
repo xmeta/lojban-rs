@@ -4,10 +4,16 @@
 
   async function loadWasm() {
     if (!wasmPromise) {
-      wasmPromise = import('./pkg/lojban_web.js').then(async (module) => {
-        await module.default();
-        return module;
-      });
+      wasmPromise = import('./pkg/lojban_web.js')
+        .then(async (module) => {
+          await module.default();
+          return module;
+        })
+        .catch((error) => {
+          // 失敗したロードをキャッシュせず、次回呼び出しで再試行できるようにする。
+          wasmPromise = null;
+          throw error;
+        });
     }
     return wasmPromise;
   }
