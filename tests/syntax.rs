@@ -319,6 +319,59 @@ fn bai_タグの文頭() {
 }
 
 #[test]
+fn tai_様態タグを含む実文() {
+    // zantufa が受理する実文(BAI:tai + 描述内 tanru、末尾 .i を含む)
+    let s =
+        parse_ok(".i .oi lo kusru ci mei ni'a lo tai senva tcima cu ruble pikci fi lo lisri .i ");
+    assert!(s.contains("BAI_core \"tai\""), "{s}");
+    assert!(s.contains("FAhA_core \"ni'a\""), "{s}");
+    // 文区切り .i は先頭と末尾
+    assert_eq!(s.matches("I_core \"i\"").count(), 2, "{s}");
+}
+
+#[test]
+fn tai_タグの描述内前置() {
+    let s = parse_ok("lo tai senva tcima cu barda");
+    assert!(s.contains("BAI_core \"tai\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"senva\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"tcima\""), "{s}");
+}
+
+#[test]
+fn tai_タグの述語前置と項接続() {
+    // selbri 前置のモダンタグ(受容の確認)
+    let s = parse_ok("mi tai sutra cadzu");
+    assert!(s.contains("BAI_core \"tai\""), "{s}");
+    // タグ + sumti 形(受容の確認)
+    let s = parse_ok("mi cadzu tai lo xanri");
+    assert!(s.contains("BAI_core \"tai\""), "{s}");
+}
+
+#[test]
+fn タグの_nai_結合() {
+    let s = parse_ok("mi tai nai sutra cadzu");
+    assert!(s.contains("BAI_core \"tai\""), "{s}");
+    assert!(s.contains("NAI_core \"nai\""), "{s}");
+}
+
+#[test]
+fn tahi_と_tai_のトークン区別() {
+    // ta'i(方法)は BAI。アポストロフィ有無で tai(様態)と別トークン
+    let s = parse_ok("mi ta'i klama");
+    assert!(s.contains("BAI_core \"ta'i\""), "{s}");
+    assert!(!s.contains("BAI_core \"tai\""), "{s}");
+    // 対比: 時制の ta'e は TAhE(ta'i は TAhE ではない)
+    let s = parse_ok("mi ta'e klama");
+    assert!(s.contains("TAhE_core \"ta'e\""), "{s}");
+}
+
+#[test]
+fn qqq_は引き続き拒否される() {
+    // 語形として不正な語は従来どおりエラー(tai 追加の影響を受けない)
+    assert!(LojbanParser::parse(Rule::text, "qqq").is_err());
+}
+
+#[test]
 fn nahe_述語スケール反転() {
     let s = parse_ok("mi na'e prami do");
     assert!(s.contains("NAhE_core \"na'e\""), "{s}");

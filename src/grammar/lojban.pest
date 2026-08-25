@@ -447,8 +447,9 @@ r_hyphen = _{ r ~ &consonant | n ~ &r }
 // cmavo クラス(標準 CLL 系の主要語。アポストロフィ付き語は ^"...\" 表記)
 // ---------------------------------------------------------------------
 A_core = @{ ( "a" | "e" | "o" | "u") ~ &word_boundary }
+// 注: tai は様態タグ(selma'o TAI)。zantufa の BAI:tai として記述内 tanru 等に現れる
 BAI_core = @{ (^"bau" | ^"bai" | ^"cau" | ^"cu'u" | ^"mu'i" | ^"mu'u" | ^"ni'i"
-               | ^"ri'a" | ^"ta'i" | ^"ki'u" | ^"kai" | ^"pa'u" | ^"se'o" | ^"si'u"
+               | ^"ri'a" | ^"ta'i" | ^"tai" | ^"ki'u" | ^"kai" | ^"pa'u" | ^"se'o" | ^"si'u"
                | ^"va'o" | ^"zu'e" | ^"ja'e" | ^"ra'i" | ^"ri'i" | ^"de'i" | ^"du'o"
                | ^"fau" | ^"ka'a" | ^"gau" | ^"piho" | ^"pi'o"
                | ^"cihu" | ^"ci'u" | ^"pu'a"
