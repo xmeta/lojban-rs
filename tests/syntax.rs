@@ -1048,3 +1048,107 @@ fn fehe_空間間隔プロパティ() {
     let s = parse_ok("fe'e ru'i mi cadzu");
     assert!(s.contains("FEhE_core"), "{s}");
 }
+
+#[test]
+fn pa_roi_複合タグ() {
+    // 数詞を前置した ROI(so'u roi = まれに 等)。tense_mark から
+    // interval_property 経由で到達する(zantufa 準拠)
+    let s = parse_ok("so'u roi klama");
+    assert!(s.contains("PA_seq \"so'u\""), "{s}");
+    assert!(s.contains("ROI_core \"roi\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"klama\""), "{s}");
+    // PU との連鎖(pu re roi)。selbri 頭の時制位置でも受理
+    let s = parse_ok("mi pu re roi klama");
+    assert!(s.contains("PU_core \"pu\""), "{s}");
+    assert!(s.contains("PA_seq \"re\""), "{s}");
+    assert!(s.contains("ROI_core \"roi\""), "{s}");
+    // NAI 否定形(so'u roi nai = まれに…ない)。interval_property の
+    // (sp1 ~ NAI_clause)? の回帰固定
+    let s = parse_ok("so'u roi nai klama");
+    assert!(s.contains("ROI_core \"roi\""), "{s}");
+    assert!(s.contains("NAI_core \"nai\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"klama\""), "{s}");
+    // 代名詞主語の形も受理される(公開 API 経由)
+    assert!(lojban::parse("mi so'u roi klama").is_ok());
+    assert!(lojban::parse("mi re roi klama").is_ok());
+}
+
+#[test]
+fn pa_roi_ku_閉鎖との相互作用() {
+    // 複合タグの ku 明示閉鎖(tense_marks の (sp1 ~ KU_clause)?)
+    let s = parse_ok("so'u roi ku klama");
+    assert!(s.contains("PA_seq \"so'u\""), "{s}");
+    assert!(s.contains("ROI_core \"roi\""), "{s}");
+    assert!(s.contains("KU_core \"ku\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"klama\""), "{s}");
+    // 代名詞主語 + PU 連鎖でも ku まで時制側に取る
+    assert!(lojban::parse("mi so'u roi ku klama").is_ok());
+    let s = parse_ok("mi pu re roi ku klama");
+    assert!(s.contains("PU_core \"pu\""), "{s}");
+    assert!(s.contains("PA_seq \"re\""), "{s}");
+    assert!(s.contains("ROI_core \"roi\""), "{s}");
+    assert!(s.contains("KU_core \"ku\""), "{s}");
+}
+
+#[test]
+fn pa_tahe_zaho_複合タグ() {
+    // interval_property の許容範囲: PA + TAhE / PA + ZAhO(so'i ta'e は
+    // 非標準だが文法上の複合タグとして受理する)
+    let s = parse_ok("so'i ta'e viska");
+    assert!(s.contains("PA_seq \"so'i\""), "{s}");
+    assert!(s.contains("TAhE_core \"ta'e\""), "{s}");
+    let s = parse_ok("za'u co'u citka");
+    assert!(s.contains("PA_seq \"za'u\""), "{s}");
+    assert!(s.contains("ZAhO_core \"co'u\""), "{s}");
+}
+
+#[test]
+fn 末尾の文区切り() {
+    // 裸区切り(.i / ni'o)は後続なしで発話を終えられる(zantufa 準拠。実文で頻出)
+    parse_ok("mi klama .i");
+    parse_ok("mi klama ni'o");
+    // 先頭 sep(lead 経由)は従来どおり
+    parse_ok(".i mi klama");
+}
+
+#[test]
+fn 文区切りの連続() {
+    // 裸区切りの後続 item が任意のため、文中の連続区切りも受理
+    let s = parse_ok("mi klama .i .i do tavla");
+    assert!(s.matches("sentence").count() >= 2, "{s}");
+    assert_eq!(s.matches("I_core \"i\"").count(), 2, "{s}");
+}
+
+#[test]
+fn 接続詞付き文区切りの後は文が必須() {
+    // 接続詞付き sep(.ije / .ibo / .ijanai 等)の後の文は必須(zantufa 準拠)。
+    // 接続詞だけ宙吊りの入力は拒否される
+    assert!(lojban::parse("mi klama .i je").is_err());
+    assert!(lojban::parse("mi klama .i bo").is_err());
+    assert!(lojban::parse("mi klama .ijanai").is_err());
+    assert!(lojban::parse("mi klama .ijebo").is_err());
+    // 対比: 後続に文が続く接続付き sep は従来どおり受理
+    parse_ok("mi klama .ijanai do tavla");
+    parse_ok("mi klama .ije do tavla");
+    parse_ok("mi klama .ibo do cadzu");
+    // 文頭のリード(lead 経由)でも接続付き sep は従来どおり受理
+    parse_ok(".ije do tavla");
+    parse_ok(".i je do tavla");
+    // 文頭かつ後続なしの宙吊りも拒否
+    assert!(lojban::parse(".i je").is_err());
+    assert!(lojban::parse(".ijanai").is_err());
+}
+
+#[test]
+fn 対象文_pa_roi複合タグと末尾区切りを含む実文() {
+    // zantufa が受理する実文(so'u roi 複合タグ + 末尾 .i を含む)
+    let s = parse_ok("ni'o la .alis. co'a tatpi lo nu zutse lo rirxe korbi re'o lo mensi gi'e zukte fi no da .i .abu cu so'u roi sutra zgana lo cukta poi my tcidu .i ku'i cy vasru no pixra ja nuncasnu .i ");
+    assert!(s.contains("NIhO_core \"ni'o\""), "{s}");
+    assert!(s.contains("ZAhO_core \"co'a\""), "{s}");
+    assert!(s.contains("FAhA_core \"re'o\""), "{s}");
+    assert!(s.contains("GIhA_core \"gi'e\""), "{s}");
+    assert!(s.contains("PA_seq \"so'u\""), "{s}");
+    assert!(s.contains("ROI_core \"roi\""), "{s}");
+    // 文区切り .i は3回(.abu / ku'i の前と末尾)
+    assert_eq!(s.matches("I_core \"i\"").count(), 3, "{s}");
+}

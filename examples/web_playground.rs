@@ -171,11 +171,7 @@ fn parse_response(input: &str) -> String {
             let tree_text = tree::to_tree_string(pairs.clone());
             let sexpr = tree::to_sexpr(pairs.clone());
             let leaves = tree::leaf_spans(pairs);
-            let leaves_json = leaves
-                .iter()
-                .map(|leaf| leaf_json(leaf))
-                .collect::<Vec<_>>()
-                .join(",");
+            let leaves_json = leaves.iter().map(leaf_json).collect::<Vec<_>>().join(",");
             format!(
                 "{{\"ok\":true,\"elapsed_ms\":{elapsed_ms:.3},\"stats\":{stats_json},\"ast\":{ast},\"pretty\":{},\"tree\":{},\"sexpr\":{},\"leaves\":[{leaves_json}]}}",
                 json_string(&pretty),

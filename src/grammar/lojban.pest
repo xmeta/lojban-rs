@@ -19,10 +19,21 @@
 // ---------------------------------------------------------------------
 text = { SOI ~ sp0 ~ content? ~ sp0 ~ EOI }
 
-content = { lead? ~ item ~ (sp1 ~ sep ~ sp1 ~ item)* }
+content = { lead? ~ item ~ ( sp1 ~ sep_conn ~ sp1 ~ item
+                          | sp1 ~ sep_bare ~ (sp1 ~ item)? )* }
+// 注: 後続 item を任意にできるのは裸区切り(.i / ni'o)のみ(zantufa 準拠)。
+//     接続詞付き(.ije / .ibo / .ijanai 等)の後の文は必須で、
+//     「.i je」のような宙吊り接続詞は拒否される
 lead    = _{ sep ~ sp1 }
-sep     = { I_clause ~ (sp1 ~ JA_clause)? ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clause)?
-          | IBO_joint | IJ_joint | NIhO_clause }
+sep     = { sep_conn | sep_bare }
+// 注: 順序選択により sep_conn の第一枝が裸 I を先取りするため、
+//     このラッパー内で sep_bare の I_clause 枝は到達不能(NIhO のみ実質有効)
+// 接続詞付きの文区切り。「後続の文は必須」は content ループ内でのみ真で、
+// 文頭の lead 経由では従来どおり後続に文があればよい(省略時は lead 全体が巻き戻る)
+sep_conn = _{ I_clause ~ (sp1 ~ JA_clause)? ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clause)?
+            | IBO_joint | IJ_joint }
+// 裸の区切り(.i / ni'o)。発話の末尾に来られる(後続の文は任意)
+sep_bare = _{ I_clause | NIhO_clause }
 // .ije / .ijanai 等の結合表記(I+JA が一語に綴られる)
 IJ_joint = { ^"i" ~ !space_char ~ JA_bare ~ (NAI_clause)? ~ &word_boundary }
 // I+BO の結合表記(.ibo = 目的接続。.ijebo = I+JE+BO)
@@ -130,6 +141,10 @@ tense_mark  = _{ PU_clause | CAhA_clause | ZAhO_clause | ZI_clause | VA_clause
                | MOhI_clause ~ sp1 ~ FAhA_clause | FAhA_clause
                | NA_clause ~ sp1 ~ KU_clause | NAKU_joint
                | CUhE_clause | KI_clause | ROROI_joint
+               // 数詞を前置した ROI/TAhE/ZAhO の複合タグ(so'u roi / re roi 等)。
+               // 順序選択のため裸の roi/ta'e/zaho は上記の単独形が先に一致し
+               // 既存の解析木は不変
+               | interval_property
                | time_interval
                | space_interval }
 
