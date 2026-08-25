@@ -1,10 +1,22 @@
 # 開発ステータス
 
-## 現在の状態: v0.87 完成(全テストグリーン)
+## 現在の状態: v0.88 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語122 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / doc 11 / fuzz 3(+ignore 2) = 計196テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語129 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体192 + doc 11 = 計203テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.87.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.88.0)
+
+## v0.88 で追加(PA+ROI 複合タグと末尾区切りの受容)
+- tense_mark に interval_property(数詞+ROI/TAhE/ZAhO の複合タグ)を配線。
+  「so'u roi(まれに)」「re roi(2度)」「pu re roi」等が selbri 前タグとして
+  解析可能に(zantufa 準拠)
+- 文区切りを sep_conn(接続詞付き .ije/.ibo/.ijanai 等・後続文必須)と
+  sep_bare(.i / ni'o 単独・後続任意)に分離。実文で頻出する末尾の単独 .i を
+  zantufa どおり受理。宙吊り接続詞(.i je だけ等)は引き続き拒否
+- 動機: Alice 翻訳の実文(so'u roi 複合タグと末尾 .i を含む)が zantufa では
+  通るのに本パーサーではエラーだった
+- 回帰テストを tests/syntax.rs に追加(統語 122→129)。
+  criterion ベンチ A/B で性能差なし
 
 ## v0.87 で追加(Web Playground)
 - examples/web_playground.rs: 追加依存ゼロのローカル HTTP サーバー(std::net のみ)。
@@ -768,6 +780,7 @@ v0.86 時点での到達度と、v1.0 判定の基準を整理する。
 
 ## 次の拡張候補
 - Tatoeba 再検証の定期実施、HTML 出力への DOT 拡張、
+- 融合表記(so'iroi 等の一語形)の構造化(現状は汎用 CMAVO フォールバックで一語受理のため PA+ROI 構造と異なる木。ROROI_joint 方針との整合は今後)
 - crates.io 公開はユーザー判断で見送り中(方針変更時は版数同期済みのため即対応可)
 
 
