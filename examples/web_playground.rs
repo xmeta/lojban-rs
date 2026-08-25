@@ -1,0 +1,224 @@
+use lojban::{classify_word, friendly_error, parse, tree, word_stats};
+use std::io::{Read, Write};
+use std::net::{TcpListener, TcpStream};
+use std::time::Instant;
+
+const INDEX_HTML: &str = include_str!("web_playground/index.html");
+const APP_JS: &str = include_str!("web_playground/app.js");
+const STYLE_CSS: &str = include_str!("web_playground/style.css");
+const MAX_REQUEST_BYTES: usize = 128 * 1024;
+
+fn main() -> std::io::Result<()> {
+    let listener = TcpListener::bind("127.0.0.1:8787")?;
+    println!("Lojban Parser Playground: http://127.0.0.1:8787");
+    println!("Press Ctrl+C to stop.");
+
+    for stream in listener.incoming() {
+        match stream {
+            Ok(mut stream) => {
+                if let Err(error) = handle_connection(&mut stream) {
+                    eprintln!("request error: {error}");
+                }
+            }
+            Err(error) => eprintln!("connection error: {error}"),
+        }
+    }
+    Ok(())
+}
+fn handle_connection(stream: &mut TcpStream) -> std::io::Result<()> {
+    let Some(request) = read_request(stream)? else {
+        return Ok(());
+    };
+
+    match (request.method.as_str(), request.path.as_str()) {
+        ("GET", "/") => send_response(stream, "200 OK", "text/html; charset=utf-8", INDEX_HTML),
+        ("GET", "/app.js") => {
+            send_response(stream, "200 OK", "text/javascript; charset=utf-8", APP_JS)
+        }
+        ("GET", "/style.css") => {
+            send_response(stream, "200 OK", "text/css; charset=utf-8", STYLE_CSS)
+        }
+        ("POST", "/api/parse") => {
+            let input = String::from_utf8_lossy(&request.body);
+            let body = parse_response(&input);
+            send_response(stream, "200 OK", "application/json; charset=utf-8", &body)
+        }
+        _ => send_response(
+            stream,
+            "404 Not Found",
+            "text/plain; charset=utf-8",
+            "Not found",
+        ),
+    }
+}
+struct Request {
+    method: String,
+    path: String,
+    body: Vec<u8>,
+}
+
+fn read_request(stream: &mut TcpStream) -> std::io::Result<Option<Request>> {
+    let mut data = Vec::new();
+    let mut chunk = [0u8; 4096];
+    let header_end;
+
+    loop {
+        let read = stream.read(&mut chunk)?;
+        if read == 0 {
+            return Ok(None);
+        }
+        data.extend_from_slice(&chunk[..read]);
+        if data.len() > MAX_REQUEST_BYTES {
+            return Ok(None);
+        }
+        if let Some(pos) = data.windows(4).position(|w| w == b"\r\n\r\n") {
+            header_end = pos + 4;
+            break;
+        }
+    }
+
+    let header_text = String::from_utf8_lossy(&data[..header_end]);
+    let mut lines = header_text.lines();
+    let Some(request_line) = lines.next() else {
+        return Ok(None);
+    };
+    let mut request_parts = request_line.split_whitespace();
+    let method = request_parts.next().unwrap_or_default().to_string();
+    let path = request_parts.next().unwrap_or("/").to_string();
+    let content_length = lines
+        .find_map(|line| {
+            let (name, value) = line.split_once(':')?;
+            name.eq_ignore_ascii_case("content-length")
+                .then(|| value.trim().parse::<usize>().ok())
+                .flatten()
+        })
+        .unwrap_or(0);
+
+    while data.len() < header_end + content_length {
+        let read = stream.read(&mut chunk)?;
+        if read == 0 {
+            break;
+        }
+        data.extend_from_slice(&chunk[..read]);
+        if data.len() > MAX_REQUEST_BYTES {
+            return Ok(None);
+        }
+    }
+
+    let body_end = (header_end + content_length).min(data.len());
+    Ok(Some(Request {
+        method,
+        path,
+        body: data[header_end..body_end].to_vec(),
+    }))
+}
+fn parse_response(input: &str) -> String {
+    let stats = word_stats(input);
+    let parse_started = Instant::now();
+    let parsed = parse(input);
+    let elapsed_ms = parse_started.elapsed().as_secs_f64() * 1000.0;
+    let stats_json = format!(
+        "{{\"tokens\":{},\"gismu\":{},\"lujvo\":{},\"fuivla\":{},\"cmevla\":{},\"cmavo\":{},\"unknown\":{}}}",
+        stats.tokens,
+        stats.gismu,
+        stats.lujvo,
+        stats.fuivla,
+        stats.cmevla,
+        stats.cmavo,
+        stats.unknown
+    );
+
+    match parsed {
+        Ok(pairs) => {
+            let ast = tree::to_json(pairs.clone());
+            let pretty = tree::to_json_pretty(pairs.clone());
+            let tree_text = tree::to_tree_string(pairs.clone());
+            let sexpr = tree::to_sexpr(pairs.clone());
+            let leaves = tree::leaf_spans(pairs);
+            let leaves_json = leaves
+                .iter()
+                .map(|leaf| leaf_json(leaf))
+                .collect::<Vec<_>>()
+                .join(",");
+            format!(
+                "{{\"ok\":true,\"elapsed_ms\":{elapsed_ms:.3},\"stats\":{stats_json},\"ast\":{ast},\"pretty\":{},\"tree\":{},\"sexpr\":{},\"leaves\":[{leaves_json}]}}",
+                json_string(&pretty),
+                json_string(&tree_text),
+                json_string(&sexpr)
+            )
+        }
+        Err(error) => format!(
+            "{{\"ok\":false,\"elapsed_ms\":{elapsed_ms:.3},\"stats\":{stats_json},\"error\":{}}}",
+            json_string(&friendly_error(&error))
+        ),
+    }
+}
+
+fn leaf_json(leaf: &tree::LeafSpan) -> String {
+    let bare = leaf.text.trim_start_matches(['.', ',', '!', '?']);
+    format!(
+        "{{\"rule\":{},\"text\":{},\"start\":{},\"end\":{},\"class\":{}}}",
+        json_string(&format!("{:?}", leaf.rule)),
+        json_string(&leaf.text),
+        leaf.start,
+        leaf.end,
+        json_string(classify_word(bare))
+    )
+}
+fn json_string(value: &str) -> String {
+    let mut out = String::with_capacity(value.len() + 2);
+    out.push('"');
+    for ch in value.chars() {
+        match ch {
+            '"' => out.push_str("\\\""),
+            '\\' => out.push_str("\\\\"),
+            '\n' => out.push_str("\\n"),
+            '\r' => out.push_str("\\r"),
+            '\t' => out.push_str("\\t"),
+            c if c < ' ' => {
+                use std::fmt::Write as _;
+                let _ = write!(out, "\\u{:04x}", c as u32);
+            }
+            c => out.push(c),
+        }
+    }
+    out.push('"');
+    out
+}
+
+fn send_response(
+    stream: &mut TcpStream,
+    status: &str,
+    content_type: &str,
+    body: &str,
+) -> std::io::Result<()> {
+    let header = format!(
+        "HTTP/1.1 {status}\r\nContent-Type: {content_type}\r\nContent-Length: {}\r\nCache-Control: no-store\r\nX-Content-Type-Options: nosniff\r\nReferrer-Policy: no-referrer\r\nContent-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'\r\nConnection: close\r\n\r\n",
+        body.len()
+    );
+    stream.write_all(header.as_bytes())?;
+    stream.write_all(body.as_bytes())?;
+    stream.flush()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parse_api_success_includes_timing_and_outputs() {
+        let body = parse_response("mi tavla do");
+        assert!(body.contains("\"ok\":true"), "{body}");
+        assert!(body.contains("\"elapsed_ms\":"), "{body}");
+        assert!(body.contains("\"ast\":"), "{body}");
+        assert!(body.contains("\"leaves\":"), "{body}");
+    }
+
+    #[test]
+    fn parse_api_error_includes_friendly_error() {
+        let body = parse_response("qqq");
+        assert!(body.contains("\"ok\":false"), "{body}");
+        assert!(body.contains("解析エラー"), "{body}");
+        assert!(body.contains("\"elapsed_ms\":"), "{body}");
+    }
+}
