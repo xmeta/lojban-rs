@@ -114,6 +114,33 @@
       </aside>
     </section>
   </main>
+
+  <section class="panel regression-lab" aria-labelledby="regression-title">
+    <div class="regression-heading">
+      <div>
+        <span class="section-label">REGRESSION LAB</span>
+        <h2 id="regression-title">Batch parser check</h2>
+        <p>1行を1ケースとしてまとめて解析し、成功率・失敗位置・処理時間を比較します。</p>
+      </div>
+      <div class="button-row">
+        <button id="regression-use-current" class="ghost-button" type="button">Add current</button>
+        <button id="regression-run" class="primary-button" type="button">Run batch</button>
+      </div>
+    </div>
+    <textarea id="regression-source" class="regression-source" spellcheck="false" aria-label="Regression test cases">mi tavla do
+le mlatu cu cadzu
+le cu
+mi pu klama le zarci
+qqq</textarea>
+    <div id="regression-summary" class="regression-summary" aria-live="polite"></div>
+    <div class="regression-table-wrap">
+      <table class="regression-table">
+        <thead><tr><th>Line</th><th>Status</th><th>Input</th><th>Time</th><th>Diagnostic</th></tr></thead>
+        <tbody id="regression-results"></tbody>
+      </table>
+    </div>
+  </section>
+
   <footer class="footer">
     <span>Powered by <strong>lojban-rs</strong> + pest · local only</span>
     <span>Esc: clear range · Alt+1…4: switch result tabs</span>

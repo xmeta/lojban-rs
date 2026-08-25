@@ -8,6 +8,7 @@ const INDEX_HTML: &str = include_str!("web_playground/index.html");
 const APP_JS: &str = include_str!("web_playground/app.js");
 const STYLE_CSS: &str = include_str!("web_playground/style.css");
 const MAX_REQUEST_BYTES: usize = 128 * 1024;
+const MAX_REGRESSION_CASES: usize = 200;
 
 fn main() -> std::io::Result<()> {
     let listener = TcpListener::bind("127.0.0.1:8787")?;
@@ -42,6 +43,11 @@ fn handle_connection(stream: &mut TcpStream) -> std::io::Result<()> {
         ("POST", "/api/parse") => {
             let input = String::from_utf8_lossy(&request.body);
             let body = parse_response(&input);
+            send_response(stream, "200 OK", "application/json; charset=utf-8", &body)
+        }
+        ("POST", "/api/regression") => {
+            let input = String::from_utf8_lossy(&request.body);
+            let body = regression_response(&input);
             send_response(stream, "200 OK", "application/json; charset=utf-8", &body)
         }
         _ => send_response(
@@ -158,6 +164,57 @@ fn parse_response(input: &str) -> String {
     }
 }
 
+fn regression_response(input: &str) -> String {
+    let batch_started = Instant::now();
+    let mut cases = Vec::new();
+    let mut passed = 0usize;
+    let mut failed = 0usize;
+    let mut processed = 0usize;
+    let mut truncated = false;
+
+    for (index, raw_line) in input.lines().enumerate() {
+        let text = raw_line.trim_end_matches('\r');
+        if text.trim().is_empty() {
+            continue;
+        }
+        if processed >= MAX_REGRESSION_CASES {
+            truncated = true;
+            break;
+        }
+        processed += 1;
+        let started = Instant::now();
+        let parsed = parse(text);
+        let elapsed_ms = started.elapsed().as_secs_f64() * 1000.0;
+        match parsed {
+            Ok(_) => {
+                passed += 1;
+                cases.push(format!(
+                    "{{\"line\":{},\"text\":{},\"ok\":true,\"elapsed_ms\":{elapsed_ms:.3}}}",
+                    index + 1,
+                    json_string(text)
+                ));
+            }
+            Err(error) => {
+                failed += 1;
+                let details = error_details_json(&error);
+                cases.push(format!(
+                    "{{\"line\":{},\"text\":{},\"ok\":false,\"elapsed_ms\":{elapsed_ms:.3},\"error\":{},\"details\":{details}}}",
+                    index + 1,
+                    json_string(text),
+                    json_string(&friendly_error(&error))
+                ));
+            }
+        }
+    }
+
+    let total = passed + failed;
+    let elapsed_ms = batch_started.elapsed().as_secs_f64() * 1000.0;
+    format!(
+        "{{\"total\":{total},\"passed\":{passed},\"failed\":{failed},\"elapsed_ms\":{elapsed_ms:.3},\"truncated\":{truncated},\"cases\":[{}]}}",
+        cases.join(",")
+    )
+}
+
 fn error_details_json(error: &Error<Rule>) -> String {
     let (start, end) = match error.location {
         InputLocation::Pos(pos) => (pos, pos),
@@ -249,5 +306,28 @@ mod tests {
         assert!(body.contains("\"elapsed_ms\":"), "{body}");
         assert!(body.contains("\"details\":"), "{body}");
         assert!(body.contains("\"expected\":["), "{body}");
+    }
+
+    #[test]
+    fn regression_api_reports_pass_and_fail_cases() {
+        let body = regression_response("mi tavla do\nqqq\n\nle mlatu cu cadzu\n");
+        assert!(body.contains("\"total\":3"), "{body}");
+        assert!(body.contains("\"passed\":2"), "{body}");
+        assert!(body.contains("\"failed\":1"), "{body}");
+        assert!(body.contains("\"line\":2"), "{body}");
+        assert!(body.contains("\"details\":"), "{body}");
+    }
+
+    #[test]
+    fn regression_api_enforces_case_limit() {
+        let input = std::iter::repeat_n("mi tavla do", MAX_REGRESSION_CASES + 1)
+            .collect::<Vec<_>>()
+            .join("\n");
+        let body = regression_response(&input);
+        assert!(body.contains("\"truncated\":true"), "{body}");
+        assert!(
+            body.contains(&format!("\"total\":{MAX_REGRESSION_CASES}")),
+            "{body}"
+        );
     }
 }

@@ -451,3 +451,95 @@ button:focus-visible, select:focus-visible, .range-target:focus-visible {
   .tab { white-space: nowrap; }
   .tabs kbd { display: none; }
 }
+
+/* Regression Lab */
+.regression-lab {
+  width: min(1180px, calc(100% - 32px));
+  margin: 16px auto 0;
+  padding: 20px;
+}
+
+.regression-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.regression-heading p {
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.regression-source {
+  min-height: 150px;
+  margin-top: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  background: rgba(5, 10, 17, 0.4);
+}
+.regression-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.regression-metric {
+  min-width: 88px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.025);
+}
+.regression-metric strong { display: block; color: #e7eef9; font: 0.84rem var(--code); }
+.regression-metric span { color: var(--muted); font-size: 0.64rem; }
+.regression-metric.pass strong { color: var(--accent); }
+.regression-metric.fail strong { color: var(--danger); }
+.regression-warning { width: 100%; color: #ffd58a; font-size: 0.72rem; }
+
+.regression-table-wrap {
+  margin-top: 14px;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.regression-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+}
+.regression-table th,
+.regression-table td {
+  padding: 10px 11px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+.regression-table th { color: #8090a8; background: rgba(255, 255, 255, 0.025); font-size: 0.64rem; }
+.regression-table tbody tr:last-child td { border-bottom: 0; }
+.case-fail { background: rgba(255, 84, 109, 0.025); }
+
+.case-badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 3px 7px;
+  font: 0.62rem var(--code);
+  font-weight: 800;
+}
+.case-badge.pass { color: var(--accent); background: rgba(113, 230, 188, 0.08); }
+.case-badge.fail { color: var(--danger); background: rgba(255, 139, 155, 0.09); }
+.case-input { border: 0; padding: 0; color: #d9e6f7; background: transparent; font: 0.72rem/1.45 var(--code); text-align: left; cursor: pointer; }
+.case-input:hover { color: var(--accent-2); }
+.case-error { max-width: 430px; color: #e8a5af; white-space: pre-wrap; font: 0.68rem/1.45 var(--code); }
+.case-expected { margin-top: 5px; color: #8292aa; font: 0.62rem/1.4 var(--code); }
+
+@media (max-width: 820px) {
+  .regression-heading { align-items: stretch; flex-direction: column; }
+  .regression-heading .button-row button { flex: 1; }
+  .regression-source { min-height: 180px; }
+}

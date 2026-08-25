@@ -30,6 +30,11 @@ const inspectorDepth = document.querySelector('#inspector-depth');
 const inspectorChildren = document.querySelector('#inspector-children');
 const inspectorPath = document.querySelector('#inspector-path');
 const closeInspectorButton = document.querySelector('#close-inspector');
+const regressionSource = document.querySelector('#regression-source');
+const regressionRunButton = document.querySelector('#regression-run');
+const regressionUseCurrentButton = document.querySelector('#regression-use-current');
+const regressionSummary = document.querySelector('#regression-summary');
+const regressionResults = document.querySelector('#regression-results');
 
 const HISTORY_KEY = 'lojban-playground-history-v1';
 const DRAFT_KEY = 'lojban-playground-draft-v1';
@@ -509,6 +514,98 @@ function scheduleParse() {
   debounceTimer = setTimeout(parseNow, 240);
 }
 
+function regressionMetric(label, value, kind = '') {
+  const item = document.createElement('div');
+  item.className = `regression-metric ${kind}`.trim();
+  const strong = document.createElement('strong');
+  strong.textContent = value;
+  const span = document.createElement('span');
+  span.textContent = label;
+  item.append(strong, span);
+  return item;
+}
+
+function renderRegression(data, roundTrip) {
+  regressionSummary.replaceChildren();
+  const rate = data.total ? (data.passed / data.total) * 100 : 0;
+  regressionSummary.append(
+    regressionMetric('cases', String(data.total)),
+    regressionMetric('passed', String(data.passed), 'pass'),
+    regressionMetric('failed', String(data.failed), data.failed ? 'fail' : 'pass'),
+    regressionMetric('pass rate', `${rate.toFixed(1)}%`, data.failed ? '' : 'pass'),
+    regressionMetric('parser total', `${data.elapsed_ms.toFixed(2)} ms`),
+    regressionMetric('round trip', `${roundTrip.toFixed(1)} ms`),
+  );
+  if (data.truncated) {
+    const warning = document.createElement('div');
+    warning.className = 'regression-warning';
+    warning.textContent = '上限200ケースまでを実行しました。残りは省略されています。';
+    regressionSummary.append(warning);
+  }
+
+  regressionResults.replaceChildren();
+  for (const testCase of data.cases) {
+    const row = document.createElement('tr');
+    row.className = testCase.ok ? 'case-pass' : 'case-fail';
+    const line = document.createElement('td');
+    line.textContent = String(testCase.line);
+    const state = document.createElement('td');
+    const badge = document.createElement('span');
+    badge.className = `case-badge ${testCase.ok ? 'pass' : 'fail'}`;
+    badge.textContent = testCase.ok ? 'PASS' : 'FAIL';
+    state.append(badge);
+    const input = document.createElement('td');
+    const open = document.createElement('button');
+    open.type = 'button';
+    open.className = 'case-input';
+    open.textContent = testCase.text;
+    open.title = 'Playgroundでこのケースを開く';
+    open.addEventListener('click', () => setSource(testCase.text, true));
+    input.append(open);
+    const time = document.createElement('td');
+    time.textContent = `${testCase.elapsed_ms.toFixed(2)} ms`;
+    const diagnostic = document.createElement('td');
+    if (testCase.ok) {
+      diagnostic.textContent = '—';
+    } else {
+      const message = document.createElement('div');
+      message.className = 'case-error';
+      message.textContent = testCase.error;
+      diagnostic.append(message);
+      if (testCase.details?.expected?.length) {
+        const expected = document.createElement('div');
+        expected.className = 'case-expected';
+        expected.textContent = `expected: ${testCase.details.expected.slice(0, 5).join(', ')}`;
+        diagnostic.append(expected);
+      }
+    }
+    row.append(line, state, input, time, diagnostic);
+    regressionResults.append(row);
+  }
+}
+
+async function runRegression() {
+  regressionRunButton.disabled = true;
+  regressionRunButton.textContent = 'Running…';
+  regressionSummary.textContent = 'Batch parsing…';
+  regressionResults.replaceChildren();
+  const started = performance.now();
+  try {
+    const response = await fetch('/api/regression', {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+      body: regressionSource.value,
+    });
+    const data = await response.json();
+    renderRegression(data, performance.now() - started);
+  } catch (error) {
+    regressionSummary.textContent = `Regression request failed: ${error}`;
+  } finally {
+    regressionRunButton.disabled = false;
+    regressionRunButton.textContent = 'Run batch';
+  }
+}
+
 for (const tab of document.querySelectorAll('.tab')) {
   tab.addEventListener('click', () => switchTab(tab.dataset.tab));
 }
@@ -523,6 +620,15 @@ shareButton.addEventListener('click', shareCurrent);
 copyButton.addEventListener('click', copyCurrent);
 downloadButton.addEventListener('click', downloadCurrent);
 closeInspectorButton.addEventListener('click', clearInspector);
+regressionRunButton.addEventListener('click', runRegression);
+regressionUseCurrentButton.addEventListener('click', () => {
+  const current = source.value.trim();
+  if (!current) return;
+  const existing = regressionSource.value.trimEnd();
+  regressionSource.value = existing ? `${existing}\n${current}` : current;
+  regressionSource.focus();
+  regressionSource.setSelectionRange(regressionSource.value.length, regressionSource.value.length);
+});
 
 clearHistoryButton.addEventListener('click', () => {
   localStorage.removeItem(HISTORY_KEY);
