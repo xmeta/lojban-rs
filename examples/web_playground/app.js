@@ -461,18 +461,13 @@ async function parseNow() {
   errorView.hidden = true;
 
   try {
-    const response = await fetch('/api/parse', {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
-      body: source.value,
-    });
-    const data = await response.json();
+    const data = await window.lojbanTransport.parse(source.value);
     if (requestId !== activeRequest) return;
     const roundTrip = performance.now() - started;
     renderStats(data.stats);
     latency.textContent = Number.isFinite(data.elapsed_ms)
-      ? `${data.elapsed_ms.toFixed(2)} ms parser · ${roundTrip.toFixed(1)} ms round trip`
-      : `${roundTrip.toFixed(1)} ms round trip`;
+      ? `${data.elapsed_ms.toFixed(2)} ms parser · ${window.lojbanTransport.timingLabel(roundTrip)}`
+      : window.lojbanTransport.timingLabel(roundTrip);
 
     if (!data.ok) {
       lastData = null;
@@ -591,12 +586,7 @@ async function runRegression() {
   regressionResults.replaceChildren();
   const started = performance.now();
   try {
-    const response = await fetch('/api/regression', {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
-      body: regressionSource.value,
-    });
-    const data = await response.json();
+    const data = await window.lojbanTransport.regression(regressionSource.value);
     renderRegression(data, performance.now() - started);
   } catch (error) {
     regressionSummary.textContent = `Regression request failed: ${error}`;

@@ -6,6 +6,7 @@ use std::time::Instant;
 
 const INDEX_HTML: &str = include_str!("web_playground/index.html");
 const APP_JS: &str = include_str!("web_playground/app.js");
+const RUNTIME_JS: &str = include_str!("web_playground/runtime.js");
 const STYLE_CSS: &str = include_str!("web_playground/style.css");
 const MAX_REQUEST_BYTES: usize = 128 * 1024;
 const MAX_REGRESSION_CASES: usize = 200;
@@ -37,6 +38,12 @@ fn handle_connection(stream: &mut TcpStream) -> std::io::Result<()> {
         ("GET", "/app.js") => {
             send_response(stream, "200 OK", "text/javascript; charset=utf-8", APP_JS)
         }
+        ("GET", "/runtime.js") => send_response(
+            stream,
+            "200 OK",
+            "text/javascript; charset=utf-8",
+            RUNTIME_JS,
+        ),
         ("GET", "/style.css") => {
             send_response(stream, "200 OK", "text/css; charset=utf-8", STYLE_CSS)
         }
@@ -62,6 +69,10 @@ struct Request {
     method: String,
     path: String,
     body: Vec<u8>,
+}
+
+fn route_path(target: &str) -> &str {
+    target.split_once('?').map_or(target, |(path, _)| path)
 }
 
 fn read_request(stream: &mut TcpStream) -> std::io::Result<Option<Request>> {
@@ -91,7 +102,8 @@ fn read_request(stream: &mut TcpStream) -> std::io::Result<Option<Request>> {
     };
     let mut request_parts = request_line.split_whitespace();
     let method = request_parts.next().unwrap_or_default().to_string();
-    let path = request_parts.next().unwrap_or("/").to_string();
+    let target = request_parts.next().unwrap_or("/");
+    let path = route_path(target).to_string();
     let content_length = lines
         .find_map(|line| {
             let (name, value) = line.split_once(':')?;
@@ -316,6 +328,12 @@ mod tests {
         assert!(body.contains("\"failed\":1"), "{body}");
         assert!(body.contains("\"line\":2"), "{body}");
         assert!(body.contains("\"details\":"), "{body}");
+    }
+
+    #[test]
+    fn route_path_ignores_query_string() {
+        assert_eq!(route_path("/?q=mi%20tavla%20do"), "/");
+        assert_eq!(route_path("/app.js?v=1"), "/app.js");
     }
 
     #[test]
