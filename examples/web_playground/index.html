@@ -95,6 +95,23 @@
         <pre id="sexpr-view" class="code-view"></pre>
       </div>
       <div id="error-view" class="error-view" hidden></div>
+      <aside id="inspector" class="inspector-panel" aria-live="polite" hidden>
+        <div class="inspector-heading">
+          <div>
+            <span class="section-label">INSPECTOR</span>
+            <h2 id="inspector-rule">Parse node</h2>
+          </div>
+          <button id="close-inspector" class="text-button" type="button">Close</button>
+        </div>
+        <p id="inspector-description" class="inspector-description"></p>
+        <dl class="inspector-grid">
+          <div><dt>Text</dt><dd id="inspector-text"></dd></div>
+          <div><dt>Bytes</dt><dd id="inspector-range"></dd></div>
+          <div><dt>Depth</dt><dd id="inspector-depth"></dd></div>
+          <div><dt>Children</dt><dd id="inspector-children"></dd></div>
+        </dl>
+        <div class="inspector-path"><span>Path</span><code id="inspector-path"></code></div>
+      </aside>
     </section>
   </main>
   <footer class="footer">

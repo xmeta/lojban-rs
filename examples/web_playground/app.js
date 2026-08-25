@@ -21,6 +21,15 @@ const clearHistoryButton = document.querySelector('#clear-history');
 const expandTreeButton = document.querySelector('#expand-tree');
 const collapseTreeButton = document.querySelector('#collapse-tree');
 const toast = document.querySelector('#toast');
+const inspector = document.querySelector('#inspector');
+const inspectorRule = document.querySelector('#inspector-rule');
+const inspectorDescription = document.querySelector('#inspector-description');
+const inspectorText = document.querySelector('#inspector-text');
+const inspectorRange = document.querySelector('#inspector-range');
+const inspectorDepth = document.querySelector('#inspector-depth');
+const inspectorChildren = document.querySelector('#inspector-children');
+const inspectorPath = document.querySelector('#inspector-path');
+const closeInspectorButton = document.querySelector('#close-inspector');
 
 const HISTORY_KEY = 'lojban-playground-history-v1';
 const DRAFT_KEY = 'lojban-playground-draft-v1';
@@ -31,6 +40,45 @@ let activeRequest = 0;
 let activeTab = 'tree';
 let lastData = null;
 let activeRangeElement = null;
+
+const RULE_HELP = {
+  text: '入力全体を表す解析木のルートです。',
+  content: '先頭の .i などを除いた、実際の発話内容です。',
+  item: '文・フラグメント・自由修飾語など、発話を構成する単位です。',
+  sentence: '通常のLojban文です。項と述語から構成されます。',
+  prenex_sentence: 'zo\'u を使う前置スコープ文です。',
+  gek_sentence: 'ganai … gi … などの先接続文です。',
+  fragment: '項だけなど、完全な文ではない発話断片です。',
+  free: '感情標識・呼格・注釈などの自由修飾要素です。',
+  terms_full: '主語等の項リスト、任意の cu、述語をまとめた構造です。',
+  terms: '複数の項の並びです。自由修飾語や接続も含められます。',
+  term: '文中の1つの項またはタグ付き要素です。',
+  tagged: 'FA・BAI・FIhO・時制などのタグが付いた項です。',
+  na_ku: '項位置で用いる否定 naku / na ku です。',
+  termset: 'nu\'i … nu\'u による項setです。',
+  bridi_tail: '述語と、それに続く項のまとまりです。gi\'e 等の連鎖も含みます。',
+  tail_terms: '述語に続く項の列と、任意の vau です。',
+  sumti: '人物・物・命題などを指す「項」です。',
+  KOhA_clause: 'mi・do・ri・ke\'a・di\'u などの代名詞です。',
+  desc: 'le / lo / la などで作る記述句です。',
+  quant_desc: '数量詞を伴う記述句です。',
+  quant_selbri: 'pa prenu のような数量詞+述語の項です。',
+  bare_number: '単独で項として使われる数詞です。',
+  abstraction: 'nu / ka / du\'u などで文を抽象化した項です。',
+  lahe_sumti: 'la\'e / lu\'e などで参照先を変換した項です。',
+  lu_quote: 'lu … li\'u による文引用です。',
+  zo_quote: 'zo の直後の1語を引用します。',
+  zoi_quote: 'zoi DELIM … DELIM による任意テキスト引用です。',
+  lohu_quote: 'lo\'u … le\'u による誤文引用です。',
+  li_mex: 'li … lo\'o による数理表現です。',
+  tanru: '複数の述語を組み合わせた複合述語です。',
+  tanru_unit: 'tanruを構成する1つの述語単位です。',
+  tense_marks: '時制・相・方位・モダルなどのマーク列です。',
+  s_marks: 'na / ja\'a / se / na\'e などの述語マークです。',
+  co_tail: 'co によるtanruの逆順構造です。',
+  guhek_selbri: 'gu\'e … gi による先接続述語です。',
+};
+
 function setStatus(kind, text) {
   status.className = `status ${kind}`;
   statusText.textContent = text;
@@ -66,6 +114,32 @@ function byteOffsetToIndex(text, target) {
   }
   return text.length;
 }
+function ruleDescription(rule) {
+  if (RULE_HELP[rule]) return RULE_HELP[rule];
+  if (rule.endsWith('_clause')) return `${rule.replace(/_clause$/, '')} selma'o の語境界付きcmavo規則です。`;
+  if (rule.endsWith('_core')) return `${rule.replace(/_core$/, '')} selma'o の語彙コア規則です。`;
+  if (/gismu/i.test(rule)) return '5文字の基本内容語(gismu)を認識する形態論規則です。';
+  if (/lujvo/i.test(rule)) return 'rafsiを組み合わせた複合内容語(lujvo)を認識する規則です。';
+  if (/fuhivla/i.test(rule)) return "借用語・自由形式内容語(fu'ivla)を認識する規則です。";
+  if (/cmevla/i.test(rule)) return '固有名詞(cmevla)を認識する形態論規則です。';
+  return 'pest文法内の内部規則です。詳細は docs/parsing-guide.md と src/grammar/lojban.pest を参照してください。';
+}
+
+function clearInspector() {
+  inspector.hidden = true;
+}
+
+function showInspector(node, depth, path) {
+  inspector.hidden = false;
+  inspectorRule.textContent = node.rule;
+  inspectorDescription.textContent = ruleDescription(node.rule);
+  inspectorText.textContent = node.text || '(empty)';
+  inspectorRange.textContent = Number.isInteger(node.start) ? `${node.start}–${node.end}` : '—';
+  inspectorDepth.textContent = String(depth);
+  inspectorChildren.textContent = String(node.children?.length || 0);
+  inspectorPath.textContent = path.join(' › ');
+}
+
 function clearRangeHighlight() {
   activeRangeElement?.classList.remove('range-active');
   activeRangeElement = null;
@@ -83,7 +157,7 @@ function selectSourceRange(startByte, endByte, element) {
   selectionInfo.textContent = `selected bytes ${startByte}–${endByte}`;
 }
 
-function bindRange(element, node) {
+function bindRange(element, node, onActivate) {
   if (!Number.isInteger(node.start) || !Number.isInteger(node.end)) return;
   element.classList.add('range-target');
   element.tabIndex = 0;
@@ -93,19 +167,24 @@ function bindRange(element, node) {
     event.stopPropagation();
     event.preventDefault();
     selectSourceRange(node.start, node.end, element);
+    onActivate?.();
   };
   element.addEventListener('click', activate);
   element.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' || event.key === ' ') activate(event);
   });
 }
-function renderTree(node, depth = 0) {
+function renderTree(node, depth = 0, parentPath = []) {
+  const path = [...parentPath, node.rule];
+  const inspect = () => showInspector(node, depth, path);
   if (!node.children?.length) {
     const leaf = document.createElement('div');
     leaf.className = 'tree-leaf';
+    const rule = ruleLabel(node.rule);
     const text = textLabel(node.text);
-    bindRange(text, node);
-    leaf.append(ruleLabel(node.rule), text);
+    bindRange(rule, node, inspect);
+    bindRange(text, node, inspect);
+    leaf.append(rule, text);
     return leaf;
   }
 
@@ -113,11 +192,13 @@ function renderTree(node, depth = 0) {
   details.className = 'tree-node';
   details.open = depth < 2;
   const summary = document.createElement('summary');
+  const rule = ruleLabel(node.rule);
   const text = textLabel(compactText(node.text));
-  bindRange(text, node);
-  summary.append(ruleLabel(node.rule), text);
+  bindRange(rule, node, inspect);
+  bindRange(text, node, inspect);
+  summary.append(rule, text);
   details.append(summary);
-  for (const child of node.children) details.append(renderTree(child, depth + 1));
+  for (const child of node.children) details.append(renderTree(child, depth + 1, path));
   return details;
 }
 
@@ -145,7 +226,7 @@ function renderWords(leaves) {
     const card = document.createElement('button');
     card.className = 'word-card';
     card.type = 'button';
-    bindRange(card, leaf);
+    bindRange(card, leaf, () => showInspector(leaf, 0, ['word', leaf.rule]));
 
     const word = document.createElement('div');
     word.className = 'word-text';
@@ -320,6 +401,7 @@ function clearOutputs() {
 async function parseNow() {
   const requestId = ++activeRequest;
   const started = performance.now();
+  clearInspector();
   setStatus('pending', 'Parsing…');
   latency.textContent = '';
   errorView.hidden = true;
@@ -391,6 +473,7 @@ clearButton.addEventListener('click', () => setSource('', true));
 shareButton.addEventListener('click', shareCurrent);
 copyButton.addEventListener('click', copyCurrent);
 downloadButton.addEventListener('click', downloadCurrent);
+closeInspectorButton.addEventListener('click', clearInspector);
 
 clearHistoryButton.addEventListener('click', () => {
   localStorage.removeItem(HISTORY_KEY);

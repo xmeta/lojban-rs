@@ -377,6 +377,41 @@ button:focus-visible, select:focus-visible, .range-target:focus-visible {
 }
 .word-card:hover { border-color: rgba(138, 184, 255, 0.34); background: rgba(138, 184, 255, 0.055); }
 .word-card.range-active { border-color: rgba(113, 230, 188, 0.46); }
+
+.inspector-panel {
+  margin: 0 18px 18px;
+  padding: 16px;
+  border: 1px solid rgba(138, 184, 255, 0.22);
+  border-radius: 14px;
+  background: rgba(10, 17, 27, 0.72);
+}
+
+.inspector-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.inspector-description {
+  margin: 10px 0 14px;
+  color: #aebed3;
+  line-height: 1.65;
+  font-size: 0.82rem;
+}
+
+.inspector-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) repeat(3, minmax(70px, 0.65fr));
+  gap: 8px;
+  margin: 0;
+}
+.inspector-grid > div { padding: 9px 10px; border: 1px solid var(--border); border-radius: 10px; }
+.inspector-grid dt, .inspector-path span { color: #63748c; font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.inspector-grid dd { margin: 5px 0 0; overflow-wrap: anywhere; color: #d8e4f3; font: 0.72rem/1.45 var(--code); }
+.inspector-path { margin-top: 10px; }
+.inspector-path code { display: block; margin-top: 5px; overflow-wrap: anywhere; color: var(--accent-2); font: 0.7rem/1.5 var(--code); }
+
 .toast {
   position: fixed;
   right: 22px;
