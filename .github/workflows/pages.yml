@@ -37,7 +37,17 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
       - name: Install wasm-bindgen CLI
-        run: cargo install wasm-bindgen-cli --version "${{ steps.bindgen.outputs.version }}" --locked
+        shell: bash
+        run: |
+          version="${{ steps.bindgen.outputs.version }}"
+          archive="wasm-bindgen-${version}-x86_64-unknown-linux-musl.tar.gz"
+          base="https://github.com/wasm-bindgen/wasm-bindgen/releases/download/${version}"
+          curl -fsSLO "${base}/${archive}"
+          curl -fsSLO "${base}/${archive}.sha256sum"
+          expected=$(cut -d' ' -f1 "${archive}.sha256sum")
+          printf '%s  %s\n' "$expected" "$archive" | sha256sum -c -
+          tar -xzf "${archive}"
+          sudo install -m 0755 "wasm-bindgen-${version}-x86_64-unknown-linux-musl/wasm-bindgen" /usr/local/bin/wasm-bindgen
 
       - name: Build Pages site
         run: ./site/build-pages.sh
