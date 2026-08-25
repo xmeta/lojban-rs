@@ -1,10 +1,23 @@
 # 開発ステータス
 
-## 現在の状態: v0.88 完成(全テストグリーン)
+## 現在の状態: v0.89 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語129 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体192 + doc 11 = 計203テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語135 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体198 + doc 11 = 計209テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.88.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.89.0)
+
+## v0.89 で追加(BAI に様態タグ tai)
+- BAI_core に様態タグ tai(selma'o TAI)を追加(zantufa の BAI:tai 相当)。
+  「lo tai senva tcima」等の描述内タグ前置や「mi tai sutra cadzu」等が
+  解析可能に
+- 動機: Alice 翻訳の実文「.i .oi lo kusru ci mei ni'a lo tai senva tcima cu
+  ruble pikci fi lo lisri .i 」(終端スペースあり)が zantufa では通るのに
+  本パーサーではエラーだった。切り分けの結果、.i .oi・kusru ci mei(数詞+MOI)・
+  ni'a(FAhA タグ項)・末尾 .i は既存対応済みで、欠落は tai 語彙のみだった
+- docs/coverage.md の BAI 行を再生成で同期(tai 追加。過去取りこぼしの
+  piho pi'o も解消)
+- 回帰テストを tests/syntax.rs に追加(統語 129→135)。
+  criterion ベンチ A/B で性能差なし
 
 ## v0.88 で追加(PA+ROI 複合タグと末尾区切りの受容)
 - tense_mark に interval_property(数詞+ROI/TAhE/ZAhO の複合タグ)を配線。
