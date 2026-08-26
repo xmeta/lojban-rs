@@ -22,7 +22,7 @@ text        入力全体(ルート)
 |---|---|
 | `terms_full` | 主語等の項リスト + (`cu`) + 述語 |
 | `terms` / `term` | 項とその並び。項間には自由修飾語・`ce'e` 区切り・`pe'e` グループ接続が現れ得る |
-| `tagged` | タグ付き項(FA / BAI(+SE/NAI) / FIhO モダル / 時制マーク連鎖+sumti) |
+| `tagged` | タグ付き項(FA / BAI(+SE/NAI) / FIhO モダル / 時制マーク連鎖+sumti)。時制タグ単独+`ku` の「タグだけ項」(`ba zi ku …`)やタグ〜sumti 間の自由修飾語(`ta'i ba'e ma …`)も可 |
 | `na_ku` | 項位置の否定(`naku` / `na ku`) |
 | `termset` | 項set(`nu'i X Y [nu'u]`) |
 | `bridi_tail` | 述語とその項(tail)。`gihek`(gi'e 等)による連鎖を含む。接続詞直後に自由修飾語(UI 等)を置ける(`gi'e .u'a cadzu`) |
@@ -37,7 +37,7 @@ text        入力全体(ルート)
 | `KOhA_clause` | 代名詞(mi do ri ke'a di'u …) |
 | `desc` | 冠詞句(le / lo / la / lo'e … + 述語) |
 | `quant_desc` / `quant_selbri` | 数量詞+描述 / 数量詞+述語(pa prenu) |
-| `bare_number` | 裸の数詞(直後が MOI の場合は項にならない) |
+| `bare_number` | 裸の数詞(直後が MOI / ROI・TAhE・ZAhO の場合は項にならない) |
 | `abstraction` | 抽象(nu / ka / du'u … + 文 + kei?)。`sedu'u` 結合形含む |
 | `lahe_sumti` | LAhE 参照(la'e X / lu'e X、終端詞 lu'u で明示閉鎖可)と結合形 `la'edi'u` |
 | `lu_quote` / `zo_quote` / `zoi_quote` / `lohu_quote` | 各種引用 |

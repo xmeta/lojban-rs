@@ -1,10 +1,31 @@
 # 開発ステータス
 
-## 現在の状態: v0.92 完成(全テストグリーン)
+## 現在の状態: v0.93 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語145 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体208 + doc 11 = 計219テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語151 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体214 + doc 11 = 計225テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.92.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.93.0)
+
+## v0.93 で追加(zantufa 差分調査による kau/re'u 追加と時制 ku 項の受容)
+- zantufa リファレンスとの差分ハーネス(743文比較)で特定された GAP の修正:
+  - 文法語彙: UI_core に kau(間接疑問マーカー。h 表記 kahu は既存で基本形が
+    欠落していた drift バグ)/ ROI_core に re'u/rehu(selma'o ROI は
+    roi+re'u の2語だったが roi のみだった)
+  - 構造: tagged に「タグだけ項」枝(tense_tags ~ sp1 ~ KU_clause)と
+    タグ〜sumti 間の自由修飾語許容。「ba zi ku le gerku klama」等の
+    [時制+明示ku]+描述+cu無し selbri 形を zantufa 互換の fragment 構造で受理
+  - 数詞絡み: bare_number に ROI/TAhE/ZAhO 直前ガード、interval_property を
+    分岐形式に書き直し(空白区切り数詞連鎖「za'u ro re'u」等を許容)
+- 動機: Alice 翻訳の実文「ni'o ba zi ku la .alis. mo'i ne'i jersi ry gi'e no roi
+  pensi lo du'u ta'i ba'e ma kau .abu ba za'u re'u bartu」がエラーになった件。
+  差分調査の過程で gerna_cipra の zantufa-1.9999 ビルド自体に
+  「za'u + C'V 形 cmavo」で [yY] を要求する退行があることも特定
+  (本プロジェクトは camxes/z0 と同じく受理するのが正。参考情報)
+- 差分ハーネス(743文)による体系的検証: GAP 17件→1件。残る「mi je do klama」は
+  camxes 準拠の意図的非対応。真の新規過剰受容ゼロ
+- docs/coverage.md は UI 行に kau、ROI 行に re'u/rehu 同期済み
+- 回帰テストを tests/syntax.rs に追加(統語 145→151)。
+  criterion ベンチ A/B で性能差なし
 
 ## v0.92 で追加(gihek 直後の自由修飾語)
 - bridi_tail の連結部で gihek_link(gi'e 等)の直後に自由修飾語(UI 感情標識等)を
@@ -843,6 +864,7 @@ v0.86 時点での到達度と、v1.0 判定の基準を整理する。
 ## 次の拡張候補
 - Tatoeba 再検証の定期実施、HTML 出力への DOT 拡張、
 - 融合表記(so'iroi 等の一語形)の構造化(現状は汎用 CMAVO フォールバックで一語受理のため PA+ROI 構造と異なる木。ROROI_joint 方針との整合は今後)
+- 差分ハーネスで検出された真の過剰受容候補9件(裸抽象主語・数詞区間の項等5パターン)の整理と、"mi je do klama" 形(文接続詞起点)の扱い(camxes は拒否、zantufa のみ緩い)
 - crates.io 公開はユーザー判断で見送り中(方針変更時は版数同期済みのため即対応可)
 
 
