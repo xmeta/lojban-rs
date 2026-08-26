@@ -99,8 +99,9 @@ sumti_core = _{ bu_lerfu | KOhA_clause | lahe_sumti | desc | BY_clause | quant_d
                | lu_quote | zo_quote | gek_sumti | li_mex | zoi_quote }
 bare_number = _{ number ~ !(sp1 ~ MOI_clause) }
 quant_selbri = { number ~ sp1 ~ selbri ~ (sp1 ~ KU_clause)? }
-// LAhE 項修飾(la'e = 参照先 / lu'e = 参照元)。ge'u による明示閉鎖も許容
-lahe_sumti = { LAHEDI_joint | LAhE_clause ~ sp1 ~ sumti ~ (sp1 ~ GEhU_clause)? }
+// LAhE 項修飾(la'e = 参照先 / lu'e = 参照元)。lu'u による明示閉鎖も許容
+// (LAhE の終端は LUhU。ge'u は GOI 関係節の終端)
+lahe_sumti = { LAHEDI_joint | LAhE_clause ~ sp1 ~ sumti ~ (sp1 ~ LUhU_clause)? }
 
 desc        = { LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
 quant_desc  = { number ~ sp1 ~ LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
@@ -167,7 +168,11 @@ time_interval = _{ (tense_offset ~ sp1)? ~ ZEhA_clause ~ (sp1 ~ tense_offset)? }
 tense_offset  = _{ PU_clause | ZI_clause }
 
 tanru      = { tanru_unit ~ (sp1 ~ tanru_link ~ sp1 ~ tanru_unit | sp1 ~ tanru_unit)* }
-tanru_unit = {
+// ba'e / za'e 強調(BAhE)は各 tanru 単位に前置できる(zantufa の G 準拠)。
+// ba'e は「直後の語」を強調するため、単位ごとの前置が意味論に整合。
+// 注: ラップは tanru 単位全体(zei 複合や linked_args を含む)に掛かるため、
+// camxes の語単位の強調よりスコープが広い
+tanru_unit = { (BAhE_clause ~ sp1)? ~ (
      zei_compound ~ (sp1 ~ linked_args)?
    | !("ija" | "ije" | "ijo" | "iju")
    ~ !(GANAI_joint | GINAI_joint | SEBAI_joint | SEDUHU_joint | IBO_joint
@@ -193,7 +198,7 @@ tanru_unit = {
    // moi は selbri なので be 連結も可(lo re moi be le ci gerku)
    | number ~ sp1 ~ MOI_clause ~ (sp1 ~ linked_args)?
    | BY_clause ~ sp1 ~ MOI_clause ~ (sp1 ~ linked_args)?
-}
+) }
 
 // zei による複合語(zdani zei sinxa = 「家の印」の lujvo 相当)。
 // camxes の zei_tail(any_word)+ 準拠だが語は完全な word に制限
@@ -250,8 +255,8 @@ gek_sentence = { frees_s? ~ sp1? ~ ga_joint ~ sp1 ~ inner_sentence
                 ~ sp1 ~ gi_joint ~ sp1 ~ inner_sentence }
 gek_sumti    = { ga_joint ~ sp1 ~ sumti ~ sp1 ~ gi_joint ~ sp1 ~ sumti }
 
-// 引用(LU...LUhU / ZO+単語は sumti、LOhU...LEhU は free。ZOI は lib.rs 前処理で対応)
-lu_quote   = { LU_clause ~ sp0 ~ content ~ sp0 ~ LUhU_clause }
+// 引用(LU...LIhU / ZO+単語は sumti、LOhU...LEhU は free。ZOI は lib.rs 前処理で対応)
+lu_quote   = { LU_clause ~ sp0 ~ content ~ sp0 ~ LIhU_clause }
 zo_quote   = { ZO_clause ~ sp1 ~ word }
 lohu_quote = { LOhU_clause ~ sp0 ~ (!LEhU_clause ~ word) ~ (sp1 ~ !LEhU_clause ~ word)*
                ~ sp0 ~ LEhU_clause }
@@ -546,11 +551,13 @@ LE_core = @{ ( ^"le'i" | ^"lo'i" | ^"la'i" | ^"lei" | ^"loi" | ^"lai"
               | ^"le" | ^"lo" | ^"la") ~ &word_boundary }
 LEhU_core = @{ ( ^"le'u" | ^"lehu") ~ &word_boundary }
 LI_core = @{ ( ^"li") ~ &word_boundary }
-// li'u は LU と LOhU に共通する終端詞のため、LIhU/LUhU 両クラスが同一語形を持つ(zantufa の命名踏襲)
+// li'u は LU 引用の終端詞(zantufa の命名踏襲)
 LIhU_core = @{ ( ^"li'u" | ^"lihu") ~ &word_boundary }
 LOhU_core = @{ ( ^"lo'u" | ^"lohu") ~ &word_boundary }
 LU_core = @{ ( ^"lu") ~ &word_boundary }
-LUhU_core = @{ ( ^"li'u" | ^"lihu") ~ &word_boundary }
+// LUhU(la'e/lu'e 参照の明示閉鎖)。かつて li'u と語形共有していたが、
+// 本来の語形 lu'u に修正(CLL 6.7 / zantufa 準拠)
+LUhU_core = @{ ( ^"lu'u" | ^"luhu") ~ &word_boundary }
 NA_core = @{ ( ^"na") ~ &word_boundary }
 JAhA_core = @{ ( ^"ja'a" | ^"jaha") ~ &word_boundary }
 NAhE_core = @{ ( ^"na'e" | ^"to'e" | ^"no'e" | ^"je'a") ~ &word_boundary }
@@ -643,8 +650,9 @@ CEhE_core = @{ (^"cehe" | ^"ce'e") ~ &word_boundary }
 // 項グループ接続(接続詞の適用範囲を項グループへ)
 PEhE_core = @{ (^"pehe" | ^"pe'e") ~ &word_boundary }
 // 強調マーカー(次の語を強調。camxes pre_clause 準拠だが
-// 受容を優先し独立した自由修飾語として受理)
-BAhE_core = @{ (^"bahe" | ^"ba'e") ~ &word_boundary }
+// 受容を優先し独立した自由修飾語として受理)。
+// 同 selma'o の za'e(前借り語)も含む
+BAhE_core = @{ (^"bahe" | ^"ba'e" | ^"za'e") ~ &word_boundary }
 DAhO_core = @{ (^"daho" | ^"da'o") ~ &word_boundary }
 // 項set(複数項をまとめて接続対象にする)
 NUhI_core = @{ (^"nuhi" | ^"nu'i") ~ &word_boundary }

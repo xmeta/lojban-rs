@@ -180,7 +180,8 @@ fn 引用は項として機能する() {
 fn lu_による文引用() {
     let s = parse_ok("lu mi klama lihu");
     assert!(s.contains("LU_core \"lu\""), "{s}");
-    assert!(s.contains("LUhU_core"), "{s}");
+    // 閉鎖 li'u は引用終端の LIhU(LUhU は la'e/lu'e 参照の閉鎖 lu'u)
+    assert!(s.contains("LIhU_core"), "{s}");
 }
 
 #[test]
@@ -193,7 +194,7 @@ fn lohu_による誤文引用は_free() {
 #[test]
 fn 引用の標準表記_lihu_lehu() {
     let s = parse_ok("lu mi klama li'u");
-    assert!(s.contains("LUhU_core \"li'u\""), "{s}");
+    assert!(s.contains("LIhU_core \"li'u\""), "{s}");
     let s = parse_ok("mi gleki lo'u coi le'u");
     assert!(s.contains("LOhU_core \"lo'u\""), "{s}");
     assert!(s.contains("LEhU_core \"le'u\""), "{s}");
@@ -527,6 +528,10 @@ fn 移動時制_mohi() {
 fn lahe_項修飾() {
     let s = parse_ok("mi nelci lu'e le cukta");
     assert!(s.contains("LAhE_core \"lu'e\""), "{s}");
+    // lu'e 系の明示閉鎖 lu'u(LUhU)
+    let s = parse_ok("lu'e le cukta lu'u");
+    assert!(s.contains("LAhE_core \"lu'e\""), "{s}");
+    assert!(s.contains("LUhU_core \"lu'u\""), "{s}");
     let s = parse_ok("la'e di'u cu xamgu");
     assert!(s.contains("LAhE_core \"la'e\""), "{s}");
     assert!(s.contains("KOhA_core \"di'u\""), "{s}");
@@ -1204,4 +1209,106 @@ fn 対象文_pa_roi複合タグと末尾区切りを含む実文() {
     assert!(s.contains("ROI_core \"roi\""), "{s}");
     // 文区切り .i は3回(.abu / ku'i の前と末尾)
     assert_eq!(s.matches("I_core \"i\"").count(), 3, "{s}");
+}
+
+#[test]
+fn 対象文_bahe強調と_lahe参照() {
+    // ni'o + la'e di'u + na'e + ba'e mutce(tanru 単位への強調前置)+ lo ka cizra
+    let s = parse_ok("ni'o la'e di'u na'e ba'e mutce lo ka cizra");
+    assert!(s.contains("NIhO_core \"ni'o\""), "{s}");
+    assert!(s.contains("LAhE_core \"la'e\""), "{s}");
+    assert!(s.contains("KOhA_core \"di'u\""), "{s}");
+    assert!(s.contains("NAhE_core \"na'e\""), "{s}");
+    // ba'e は tanru_unit の前置(BAhE_clause ノード)
+    assert!(
+        s.contains("tanru_unit (BAhE_clause (BAhE_core \"ba'e\")"),
+        "{s}"
+    );
+    assert!(s.contains("BRIVLA_core \"mutce\""), "{s}");
+    assert!(s.contains("NU_core \"ka\""), "{s}");
+    // la'e の終端に ge'u は現れない(LUhU 専用)
+    assert!(!s.contains("GEhU_core"), "{s}");
+}
+
+#[test]
+fn bahe_tanru単位への前置() {
+    // s_mark(na'e)と tanru 単位の間
+    let s = parse_ok("mi na'e ba'e mutce lo ka cizra");
+    assert!(s.contains("NAhE_core \"na'e\""), "{s}");
+    assert!(s.contains("BAhE_core \"ba'e\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"mutce\""), "{s}");
+    // tanru 第2単位への前置
+    let s = parse_ok("mutce ba'e nandu");
+    assert!(s.contains("BRIVLA_core \"mutce\""), "{s}");
+    assert!(s.contains("BAhE_core \"ba'e\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"nandu\""), "{s}");
+    // ba'e + 非 BRIVLA 単位(GOhA)
+    let s = parse_ok("na'e ba'e go'i");
+    assert!(s.contains("NAhE_core \"na'e\""), "{s}");
+    assert!(
+        s.contains("tanru_unit (BAhE_clause (BAhE_core \"ba'e\")"),
+        "{s}"
+    );
+    assert!(s.contains("GOhA_core \"go'i\""), "{s}");
+    // 連続の ba'e(free 経由で2語とも受理)
+    let s = parse_ok("ba'e ba'e klama");
+    assert_eq!(s.matches("BAhE_core").count(), 2, "{s}");
+    assert!(s.contains("BRIVLA_core \"klama\""), "{s}");
+    // 強調なしの形は従来どおり(ba'e ノードなし)
+    let s = parse_ok("mi na'e mutce");
+    assert!(!s.contains("BAhE_core"), "{s}");
+}
+
+#[test]
+fn zae_前借り語() {
+    // za'e は BAhE 同 selma'o(free 経路)
+    let s = parse_ok("mi za'e klama");
+    assert!(s.contains("BAhE_core \"za'e\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"klama\""), "{s}");
+    // 文頭の単独形も free(frees_s)経由の受理
+    let s = parse_ok("za'e klama");
+    assert!(s.contains("BAhE_core \"za'e\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"klama\""), "{s}");
+    // tanru 単位の先頭(tanru_unit 経路)でも受理
+    let s = parse_ok("mutce za'e nandu");
+    assert!(
+        s.contains("tanru_unit (BAhE_clause (BAhE_core \"za'e\")"),
+        "{s}"
+    );
+    assert!(s.contains("BRIVLA_core \"nandu\""), "{s}");
+}
+
+#[test]
+fn lahe_明示閉鎖_luu() {
+    // LAhE の終端は lu'u(LUhU)。ge'u は受けない(CLL 6.7 / zantufa 準拠)
+    let s = parse_ok("la'e di'u lu'u cu mutce");
+    assert!(s.contains("LAhE_core \"la'e\""), "{s}");
+    assert!(s.contains("KOhA_core \"di'u\""), "{s}");
+    assert!(s.contains("LUhU_core \"lu'u\""), "{s}");
+    assert!(s.contains("CU_core \"cu\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"mutce\""), "{s}");
+    // h 表記(luhu)も同様
+    let s = parse_ok("la'e di'u luhu cu mutce");
+    assert!(s.contains("LUhU_core \"luhu\""), "{s}");
+    // ge'u(GOI 終端)では閉鎖できない
+    assert!(lojban::parse("la'e di'u ge'u cu mutce").is_err());
+}
+
+#[test]
+fn lu引用の閉鎖ノードは_lihu() {
+    // lu_quote の閉鎖は LIhU_clause(li'u)。LUhU は本来の語形 lu'u を持つ
+    let s = parse_ok("lu mi klama li'u");
+    assert!(s.contains("LIhU_clause (LIhU_core \"li'u\")"), "{s}");
+    assert!(!s.contains("LUhU_core"), "{s}");
+    let s = parse_ok("lu mi klama lihu");
+    assert!(s.contains("LIhU_core \"lihu\""), "{s}");
+}
+
+#[test]
+fn bae_free経路は従来どおり() {
+    // 項後の自由修飾語としての ba'e(free 経路)は壊れない
+    let s = parse_ok("mi ta'a ba'e do");
+    assert!(s.contains("COI_core \"ta'a\""), "{s}");
+    assert!(s.contains("BAhE_core \"ba'e\""), "{s}");
+    assert!(s.contains("KOhA_core \"do\""), "{s}");
 }
