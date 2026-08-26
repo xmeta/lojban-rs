@@ -80,7 +80,29 @@ tagged = { FA_clause ~ sp1 ~ sumti
          | (SE_clause ~ sp1)? ~ BAI_clause ~ (sp1 ~ NAI_clause)? ~ sp1 ~ sumti
          | SEBAI_joint ~ sp1 ~ sumti
          | FIhO_clause ~ sp1 ~ selbri ~ (sp1 ~ FEhU_clause)? ~ sp1 ~ sumti
-         | tense_tags ~ sp1 ~ sumti ~ (sp1 ~ KU_clause)? }
+         // タグと sumti 間の自由修飾語を許容(ta'i ba'e ma … 等。
+         // zantufa は sumti 先頭語への pre_clause(BAhE)付帯として受理)。
+         // frees_mid の後の隙間は sp1? が吸う(教訓5裏面の sp1 配置規約)
+         | tense_tags ~ sp1 ~ frees_mid? ~ sp1? ~ sumti ~ (sp1 ~ KU_clause)?
+         // 注: 本枝が受けるタグ付き項は term 位置(述語の前)を想定する。
+         //     selbri の後ろ(tail_terms)で一致した場合、直後に別の裸 brivla
+         //     は続かない(接続詞なしの二重述語は非文)。例:
+         //     「mi ponse re ta'e mi klama」は re ta'e mi を tail_terms の
+         //     タグ付き項として消費した後、klama に述語の役割が残らず拒否。
+         //     zantufa(z0/z1)/camxes もこの形を拒否することを実測済みで
+         //     v0.92 と同一挙動のため、受理拡張は行わない
+         // タグだけ項(sumti を伴わない明示 ku 閉鎖)。zantufa の
+         // tag_term(tag … KU_elidible) 相当。「ba zi ku le gerku klama」の
+         // ように [時制+ku] に描述が続く入力は、sentence の tense_marks が
+         // 「ba zi ku」まで消費した後、描述の tanru が後続の brivla を貪欲吸収
+         // して bridi_tail が空になり失敗する。zantufa はこれを全文ではなく
+         // fragment(terms: tag_term + sumti)として受理するため、本枝により
+         // 同経路(fragment: tagged(ba zi ku) + desc(le gerku klama))で再現する。
+         // 注: sentence 側 tense_marks の末尾 (sp1 ~ KU_clause)? は削除しない。
+         //     PEG は選択成功で確定するため文頭の時制連鎖を削ると直後の裸 ku が
+         //     項を開始できず(本枝は tense_tags 前置が必須)、かえって
+         //     受理不能になる(実測)
+         | tense_tags ~ sp1 ~ KU_clause }
 // 注: FIhO の fe'u は省略可(selbri は tail_terms を含まないため、
 //     直後の sumti との境界が自明)
 // 時制マーク連鎖をタグとして使う(pu le cabdei / vi ne'i le zdani 等)。
@@ -97,7 +119,13 @@ sumti      = { sumti_core ~ (sp1 ~ relative_clauses)?
 //     bridi_tail 側の「数詞+MOI」述語が届かない
 sumti_core = _{ bu_lerfu | KOhA_clause | lahe_sumti | desc | BY_clause | quant_desc | quant_selbri | bare_number | abstraction
                | lu_quote | zo_quote | gek_sumti | li_mex | zoi_quote }
-bare_number = _{ number ~ !(sp1 ~ MOI_clause) }
+// 注: 直後が ROI/TAhE/ZAhO の場合は数詞単独の項としない。
+//     「so'i re'u」「za'u ro re'u」等の数詞+間隔プロパティは複合タグ
+//     (interval_property)だが、fragment の項解析が数詞だけ部分一致して
+//     確定すると tense_item 経路が届かなくなるため(PEG の部分成功確定)。
+//     数詞+これらの語はタグを成すという CLL 規範とも整合
+bare_number = _{ number ~ !(sp1 ~ MOI_clause)
+                ~ !(sp1 ~ (ROI_clause | TAhE_clause | ZAhO_clause)) }
 quant_selbri = { number ~ sp1 ~ selbri ~ (sp1 ~ KU_clause)? }
 // LAhE 項修飾(la'e = 参照先 / lu'e = 参照元)。lu'u による明示閉鎖も許容
 // (LAhE の終端は LUhU。ge'u は GOI 関係節の終端)
@@ -148,9 +176,7 @@ tense_mark  = _{ PU_clause | CAhA_clause | ZAhO_clause | ZI_clause | VA_clause
                | MOhI_clause ~ sp1 ~ FAhA_clause | FAhA_clause
                | NA_clause ~ sp1 ~ KU_clause | NAKU_joint
                | CUhE_clause | KI_clause | ROROI_joint
-               // 数詞を前置した ROI/TAhE/ZAhO の複合タグ(so'u roi / re roi 等)。
-               // 順序選択のため裸の roi/ta'e/zaho は上記の単独形が先に一致し
-               // 既存の解析木は不変
+               // 数詞を前置した ROI/TAhE/ZAhO の複合タグ(so'u roi / re roi 等)
                | interval_property
                | time_interval
                | space_interval }
@@ -164,8 +190,15 @@ space_interval = _{ VEhA_clause ~ (sp1 ~ VIhA_clause)?
                      ~ (sp1 ~ FEhE_clause ~ sp1 ~ interval_property)*
                   | FEhE_clause ~ sp1 ~ interval_property
                     ~ (sp1 ~ FEhE_clause ~ sp1 ~ interval_property)* }
-interval_property = _{ (PA_seq | PA_clause)? ~ sp1?
-                       ~ (ROI_clause | TAhE_clause | ZAhO_clause)
+// 数詞を前置した ROI/TAhE/ZAhO の複合タグ(so'u roi / re roi 等)。
+// 数詞は無空白連結(PA_seq)と空白区切り連鎖(za'u ro re'u / pa za'u re'u 等)
+// の両方を許容。注: 選択はグループ単位で確定するため、
+// (PA_seq | PA_clause ~ …)? のような括り方は数詞連鎖の読み替えができない
+// (教訓5の裏面)。数詞形ごとに完全な分岐で書く
+interval_property = _{ PA_seq ~ ip_tail
+                     | PA_clause ~ (sp1 ~ PA_clause)* ~ ip_tail
+                     | ip_tail }
+ip_tail           = _{ sp1? ~ (ROI_clause | TAhE_clause | ZAhO_clause)
                        ~ (sp1 ~ NAI_clause)? }
 
 // 時制間隔(ZEhA): オフセット(PU/ZI)を間隔詞の両端に置く
@@ -588,7 +621,8 @@ PA_word  = _{ (^"dau" | ^"fei" | ^"rei" | ^"vai" | ^"so'a" | ^"so'e" | ^"so'i"
 PA_core  = @{ PA_word ~ &word_boundary }
 // 無ポーズ連結数詞(renono = 1200 等)
 PA_seq   = @{ PA_word+ ~ &word_boundary }
-ROI_core = @{ ( ^"roi") ~ &word_boundary }
+// roi に同系列の序数頻度タグ re'u を追加(CLL: selma'o ROI)。h 表記 rehu も併記
+ROI_core = @{ ( ^"roi" | ^"re'u" | ^"rehu") ~ &word_boundary }
 SE_core = @{ ( ^"se" | ^"te" | ^"ve" | ^"xe") ~ &word_boundary }
 // SE+BAI の結合表記(pi'o va'u mu'i cau ja'e cu'u ba'i ki'u ri'a ka'a の se 変換)
 SEBAI_joint = @{ (^"sepi'o" | ^"sepiho" | ^"seva'u" | ^"sevahu"
@@ -606,7 +640,7 @@ UI_core = @{ (^"u'i" | ^"u'u" | ^"ru'e" | ^"ju'o" | ^"pe'i" | ^"sa'e" | ^"ta'o"
               | ^"kuhi" | ^"ku'i" | ^"ja'o" | ^"po'o" | ^"dahi" | ^"da'i"
               | ^"jehu" | ^"je'u" | ^"laha" | ^"la'a" | ^"zaha" | ^"za'a"
               | ^"gahi" | ^"ga'i" | ^"uho" | ^"u'o" | ^"ihi" | ^"i'i"
-              | ^"oha" | ^"o'a" | ^"ehi" | ^"e'i" | ^"kahu" | ^"ka'u"
+              | ^"oha" | ^"o'a" | ^"ehi" | ^"e'i" | ^"kahu" | ^"ka'u" | ^"kau"
               | ^"ruha" | ^"ru'a" | ^"jiha" | ^"ji'a"
               | ^"zuhu" | ^"zu'u" | ^"baha" | ^"ba'a"
               | ^"ai" | ^"au" | ^"kiaha" | ^"ki'a"

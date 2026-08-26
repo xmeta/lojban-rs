@@ -1423,3 +1423,156 @@ fn 対象文_gihe直後の感情標識を含む実文() {
     assert!(s.contains("NOI_core \"noi\""), "{s}");
     assert!(s.contains("BRIVLA_core \"spabi'u\""), "{s}");
 }
+
+#[test]
+fn kau_間接疑問マーカー() {
+    // kau は UI セルマォ(CLL 19.10 / zantufa ツリーでも UI:kau)。
+    // free 経路で受理される(v0.93 で UI_core に追加)
+    let s = parse_ok("mi kau klama");
+    assert!(s.contains("UI_core \"kau\""), "{s}");
+    assert!(s.contains("free"), "{s}");
+    assert!(s.contains("BRIVLA_core \"klama\""), "{s}");
+    // 項間・抽象内でも同じ経路
+    parse_ok("mi kau tavla do");
+    parse_ok("ma kau .abu bartu");
+    let s = parse_ok("mi djuno lo du'u ma kau klama");
+    assert!(s.contains("UI_core \"kau\""), "{s}");
+    // h 表記 kahu(UI_core 既存)と共存する
+    parse_ok("mi kahu klama");
+    // NAI 否定・CAI 強度の修飾形(ui_free の既存経路)
+    let s = parse_ok("kau nai");
+    assert!(s.contains("UI_core \"kau\""), "{s}");
+    assert!(s.contains("NAI_core \"nai\""), "{s}");
+    let s = parse_ok("kau sai");
+    assert!(s.contains("UI_core \"kau\""), "{s}");
+    assert!(s.contains("CAI_core \"sai\""), "{s}");
+}
+
+#[test]
+fn rehu_序数頻度タグ() {
+    // re'u は ROI セルマォ(roi + re'u。v0.93 で追加)。h 表記 rehu も同様
+    let s = parse_ok("mi za'u re'u klama");
+    assert!(s.contains("PA_core \"za'u\""), "{s}");
+    assert!(s.contains("ROI_core \"re'u\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"klama\""), "{s}");
+    let s = parse_ok("so'i rehu klama");
+    assert!(s.contains("ROI_core \"rehu\""), "{s}");
+    // 数詞を挟む/連鎖する形(so'u roi 同様の複合タグ)
+    for w in ["za'u ro re'u", "pa za'u re'u", "so'i re'u", "su'o re'u"] {
+        let s = parse_ok(w);
+        assert!(s.contains("ROI_core"), "{s}");
+    }
+    let s = parse_ok("za'u ro rehu");
+    assert!(s.contains("ROI_core \"rehu\""), "{s}");
+    // NAI 否定形(interval_property の (sp1 ~ NAI_clause)? 経由)
+    let s = parse_ok("so'i re'u nai klama");
+    assert!(s.contains("ROI_core \"re'u\""), "{s}");
+    assert!(s.contains("NAI_core \"nai\""), "{s}");
+    // 裸 ROI の項後用法。z1 のみ整合の受容(z0/camxes は拒否)だが、
+    // 既存の「mi roi klama」と同じ selbri 頭時制タグ経路で一貫
+    let s = parse_ok("mi re'u klama");
+    assert!(s.contains("ROI_core \"re'u\""), "{s}");
+    // interval_property 分岐書き換え(v0.93)の等価性ピン:
+    // 無空白数詞連鎖(PA_seq)+ ROI の形(branch1)が従来どおり生きている
+    let s = parse_ok("reso'i roi klama");
+    assert!(s.contains("PA_seq \"reso'i\""), "{s}");
+    assert!(s.contains("ROI_core \"roi\""), "{s}");
+    let s = parse_ok("reso'i re'u klama");
+    assert!(s.contains("PA_seq \"reso'i\""), "{s}");
+    assert!(s.contains("ROI_core \"re'u\""), "{s}");
+    // 無空白結合形(so'uroi / zahurehu)は PA_seq ではなく音韻上の
+    // brivla(fuhivla 形)として受理される(PA_word に ROI/TAhE 語は
+    // 含まれないため)。v0.92 から不変の既存挙動
+    let s = parse_ok("so'uroi klama");
+    assert!(s.contains("BRIVLA_core \"so'uroi\""), "{s}");
+    let s = parse_ok("zahurehu");
+    assert!(s.contains("BRIVLA_core \"zahurehu\""), "{s}");
+    // li 内の数詞(mex)は bare_number ガードの影響を受けない
+    let s = parse_ok("li re no");
+    assert!(s.contains("LI_core \"li\""), "{s}");
+    assert!(s.contains("PA_core \"re\""), "{s}");
+    assert!(s.contains("PA_core \"no\""), "{s}");
+}
+
+#[test]
+fn 時制kuに描述が続く形は_fragment_として受理() {
+    // [時制+明示ku] + 描述(+cu 無し)。zantufa は全文ではなく
+    // fragment(terms: tag_term + sumti)として受理する。
+    // tagged の「タグだけ項」枝(tense_tags ~ sp1 ~ KU_clause)により同経路を再現。
+    // 描述の tanru が後続の brivla を吸収する点も zantufa と同じ
+    let s = parse_ok("ba zi ku le gerku klama");
+    assert!(s.contains("fragment"), "{s}");
+    assert!(s.contains("KU_core \"ku\""), "{s}");
+    assert!(s.contains("LE_core \"le\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"gerku\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"klama\""), "{s}");
+    // cmevla 描述でも同様
+    let s = parse_ok("ba zi ku la .alis. klama");
+    assert!(s.contains("KU_core \"ku\""), "{s}");
+    assert!(s.contains("CMEVLA_clause"), "{s}");
+    // 対比: 主語が先にある場合は従来どおり文として受理
+    // (tense_marks が「pu zi ku」まで消費し bridi_tail が続く)
+    let s = parse_ok("mi pu zi ku klama");
+    assert!(s.contains("PU_core \"pu\""), "{s}");
+    assert!(s.contains("KU_core \"ku\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"klama\""), "{s}");
+    // 裸の ku だけの項は引き続き拒否(tagged は tense_tags 前置が必須)
+    assert!(LojbanParser::parse(Rule::text, "mi ku klama").is_err());
+}
+
+#[test]
+fn タグと項の間の自由修飾語() {
+    // tagged の時制枝はタグ〜sumti 間の自由修飾語を許容する
+    // (ta'i ba'e ma …。zantufa は sumti 先頭語への BAhE 付帯として受理)
+    let s = parse_ok("mi ta'i ba'e ma .abu bartu");
+    assert!(s.contains("BAI_core \"ta'i\""), "{s}");
+    assert!(s.contains("BAhE_core \"ba'e\""), "{s}");
+    assert!(s.contains("KOhA_core \"ma\""), "{s}");
+    assert!(s.contains("BY_core \"abu\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"bartu\""), "{s}");
+    // 自由修飾語なしの形は従来どおり
+    parse_ok("mi ta'i do klama");
+}
+
+#[test]
+fn 述語後のタグ付き項の後に裸述語は続かない() {
+    // 「selbri + 数詞+TAhE タグ付き項 + 裸 selbri」は接続詞なしの
+    // 二重述語となる非文。タグ付き項(re ta'e mi)は tail_terms として
+    // 解釈され、後続の brivla に述語の役割が残らない。
+    // zantufa(z0/z1)・camxes すべてが拒否することを参照突合済みで、
+    // v0.92 も同一挙動のため受理拡張は行わない(lojban.pest tagged 注記)
+    assert!(lojban::parse("mi ponse re ta'e mi klama").is_err());
+    // 対比: 述語で終わる形 / タグ付き項が主語側にある形は受理される
+    // (後者は参照系より緩い既存の受容。v0.92 から不変)
+    parse_ok("mi ponse re ta'e mi");
+    parse_ok("mi re ta'e mi klama");
+}
+
+#[test]
+fn 対象文_kau_rehu_時制kuを含む実文() {
+    // zantufa(z1 を除くビルド)/camxes が受理する実文。
+    // 時制+明示ku / MOhI+FAhA / gi'e 連鎖 / 抽象 / ba'e 強調 /
+    // kau(UI) / za'u re'u(数詞+ROI 複合タグ)を含む
+    let s = parse_ok("ni'o ba zi ku la .alis. mo'i ne'i jersi ry gi'e no roi pensi lo du'u ta'i ba'e ma kau .abu ba za'u re'u bartu");
+    assert!(s.contains("NIhO_core \"ni'o\""), "{s}");
+    assert!(s.contains("PU_core \"ba\""), "{s}");
+    assert!(s.contains("ZI_core \"zi\""), "{s}");
+    assert!(s.contains("KU_core \"ku\""), "{s}");
+    assert!(s.contains("MOhI_core \"mo'i\""), "{s}");
+    assert!(s.contains("FAhA_core \"ne'i\""), "{s}");
+    assert!(s.contains("GIhA_core \"gi'e\""), "{s}");
+    assert!(
+        s.contains("PA_seq \"no\"") && s.contains("ROI_core \"roi\""),
+        "{s}"
+    );
+    assert!(s.contains("NU_core \"du'u\""), "{s}");
+    assert!(s.contains("BAI_core \"ta'i\""), "{s}");
+    assert!(s.contains("BAhE_core \"ba'e\""), "{s}");
+    assert!(s.contains("UI_core \"kau\""), "{s}");
+    assert!(s.contains("BY_core \"abu\""), "{s}");
+    assert!(
+        s.contains("PA_seq \"za'u\"") && s.contains("ROI_core \"re'u\""),
+        "{s}"
+    );
+    assert!(s.contains("BRIVLA_core \"bartu\""), "{s}");
+}
