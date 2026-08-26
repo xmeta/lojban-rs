@@ -121,7 +121,13 @@ relative_clause  = {
   | GOI_clause ~ sp1 ~ sumti ~ (sp1 ~ GEhU_clause)?
 }
 
-bridi_tail = { selbri ~ tail_terms ~ (sp1 ~ gihek_link ~ sp1 ~ bridi_tail)* }
+bridi_tail = { selbri ~ tail_terms ~ (sp1 ~ gihek_link ~ sp1 ~ free* ~ bridi_tail)* }
+// 連結部の gihek_link 直後にも自由修飾語を許容(mi klama gi'e .ui cadzu)。
+// free は非 silent だが空一致ではノードを生成しないため、UI 等を含まない
+// 入力の解析木は不変(BAhE の tanru_unit 前置と同じインライングループ方式)。
+// free 語彙(UI/SAhE/COI 等)は selbri を開始しない上、順序選択で free が
+// 先に試行されるため競合はない(to'e / se 等の s_mark は語境界により
+// TO/SEI が先取りしない)。ループ進行は sp1+gihek_link が保証
 // 述語と項の間・項間の自由修飾語を許容(mi cusku .ui do / cusku sei … do)。
 // 項リスト本体は terms と共通(CEhE/PEhE 含む)
 tail_terms = { (sp1 ~ free)* ~ (sp1 ~ terms_items)? ~ (sp1 ~ free)* ~ (sp1 ~ VAU_clause)? }

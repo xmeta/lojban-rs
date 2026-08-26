@@ -1311,6 +1311,15 @@ fn bae_free経路は従来どおり() {
     assert!(s.contains("COI_core \"ta'a\""), "{s}");
     assert!(s.contains("BAhE_core \"ba'e\""), "{s}");
     assert!(s.contains("KOhA_core \"do\""), "{s}");
+    // gihek_link 直後の ba'e(v0.92): PEG 順序選択により tanru_unit 前置ではなく
+    // free 経路(bae_free)で先取りされる。暗黙仕様を意図的仕様として記録
+    let s = parse_ok("mi klama gi'e ba'e cadzu");
+    assert!(s.contains("GIhA_core \"gi'e\""), "{s}");
+    assert!(
+        s.contains("bae_free (BAhE_clause (BAhE_core \"ba'e\"))"),
+        "{s}"
+    );
+    assert!(s.contains("BRIVLA_core \"cadzu\""), "{s}");
 }
 
 #[test]
@@ -1360,4 +1369,57 @@ fn 対象文_概念抽象sioを含む実文() {
     assert!(s.contains("BY_core \"jy\""), "{s}");
     assert!(s.contains("BY_core \"ry\""), "{s}");
     assert!(s.contains("BRIVLA_core \"sa'irbi'o\""), "{s}");
+}
+
+#[test]
+fn 述語連鎖直後の感情標識() {
+    // gihek_link の直後に自由修飾語(v0.92)。zantufa の (GIhA:gi'e UI:u'a) 相当
+    let s = parse_ok("mi klama gi'e .u'a cadzu");
+    assert!(s.contains("GIhA_core \"gi'e\""), "{s}");
+    assert!(
+        s.contains("UI_core \".u'a\"") || s.contains("UI_core \"u'a\""),
+        "{s}"
+    );
+    // 後続の述語は連鎖側の bridi_tail として解析される
+    assert!(s.contains("BRIVLA_core \"cadzu\""), "{s}");
+    // 3連鎖: 真ん中に UI なし・末尾に UI 付き
+    let s = parse_ok("mi klama gi'e cadzu gi'e .u'a bajra");
+    assert_eq!(s.matches("GIhA_core").count(), 2, "{s}");
+    assert!(s.contains("UI_core \"u'a\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"bajra\""), "{s}");
+    // NAI 否定形(ui_free の既存経路で受理)
+    let s = parse_ok("mi klama gi'e .u'a nai cadzu");
+    assert!(s.contains("UI_core \"u'a\""), "{s}");
+    assert!(s.contains("NAI_core \"nai\""), "{s}");
+    // CAI 強度も同じ位置で受理
+    let s = parse_ok("mi klama gi'e u'a sai cadzu");
+    assert!(s.contains("CAI_core \"sai\""), "{s}");
+    // 語境界ガードの回帰固定: free* 挿入により s_mark / BRIVLA 先頭の
+    // 述語が free(SEI/SI/SU 等)に先取りされない
+    let s = parse_ok("mi klama gi'e se prami do");
+    assert!(s.contains("SE_core \"se\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"prami\""), "{s}");
+    let s = parse_ok("mi klama gi'e sutra");
+    assert!(s.contains("BRIVLA_core \"sutra\""), "{s}");
+    // 連鎖先のない形は従来どおり拒否
+    assert!(LojbanParser::parse(Rule::text, "mi klama gi'e .u'a").is_err());
+    // 語形として不正な語は従来どおりエラー(否定系維持)
+    assert!(LojbanParser::parse(Rule::text, "qqq").is_err());
+}
+
+#[test]
+fn 対象文_gihe直後の感情標識を含む実文() {
+    // zantufa が受理する実文。2箇所の gi'e 連鎖のうち後半が gi'e .u'a 形。
+    // KE グループ / MOhI+FAhA / 関係節 / lujvo を含む
+    let s = parse_ok(".i .abu bai lo nu kucli cu bajra pagre lo foldi gi'e jersi ry gi'e .u'a viska lo nu ry canci mo'i ne'i lo barda ke ractu kevna noi cnita lo spabi'u");
+    assert_eq!(s.matches("GIhA_core \"gi'e\"").count(), 2, "{s}");
+    assert!(s.contains("UI_core \"u'a\""), "{s}");
+    assert!(s.contains("BY_core \"abu\""), "{s}");
+    assert!(s.contains("BAI_core \"bai\""), "{s}");
+    assert!(s.contains("NU_core \"nu\""), "{s}");
+    assert!(s.contains("MOhI_core \"mo'i\""), "{s}");
+    assert!(s.contains("FAhA_core \"ne'i\""), "{s}");
+    assert!(s.contains("KE_core \"ke\""), "{s}");
+    assert!(s.contains("NOI_core \"noi\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"spabi'u\""), "{s}");
 }
