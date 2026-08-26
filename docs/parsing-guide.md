@@ -39,7 +39,7 @@ text        入力全体(ルート)
 | `quant_desc` / `quant_selbri` | 数量詞+描述 / 数量詞+述語(pa prenu) |
 | `bare_number` | 裸の数詞(直後が MOI の場合は項にならない) |
 | `abstraction` | 抽象(nu / ka / du'u … + 文 + kei?)。`sedu'u` 結合形含む |
-| `lahe_sumti` | LAhE 参照(la'e X / lu'e X)と結合形 `la'edi'u` |
+| `lahe_sumti` | LAhE 参照(la'e X / lu'e X、終端詞 lu'u で明示閉鎖可)と結合形 `la'edi'u` |
 | `lu_quote` / `zo_quote` / `zoi_quote` / `lohu_quote` | 各種引用 |
 | `li_mex` | 数理表現(li … loho) |
 | `gek_sumti` | 先接続項(ge X gi Y) |
@@ -54,7 +54,7 @@ text        入力全体(ルート)
 |---|---|
 | `s_marks` | 述語マーク(na 否定 / ja'a 肯定 / se te ve xe 変換 / na'e to'e no'e je'a) |
 | `tense_marks` | 時制・相・方位・モダルの連鎖(pu ca ba / ze'i ze'a ze'u / ROI / BAI / FAhA / MOhI / ZEhA / VEhA VIhA / cu'e / ki / naku / ZEhA・空間間隔 / 数詞+ROI/TAhE/ZAhO の複合タグ(so'u roi 等)) |
-| `tanru` / `tanru_unit` | 複合述語。unit は brivla / GOhA / cmevla / nu_form / me_form(+me'u, MOI) / ke_group / JAI 変換 / 数詞+MOI / zei 複合 を取り得る |
+| `tanru` / `tanru_unit` | 複合述語。unit は brivla / GOhA / cmevla / nu_form / me_form(+me'u, MOI) / ke_group / JAI 変換 / 数詞+MOI / zei 複合 を取り得る(各 unit の前に BAhE(ba'e/za'e)強調を前置可) |
 | `co_tail` | `co` による逆順 |
 | `guhek_selbri` | 先接続述語(gu'e … gi) |
 

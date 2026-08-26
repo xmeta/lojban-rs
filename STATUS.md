@@ -1,10 +1,30 @@
 # 開発ステータス
 
-## 現在の状態: v0.89 完成(全テストグリーン)
+## 現在の状態: v0.90 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語135 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体198 + doc 11 = 計209テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語141 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体204 + doc 11 = 計215テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.89.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.90.0)
+
+## v0.90 で追加(BAhE 前置と LAhE 終端の修正)
+- BAhE(ba'e 強調)を tanru 各単位に前置可能に(「na'e ba'e mutce」等)。
+  zantufa の [BAhE G:x] 相当。camxes は語単位だが本パーサーは受容優先で
+  tanru 単位ごとに受理
+- 同 selma'o の za'e(前借り語)も語彙追加
+- LAhE(la'e/lu'e)の終端詞を GEhU→LUhU に修正(CLL 6.7/zantufa 準拠)。
+  これに伴い:
+  - 「la'e di'u lu'u …」のような明示閉鎖が可能に(新規受容)
+  - **破壊的変更: 「la'e … ge'u」は拒否されるように**(旧実装の誤り。
+    corpus/battery 既存文への影響がないことは確認済み)
+- LUhU/LIhU を分離: LUhU_core は本来の lu'u/luhu に、引用終端 li'u/lihu は
+  LIhU_clause へ。解析木ノード名が変わるのは lu 引用の閉鎖ノードのみ
+  (LUhU_clause→LIhU_clause)
+- 動機: Alice 翻訳の実文「ni'o la'e di'u na'e ba'e mutce lo ka cizra」が
+  zantufa では通るのに本パーサーではエラーだった
+- docs/coverage.md を再生成で同期(BAhE 行に za'e、LIhU 接続化、LUhU 行の
+  語形修正。接続クラス数 111→112)
+- 回帰テストを tests/syntax.rs に追加(統語 135→141)。
+  criterion ベンチ A/B で性能差なし
 
 ## v0.89 で追加(BAI に様態タグ tai)
 - BAI_core に様態タグ tai(selma'o TAI)を追加(zantufa の BAI:tai 相当)。
