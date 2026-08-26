@@ -63,10 +63,10 @@
 | LE | `le'i` `lo'i` `la'i` `lei` `loi` `lai` `lo'e` `lehe` `le'e` `le` `lo` `la` | ✅ |
 | LEhU | `le'u` `lehu` | ✅ |
 | LI | `li` | ✅ |
-| LIhU | `li'u` `lihu` | — |
+| LIhU | `li'u` `lihu` | ✅ |
 | LOhU | `lo'u` `lohu` | ✅ |
 | LU | `lu` | ✅ |
-| LUhU | `li'u` `lihu` | ✅ |
+| LUhU | `lu'u` `luhu` | ✅ |
 | NA | `na` | ✅ |
 | JAhA | `ja'a` `jaha` | ✅ |
 | NAhE | `na'e` `to'e` `no'e` `je'a` | ✅ |
@@ -108,7 +108,7 @@
 | XI | `xi` | ✅ |
 | CEhE | `cehe` `ce'e` | ✅ |
 | PEhE | `pehe` `pe'e` | ✅ |
-| BAhE | `bahe` `ba'e` | ✅ |
+| BAhE | `bahe` `ba'e` `za'e` | ✅ |
 | DAhO | `daho` `da'o` | ✅ |
 | NUhI | `nuhi` `nu'i` | ✅ |
 | NUhU | `nuhu` `nu'u` | ✅ |
@@ -120,6 +120,6 @@
 | CMEVLA |  | ✅ |
 | BRIVLA |  | ✅ |
 
-計 113 クラス定義 / 111 クラスが統語に接続。
-未接続の LIhU は LUhU と同語形のための予備定義(設計上未使用)。
+計 113 クラス定義 / 112 クラスが統語に接続。
+未接続の GIhI は対応する統語(文連結 gihi)が未実装のための予備定義。
 結合表記(joint)は次セクション。
