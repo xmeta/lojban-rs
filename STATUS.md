@@ -1,10 +1,23 @@
 # 開発ステータス
 
-## 現在の状態: v0.90 完成(全テストグリーン)
+## 現在の状態: v0.91 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語141 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体204 + doc 11 = 計215テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語143 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体206 + doc 11 = 計217テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.90.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.91.0)
+
+## v0.91 で追加(NU に概念抽象 si'o)
+- NU_core に概念抽象 si'o(selma'o NU)を追加。標準 NU セルマォ11語の
+  最後の欠落分(CLL 準拠補完)。「lo si'o ri viska」等の描述内 si'o 抽象が
+  解析可能に
+- 動機: Alice 翻訳の長実文「.i ku'i la .alis. ca lo nu … fa lo si'o ri pu no roi viska …」
+  (終端スペースあり)が zantufa では通るのに本パーサーではエラーだった。
+  切り分けの結果、be 連結項・字詞項・lujvo・pu no roi・poi+.a 接続等の
+  文の他要素はすべて既存対応済みで、欠落は si'o のみだった
+- docs/coverage.md の NU 行を再生成で同期(si'o 追加。クラス数不変のため
+  計数行は変更なし)
+- 回帰テストを tests/syntax.rs に追加(統語 141→143)。
+  criterion ベンチ A/B で性能差なし。対象文は release で 0.023 秒で解析
 
 ## v0.90 で追加(BAhE 前置と LAhE 終端の修正)
 - BAhE(ba'e 強調)を tanru 各単位に前置可能に(「na'e ba'e mutce」等)。

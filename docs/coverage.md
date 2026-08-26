@@ -72,7 +72,7 @@
 | NAhE | `na'e` `to'e` `no'e` `je'a` | ✅ |
 | NIhO | `ni'o` `niho` | ✅ |
 | NOI | `poi` `noi` `voi` | ✅ |
-| NU | `je'i` `mu'e` `pu'u` `zu'o` `li'i` `su'u` `du'u` `nu` `ka` `ni` | ✅ |
+| NU | `je'i` `mu'e` `pu'u` `zu'o` `li'i` `su'u` `si'o` `du'u` `nu` `ka` `ni` | ✅ |
 | PA |  | ✅ |
 | ROI | `roi` | ✅ |
 | SE | `se` `te` `ve` `xe` | ✅ |
