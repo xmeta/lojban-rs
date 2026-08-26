@@ -25,7 +25,7 @@ text        入力全体(ルート)
 | `tagged` | タグ付き項(FA / BAI(+SE/NAI) / FIhO モダル / 時制マーク連鎖+sumti) |
 | `na_ku` | 項位置の否定(`naku` / `na ku`) |
 | `termset` | 項set(`nu'i X Y [nu'u]`) |
-| `bridi_tail` | 述語とその項(tail)。`gihek`(gi'e 等)による連鎖を含む |
+| `bridi_tail` | 述語とその項(tail)。`gihek`(gi'e 等)による連鎖を含む。接続詞直後に自由修飾語(UI 等)を置ける(`gi'e .u'a cadzu`) |
 | `tail_terms` | 述語に続く項の列(自由修飾語混在可)+ `vau` |
 
 ## sumti(項)

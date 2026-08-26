@@ -1,10 +1,26 @@
 # 開発ステータス
 
-## 現在の状態: v0.91 完成(全テストグリーン)
+## 現在の状態: v0.92 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語143 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体206 + doc 11 = 計217テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語145 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体208 + doc 11 = 計219テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.91.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.92.0)
+
+## v0.92 で追加(gihek 直後の自由修飾語)
+- bridi_tail の連結部で gihek_link(gi'e 等)の直後に自由修飾語(UI 感情標識等)を
+  挿入可能に。zantufa の GIhA:gi'e UI:u'a 相当。「mi klama gi'e .u'a cadzu」等が
+  解析可能に。`.u'a nai`・`u'a sai`(強度)も既存経路で受理
+- 動機: Alice 翻訳の実文「.i .abu bai lo nu kucli cu bajra pagre lo foldi
+  gi'e jersi ry gi'e .u'a viska …」(終端スペースなし)が zantufa では通るのに
+  本パーサーではエラーだった。切り分けの結果、KE グループ・MOhI+FAhA・
+  lujvo spabi'u・noi 等の他要素はすべて既存対応済みで、欠落は gihek 後の
+  自由修飾語のみだった
+- docs/coverage.md はクラス接続状況不変のため再生成でも差分ゼロ
+- 回帰テストを tests/syntax.rs に追加(統語 143→145)。
+  criterion ベンチ A/B で性能差なし(関係節ベンチに一時的な変動があったが
+  再測定で復帰=ノイズ)
+- 解析木: UI なし入力は完全不変。唯一 `gi'e ba'e <selbri>` 形で ba'e の帰属ノードが
+  tanru_unit 前置から独立 FREE ノードに(受容可否不変、意味論整合)
 
 ## v0.91 で追加(NU に概念抽象 si'o)
 - NU_core に概念抽象 si'o(selma'o NU)を追加。標準 NU セルマォ11語の
