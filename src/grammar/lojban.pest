@@ -563,7 +563,8 @@ JAhA_core = @{ ( ^"ja'a" | ^"jaha") ~ &word_boundary }
 NAhE_core = @{ ( ^"na'e" | ^"to'e" | ^"no'e" | ^"je'a") ~ &word_boundary }
 NIhO_core = @{ ( ^"ni'o" | ^"niho") ~ &word_boundary }
 NOI_core = @{ ( ^"poi" | ^"noi" | ^"voi") ~ &word_boundary }
-NU_core = @{ ( ^"je'i" | ^"mu'e" | ^"pu'u" | ^"zu'o" | ^"li'i" | ^"su'u" | ^"du'u" | ^"nu" | ^"ka" | ^"ni") ~ &word_boundary }
+// si'o(概念抽象)は zantufa 由来の語彙に欠けている NU セルマォの1語(CLL 準拠で補完)
+NU_core = @{ ( ^"je'i" | ^"mu'e" | ^"pu'u" | ^"zu'o" | ^"li'i" | ^"su'u" | ^"si'o" | ^"du'u" | ^"nu" | ^"ka" | ^"ni") ~ &word_boundary }
 // SE+NU の結合表記(報話で高頻度の sedu'u)。素の形が先だと境界先読みで失敗するため
 // joint を先に試行(教訓6)。tanru_unit の BRIVLA ガードにも追加(fu'ivla 誤認防止)
 SEDUHU_joint = @{ (^"sedu'u" | ^"seduhu") ~ &word_boundary }

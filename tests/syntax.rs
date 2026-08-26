@@ -1312,3 +1312,52 @@ fn bae_free経路は従来どおり() {
     assert!(s.contains("BAhE_core \"ba'e\""), "{s}");
     assert!(s.contains("KOhA_core \"do\""), "{s}");
 }
+
+#[test]
+fn 抽象_sio() {
+    // si'o(概念抽象)は NU_core の語彙(v0.91 で追加。nu/ka と同じ抽象経路)。
+    // 大文字形も受理(^case-insensitive の回帰ガード)
+    let s = parse_ok("lo SI'O ri viska cu nandu");
+    assert!(s.contains("NU_core \"SI'O\""), "{s}");
+    // 項位置の抽象は tanru_unit 内の nu_form ノード
+    let s = parse_ok("lo si'o ri viska cu nandu");
+    assert!(s.contains("NU_core \"si'o\""), "{s}");
+    assert!(s.contains("nu_form"), "{s}");
+    // 項の代名詞が来る形も同様
+    let s = parse_ok("lo si'o mi viska cu nandu");
+    assert!(s.contains("NU_core \"si'o\""), "{s}");
+    assert!(s.contains("nu_form"), "{s}");
+    // kei による明示終端も受理
+    let s = parse_ok("lo si'o do viska kei cu nandu");
+    assert!(s.contains("NU_core \"si'o\""), "{s}");
+    assert!(s.contains("KEI_clause"), "{s}");
+    // 別形: 抽象節を selbri 側に置くと abstraction ノード
+    let s = parse_ok("mi si'o do tavla cu nelci");
+    assert!(s.contains("NU_core \"si'o\""), "{s}");
+    assert!(s.contains("abstraction"), "{s}");
+    // 対比: 従来語彙(nu / ka)は影響を受けない
+    for w in ["nu", "ka"] {
+        let s = parse_ok(&format!("lo {w} ri viska cu nandu"));
+        assert!(s.contains(&format!("NU_core \"{w}\"")), "{s}");
+    }
+}
+
+#[test]
+fn 対象文_概念抽象sioを含む実文() {
+    // zantufa が受理する実文(終端に半角スペース)。fa lo si'o … の
+    // si'o が NU_core として解析されることを含め全体が受理される
+    let s = parse_ok(".i ku'i la .alis. ca lo nu la ractu ca'a lebna lo junla lo kosta daski gi'e catlu jy gi'e di'a sutra cu spaji sa'irbi'o ki'u lo nu lindi pagre lo menli be .abu fa lo si'o ri pu no roi viska lo ractu poi ponse lo kosta daski .a lo junla poi ry ke'a dy ka'e lebna ");
+    assert!(s.contains("I_core \"i\""), "{s}");
+    assert!(s.contains("GIhA_core \"gi'e\""), "{s}");
+    assert!(s.contains("CAhA_core \"ca'a\""), "{s}");
+    assert!(s.contains("FA_core \"fa\""), "{s}");
+    assert!(s.contains("NU_core \"si'o\""), "{s}");
+    assert!(
+        s.contains("PU_core \"pu\"") && s.contains("ROI_core \"roi\""),
+        "{s}"
+    );
+    assert!(s.contains("NOI_core \"poi\""), "{s}");
+    assert!(s.contains("BY_core \"jy\""), "{s}");
+    assert!(s.contains("BY_core \"ry\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"sa'irbi'o\""), "{s}");
+}
