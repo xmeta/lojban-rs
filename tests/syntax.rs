@@ -1576,3 +1576,35 @@ fn 対象文_kau_rehu_時制kuを含む実文() {
     );
     assert!(s.contains("BRIVLA_core \"bartu\""), "{s}");
 }
+
+#[test]
+fn 対象文_裸時制連鎖を含む実文() {
+    // zantufa が受理する実文。複数の MOhI+FAhA 連鎖を裸時制フラグメント
+    // (tense_item)として受理する。ku は入力に存在しない(暗黙終端)
+    let s = parse_ok("ni'o mo'i ni'a mo'i ni'a mo'i ni'a .i xu lo nu farlu cu no roi mulno .i");
+    assert!(s.contains("NIhO_core \"ni'o\""), "{s}");
+    // MOhI+FAhA の組が3回出現する
+    assert_eq!(s.matches("MOhI_core \"mo'i\"").count(), 3, "{s}");
+    assert_eq!(s.matches("FAhA_core \"ni'a\"").count(), 3, "{s}");
+    assert!(s.contains("UI_core \"xu\""), "{s}");
+    assert!(s.contains("NU_core \"nu\""), "{s}");
+    assert!(
+        s.contains("PA_seq \"no\"") && s.contains("ROI_core \"roi\""),
+        "{s}"
+    );
+    assert!(s.contains("BRIVLA_core \"farlu\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"mulno\""), "{s}");
+}
+
+#[test]
+fn 裸時制連鎖のフラグメント() {
+    // 2組以上の連鎖は tense_item 経由でのみ受理される
+    parse_ok("mo'i ni'a mo'i ni'a");
+    parse_ok("mo'i ni'a mo'i ni'a mo'i ni'a");
+    parse_ok("pu ba");
+    // 単一形・ku 付き形は従来どおり
+    parse_ok("mo'i ni'a");
+    parse_ok("mo'i ni'a ku");
+    // 否定系維持
+    assert!(lojban::parse("qqq").is_err());
+}
