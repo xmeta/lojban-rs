@@ -1,10 +1,28 @@
 # 開発ステータス
 
-## 現在の状態: v0.94 完成(全テストグリーン)
+## 現在の状態: v0.95 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語153 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体216 + doc 11 = 計227テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語156 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体219 + doc 11 = 計230テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.94.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.95.0)
+
+## v0.95 で追加(タグ+BO 短スコープ結合の受容)
+- 文法: tense_mark に (sp1 ~ BO_clause)? を後置し、タグ+BO の短スコープ結合
+  (ni'i bo / ki'u bo / pu bo / mu'i bo 等)を一様に受理。zantufa の
+  statement_2 / bridi_tail_2 / sumti_2 / selbri_5 等の `tag? BO_clause` 相当
+- 動機: Alice 翻訳の実文「.i ni'i bo lo nunfarlu temci cu mutce banzu …」が
+  エラーになった。ki'u bo(〜のため)は実文で高頻度
+- 参照版差: 文頭タグ+BO は zantufa-0.9999 が受理・1.9999 は拒否(退行)。
+  本パーサーは z0 方針に整合
+- 意図的拡張(過剰受容として記録。v0.90 BAhE スコープの記録前例準拠):
+  「mi pu bo klama」(selbri 前タグ+BO)は z0/z1 とも拒否だが受容優先で受理。
+  宙吊り「pu bo」フラグメント等も副次的に受理(テストでピン済み)
+- 既知 GAP の維持: 「mi klama bo cadzu」(裸 tanru BO 接続)は未対応のまま
+  (テストでピン)
+- 回帰テストを tests/syntax.rs に追加(統語 153→156)。全体は 230
+  (単体219+doc11、example 内 5 は別途)
+- docs/coverage.md はクラス接続不変のため差分なし
+- criterion ベンチは p>0.05 で変化なし
 
 ## v0.94 で追加(裸時制連鎖フラグメントの受容)
 - 文法: tense_item = { tense_mark } → { tense_marks }。裸時制の発話フラグメントで

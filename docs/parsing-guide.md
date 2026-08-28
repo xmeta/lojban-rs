@@ -53,7 +53,7 @@ text        入力全体(ルート)
 | 規則 | 意味 |
 |---|---|
 | `s_marks` | 述語マーク(na 否定 / ja'a 肯定 / se te ve xe 変換 / na'e to'e no'e je'a) |
-| `tense_marks` | 時制・相・方位・モダルの連鎖(pu ca ba / ze'i ze'a ze'u / ROI / BAI / FAhA / MOhI / ZEhA / VEhA VIhA / cu'e / ki / naku / ZEhA・空間間隔 / 数詞+ROI/TAhE/ZAhO の複合タグ(so'u roi 等)) |
+| `tense_marks` | 時制・相・方位・モダルの連鎖(pu ca ba / ze'i ze'a ze'u / ROI / BAI / FAhA / MOhI / ZEhA / VEhA VIhA / cu'e / ki / naku / ZEhA・空間間隔 / 数詞+ROI/TAhE/ZAhO の複合タグ(so'u roi 等))。各タグの直後に `bo` を後置可(短スコープ結合。`ki'u bo` `ni'i bo` 等) |
 | `tanru` / `tanru_unit` | 複合述語。unit は brivla / GOhA / cmevla / nu_form / me_form(+me'u, MOI) / ke_group / JAI 変換 / 数詞+MOI / zei 複合 を取り得る(各 unit の前に BAhE(ba'e/za'e)強調を前置可) |
 | `co_tail` | `co` による逆順 |
 | `guhek_selbri` | 先接続述語(gu'e … gi) |
