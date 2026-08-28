@@ -146,7 +146,7 @@ println!("{}", tree::to_json(pairs));
 ## 開発
 
 ```console
-$ cargo test      # 全テスト(225件=単体214+doc 11、実文418文を含む)
+$ cargo test      # 全テスト(227件=単体216+doc 11、実文418文を含む)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 $ cargo bench    # 性能ベンチマーク(criterion)

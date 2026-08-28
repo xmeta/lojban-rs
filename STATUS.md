@@ -1,10 +1,29 @@
 # 開発ステータス
 
-## 現在の状態: v0.93 完成(全テストグリーン)
+## 現在の状態: v0.94 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語151 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体214 + doc 11 = 計225テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語153 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体216 + doc 11 = 計227テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.93.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.94.0)
+
+## v0.94 で追加(裸時制連鎖フラグメントの受容)
+- 文法: tense_item = { tense_mark } → { tense_marks }。裸時制の発話フラグメントで
+  複数タグの連鎖(ku なし)を1項として受理可能に(「mo'i ni'a mo'i ni'a mo'i ni'a」等)。
+  zantufa は連鎖を1項として解析するための整合修正
+- レビュー対応の追加修正: tense_item に VAU 後置 (sp1 ~ VAU_clause)? を追加
+  (zantufa の fragment terms ~ VAU_elidible 相当。「mo'i ni'a vau」等が受理可能に)。
+  fragment 末尾に否定先読みガード !(sp1 ~ tense_mark) を追加(「naku pu」「na ku ba」が
+  fragment の na_ku 部分確定で tense_item 全体一致に届かない PEG 確定問題の解消)
+- いずれも zantufa 照合済みの受容系追加(mo'i ni'a vau / naku pu / na ku ba)。
+  差分ハーネス(744文)突合で退行ゼロ・新規過剰受容ゼロを確認
+- 動機: Alice 翻訳の実文「ni'o mo'i ni'a mo'i ni'a mo'i ni'a .i xu lo nu farlu cu
+  no roi mulno .i」がエラーになった
+- 回帰テストを tests/syntax.rs に追加(統語 151→153)。全体は 227
+  (単体216+doc11、example 内 5 は別途)
+- docs/coverage.md はクラス接続不変のため差分なし
+- criterion ベンチは p>0.05 で変化なし
+- 差分ハーネス(744文)再検証: v0.94 による新規受理は4文ですべて zantufa も受理、
+  リグレッション 0。GAP は既知の意図的非対応(「mi je do klama」系)のみ
 
 ## v0.93 で追加(zantufa 差分調査による kau/re'u 追加と時制 ku 項の受容)
 - zantufa リファレンスとの差分ハーネス(743文比較)で特定された GAP の修正:
