@@ -1594,6 +1594,16 @@ fn 対象文_裸時制連鎖を含む実文() {
     );
     assert!(s.contains("BRIVLA_core \"farlu\""), "{s}");
     assert!(s.contains("BRIVLA_core \"mulno\""), "{s}");
+    // tense_item ノード配下に3組の入れ子が揃っていることの直接確認
+    // (MOhI+FAhA が別々の item に散らばっていないことの回帰ガード)
+    assert!(
+        s.contains(
+            "(tense_item (MOhI_clause (MOhI_core \"mo'i\")) (FAhA_clause (FAhA_core \"ni'a\")) \
+             (MOhI_clause (MOhI_core \"mo'i\")) (FAhA_clause (FAhA_core \"ni'a\")) \
+             (MOhI_clause (MOhI_core \"mo'i\")) (FAhA_clause (FAhA_core \"ni'a\")))"
+        ),
+        "{s}"
+    );
 }
 
 #[test]
@@ -1605,6 +1615,36 @@ fn 裸時制連鎖のフラグメント() {
     // 単一形・ku 付き形は従来どおり
     parse_ok("mo'i ni'a");
     parse_ok("mo'i ni'a ku");
+    // ku 付き形は fragment(tagged) 経路が先行する(item 選択のシャドウ挙動ピン。
+    // tense_item 側の tense_marks 末尾 KU 枝は実質予備)
+    let s = parse_ok("pu ba ku");
+    assert!(s.contains("fragment"), "{s}");
+    assert!(!s.contains("tense_item"), "{s}");
+    assert!(s.contains("KU_core \"ku\""), "{s}");
+    // 連鎖が区切りのポーズを呑まない(前後の .i が両方残る)
+    let s = parse_ok(".i pu ba .i");
+    assert_eq!(s.matches("I_core \"i\"").count(), 2, "{s}");
+    assert!(s.contains("tense_item"), "{s}");
+    // 連鎖 + VAU(zantufa の fragment terms VAU_elidible 相当。v0.94 で受容)
+    let s = parse_ok("mo'i ni'a vau");
+    assert!(s.contains("tense_item"), "{s}");
+    assert!(s.contains("VAU_core \"vau\""), "{s}");
+    // naku 混在連鎖(zantufa は brigahi + tag_term の2項として受理するため
+    // 受容。fragment の na_ku 部分確定を否定先読みで tense_item に譲る)
+    let s = parse_ok("naku pu");
+    assert!(s.contains("tense_item"), "{s}");
+    assert!(s.contains("NAKU_joint \"naku\""), "{s}");
+    assert!(s.contains("PU_core \"pu\""), "{s}");
+    let s = parse_ok("na ku ba");
+    assert!(s.contains("tense_item"), "{s}");
+    assert!(
+        s.contains("NA_core \"na\"") && s.contains("KU_core \"ku\""),
+        "{s}"
+    );
+    assert!(s.contains("PU_core \"ba\""), "{s}");
+    // VAU との組合せも同様
+    parse_ok("naku pu vau");
+    parse_ok("na ku ba vau");
     // 否定系維持
     assert!(lojban::parse("qqq").is_err());
 }

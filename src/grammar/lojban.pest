@@ -54,10 +54,15 @@ item    = { gek_sentence | prenex_sentence | sentence | free | Y_clause
 prenex_sentence = { prenex_terms ~ sp1 ~ ZOhU_clause ~ sp1 ~ inner_sentence }
 prenex_terms    = _{ prenex_term ~ (sp1 ~ prenex_term)* }
 prenex_term     = _{ PA_seq | PA_clause | KOhA_clause }
-fragment  = { terms ~ (sp1 ~ VAU_clause)? ~ (sp1 ~ free)? }
+// 末尾の否定先読み: 項解析が na_ku だけで部分確定する入力(naku pu /
+// na ku ba 等)を tense_item に譲る。受理済み入力では item の直後は
+// 区切りか終端のみのため、既存の解析木は不変
+fragment  = { terms ~ (sp1 ~ VAU_clause)? ~ (sp1 ~ free)? ~ !(sp1 ~ tense_mark) }
 // 裸時制の発話フラグメント。連鎖(mo'i ni'a mo'i ni'a 等)を1項として
-// 受理するため単一の tense_mark ではなく連鎖規則の tense_marks を使う
-tense_item = { tense_marks }
+// 受理するため単一の tense_mark ではなく連鎖規則の tense_marks を使う。
+// VAU 後置(mo'i ni'a vau 等)は zantufa の fragment(terms ~ VAU_elidible)相当
+// 注: ku 付き形は fragment(tagged)経路が先行するため本規則の KU 枝は実質予備
+tense_item = { tense_marks ~ (sp1 ~ VAU_clause)? }
 
 sentence   = { frees_s? ~ sp1? ~ tense_marks? ~ sp1? ~ (terms_full | bridi_tail) ~ frees_m? }
 terms_full = { terms ~ (sp1 ~ CU_clause)? ~ sp1 ~ frees_mid? ~ bridi_tail }
