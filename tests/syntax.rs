@@ -732,6 +732,81 @@ fn 述語連鎖_bo_グルーピング() {
 }
 
 #[test]
+fn タグ直後の_bo_短スコープ結合() {
+    // zantufa の tag? BO_clause 相当。tense_mark がタグの直後の BO を
+    // 一様に消費する(v0.95)。文頭の .i + タグ + BO の実文
+    let s = parse_ok(
+        ".i ni'i bo lo nunfarlu temci cu mutce banzu \
+         lo nu catlu lo sruri gi'e kucli lo du'u ma kau ba zi fasnu",
+    );
+    // タグ(ni'i)と BO が sentence 直下に並ぶ(tense_mark は silent)
+    assert!(s.contains("BAI_clause (BAI_core \"ni'i\")"), "{s}");
+    assert!(s.contains("BO_clause (BO_core \"bo\")"), "{s}");
+    assert!(s.contains("LE_core \"lo\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"nunfarlu\""), "{s}");
+    assert!(s.contains("NU_core \"du'u\""), "{s}");
+    // BO は文の本体より先に消費される(タグ+BO の短スコープ結合)
+    let bo = s.find("BO_clause (BO_core \"bo\")").unwrap();
+    let body = s.find("terms_full").unwrap();
+    assert!(bo < body, "{s}");
+}
+
+#[test]
+fn タグ_bo_の各位置() {
+    // 文頭タグ+BO(lead + sentence の tense_marks 経路)
+    parse_ok("ni'i bo mi klama");
+    parse_ok("pu bo mi klama");
+    parse_ok(".i ki'u bo mi klama");
+    parse_ok("ni'o ki'u bo mi klama");
+    parse_ok(".i ni'i bo mi klama");
+    // 項に続くタグ+BO(zantufa の sumti_2 / term_1 ループ相当)
+    let s = parse_ok("mi ni'i bo do klama");
+    assert!(
+        s.contains("BAI_core \"ni'i\"") && s.contains("BO_core \"bo\""),
+        "{s}"
+    );
+    // selbri 後の tail_terms 内(zantufa の tag_term + BO 相当)
+    parse_ok("mi viska pu bo lo mlatu");
+    // selbri 前タグ+BO(selbri の tense_marks 経路)
+    parse_ok("mi pu bo klama");
+    // 連鎖途中の BO(v0.95)。zantufa は連鎖単位で1回だが本実装は各要素の
+    // 直後に BO を許可する意図的緩和(「ca bo ba」は z1 が拒否、z0 は
+    // tag_term+BO の2項として受理。「pu bo ca bo」は z0/z1 とも拒否)
+    parse_ok("ca bo ba");
+    parse_ok("pu bo ca bo");
+    // BAI+NAI+BO(z0/z1 は拒否する意図的緩和)
+    let s = parse_ok("mu'i nai bo");
+    assert!(
+        s.contains("NAI_core \"nai\"") && s.contains("BO_core \"bo\""),
+        "{s}"
+    );
+}
+
+#[test]
+fn 既存_bo_経路は維持される() {
+    // tanru の JA+BO 接続(tanru_link 経路。本件で変更していない)
+    let s = parse_ok("mi klama je bo cadzu");
+    assert!(
+        s.contains("JA_core \"je\"") && s.contains("BO_core \"bo\""),
+        "{s}"
+    );
+    // タグなし .i bo(既存 sep 経路)
+    let s = parse_ok(".i bo mi klama");
+    assert!(s.contains("BO_clause"), "{s}");
+    parse_ok("mi klama .i bo mi klama");
+    parse_ok("mi joi bo do klama");
+    parse_ok("ta melbi je bo cmalu zdani");
+    // BO を含まないタグの解析木は不変
+    parse_ok("ni'i mi klama");
+    parse_ok(".i ni'i mi klama");
+    // 裸の tanru BO 接続(zantufa selbri_6 相当)は本件のスコープ外で
+    // 従来どおり拒否(tanru_link は JA 付きのみ)
+    assert!(lojban::parse("mi klama bo cadzu").is_err());
+    // 非文は拒否
+    assert!(lojban::parse("qqq").is_err());
+}
+
+#[test]
 fn 発話序数_mai() {
     // .i 直後
     let s = parse_ok(".i pamai mi klama");
@@ -1518,6 +1593,16 @@ fn 時制kuに描述が続く形は_fragment_として受理() {
     assert!(s.contains("BRIVLA_core \"klama\""), "{s}");
     // 裸の ku だけの項は引き続き拒否(tagged は tense_tags 前置が必須)
     assert!(LojbanParser::parse(Rule::text, "mi ku klama").is_err());
+    // タグだけ項枝 + BO(v0.95 の tense_mark BO 後置による副次的受容)。
+    // BO を伴うタグだけ項も fragment(tagged) で受理する。
+    // zantufa(z0/z1)は拒否する意図的緩和
+    let s = parse_ok("pu bo ku");
+    assert!(s.contains("fragment"), "{s}");
+    assert!(s.contains("tagged"), "{s}");
+    assert!(
+        s.contains("BO_core \"bo\"") && s.contains("KU_core \"ku\""),
+        "{s}"
+    );
 }
 
 #[test]
@@ -1645,6 +1730,27 @@ fn 裸時制連鎖のフラグメント() {
     // VAU との組合せも同様
     parse_ok("naku pu vau");
     parse_ok("na ku ba vau");
+    // 宙吊りタグ+BO フラグメント(v0.95 の tense_mark BO 後置による副次的受容)。
+    // 接続先を持たない短スコープ結合で、zantufa(z0/z1)は拒否する意図的緩和
+    // (「naku pu」ピンと同様の受容ピン)
+    let s = parse_ok("pu bo");
+    assert!(s.contains("tense_item"), "{s}");
+    assert!(
+        s.contains("PU_core \"pu\"") && s.contains("BO_core \"bo\""),
+        "{s}"
+    );
+    let s = parse_ok("ni'i bo");
+    assert!(s.contains("tense_item"), "{s}");
+    assert!(
+        s.contains("BAI_core \"ni'i\"") && s.contains("BO_core \"bo\""),
+        "{s}"
+    );
+    let s = parse_ok("naku pu bo");
+    assert!(s.contains("tense_item"), "{s}");
+    assert!(
+        s.contains("NAKU_joint \"naku\"") && s.contains("BO_core \"bo\""),
+        "{s}"
+    );
     // 否定系維持
     assert!(lojban::parse("qqq").is_err());
 }

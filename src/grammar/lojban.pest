@@ -178,7 +178,14 @@ s_mark  = { NA_clause | JAhA_clause | SE_clause | NAhE_clause }
 
 // 時制・相・方位の連続(zantufa の tag/tense の簡略版。ku による明示閉鎖も許容)
 tense_marks = _{ tense_mark ~ (sp1 ~ tense_mark)* ~ (sp1 ~ KU_clause)? }
-tense_mark  = _{ PU_clause | CAhA_clause | ZAhO_clause | ZI_clause | VA_clause
+// 各タグの直後に BO(短スコープ結合)を許容(zantufa の tag? BO_clause 相当)。
+// 「.i ni'i bo …」「ni'o ki'u bo …」の文頭タグ+BO と「mi pu bo klama」等の
+// selbri 前タグ+BO を一様に受理する。tense_mark は silent なので既存入力
+// (タグの後に BO が来ない入力)の解析木は不変。BO はタグ位置でのみ試行され、
+// tanru の BO 接続(selbri_6 相当・未実装)や sep の .i bo とは競合しない
+// 注: 「mi pu bo klama」は z0/z1 とも拒否する本パーサーの意図的拡張(受容優先)。
+//     宙吊り pu bo フラグメントも副次的に受理する(tests/syntax.rs の受容ピン参照)
+tense_mark  = _{ (PU_clause | CAhA_clause | ZAhO_clause | ZI_clause | VA_clause
                | TAhE_clause | ROI_clause | BAI_clause ~ (sp1 ~ NAI_clause)?
                | MOhI_clause ~ sp1 ~ FAhA_clause | FAhA_clause
                | NA_clause ~ sp1 ~ KU_clause | NAKU_joint
@@ -186,7 +193,7 @@ tense_mark  = _{ PU_clause | CAhA_clause | ZAhO_clause | ZI_clause | VA_clause
                // 数詞を前置した ROI/TAhE/ZAhO の複合タグ(so'u roi / re roi 等)
                | interval_property
                | time_interval
-               | space_interval }
+               | space_interval) ~ (sp1 ~ BO_clause)? }
 
 // 空間間隔(VEhA/VIhA)。FAhA を後続可(ve'i ne'i le zdani 等)。
 // FEhE に続く間隔プロパティ(roi/ta'e/zaho の空間用法)も連鎖可(camxes 準拠)
