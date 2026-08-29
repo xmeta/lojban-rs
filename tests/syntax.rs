@@ -1686,8 +1686,12 @@ fn kau_間接疑問マーカー() {
 #[test]
 fn rehu_序数頻度タグ() {
     // re'u は ROI セルマォ(roi + re'u。v0.93 で追加)。h 表記 rehu も同様
+    // v0.99: quant_selbri ガードにより fragment(数詞+selbri の項)ではなく
+    // 文のタグ読み(selbri の tense_marks 経路)で受理される。
+    // interval_property の PA_seq 枝は atomic のため PA_core 子ノードは出ない
     let s = parse_ok("mi za'u re'u klama");
-    assert!(s.contains("PA_core \"za'u\""), "{s}");
+    assert!(s.contains("sentence"), "{s}");
+    assert!(s.contains("PA_seq \"za'u\""), "{s}");
     assert!(s.contains("ROI_core \"re'u\""), "{s}");
     assert!(s.contains("BRIVLA_core \"klama\""), "{s}");
     let s = parse_ok("so'i rehu klama");
@@ -1959,6 +1963,102 @@ fn faha_残り5語の補完() {
     let s = parse_ok("mi mo'i bu'u klama");
     assert!(s.contains("MOhI_core \"mo'i\""), "{s}");
     assert!(s.contains("FAhA_core \"bu'u\""), "{s}");
+    // 否定系維持
+    assert!(lojban::parse("qqq").is_err());
+}
+
+#[test]
+fn 抽象内の数詞roi複合タグはquant_selbriに貪欲消費されない() {
+    // v0.99: 抽象(du'u)内の inner sentence で quant_selbri が
+    // 「za'u re'u sudga」を数詞+selbri の項として貪欲消費し、
+    // bridi_tail の selbri が残らず拒否される問題を修正
+    // (PEG の部分成功確定。v0.93 ギャップC「ba zi ku le gerku klama」と同型)。
+    // bare_number と同じ ROI/TAhE/ZAhO 直前ガードを quant_selbri に追加し、
+    // 数詞+ROI を複合タグ(interval_property)として selbri の
+    // tense_marks 経路に譲る。zantufa z0 の term_2 !tag sumti ガード相当
+    let s = parse_ok("mi li'a du'u ma kau za'u re'u sudga");
+    assert!(s.contains("NU_core \"du'u\""), "{s}");
+    assert!(s.contains("KOhA_core \"ma\""), "{s}");
+    assert!(s.contains("UI_core \"kau\""), "{s}");
+    // 抽象内の PA+ROI 複合タグ構造(タグ読みのピン)
+    assert!(s.contains("PA_seq \"za'u\""), "{s}");
+    assert!(s.contains("ROI_core \"re'u\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"sudga\""), "{s}");
+    // BAI タグ(ta'i)付き項を含む対象文全体
+    let s = parse_ok("ni'o lo pa moi preti cu li'a du'u ta'i ma kau za'u re'u sudga");
+    assert!(s.contains("NIhO_core \"ni'o\""), "{s}");
+    assert!(s.contains("LE_core \"lo\""), "{s}");
+    assert!(
+        s.contains("PA_core \"pa\"") && s.contains("MOI_core \"moi\""),
+        "{s}"
+    );
+    assert!(s.contains("BRIVLA_core \"preti\""), "{s}");
+    assert!(s.contains("CU_core \"cu\""), "{s}");
+    assert!(s.contains("UI_core \"li'a\""), "{s}");
+    assert!(s.contains("NU_core \"du'u\""), "{s}");
+    assert!(s.contains("BAI_core \"ta'i\""), "{s}");
+    assert!(s.contains("UI_core \"kau\""), "{s}");
+    assert!(s.contains("PA_seq \"za'u\""), "{s}");
+    assert!(s.contains("ROI_core \"re'u\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"sudga\""), "{s}");
+    // NAI 付きは v0.98 以前から受理(quant_selbri の selbri が nai を
+    // 取り込めずタグ読みにフォールバックする経路)。挙動不変
+    let s = parse_ok("mi li'a du'u ma kau za'u re'u nai sudga");
+    assert!(s.contains("PA_seq \"za'u\""), "{s}");
+    assert!(s.contains("ROI_core \"re'u\""), "{s}");
+    assert!(s.contains("NAI_core \"nai\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"sudga\""), "{s}");
+    // ガードの TAhE/ZAhO 枝のピン: 数詞+TAhE/ZAhO も複合タグ
+    // (interval_property)としてタグ読みになる。
+    // 注: z0 は ta'e を BAI 扱いにして数詞+TAhE 複合タグを持たないため
+    // 「za'u ta'e sudga」を量化詞+selbri の項として読む既知差分の領域。
+    // 当社は CLL 規範の interval_property 読みを優先する(v0.99 実装報告の
+    // エッジ分類を参照)
+    let s = parse_ok("mi li'a du'u ma kau za'u ta'e sudga");
+    assert!(s.contains("PA_seq \"za'u\""), "{s}");
+    assert!(s.contains("TAhE_core \"ta'e\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"sudga\""), "{s}");
+    let s = parse_ok("mi li'a du'u ma kau za'u pu'o sudga");
+    assert!(s.contains("PA_seq \"za'u\""), "{s}");
+    assert!(s.contains("ZAhO_core \"pu'o\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"sudga\""), "{s}");
+    // 既存維持: 数詞+MOI はガード外(tanru_unit の number+MOI 経路)
+    parse_ok("lo re moi prenu cu barda");
+    parse_ok("mi viska re moi prenu");
+    // 既存維持: 数詞+ROI の単文。v0.98 は fragment(quant_selbri 項)経路
+    // だったが、v0.99 からは z0 と同じ文のタグ読みで受理(木は変化)
+    parse_ok("mi za'u re'u klama");
+    // 既存維持: 直後が ROI/TAhE/ZAhO でない数詞+selbri は従来どおり
+    // quant_selbri の項(ガードの非過剰遮断ピン)
+    let s = parse_ok("pa prenu cu klama");
+    assert!(s.contains("quant_selbri"), "{s}");
+    // 数詞連鎖+selbri も quant_selbri 維持(連鎖の途中で遮断されない)
+    let s = parse_ok("pa re prenu cu klama");
+    assert!(s.contains("quant_selbri"), "{s}");
+    assert!(
+        s.contains("PA_core \"pa\"") && s.contains("PA_core \"re\""),
+        "{s}"
+    );
+    // KU 後置形も quant_selbri 維持
+    let s = parse_ok("pa prenu ku");
+    assert!(s.contains("quant_selbri"), "{s}");
+    assert!(s.contains("KU_core \"ku\""), "{s}");
+    // 抽象内の空白区切り数詞連鎖+ROI も複合タグとして受理される。
+    // 空白区切りのため interval_property の PA_clause 連鎖枝が選ばれ
+    // (PA_seq 枝は無空白連結のみ)、PA_clause が並ぶ
+    let s = parse_ok("mi li'a du'u ma kau za'u ro re'u sudga");
+    assert!(s.contains("NU_core \"du'u\""), "{s}");
+    assert!(
+        s.contains("PA_core \"za'u\"") && s.contains("PA_core \"ro\""),
+        "{s}"
+    );
+    assert!(s.contains("ROI_core \"re'u\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"sudga\""), "{s}");
+    // z0 も拒否する形は引き続き拒否(数詞+ROI タグの後には selbri が
+    // 続かず、裸の数詞+selbri 項もタグ読みに譲るため)
+    assert!(lojban::parse("mi li'a du'u ma kau za'u sudga").is_err());
+    // 数詞+ROI タグの直後の selbri を欠く形も拒否(z0 整合)
+    assert!(lojban::parse("mi za'u re'u klama ku").is_err());
     // 否定系維持
     assert!(lojban::parse("qqq").is_err());
 }

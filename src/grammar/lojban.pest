@@ -133,7 +133,16 @@ sumti_core = _{ bu_lerfu | KOhA_clause | lahe_sumti | desc | BY_clause | quant_d
 //     数詞+これらの語はタグを成すという CLL 規範とも整合
 bare_number = _{ number ~ !(sp1 ~ MOI_clause)
                 ~ !(sp1 ~ (ROI_clause | TAhE_clause | ZAhO_clause)) }
-quant_selbri = { number ~ sp1 ~ selbri ~ (sp1 ~ KU_clause)? }
+// 注: 直後が ROI/TAhE/ZAhO の場合は数量詞+selbri の項としない。
+//     「za'u re'u sudga」等の数詞+間隔プロパティは複合タグ
+//     (interval_property)であり、抽象内の inner sentence で本規則が
+//     数詞+selbri を貪欲消費すると bridi_tail の selbri が残らず
+//     拒否される(PEG の部分成功確定。v0.93 ギャップC「ba zi ku
+//     le gerku klama」と同型)。bare_number と同じガードで
+//     タグ読み(selbri の tense_marks 経路)に譲る。zantufa の
+//     term_2 の !tag sumti ガードに相当
+quant_selbri = { number ~ !(sp1 ~ (ROI_clause | TAhE_clause | ZAhO_clause))
+               ~ sp1 ~ selbri ~ (sp1 ~ KU_clause)? }
 // LAhE 項修飾(la'e = 参照先 / lu'e = 参照元)。lu'u による明示閉鎖も許容
 // (LAhE の終端は LUhU。ge'u は GOI 関係節の終端)
 lahe_sumti = { LAHEDI_joint | LAhE_clause ~ sp1 ~ sumti ~ (sp1 ~ LUhU_clause)? }
