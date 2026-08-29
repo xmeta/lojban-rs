@@ -148,7 +148,23 @@ abstr_head  = _{ SEDUHU_joint | NU_clause }
 // 注: (mex ~ sp1)? ~ selbri だと、mex が成功した後に selbri が失敗した際に
 //     グループ成功が確定し「selbri 単独」 reading に戻れない
 //     (le re moi prenu で発覚)。分岐で書く(教訓5の裏面)
-sumti_tail  = _{ mex ~ sp1 ~ selbri | selbri }
+// 描述内で selbri の前に埋め込み sumti を許容(所有形 lo mi gerku /
+// lo di'u valsi 等。zantufa の
+// `sumti_tail <- relative_clauses? (!quantifier sumti)? sumti_tail_1`
+// の埋め込みスロット相当)。mex 枝を先にすることで数詞描述
+// (lo pa mlatu 等)は既存の mex 経路に誘導され、解析木は不変
+// 注: 埋め込み sumti の直前の !mex は zantufa の !quantifier 先読み相当。
+//     数詞起源の sumti は2系統に分かれる:
+//     ・zantufa も拒否する系(本実装と一致): 数詞+相対節
+//       (lo pa poi gerku barda)/ 数詞+VUhO(lo pa vu'o mi)
+//     ・zantufa は sumti_tail_1 の「quantifier sumti」尾部形で受理するが、
+//       本実装は既知差異として拒否する系: 数詞+JOI 項接続
+//       (lo pa joi re gerku)/ 数詞+所有形(lo pa mi gerku)。
+//       尾部形の完全対応は sumti_tail の2層構造への再編を要するため見送り。
+//     mex は非演算子先頭語で高速に失敗するためガードのコストは無視できる
+// 注: 尾部形の表面形 lo pa le gerku ku は未対応(GAP)。意味的に近接する
+//     語順 pa le gerku ku のみ quant_desc で受理済み
+sumti_tail  = _{ mex ~ sp1 ~ selbri | !mex ~ sumti ~ sp1 ~ selbri | selbri }
 
 relative_clauses = { relative_clause ~ (sp1 ~ relative_clause)* }
 relative_clause  = {

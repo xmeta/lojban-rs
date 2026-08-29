@@ -443,6 +443,82 @@ fn 不完全な描述内数式は拒否される() {
 }
 
 #[test]
+fn 描述内の埋め込みsumti() {
+    // 描述内で selbri の前に埋め込み sumti を許容(所有形 lo mi gerku /
+    // lo di'u valsi 等。zantufa の
+    // sumti_tail <- relative_clauses? (!quantifier sumti)? sumti_tail_1
+    // の埋め込みスロット相当)。mex 枝を先にすることで数詞描述は既存の
+    // mex 経路に誘導され木は不変
+    for input in [
+        "lo di'u valsi cu barda",
+        "lo mi gerku cu barda",
+        "lo do zdani cu barda",
+        "lo mi klama cu barda",
+        // KU 明示閉鎖との相互作用(新規受容)
+        "lo mi gerku ku cu barda",
+        // 入れ子描述(内側を ku で閉じれば外側 selbri が成立)
+        "lo lo nanmu ku gerku cu barda",
+        // 相対節は desc 全体に付く(埋め込み sumti の内側ではない)
+        "lo mi gerku poi barda cu cadzu",
+    ] {
+        let s = parse_ok(input);
+        assert!(s.contains("desc"), "{s}");
+    }
+    // 埋め込み sumti が desc 内の sumti として現れる
+    let s = parse_ok("lo di'u valsi cu barda");
+    assert!(s.contains("KOhA_core \"di'u\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"valsi\""), "{s}");
+    let s = parse_ok("lo mi gerku cu barda");
+    assert!(s.contains("KOhA_core \"mi\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"gerku\""), "{s}");
+    // 相対節は desc の外(sumti レベル)に付く
+    let s = parse_ok("lo mi gerku poi barda cu cadzu");
+    assert!(s.contains("relative_clauses"), "{s}");
+    // 数詞描述は従来どおり mex 経路(木形状不変)
+    let s = parse_ok("lo pa mlatu cu barda");
+    assert!(s.contains("mex"), "{s}");
+    assert!(!s.contains("(sumti (number"), "{s}");
+    // 数詞起源の埋め込み sumti は zantufa の !quantifier 先読み相当の
+    // !mex ガードで拒否。2系統ある:
+    // ・zantufa も拒否(本実装と一致): 数詞+相対節 / 数詞+VUhO
+    // ・zantufa は sumti_tail_1 の quantifier sumti 枝で受理するが、
+    //   本実装は既知差異として拒否: 数詞+JOI 項接続 / 数詞+所有形 /
+    //   尾部形の表面形 lo pa le gerku ku(語順 pa le gerku ku のみ
+    //   quant_desc で受理済み)
+    for input in [
+        "lo pa joi re gerku cu barda",
+        "lo pa poi gerku barda cu cadzu",
+        "lo pa vu'o mi gerku cu barda",
+        "lo pa mi gerku",
+        "lo pa le gerku ku",
+    ] {
+        assert!(LojbanParser::parse(Rule::text, input).is_err(), "{input}");
+    }
+    // 埋め込み sumti 単独では描述が閉じない(zantufa z0/z1 と一致)
+    assert!(LojbanParser::parse(Rule::text, "lo di'u cu barda").is_err());
+    // 入れ子描述は ku なしでは内側 tanru が貪欲吸収され zantufa とともに拒否
+    assert!(LojbanParser::parse(Rule::text, "lo lo nanmu gerku cu barda").is_err());
+    // 否定系維持
+    assert!(lojban::parse("qqq").is_err());
+}
+
+#[test]
+fn 描述内埋め込みsumtiを含む対象文() {
+    // 描述内の selbri 前埋め込み sumti(di'u)を含む抽象+BE 連結の全体文
+    let s = parse_ok("ni'o ca lo nu .abu cusku lo di'u valsi kei lo jamfu be .abu cu sakli .i");
+    assert!(s.contains("NIhO_core \"ni'o\""), "{s}");
+    assert!(s.contains("PU_core \"ca\""), "{s}");
+    assert!(s.contains("NU_core \"nu\""), "{s}");
+    assert!(s.contains("BY_core \"abu\""), "{s}");
+    assert!(s.contains("KOhA_core \"di'u\""), "{s}");
+    assert!(s.contains("KEI_core \"kei\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"jamfu\""), "{s}");
+    assert!(s.contains("BE_core \"be\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"sakli\""), "{s}");
+    assert!(s.contains("I_core \"i\""), "{s}");
+}
+
+#[test]
 fn zoi_による任意テキスト引用() {
     let s = parse_ok("mi cusku zoi .ky. hello world .ky.");
     assert!(s.contains("zoi_quote"), "{s}");
