@@ -817,6 +817,90 @@ fn 発話序数_mai() {
 }
 
 #[test]
+fn 発話序数_分離形_数詞_mai() {
+    // 分離形「数詞+mai」は自由修飾語(zantufa free <- mex_2 MAI_clause の
+    // number サブセット)。v0.96 まで裸の mai 自体が MAI_core に無く
+    // 「pa mai …」全体が拒否されていた回帰
+    let s = parse_ok("pa mai");
+    assert!(
+        s.contains(
+            "mai_free (number (PA_clause (PA_core \"pa\"))) (MAI_clause (MAI_core \"mai\"))"
+        ),
+        "{s}"
+    );
+    // 文頭の自由修飾語として
+    let s = parse_ok("pa mai mi klama");
+    assert!(s.contains("MAI_core \"mai\""), "{s}");
+    // 融合数詞+mai(PA_seq 経路)
+    parse_ok("pare mai mi klama");
+    // 文中の項の後ろ(旧文法は裸 mai を語彙に持たず入力ごと拒否。
+    // 隣接する数詞+mai は free に一括される。sumti+free の2要素に
+    // 分かれるのは融合形 pa+pamai のケースで、こちらも free 一括に
+    // なるため木が変わる — 後述の pa pamai ピンを参照)
+    let s = parse_ok("mi viska pa mai");
+    assert!(s.contains("mai_free (number"), "{s}");
+    // 項と mai の間に別の free が挟まれば数詞は項のまま(隣接時のみ一括)
+    let s = parse_ok("mi viska pa .ui mai");
+    assert!(
+        s.contains("sumti (number") && s.contains("MAI_core \"mai\""),
+        "{s}"
+    );
+    // number の BOI 経路
+    let s = parse_ok("pa boi mai");
+    assert!(
+        s.contains("BOI_core \"boi\"") && s.contains("MAI_core \"mai\""),
+        "{s}"
+    );
+    // 疑問数詞 xo も number 経路で受理
+    let s = parse_ok("xo mai");
+    assert!(
+        s.contains("PA_core \"xo\"") && s.contains("MAI_core \"mai\""),
+        "{s}"
+    );
+    // 裸の mo'o も free として受理
+    let s = parse_ok("mo'o");
+    assert!(
+        s.contains("mai_free (MAI_clause (MAI_core \"mo'o\"))"),
+        "{s}"
+    );
+    // 裸の mai/mo'o 単独の free は意図的緩和(zantufa は mex_2 前置を
+    // 要求するため拒否。第一枝 MAI_clause の帰結)
+    parse_ok("mi klama mai");
+    parse_ok("mi klama mo'o");
+    // 段落序数 mo'o(selma'o MAI のもう1語)
+    let s = parse_ok("pa mo'o mi klama");
+    assert!(s.contains("MAI_core \"mo'o\""), "{s}");
+    // 数詞項の後ろに置いた場合も free として受理
+    parse_ok("mi pa mai klama");
+    // 融合形は従来どおり
+    let s = parse_ok("pamai");
+    assert!(s.contains("MAI_core \"pamai\""), "{s}");
+    // 融合形は pamai〜nomai のみ(MAI_core 固定)。"paremai" は MAI と
+    // しては解釈されず、lujvo 形態として BRIVLA 経路で受理される
+    // (v0.95 から不変。zantufa も数詞+mai の無空白連結として受理)
+    let s = parse_ok("paremai");
+    assert!(!s.contains("MAI_core"), "{s}");
+    assert!(s.contains("BRIVLA_core \"paremai\""), "{s}");
+    // brivla 解析の帰結として、本実装は後続の bridi とは繋がらない
+    assert!(lojban::parse("paremai mi klama").is_err());
+    // 旧受容入力で木が変わる融合形パターン: 旧解析は sumti(pa)+
+    // free(pamai) の2要素だったが、隣接する数詞+MAI は free に
+    // 一括される(受容は同じで木のみ変化)
+    let s = parse_ok("mi viska pa pamai");
+    assert!(
+        s.contains(
+            "mai_free (number (PA_clause (PA_core \"pa\"))) (MAI_clause (MAI_core \"pamai\"))"
+        ),
+        "{s}"
+    );
+    // 対象文(発話序数を含む全文)
+    let s = parse_ok("pa mai .abu troci lo nu catlu lo cnita gi'e facki lo du'u .abu ma kau klama");
+    assert!(s.contains("MAI_core \"mai\""), "{s}");
+    // 非文は拒否
+    assert!(lojban::parse("qqq").is_err());
+}
+
+#[test]
 fn 感情強度_cai() {
     let s = parse_ok("ui sai do gleki");
     assert!(s.contains("UI_core \"ui\""), "{s}");

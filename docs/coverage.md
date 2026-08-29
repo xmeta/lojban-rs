@@ -85,7 +85,7 @@
 | VUhO | `vu'o` `vuho` | ✅ |
 | Y |  | ✅ |
 | NAI | `nai` | ✅ |
-| MAI | `pamai` `remai` `cimai` `vomai` `mumai` `xamai` `zemai` `bimai` `somai` `nomai` | ✅ |
+| MAI | `pamai` `remai` `cimai` `vomai` `mumai` `xamai` `zemai` `bimai` `somai` `nomai` `mai` `mo'o` `moho` | ✅ |
 | CAI | `cai` `sai` `ru'e` `ruhe` `cu'i` `cuhi` | ✅ |
 | PU | `pu` `ca` `ba` | ✅ |
 | KI | `ki` | ✅ |

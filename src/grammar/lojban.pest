@@ -320,7 +320,12 @@ free      = { free_unit ~ (sp1 ~ free_unit)* }
 free_unit = { ui_free | mai_free | soi_free | sei_free | xi_free | daho_free
            | fuhe_free | fuho_free | faho_free | bae_free
            | to_quote | vocative | lohu_quote | SI_clause | SU_clause }
-mai_free  = { MAI_clause }
+// 発話序数の分離形(数詞+MAI: pa mai / pare mai / pa mo'o)も自由修飾語。
+// zantufa は free <- mex_2 MAI_clause で数式(mex)全体を許容するが、
+// 本実装は number(PA 連鎖+boi)までのサブセットとする。
+// 第一枝により裸の mai/mo'o 単独も free として受理される
+// (zantufa は mex_2 前置を要求するため意図的緩和。例: mi klama mai)
+mai_free  = { MAI_clause | number ~ sp1 ~ MAI_clause }
 soi_free  = { SOI_clause ~ sp1 ~ sumti ~ (sp1 ~ sumti)? ~ (sp1 ~ SEhU_clause)? }
 // 添字(broda xi re / xi vei re su'i ci)。camxes: XI (number|lerfu)|XI VEI mex VEhO?
 xi_free   = { XI_clause ~ sp1 ~ (number | BY_clause | vei_group) }
@@ -667,9 +672,13 @@ VAU_core = @{ ( ^"vau") ~ &word_boundary }
 VUhO_core = @{ ( ^"vu'o" | ^"vuho") ~ &word_boundary }
 Y_core = @{ ( ("y" | "Y")+) ~ &word_boundary }
 NAI_core = @{ ( ^"nai") ~ &word_boundary }
-// 発話序数(PA+mai の結合形。.i pamai … / 文末 … pamai)
+// 発話序数(PA+mai の結合形。.i pamai … / 文末 … pamai)。
+// selma'o MAI の本体語は mai と mo'o(段落序数)の2語。h 表記 moho も
+// 既存方針どおり併記。融合形(pamai 等)は PA+mai の結合表記として同梱
+// (zantufa は bahai/moho/mai。bahai は標準外のため未収録)
 MAI_core = @{ (^"pamai" | ^"remai" | ^"cimai" | ^"vomai" | ^"mumai"
-              | ^"xamai" | ^"zemai" | ^"bimai" | ^"somai" | ^"nomai") ~ &word_boundary }
+              | ^"xamai" | ^"zemai" | ^"bimai" | ^"somai" | ^"nomai"
+              | ^"mai" | ^"mo'o" | ^"moho") ~ &word_boundary }
 // 感情強度(CAI): cai=最強 / sai=強 / ru'e=弱 / cu'i=中立
 CAI_core = @{ (^"cai" | ^"sai" | ^"ru'e" | ^"ruhe" | ^"cu'i" | ^"cuhi") ~ &word_boundary }
 PU_core   = @{ (^"pu" | ^"ca" | ^"ba") ~ &word_boundary }

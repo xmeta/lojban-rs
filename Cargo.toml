@@ -1,6 +1,6 @@
 [package]
 name = "lojban"
-version = "0.95.0"
+version = "0.96.0"
 edition = "2021"
 # 実効 MSRV は依存 pest 2.9 の要求(1.83)に従う。1.74 宣言は実測と不一致だった
 rust-version = "1.83"
