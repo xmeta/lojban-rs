@@ -1914,3 +1914,51 @@ fn 裸時制連鎖のフラグメント() {
     // 否定系維持
     assert!(lojban::parse("qqq").is_err());
 }
+
+#[test]
+fn faha_残り5語の補完() {
+    // CLL 10.12 の FAhA セルマォから欠落していた5語(bu'u/du'a/vu'a/ze'o/zo'i)を
+    // FAhA_core に追加(v0.98)。変更前はこれらの語は FAhA 位置で完全未受理
+    // (「mi jaurjanli bu'u lo lalxu」は bu'u 直後でエラー)。
+    // 対象文: selbri 後の FAhA タグ付き項(zantufa の tag_term 相当)
+    let s = parse_ok("ni'o ca ku .abu tirna lo nu da va jaurjanli bu'u lo lalxu");
+    assert!(s.contains("NIhO_core \"ni'o\""), "{s}");
+    assert!(s.contains("PU_core \"ca\""), "{s}");
+    assert!(s.contains("KU_core \"ku\""), "{s}");
+    assert!(s.contains("BY_core \"abu\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"tirna\""), "{s}");
+    assert!(s.contains("NU_core \"nu\""), "{s}");
+    assert!(s.contains("FAhA_core \"bu'u\""), "{s}");
+    assert!(s.contains("LE_core \"lo\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"lalxu\""), "{s}");
+    // selbri 前タグ(tagged 経路)。描述の tanru が後続の klama を貪欲吸収し、
+    // 全体は fragment として受理される(zantufa z0 も同一の木。「ba zi ku
+    // le gerku klama」ピンと同じ描述の貪欲吸収)
+    let s = parse_ok("mi bu'u lo lalxu klama");
+    assert!(s.contains("fragment"), "{s}");
+    assert!(s.contains("FAhA_core \"bu'u\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"lalxu\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"klama\""), "{s}");
+    // selbri 後タグ付き項(tail_terms 経路)
+    let s = parse_ok("mi jaurjanli bu'u lo lalxu");
+    assert!(s.contains("FAhA_core \"bu'u\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"jaurjanli\""), "{s}");
+    // 残り4語の selbri 前タグ(selbri の tense_marks 経路)
+    for w in ["du'a", "ze'o", "zo'i", "vu'a"] {
+        let s = parse_ok(&format!("mi {w} klama"));
+        assert!(s.contains(&format!("FAhA_core \"{w}\"")), "{s}");
+    }
+    // h 表記(ze'o のみ zeho。zeoho は誤りで zantufa も拒否することを実測済み)
+    let s = parse_ok("mi buhu lo lalxu klama");
+    assert!(s.contains("FAhA_core \"buhu\""), "{s}");
+    for h in ["duha", "vuha", "zeho", "zohi"] {
+        let s = parse_ok(&format!("mi {h} klama"));
+        assert!(s.contains(&format!("FAhA_core \"{h}\"")), "{s}");
+    }
+    // MOhI+FAhA の組合せ
+    let s = parse_ok("mi mo'i bu'u klama");
+    assert!(s.contains("MOhI_core \"mo'i\""), "{s}");
+    assert!(s.contains("FAhA_core \"bu'u\""), "{s}");
+    // 否定系維持
+    assert!(lojban::parse("qqq").is_err());
+}

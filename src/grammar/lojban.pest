@@ -548,7 +548,10 @@ DOhU_core = @{ ( ^"do'u" | ^"dohu") ~ &word_boundary }
 FA_core = @{ ( ^"fi'a" | ^"fa" | ^"fe" | ^"fi" | ^"fo" | ^"fu") ~ &word_boundary }
 FAhA_core = @{ (^"ca'u" | ^"cahu" | ^"ti'a" | ^"tiha" | ^"zu'a" | ^"zuha"
               | ^"ga'u" | ^"gahu" | ^"ni'a" | ^"niha" | ^"ru'u" | ^"ruhu"
-              | ^"ne'i" | ^"pa'o" | ^"paho" | ^"te'e" | ^"ne'a" | ^"re'o") ~ &word_boundary }
+              | ^"ne'i" | ^"pa'o" | ^"paho" | ^"te'e" | ^"ne'a" | ^"re'o"
+              // CLL 10.12 の残り5語を補完(既存の並び順を壊さず末尾に追加。h 表記も併記)
+              | ^"bu'u" | ^"buhu" | ^"du'a" | ^"duha"
+              | ^"vu'a" | ^"vuha" | ^"ze'o" | ^"zeho" | ^"zo'i" | ^"zohi") ~ &word_boundary }
 MOhI_core = @{ ( ^"mo'i" | ^"mohi") ~ &word_boundary }
 FAhO_core = @{ ( ^"fa'o" | ^"faho") ~ &word_boundary }
 FEhU_core = @{ ( ^"fe'u" | ^"fehu") ~ &word_boundary }
