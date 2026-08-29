@@ -35,7 +35,7 @@ text        入力全体(ルート)
 | 規則 | 意味 |
 |---|---|
 | `KOhA_clause` | 代名詞(mi do ri ke'a di'u …) |
-| `desc` | 冠詞句(le / lo / la / lo'e … + 述語) |
+| `desc` | 冠詞句(le / lo / la / lo'e … + 述語)。述語の前に埋め込み sumti を置ける(`lo mi gerku` / `lo di'u valsi`) |
 | `quant_desc` / `quant_selbri` | 数量詞+描述 / 数量詞+述語(pa prenu) |
 | `bare_number` | 裸の数詞(直後が MOI / ROI・TAhE・ZAhO の場合は項にならない) |
 | `abstraction` | 抽象(nu / ka / du'u … + 文 + kei?)。`sedu'u` 結合形含む |

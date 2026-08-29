@@ -1,10 +1,30 @@
 # 開発ステータス
 
-## 現在の状態: v0.96 完成(全テストグリーン)
+## 現在の状態: v0.97 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語157 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体220 + doc 11 = 計231テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語159 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体222 + doc 11 = 計233テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.96.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.97.0)
+
+## v0.97 で追加(描述内の埋め込み sumti)
+- 文法: sumti_tail に `!mex ~ sumti ~ sp1 ~ selbri` 枝を追加し、描述内で
+  selbri の前に埋め込み sumti を許容。所有形「lo mi gerku(私の犬)」・
+  参照形「lo di'u valsi(前述の語)」等が解析可能に。zantufa の
+  `sumti_tail <- relative_clauses? (!quantifier sumti)? sumti_tail_1` の
+  埋め込みスロット相当
+- 数詞描述(lo pa mlatu 等)は既存の mex 経路を維持(mex 枝を先に配置し
+  解析木は不変)
+- 既知差異(GAP)の記録: 尾部形 quantifier+sumti(lo pa mi gerku /
+  lo pa joi re gerku / lo pa le gerku ku)は zantufa が受理するが本実装は
+  拒否。尾部形の完全対応は sumti_tail の2層構造への再編を要するため見送り
+  (テスト・文法コメントで明記)
+- 動機: Alice 翻訳の実文「ni'o ca lo nu .abu cusku lo di'u valsi kei
+  lo jamfu be .abu cu sakli .i」がエラーになった
+- 回帰テストを tests/syntax.rs に追加(統語 157→159)。全体は 233
+  (単体222+doc11、example 内 5 は別途)
+- docs/coverage.md はクラス接続不変のため差分なし
+- criterion ベンチはフルサンプルで改善方向(劣化なし)
+- 差分ハーネス(420行コーパス)で GAP 0・真の新規 OVER ゼロを維持
 
 ## v0.96 で追加(発話序数 mai の分離形受容)
 - 文法: MAI_core に mai/mo'o/moho を追加。従来は融合形(pamai〜nomai)のみで
