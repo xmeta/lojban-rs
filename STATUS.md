@@ -1,10 +1,25 @@
 # 開発ステータス
 
-## 現在の状態: v0.97 完成(全テストグリーン)
+## 現在の状態: v0.98 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語159 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体222 + doc 11 = 計233テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語160 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体223 + doc 11 = 計234テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.97.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.98.0)
+
+## v0.98 で追加(FAhA 残り5語の補完)
+- 文法: FAhA_core に標準(CLL 10.12)の残り5語 bu'u / du'a / vu'a / ze'o / zo'i と
+  h 表記(buhu/duha/vuha/zeho/zohi)を追加し、FAhA セルマォ16語を完全対応。
+  「bu'u lo lalxu(湖と一致する位置に)」等の空間タグ付き項が解析可能に
+- 動機: Alice 翻訳の実文「ni'o ca ku .abu tirna lo nu da va jaurjanli
+  bu'u lo lalxu」がエラーになった
+- h 表記は ze'o→zeho(zeoho ではない。アポストロフィ→h 置換規約。
+  zeoho は zantufa も拒否することを実測済み)
+- 回帰テストを tests/syntax.rs に追加(統語 159→160)。全体は 234
+  (単体223+doc11、example 内 5 は別途)
+- docs/coverage.md の FAhA 行を同期
+- criterion ベンチは劣化なし
+- 差分ハーネス(z0/z1 × 448入力)で GAP 16→0・リグレッション 0・
+  真の新規 OVER ゼロ
 
 ## v0.97 で追加(描述内の埋め込み sumti)
 - 文法: sumti_tail に `!mex ~ sumti ~ sp1 ~ selbri` 枝を追加し、描述内で
@@ -940,6 +955,8 @@ v0.86 時点での到達度と、v1.0 判定の基準を整理する。
 - Tatoeba 再検証の定期実施、HTML 出力への DOT 拡張、
 - 融合表記(so'iroi 等の一語形)の構造化(現状は汎用 CMAVO フォールバックで一語受理のため PA+ROI 構造と異なる木。ROROI_joint 方針との整合は今後)
 - 差分ハーネスで検出された真の過剰受容候補9件(裸抽象主語・数詞区間の項等5パターン)の整理と、"mi je do klama" 形(文接続詞起点)の扱い(camxes は拒否、zantufa のみ緩い)
+- FAhA 関連の残課題: selbri 前タグ位置の FAhA+NAI(ca'u nai 等)未対応、
+  ne'i/te'e/ne'a/re'o の h 表記(nehi/tehe/neha/reho)未収録
 - crates.io 公開はユーザー判断で見送り中(方針変更時は版数同期済みのため即対応可)
 
 
