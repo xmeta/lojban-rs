@@ -1,10 +1,31 @@
 # 開発ステータス
 
-## 現在の状態: v0.98 完成(全テストグリーン)
+## 現在の状態: v0.99 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語160 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体223 + doc 11 = 計234テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語161 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体224 + doc 11 = 計235テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.98.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.99.0)
+
+## v0.99 で追加(quant_selbri への間隔プロパティガード)
+- 文法: quant_selbri に `!(sp1 ~ (ROI|TAhE|ZAhO)_clause)` ガードを追加
+  (v0.93 の bare_number ガードと同形式)。数詞の直後が間隔プロパティ語なら
+  quantifier+selbri の項としない。zantufa の `!tag sumti` ガード相当
+- 効果: 抽象内で「数詞+ROI 複合タグ+selbri」(za'u re'u sudga 等)が
+  quant_selbri に貪欲消費されて文が閉塞する問題(v0.93 の
+  「ba zi ku le gerku klama」と同型の PEG 部分成功確定)を解消。
+  タグ読みは z0 と同構造
+- 動機: Alice 翻訳の実文「ni'o lo pa moi preti cu li'a du'u ta'i ma kau
+  za'u re'u sudga」がエラーになった
+- 木形状変化: number+ROI 系の入力(mi za'u re'u klama 等)で
+  fragment(quant_selbri)→sentence(タグ読み)に変化(z0 整合)
+- vs-z0 既知差分: number+TAhE/ZAhO の組合せで z0 は ta'e を BAI 扱いする
+  非標準分類のため差が発生(各2件)。本パーサーは CLL 準拠の
+  interval_property 読みを優先
+- 回帰テストを tests/syntax.rs に追加(統語 160→161)。全体は 235
+  (単体224+doc11、example 内 5 は別途)
+- docs/coverage.md はクラス接続不変のため差分なし
+- criterion ベンチは p>0.05 で変化なし
+- 差分ハーネス(420行/448行コーパス)で GAP 増減ゼロ・真の新規 OVER ゼロ
 
 ## v0.98 で追加(FAhA 残り5語の補完)
 - 文法: FAhA_core に標準(CLL 10.12)の残り5語 bu'u / du'a / vu'a / ze'o / zo'i と
