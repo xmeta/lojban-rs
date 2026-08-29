@@ -62,7 +62,7 @@ text        入力全体(ルート)
 
 感情標識(`ui` + CAI 強度 + nai、結合形 `ta'onai` 等)、談話標識
 (`ku'i ja'o po'o …`)、`sei` 挿入(内部に文)、`to … toi` 注釈、
-呼格(`coi … [do'u]`)、`soi` 入れ替え、発話序数(`pamai`)、添字(`xi`)、
+呼格(`coi … [do'u]`)、`soi` 入れ替え、発話序数(`pamai` / 分離形 `pa mai`)、添字(`xi`)、
 `da'o` / `fa'o` / `fu'e` `fu'o` スコープ、BAhE 強調、SI/SU。
 
 ## 解析木が元テキストと異なるケース

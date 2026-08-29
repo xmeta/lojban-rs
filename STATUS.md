@@ -1,10 +1,28 @@
 # 開発ステータス
 
-## 現在の状態: v0.95 完成(全テストグリーン)
+## 現在の状態: v0.96 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語156 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体219 + doc 11 = 計230テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語157 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体220 + doc 11 = 計231テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.95.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.96.0)
+
+## v0.96 で追加(発話序数 mai の分離形受容)
+- 文法: MAI_core に mai/mo'o/moho を追加。従来は融合形(pamai〜nomai)のみで
+  selma'o MAI の本体語 mai が欠落していた(mo'o は段落序数)
+- mai_free を MAI_clause | number ~ sp1 ~ MAI_clause に拡張し、分離形
+  「数詞+mai」(pa mai = 第一に)を自由修飾語として受理。zantufa の
+  free <- mex_2 MAI_clause 相当(number までのサブセット)
+- 動機: Alice 翻訳の実文「pa mai .abu troci lo nu catlu lo cnita gi'e facki
+  lo du'u .abu ma kau klama」がエラーになった
+- 意図的緩和の記録(v0.95 タグ+BO の前例準拠): 裸の mai/mo'o 単独も free として
+  受理される(zantufa は mex 前置を要求。例: mi klama mai)。テストでピン済み
+- 既知差分: 融合形の mo'o 複合(pamo'o 等)は未収録(分離形で受理可能)。
+  「paremai」は lujvo(brivla)としての既存受容
+- 回帰テストを tests/syntax.rs に追加(統語 156→157)。全体は 231
+  (単体220+doc11、example 内 5 は別途)
+- docs/coverage.md は MAI 行に mai/mo'o/moho 追加済み
+- criterion ベンチはノイズ範囲で変化なし
+- 差分ハーネス(420行コーパス)で受容差分ゼロ、GAP=0/OVER 増減ゼロ
 
 ## v0.95 で追加(タグ+BO 短スコープ結合の受容)
 - 文法: tense_mark に (sp1 ~ BO_clause)? を後置し、タグ+BO の短スコープ結合
