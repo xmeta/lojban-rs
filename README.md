@@ -102,6 +102,8 @@ ta'u (CvvApo)
 
 ### Web Playground example
 
+**公開版:** https://xmeta.github.io/lojban-rs/
+
 ブラウザで解析木・単語分類・JSON・S式を確認できるローカルWebアプリを同梱しています。追加依存はありません。
 
 ```console

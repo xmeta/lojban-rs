@@ -108,6 +108,8 @@ ta'u (CvvApo)
 
 ### Web Playground example
 
+**Live site:** https://xmeta.github.io/lojban-rs/
+
 A local web app for inspecting the parse tree, word classification, JSON, and
 S-expressions in the browser ships as an example. It has no additional
 dependencies.
