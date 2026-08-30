@@ -2062,3 +2062,156 @@ fn 抽象内の数詞roi複合タグはquant_selbriに貪欲消費されない()
     // 否定系維持
     assert!(lojban::parse("qqq").is_err());
 }
+
+#[test]
+fn 裸prenexと描述を項に取る前置スコープ() {
+    // v0.100: prenex_sentence の2つのギャップを解消(zantufa z0/z1 準拠)。
+    // ① prenex_term の選言の末尾に sumti を追加し、完全な sumti
+    //   (描述 lo di'u preti 等)も前置スコープの項に取れる。
+    //   単純形(PA_seq/PA_clause/KOhA_clause)を先に試すため既存の
+    //   木形状は不変(「su'o da」は PA_seq+KOhA_clause の2項のまま)
+    // ② zo'u 後の inner_sentence を任意化し、zo'u で閉じる裸 prenex
+    //   (zo'u 後の bridi を省略したトピック風の形)を受理
+    // 動機: 実文「ni'o lo di'u preti zo'u」(前述の文は質問だ)が
+    //   エラーになった
+    // 対象文: 裸 prenex。描述(lo di'u preti)が prenex の項となり
+    //   zo'u で閉じる。desc(LE_clause)内の埋め込み sumti として
+    //   KOhA_core "di'u"、sumti_tail 経由の selbri "preti" を持つ
+    let s = parse_ok("ni'o lo di'u preti zo'u");
+    assert!(s.contains("prenex_sentence"), "{s}");
+    assert!(s.contains("NIhO_core \"ni'o\""), "{s}");
+    assert!(s.contains("desc"), "{s}");
+    assert!(s.contains("LE_core \"lo\""), "{s}");
+    assert!(s.contains("KOhA_core \"di'u\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"preti\""), "{s}");
+    assert!(s.contains("ZOhU_core \"zo'u\""), "{s}");
+    // prenex + bridi の形(zo'u 後に文が続く)
+    let s = parse_ok("lo di'u preti zo'u mi jinvi");
+    assert!(s.contains("prenex_sentence"), "{s}");
+    assert!(s.contains("ZOhU_core \"zo'u\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"jinvi\""), "{s}");
+    // 所有形の描述を項に取る prenex + bridi
+    let s = parse_ok("lo mi gerku zo'u mi klama");
+    assert!(s.contains("prenex_sentence"), "{s}");
+    assert!(s.contains("KOhA_core \"mi\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"gerku\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"klama\""), "{s}");
+    // ku 付きの描述
+    let s = parse_ok("le nanmu ku zo'u mi klama");
+    assert!(s.contains("prenex_sentence"), "{s}");
+    assert!(s.contains("LE_core \"le\""), "{s}");
+    assert!(s.contains("KU_core \"ku\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"nanmu\""), "{s}");
+    // 固有名詞の sumti
+    let s = parse_ok("la alis. zo'u mi klama");
+    assert!(s.contains("prenex_sentence"), "{s}");
+    assert!(s.contains("CMEVLA_core \"alis\""), "{s}");
+    // 裸 prenex(zo'u で閉じる)。bridi を省略したトピック風の形
+    for text in ["lo preti zo'u", "mi zo'u", "su'o da zo'u"] {
+        let s = parse_ok(text);
+        assert!(s.contains("prenex_sentence"), "{s}");
+        assert!(s.contains("ZOhU_core \"zo'u\""), "{s}");
+    }
+    // 既存木不変ピン: 単純形の項は sumti で包まれず、prenex_sentence の
+    // 直接の子であること(選言の順序により PA_seq/KOhA_clause が優先)。
+    // sexpr 上で prenex_sentence の直後に PA_seq/KOhA_clause が並つことを
+    // 部分一致で確認する
+    let s = parse_ok("su'o da zo'u da klama");
+    assert!(
+        s.contains(
+            "(prenex_sentence (PA_seq \"su'o\") (KOhA_clause (KOhA_core \"da\")) (ZOhU_clause"
+        ),
+        "{s}"
+    );
+    let s = parse_ok("mi zo'u mi klama");
+    assert!(
+        s.contains("(prenex_sentence (KOhA_clause (KOhA_core \"mi\")) (ZOhU_clause"),
+        "{s}"
+    );
+    // 否定系維持
+    assert!(lojban::parse("qqq").is_err());
+}
+
+#[test]
+fn prenex_sentence先試行順序交換の例外と境界() {
+    // v0.100 レビュー対応: item/inner_sentence の sentence 先試行順序交換の
+    // 挙動を固定するピンと、境界・入れ子文脈のカバレッジ
+    // (文法本体は変更せず、実測の挙動をアサートする)
+    // 例外(zeicompound 経路): zei_compound は word 経由(CMAVO_clause
+    // フォールバック)で cmavo「zo'u」を吸収でき、!ZOhU_clause ガードは
+    // tanru_unit の BRIVLA 枝にしか掛かっていない。そのため頂層 zo'u の
+    // 直後に zei が続く形は sentence が先に一致し、旧順序と木が変わる
+    // 形がある。zeicompound 側へのガード追加は単独「zo'u zei broda」の
+    // 既存受理を損なうため行わない(実測: 旧順序(v0.99)では
+    // mi zo'u zei broda は sentence 木、mi zo'u zei zei broda は
+    // prenex 木だった)
+    // mi zo'u zei broda: 旧順序(v0.99)でも prenex 必須内文の失敗により
+    // sentence の zei_compound(「zo'u zei broda」を selbri として吸収)
+    // で既に受理・同木。拒否となるのは内文任意化+旧順序の組合せの
+    // バリアント固有で、リリース比較(v0.99→v0.100)では受理拡張ではない
+    let s = parse_ok("mi zo'u zei broda");
+    assert!(s.contains("sentence"), "{s}");
+    assert!(!s.contains("prenex_sentence"), "{s}");
+    assert!(s.contains("zei_compound"), "{s}");
+    assert!(s.contains("CMAVO_core \"zo'u\""), "{s}");
+    assert!(s.contains("ZEI_core \"zei\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"broda\""), "{s}");
+    // 単独の zei_compound(zo'u 先頭)は従来どおり受理(ガード不追加の根拠)
+    let s = parse_ok("zo'u zei broda");
+    assert!(s.contains("zei_compound"), "{s}");
+    assert!(s.contains("CMAVO_core \"zo'u\""), "{s}");
+    // mi zo'u zei zei broda: 旧順序=prenex(内文 zei zei broda)→ 新順序=
+    // sentence(zei_compound「zo'u zei zei」+ tanru broda)の別木。
+    // 受理は維持(退行なし)
+    let s = parse_ok("mi zo'u zei zei broda");
+    assert!(s.contains("sentence"), "{s}");
+    assert!(!s.contains("prenex_sentence"), "{s}");
+    assert!(s.contains("zei_compound"), "{s}");
+    assert!(s.contains("CMAVO_core \"zo'u\""), "{s}");
+    assert!(s.contains("CMAVO_core \"zei\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"broda\""), "{s}");
+    // 参考: bu_lerfu 経路(項位置)は旧順序でも prenex の内文が失敗して
+    // sentence が選ばれるため順序非依存(実測: 旧順序でも受理・同木)。
+    // bu_lerfu が term として「zo'u bu」を吸収する
+    let s = parse_ok("mi zo'u bu broda");
+    assert!(s.contains("sentence"), "{s}");
+    assert!(!s.contains("prenex_sentence"), "{s}");
+    assert!(s.contains("bu_lerfu"), "{s}");
+    assert!(s.contains("CMAVO_core \"zo'u\""), "{s}");
+    assert!(s.contains("BU_core \"bu\""), "{s}");
+    // 量化描述の prenex 項は PA_seq が「ro」を先に確定するため
+    // (PA_seq "ro")+(sumti desc …) の2項に分割される(項位置の
+    // quant_desc 1ノードとの不整合。既存単純形優先の選言順序の副作用。
+    // 受理自体は z0 整合)
+    let s = parse_ok("ro lo ci gerku zo'u mi klama");
+    assert!(
+        s.contains("(prenex_sentence (PA_seq \"ro\") (sumti (desc"),
+        "{s}"
+    );
+    assert!(s.contains("PA_core \"ci\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"gerku\""), "{s}");
+    assert!(s.contains("ZOhU_core \"zo'u\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"klama\""), "{s}");
+    // 拒否系の境界(単独 zo'u / 述語後の zo'u / zo'u 連続。z0/z1 も拒否)
+    assert!(lojban::parse("zo'u").is_err());
+    assert!(lojban::parse("mi klama zo'u").is_err());
+    assert!(lojban::parse("mi zo'u zo'u").is_err());
+    // 入れ子文脈の裸 prenex。gek 内と抽象内で受理
+    // (z0/z1 はいずれも拒否する既知差分=拡張。内文の裸 prenex は
+    // 頂層と同じく bridi 省略形として一貫して受理する)
+    let s = parse_ok("ganai mi zo'u gi broda");
+    assert!(s.contains("gek_sentence"), "{s}");
+    assert!(
+        s.contains("(prenex_sentence (KOhA_clause (KOhA_core \"mi\")) (ZOhU_clause"),
+        "{s}"
+    );
+    assert!(s.contains("GI_core \"gi\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"broda\""), "{s}");
+    let s = parse_ok("mi nu lo preti zo'u kei klama");
+    assert!(s.contains("NU_core \"nu\""), "{s}");
+    assert!(s.contains("(prenex_sentence (sumti (desc"), "{s}");
+    assert!(s.contains("KEI_core \"kei\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"klama\""), "{s}");
+    // 否定系維持
+    assert!(lojban::parse("qqq").is_err());
+}

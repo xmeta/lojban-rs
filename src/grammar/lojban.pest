@@ -45,15 +45,49 @@ UINAI_joint = @{ (^"ta'onai" | ^"ja'onai" | ^"ku'inai" | ^"po'onai"
                 | ^"cu'inai" | ^"ji'anai" | ^"ru'anai" | ^"ehinai" | ^"e'inai"
                 | ^"ihinai" | ^"i'inai" | ^"ohanai" | ^"o'anai" | ^"kahunai"
                 | ^"ka'unai" | ^"a'unai" | ^"u'inai" | ^"u'unai") ~ &word_boundary }
-item    = { gek_sentence | prenex_sentence | sentence | free | Y_clause
+// 注: sentence を prenex_sentence より先に試す(v0.100)。prenex 項に sumti を
+// 許可すると、非 prenex 入力(sumti で始まる普通の文)で prenex_sentence が
+// 描述を解析し切ってから ZOhU で失敗・全巻き戻しとなり、sentence 経路が
+// 同一解析をやり直す(v0.30 教訓の再発)。sentence は頂層の zo'u を
+// 消費できない(ZOhU を消費するのは prenex_sentence のみ)ため、
+// prenex が受理する入力では sentence は必ず失敗する。よって順序交換は
+// 受理・木形状ともに不変で、非 prenex 入力の無駄な prenex 試行を消す
+// 例外: zei_compound / bu_lerfu は word 経由(CMAVO_clause フォールバック)で
+// cmavo「zo'u」を吸収でき、!ZOhU_clause ガードは tanru_unit の BRIVLA 枝に
+// しか掛かっていない。このうち selbri 位置の zei_compound が順序交換の
+// 例外となる(実測。テスト「prenex_sentence先試行順序交換の例外と境界」ピン):
+// ・mi zo'u zei broda: 旧順序(v0.99)でも prenex 必須内文の失敗により
+//   sentence(zei_compound が「zo'u zei broda」を selbri として吸収)で
+//   既に受理・同木。拒否となるのは内文任意化+旧順序の組合せのバリアント
+//   固有で、リリース比較(v0.99→v0.100)では受理拡張ではない
+// ・mi zo'u zei zei broda: 旧順序=prenex(内文 zei zei broda)→ 新順序=
+//   sentence(zei_compound「zo'u zei zei」+ tanru broda)で別木(木形変化。
+//   受理は維持、退行なし)
+// bu_lerfu 経路(項位置。mi zo'u bu broda 等)は旧順序でも prenex_term の
+// sumti(bu_lerfu)が「zo'u bu」を吸収し ZOhU が欠落して prenex 失敗、
+// sentence が選ばれるため順序非依存で挙動不変。
+// zei_compound 側へのガード追加は単独「zo'u zei broda」の既存受理を
+// 損なうため行わない。現実の入力では頂層 zo'u の直後に zei が続く形は
+// 事実上なく、実用上は不変
+item    = { gek_sentence | sentence | prenex_sentence | free | Y_clause
           | fragment | tense_item }
 // 前置スコープ(su'o da zo'u … / ro da zo'u …)。論理の量化を文に前置する。
 // 項は「量化詞+代名詞」の単純形に制限(完全な terms を使うと
 // item 失敗パスのたびに rafsi バックトラックが再試行され
-// ファジングで指数時間になるため。v0.30 教訓)
-prenex_sentence = { prenex_terms ~ sp1 ~ ZOhU_clause ~ sp1 ~ inner_sentence }
+// ファジングで指数時間になるため。v0.30 教訓)。
+// v0.100: 完全な sumti(描述 lo di'u preti 等)も項に取れる。
+// sumti は選言の末尾に置き、既存の単純形の木を優先
+// (「su'o da」は PA_seq+KOhA_clause の2項のまま)。
+// また zo'u で閉じる裸 prenex(zo'u 後の bridi を省略したトピック風の形、
+// ni'o lo di'u preti zo'u 等)も受理する(zantufa z0/z1 準拠)。
+// item/inner_sentence では sentence を先に試す(上記 item の注を参照)。
+// 注: 量化描述(ro lo ci gerku 等)を項に取る場合、PA_seq が先に「ro」を
+// 確定するため (PA_seq "ro") + (sumti desc …) の2項に分割される
+// (項位置の quant_desc 1ノードとは不整合。既存の単純形を優先する
+// 選言順序の副作用で、受理自体は z0 整合)
+prenex_sentence = { prenex_terms ~ sp1 ~ ZOhU_clause ~ (sp1 ~ inner_sentence)? }
 prenex_terms    = _{ prenex_term ~ (sp1 ~ prenex_term)* }
-prenex_term     = _{ PA_seq | PA_clause | KOhA_clause }
+prenex_term     = _{ PA_seq | PA_clause | KOhA_clause | sumti }
 // 末尾の否定先読み: 項解析が na_ku だけで部分確定する入力(naku pu /
 // na ku ba 等)を tense_item に譲る。受理済み入力では item の直後は
 // 区切りか終端のみのため、既存の解析木は不変
@@ -152,7 +186,10 @@ quant_desc  = { number ~ sp1 ~ LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)?
 number      = { PA_clause ~ (sp1 ~ PA_clause)* ~ (sp1 ~ BOI_clause)?
               | PA_seq }
 abstraction = { abstr_head ~ sp1 ~ inner_sentence ~ (sp1 ~ KEI_clause)? }
-inner_sentence = _{ gek_sentence | prenex_sentence | sentence }
+// 注: sentence を prenex_sentence より先に試す(item の注と同じ理由。
+// 抽象内の非 prenex 内文で描述の二重解析を避ける。zeicompound/bu 経路の
+// 順序交換の例外については item の注を参照)
+inner_sentence = _{ gek_sentence | sentence | prenex_sentence }
 abstr_head  = _{ SEDUHU_joint | NU_clause }
 // 注: (mex ~ sp1)? ~ selbri だと、mex が成功した後に selbri が失敗した際に
 //     グループ成功が確定し「selbri 単独」 reading に戻れない
