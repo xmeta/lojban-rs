@@ -10,7 +10,7 @@ text        入力全体(ルート)
 └─ content  実内容(先頭の .i 等のリード部を除く)
    └─ item  文・フラグメント・自由修飾語などの単位
       ├─ gek_sentence    先接続文(ganai … gi …)
-      ├─ prenex_sentence 前置スコープ文(su'o da zo'u …)
+      ├─ prenex_sentence 前置スコープ文(su'o da zo'u …。項は描述等の完全な sumti を取れる。内側の文を省略した裸 prenex も受理)
       ├─ sentence        通常の文
       ├─ fragment        項のみの断片(mi 単独 等)
       └─ free            語・句の単独自由修飾(.ui 等)

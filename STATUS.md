@@ -1,10 +1,34 @@
 # 開発ステータス
 
-## 現在の状態: v0.99 完成(全テストグリーン)
+## 現在の状態: v0.100 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語161 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体224 + doc 11 = 計235テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語163 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体226 + doc 11 = 計237テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.99.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.100.0)
+
+## v0.100 で追加(prenex の拡張)
+- 文法: ①`prenex_term` の選言末尾に `sumti` を追加(完全な sumti=描述等を
+  prenex 項に取れる。PA_seq/PA_clause/KOhA_clause が先に一致するため
+  既存木形不変)②`prenex_sentence` の `inner_sentence` を任意化
+  (裸 prenex=zo'u で閉じるトピック風の受理)③`item`/`inner_sentence` で
+  `sentence` を `prenex_sentence` より先に試行する順序交換(非 prenex 入力の
+  二重解析を解消する性能修正。ZOhU を直接消費する規則は prenex_sentence のみ
+  のため受理・木形不変。例外: zei_compound/bu_lerfu が word 経由で zo'u を
+  吸収し得るが退行なし)
+- 動機: Alice 翻訳の実文「ni'o lo di'u preti zo'u」がエラーになった。
+  zantufa z0/z1 は受理
+  (木: `(NIhO:ni'o [{LE:lo <KOhA:di'u G:preti> KU} ZOhU:zo'u])`)
+- 効果: プローブ10行(描述を項に取る prenex、裸 prenex)が z0/z1 と一致。
+  868行コーパスで受理変動ゼロ・sexpr 完全一致(順序交換の不変性実証)
+- 既知差分: 入れ子の裸 prenex(`ganai mi zo'u gi broda` /
+  `mi nu lo preti zo'u kei klama`)は本パーサーが受理するが z0/z1 は拒否
+  (意図的拡張として記録)
+- 回帰テストを tests/syntax.rs に追加(統語 161→163)。全体は 237
+  (単体226+doc11、example 内 5 は別途)
+- docs/coverage.md は語彙クラス追加なしのため差分なし
+- criterion ベンチ: 順序交換により非 prenex 入力の二重解析を解消。
+  8項目すべて p>0.05(環境ノイズ大)
+- WASM: ビルド+Node ハーネス 16/16 PASS
 
 ## v0.99 で追加(quant_selbri への間隔プロパティガード)
 - 文法: quant_selbri に `!(sp1 ~ (ROI|TAhE|ZAhO)_clause)` ガードを追加
