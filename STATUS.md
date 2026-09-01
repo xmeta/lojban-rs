@@ -1,10 +1,39 @@
 # 開発ステータス
 
-## 現在の状態: v0.100 完成(全テストグリーン)
+## 現在の状態: v0.101 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語163 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体226 + doc 11 = 計237テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語165 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体228 + doc 11 = 計239テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.100.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.101.0)
+
+## v0.101 で追加(mex 接続詞演算子と量化 sumti)
+- 文法: ①新規サイレント規則 `mex_conn`(A/JOI+NAI | GAhO? BIhI GAhO? NAI。
+  BO は演算子に付かない——z0 が「.i se ju bo no da klama」を拒否するのを
+  実測で確認)②`mex_operator` に `(SE)? ~ mex_conn` を追加(SE 変換接続詞を
+  mex 演算子として受理)③`mex_operand` に前置形を追加 ④`sumti_core` に
+  `quant_sumti = { mex ~ sp1 ~ sumti_core }` を追加(camxes の
+  quantifier+sumti_5 相当)⑤`JOI_core` に ja/je/jo/ju を追加
+- JOI_core 語彙追加の性質: zantufa の JOI 終端は接続詞の総称で JA 系を包含
+  (z0 実測: 対象文の ju は JOI_clause、mi ja do klama も joik_ek(JOI ja))。
+  CLL の規範では項接続に JA 系は使えないため zantufa 準拠の意図的拡張。
+  ji は z0 が受理するが未収録(既知差分 GAP)
+- 動機: Alice 翻訳の実文「.i se ju no da mi tolprali lo nu troci」が
+  エラーになった。z0 の解析では「se ju」は文接続詞ではなく mex の演算子
+  (SE 変換 joik)+被演算子 no(0)で、「se ju no da」は量化 sumti
+- 効果: 差分ハーネス(421+449行)で退行ゼロ、受理拡張14行(全て z0 受理を
+  実測: se ju/se ja/se bi'i/se ju nai 量化系、li se ju no du re ci、
+  li pa se ju re、mi ja/ju/je do klama、lo pa joi re gerku cu barda)
+- 木変化クラス: ①数詞+KOhA の2項→quant_sumti 1項(no da klama /
+  pa da klama 等13行、z0 整合)②li mex 中置接続の読み変わり
+  (li pa joi re / li pa a re が旧2項接続→単一 mex。z0 も単一 mex を
+  実測一致)③lo pa joi re gerku cu barda が既知差異の拒否から受容に
+  (z0 も受理)
+- 既知差分: li ... du ... 形は z0 が全て拒否する既存の受容済み差分クラス
+- テスト: 統語 163→165。全体は 239(単体228+doc11、example 内 5 は別途)
+- docs/coverage.md は JOI 行を同期。coverage_doc テストを全語彙検証に強化
+  (語彙ドリフトを検出できる)
+- criterion ベンチ: 方向性劣化なし(環境ノイズ大)。WASM ビルド+Node
+  ハーネス 6/6 PASS
 
 ## v0.100 で追加(prenex の拡張)
 - 文法: ①`prenex_term` の選言末尾に `sumti` を追加(完全な sumti=描述等を
@@ -75,9 +104,10 @@
 - 数詞描述(lo pa mlatu 等)は既存の mex 経路を維持(mex 枝を先に配置し
   解析木は不変)
 - 既知差異(GAP)の記録: 尾部形 quantifier+sumti(lo pa mi gerku /
-  lo pa joi re gerku / lo pa le gerku ku)は zantufa が受理するが本実装は
-  拒否。尾部形の完全対応は sumti_tail の2層構造への再編を要するため見送り
-  (テスト・文法コメントで明記)
+  lo pa le gerku ku)は zantufa が受理するが本実装は拒否。尾部形の完全対応は
+  sumti_tail の2層構造への再編を要するため見送り(テスト・文法コメントで明記)。
+  なお lo pa joi re gerku(数詞+JOI 項接続)は v0.101 から mex_conn 経由で
+  受容に変わった(「v0.101 で追加」参照)
 - 動機: Alice 翻訳の実文「ni'o ca lo nu .abu cusku lo di'u valsi kei
   lo jamfu be .abu cu sakli .i」がエラーになった
 - 回帰テストを tests/syntax.rs に追加(統語 157→159)。全体は 233
