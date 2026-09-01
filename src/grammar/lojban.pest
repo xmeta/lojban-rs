@@ -296,7 +296,35 @@ ip_tail           = _{ sp1? ~ (ROI_clause | TAhE_clause | ZAhO_clause)
 time_interval = _{ (tense_offset ~ sp1)? ~ ZEhA_clause ~ (sp1 ~ tense_offset)? }
 tense_offset  = _{ PU_clause | ZI_clause }
 
-tanru      = { tanru_unit ~ (sp1 ~ tanru_link ~ sp1 ~ tanru_unit | sp1 ~ tanru_unit)* }
+tanru      = { tanru_unit ~ (sp1 ~ tanru_link ~ sp1 ~ tanru_unit | sp1 ~ tanru_unit | tanru_post)* }
+// tanru 単位間の自由修飾語(v0.103)。zantufa(z0)は tanru_unit 直後の
+// post_clause で「free 修飾語 + 後続 selbri / DOhU」を受理するため、
+// 呼格(ju'i 等)や感情標識(.ui 等)が tanru 単位の間に挟まる形
+// (farlu ju'i cnita / klama .ui cnita)が解析できる。
+// tanru_post はサイレント規則なので、free と DOhU_clause は tanru の
+// 直接の子として平準的に現れる。
+// 木形状の差異(記録): z0 は後続 selbri を post_clause 内に右再帰ネストするが、
+// 本実装は tanru 繰り返しの平準形とする(受理・読みは同一)。
+// フォールバック設計: 後続に単位 / link / DOhU が続かない free
+// (klama .ui の末尾 free 等)では本枝が失敗して既存の tail free 経路に
+// フォールバックする。PEG は選択成功で確定するため、free のみで
+// 後続が無い入力で本枝を失敗させることが既存木維持の要。
+// 裸 DOhU(klama dohu)は free が前置されない限り拒否(z0 整合)。
+// link(je 等)の直後の free(farlu je ju'i cnita)も拒否(z0 も拒否)。
+// z0 差分(過剰受容・記録): z0 は vocative が後続 free を内包して DOhU を取る
+// (ju'i .ui dohu 全体が vocative 系 free)ため、DOhU は vocative 同伴時のみ
+// 許可される。本規則は語種を見ないため、第3枝(DOhU)に加え第2枝の
+// optional DOhU でも同様に、vocative を含まない free + DOhU を過剰受容する:
+// 「farlu .ui dohu」(z0 実測 err)と「farlu .ui cnita dohu」(z0 実測 err)。
+// 語種を表明すると free 列の分割・木設計の再編が必要になり複雑化に見合わない
+// ため語種を見ない設計を採る(実測 z0 交叉の結果は tests/syntax.rs を参照)。
+// 既知 GAP(将来の受理拡張候補): 「farlu ju'i co cnita」は z0 が受理する
+// (free の後を co 転換 selbri が継続する読み)が、本規則の継続枝には
+// co 枝がなく未対応
+tanru_post = _{ frees_m ~ sp1
+              ~ ( tanru_link ~ sp1 ~ tanru_unit
+                | tanru_unit ~ (sp1 ~ DOhU_clause)?
+                | DOhU_clause ) }
 // ba'e / za'e 強調(BAhE)は各 tanru 単位に前置できる(zantufa の G 準拠)。
 // ba'e は「直後の語」を強調するため、単位ごとの前置が意味論に整合。
 // 注: ラップは tanru 単位全体(zei 複合や linked_args を含む)に掛かるため、

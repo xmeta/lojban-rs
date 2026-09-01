@@ -2553,3 +2553,155 @@ fn bai_追加語彙と_z0差分ピン() {
     // 後続の cu と selbri が続く完全文
     assert!(s.contains("CU_clause (CU_core \"cu\")"), "{s}");
 }
+
+#[test]
+fn tanru間の自由修飾語_対象文と受理() {
+    // v0.103: tanru 単位間に自由修飾語を許容(tanru_post。z0 の
+    // tanru_unit 後置 post_clause 相当)。動機はユーザー報告の実文:
+    // 「.i .oi ta ca'o farlu ju'i cnita」— ju'i は tanru 単位間の呼格で、
+    // cnita は tanru 継続単位(z0 も同じ読みで、呼格引数ではない)
+    let s = parse_ok(".i .oi ta ca'o farlu ju'i cnita");
+    assert!(s.contains("UI_core \"oi\""), "{s}");
+    assert!(s.contains("KOhA_core \"ta\""), "{s}");
+    assert!(s.contains("ZAhO_core \"ca'o\""), "{s}");
+    // tanru 内に free(vocative ju'i) と単位 cnita が含まれる
+    // (平準形: z0 は post_clause 内に右再帰ネストするが読みは同一)
+    assert!(
+        s.contains(
+            "(tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"farlu\"))) \
+             (free (free_unit (vocative (COI_clause (COI_core \"ju'i\"))))) \
+             (tanru_unit (BRIVLA_clause (BRIVLA_core \"cnita\"))))"
+        ),
+        "{s}"
+    );
+
+    // 単独の受理バリエーション(z0 実測: いずれも受理)
+    let s = parse_ok("farlu ju'i cnita");
+    assert!(
+        s.contains(
+            "(tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"farlu\"))) \
+                    (free (free_unit (vocative (COI_clause (COI_core \"ju'i\"))))) \
+                    (tanru_unit (BRIVLA_clause (BRIVLA_core \"cnita\"))))"
+        ),
+        "{s}"
+    );
+    parse_ok("mi klama ju'i cnita");
+    // link(je)の前に free が挟まる形
+    let s = parse_ok("farlu ju'i je cnita");
+    assert!(
+        s.contains(
+            "(free (free_unit (vocative (COI_clause (COI_core \"ju'i\"))))) \
+                    (JA_clause (JA_core \"je\"))"
+        ),
+        "{s}"
+    );
+    // DOhU による明示閉鎖(z0 実測 ok)
+    let s = parse_ok("farlu ju'i cnita dohu");
+    assert!(s.contains("DOhU_clause (DOhU_core \"dohu\")"), "{s}");
+    // 感情標識でも同じ経路(z0 実測: klama .ui cnita は受理)
+    let s = parse_ok("klama .ui cnita");
+    assert!(
+        s.contains(
+            "(tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\"))) \
+             (free (free_unit (ui_free (UI_clause (UI_core \"ui\"))))) \
+             (tanru_unit (BRIVLA_clause (BRIVLA_core \"cnita\"))))"
+        ),
+        "{s}"
+    );
+    parse_ok("mi klama .ui cnita");
+}
+
+#[test]
+fn tanru間の自由修飾語_既存木不変と_z0差分ピン() {
+    // 既存木不変ピン1: 後続に単位 / link / DOhU が無い free は tanru_post が
+    // 失敗して tail free にフォールバックする(「klama .ui」の木は v0.102 から不変)
+    let s = parse_ok("klama .ui");
+    // tanru は単位 klama のみ(free を取り込まない)
+    assert!(
+        s.contains("(tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\"))))"),
+        "{s}"
+    );
+    // free は tail_terms に留まる
+    assert!(
+        s.contains("tail_terms (free (free_unit (ui_free (UI_clause (UI_core \"ui\")))))"),
+        "{s}"
+    );
+
+    // 複数 free のフォールバック(z0 実測 ok。z0 は free を post_clause 内に
+    // 保持するが、本実装では tanru_post の frees_m が2個の free を消費した後
+    // 継続グループが失敗し、文末の frees_m が2個の free を tail_terms 側に取る)
+    let s = parse_ok("klama ju'i .ui");
+    assert!(
+        s.contains("(tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\"))))"),
+        "{s}"
+    );
+    assert!(
+        s.contains(
+            "tail_terms (free (free_unit (vocative (COI_clause (COI_core \"ju'i\")))) \
+             (free_unit (ui_free (UI_clause (UI_core \"ui\")))))"
+        ),
+        "{s}"
+    );
+
+    // 既存木不変ピン2: 文頭の呼格 free + selbri(cnita farlu)のまま。
+    // ju'i が tanru 側に取り込まれず、farlu は cnita の tanru 継続単位
+    let s = parse_ok("ju'i cnita farlu");
+    assert!(
+        s.contains("(free (free_unit (vocative (COI_clause (COI_core \"ju'i\"))))) (bridi_tail"),
+        "{s}"
+    );
+    assert!(
+        s.contains(
+            "(tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"cnita\"))) \
+             (tanru_unit (BRIVLA_clause (BRIVLA_core \"farlu\"))))"
+        ),
+        "{s}"
+    );
+
+    // z0 差分ピン(拒否維持): 裸 DOhU は free が前置されない限り拒否
+    assert!(LojbanParser::parse(Rule::text, "klama dohu").is_err());
+    assert!(LojbanParser::parse(Rule::text, "mi klama dohu").is_err());
+    // link 直後の free も拒否(z0 も拒否を実測)
+    assert!(LojbanParser::parse(Rule::text, "farlu je ju'i cnita").is_err());
+
+    // z0 交叉(実測)で受理を確認した追加形
+    // vocative の明示閉鎖のみ(z0 も受理)
+    let s = parse_ok("farlu ju'i dohu");
+    assert!(s.contains("vocative"), "{s}");
+    assert!(s.contains("DOhU_core \"dohu\""), "{s}");
+    // vocative を挟んだ複数 free + 継続単位(z0 も受理)
+    let s = parse_ok("farlu .ui ju'i cnita");
+    assert!(
+        s.contains(
+            "(free (free_unit (ui_free (UI_clause (UI_core \"ui\")))) \
+             (free_unit (vocative (COI_clause (COI_core \"ju'i\")))))"
+        ),
+        "{s}"
+    );
+    assert!(s.contains("BRIVLA_core \"cnita\""), "{s}");
+    // 連続 vocative(z0 も受理)
+    let s = parse_ok("farlu ju'i ju'i cnita");
+    assert_eq!(s.matches("COI_core \"ju'i\"").count(), 2, "{s}");
+    assert!(s.contains("BRIVLA_core \"cnita\""), "{s}");
+    // vocative + 後続 free を伴う DOhU 閉鎖(z0 も受理)
+    let s = parse_ok("farlu ju'i .ui dohu");
+    assert!(s.contains("COI_core \"ju'i\""), "{s}");
+    assert!(s.contains("DOhU_core \"dohu\""), "{s}");
+
+    // 既知の z0 差分(過剰受容): vocative を含まない free + DOhU は z0 が
+    // 拒否するが、tanru_post は語種を見ないため受理する。第3枝(DOhU)の
+    // クラスと、第2枝の optional DOhU のクラスの両方を記録ピンとして保持
+    // (grammar 側のコメント参照。受理側に倒した記録ピン)
+    // 第3枝のクラス(free + DOhU。z0 実測 err)
+    let s = parse_ok("farlu .ui dohu");
+    assert!(s.contains("UI_core \"ui\""), "{s}");
+    assert!(s.contains("DOhU_core \"dohu\""), "{s}");
+    // 第2枝の optional DOhU のクラス(free + 単位 + DOhU。z0 実測 err)
+    let s = parse_ok("farlu .ui cnita dohu");
+    assert!(s.contains("UI_core \"ui\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"cnita\""), "{s}");
+    assert!(s.contains("DOhU_clause (DOhU_core \"dohu\")"), "{s}");
+
+    // 語形不正は引き続きエラー
+    assert!(lojban::parse("qqq").is_err());
+}
