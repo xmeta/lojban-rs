@@ -2705,3 +2705,263 @@ fn tanru間の自由修飾語_既存木不変と_z0差分ピン() {
     // 語形不正は引き続きエラー
     assert!(lojban::parse("qqq").is_err());
 }
+
+#[test]
+fn tanru単位のse_nae前置_対象文と受理() {
+    // v0.104: tanru 単位に SE/NAhE を前置できる(tagji se klama 等)。
+    // 動機はユーザー報告の実文: 「.i lo .abu xejni'a cu tai tagji se danre
+    // lo jamfu ja'e lo nu carmi nandu fa lo nu kargau lo moklu」。
+    // z0 実測スコープ: tanru 単位の前置は SE と NAhE のみで、
+    // NA / JAhA は不可(selbri 直下の s_mark とスコープが異なる)
+    let s = parse_ok(".i lo .abu xejni'a cu tai tagji se danre lo jamfu ja'e lo nu carmi nandu fa lo nu kargau lo moklu");
+    // selbri の BAI 前置(tai。既存の selbri 経路)
+    assert!(
+        s.contains("(selbri (BAI_clause (BAI_core \"tai\")) (tanru"),
+        "{s}"
+    );
+    // tanru 2単位目の SE 前置(v0.104 の新規経路)
+    assert!(
+        s.contains("(tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"tagji\"))) \
+                    (tanru_unit (SE_clause (SE_core \"se\")) (BRIVLA_clause (BRIVLA_core \"danre\"))))"),
+        "{s}"
+    );
+    // terms(lo .abu xejni'a)と tail terms(lo jamfu + ja'e lo nu …)の構造
+    assert!(s.contains("BY_core \"abu\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"xejni'a\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"jamfu\""), "{s}");
+    assert!(
+        s.contains("(tagged (BAI_clause (BAI_core \"ja'e\"))"),
+        "{s}"
+    );
+    assert!(s.contains("nu_form (NU_clause (NU_core \"nu\"))"), "{s}");
+
+    // 受理バリエーション(z0 実測: いずれも受理)
+    let s = parse_ok("tagji se klama");
+    assert!(
+        s.contains("(tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"tagji\"))) \
+                    (tanru_unit (SE_clause (SE_core \"se\")) (BRIVLA_clause (BRIVLA_core \"klama\"))))"),
+        "{s}"
+    );
+    let s = parse_ok("tagji na'e klama");
+    assert!(
+        s.contains(
+            "(tanru_unit (NAhE_clause (NAhE_core \"na'e\")) \
+                    (BRIVLA_clause (BRIVLA_core \"klama\")))"
+        ),
+        "{s}"
+    );
+    let s = parse_ok("tagji je'a klama");
+    assert!(
+        s.contains(
+            "(tanru_unit (NAhE_clause (NAhE_core \"je'a\")) \
+                    (BRIVLA_clause (BRIVLA_core \"klama\")))"
+        ),
+        "{s}"
+    );
+    // SE 語彙の他の語(SE_core = se/te/ve/xe。ve/xe は同経路で受理を実測、
+    // z0 も受理)
+    let s = parse_ok("tagji te klama");
+    assert!(
+        s.contains(
+            "(tanru_unit (SE_clause (SE_core \"te\")) \
+                    (BRIVLA_clause (BRIVLA_core \"klama\")))"
+        ),
+        "{s}"
+    );
+    // NAhE 語彙の他の語(NAhE_core = na'e/to'e/no'e/je'a。no'e は同経路で
+    // 受理を実測、z0 も受理)
+    let s = parse_ok("tagji to'e klama");
+    assert!(
+        s.contains(
+            "(tanru_unit (NAhE_clause (NAhE_core \"to'e\")) \
+                    (BRIVLA_clause (BRIVLA_core \"klama\")))"
+        ),
+        "{s}"
+    );
+    // 主語が先に来る形(項解析後に bridi_tail 側の tanru 単位として取る)
+    let s = parse_ok("mi tagji se klama");
+    assert!(
+        s.contains("(terms_full (terms (term (sumti (KOhA_clause (KOhA_core \"mi\"))))) \
+                    (bridi_tail (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"tagji\"))) \
+                    (tanru_unit (SE_clause (SE_core \"se\")) (BRIVLA_clause (BRIVLA_core \"klama\"))))) \
+                    (tail_terms \"\"))"),
+        "{s}"
+    );
+    // NAhE+SE の重ね掛け(z0 実測 ok)
+    let s = parse_ok("tagji na'e se klama");
+    assert!(
+        s.contains(
+            "(tanru_unit (NAhE_clause (NAhE_core \"na'e\")) (SE_clause (SE_core \"se\")) \
+                    (BRIVLA_clause (BRIVLA_core \"klama\")))"
+        ),
+        "{s}"
+    );
+    // tanru 継続の SE 前置(以前は2単位目に se を置けず拒否だった。z0 実測 ok)
+    let s = parse_ok("klama se broda");
+    assert!(
+        s.contains("(tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\"))) \
+                    (tanru_unit (SE_clause (SE_core \"se\")) (BRIVLA_clause (BRIVLA_core \"broda\"))))"),
+        "{s}"
+    );
+    // tanru_link(je)経路の単位でも新前置が効く(z0 実測 ok)
+    let s = parse_ok("broda je se broda");
+    assert!(
+        s.contains("(tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"broda\"))) \
+                    (JA_clause (JA_core \"je\")) \
+                    (tanru_unit (SE_clause (SE_core \"se\")) (BRIVLA_clause (BRIVLA_core \"broda\"))))"),
+        "{s}"
+    );
+}
+
+#[test]
+fn tanru単位のse_nae前置_既存木不変と_z0差分ピン() {
+    // z0 整合拒否ピン(z0 実測 err): tanru 単位の前置は SE/NAhE のみ。
+    // NA / JAhA は selbri 直下の s_mark では取れるが、tanru 単位の前置としては不可
+    assert!(LojbanParser::parse(Rule::text, "tagji na klama").is_err());
+    assert!(LojbanParser::parse(Rule::text, "tagji ja'a klama").is_err());
+    assert!(LojbanParser::parse(Rule::text, "tagji se ja'a klama").is_err());
+    assert!(LojbanParser::parse(Rule::text, "tagji ja'a se klama").is_err());
+    // 順序固定(z0 スコープ): NAhE? ~ SE? のみで SE ~ NAhE は不可
+    // (tagji se na'e klama は z0 も拒否を実測)
+    assert!(LojbanParser::parse(Rule::text, "tagji se na'e klama").is_err());
+
+    // 既存の selbri 直下 s_marks 経路は不変(単独 selbri の se/na'e は
+    // 先行する s_marks が消費するため、tanru_unit の SE/NAhE 前置は出番がなく木も変わらない)
+    let s = parse_ok("se danre");
+    assert!(
+        s.contains(
+            "(selbri (s_mark (SE_clause (SE_core \"se\"))) \
+                    (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"danre\")))))"
+        ),
+        "{s}"
+    );
+    let s = parse_ok("na'e danre");
+    assert!(
+        s.contains("(s_mark (NAhE_clause (NAhE_core \"na'e\")))"),
+        "{s}"
+    );
+
+    // lujvo 語頭の se は SE 前置に読まれず BRIVLA 1語のまま(語境界により
+    // SE_core が seltau / selma'o の語内 se に食み出さない)
+    let s = parse_ok("mi seltau klama");
+    assert!(
+        s.contains(
+            "(tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"seltau\"))) \
+                    (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\"))))"
+        ),
+        "{s}"
+    );
+
+    // BAhE 強調経路は不変(BAhE ~ sp1 ~ BRIVLA。SE/NAhE 前置は空のまま)
+    let s = parse_ok("farlu ba'e cnita");
+    assert!(
+        s.contains(
+            "(tanru_unit (BAhE_clause (BAhE_core \"ba'e\")) \
+                    (BRIVLA_clause (BRIVLA_core \"cnita\")))"
+        ),
+        "{s}"
+    );
+    // BAhE ~ SE 組合せ(BAhE ~ sp1 ~ NAhE? ~ SE? ~ BRIVLA の順序どおり。
+    // z0 実測 ok。ba'e na'e broda も同経路で受理を実測)
+    let s = parse_ok("farlu ba'e se cnita");
+    assert!(
+        s.contains(
+            "(tanru_unit (BAhE_clause (BAhE_core \"ba'e\")) (SE_clause (SE_core \"se\")) \
+                    (BRIVLA_clause (BRIVLA_core \"cnita\")))"
+        ),
+        "{s}"
+    );
+
+    // 語形不正は引き続きエラー
+    assert!(lojban::parse("qqq").is_err());
+}
+
+#[test]
+fn 項が空のcu文_対象文と受理() {
+    // v0.104: 項が空の cu 文(cu klama / cu pu klama 等)を受理する
+    // (camxes terms-80 の terms 空許容相当。z0 も受理)。
+    // terms_full に CU 先行の第2枝を追加し、CU_clause が terms_full の
+    // 直接の子として現れる(第2枝経由の実木)
+    let s = parse_ok("cu klama");
+    assert!(
+        s.contains("(terms_full (CU_clause (CU_core \"cu\")) \
+                    (bridi_tail (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\"))))) \
+                    (tail_terms \"\")))"),
+        "{s}"
+    );
+    let s = parse_ok("cu pu klama");
+    assert!(
+        s.contains(
+            "(terms_full (CU_clause (CU_core \"cu\")) \
+                    (bridi_tail (selbri (PU_clause (PU_core \"pu\")) \
+                    (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\"))))) \
+                    (tail_terms \"\")))"
+        ),
+        "{s}"
+    );
+    // tai は BAI_clause(z0 と同一の selbri 前置タグ読み)
+    let s = parse_ok("cu tai klama");
+    assert!(
+        s.contains(
+            "(bridi_tail (selbri (BAI_clause (BAI_core \"tai\")) \
+                    (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\"))))) \
+                    (tail_terms \"\"))"
+        ),
+        "{s}"
+    );
+    let s = parse_ok("cu se danre");
+    assert!(
+        s.contains(
+            "(terms_full (CU_clause (CU_core \"cu\")) \
+                    (bridi_tail (selbri (s_mark (SE_clause (SE_core \"se\"))) \
+                    (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"danre\"))))) \
+                    (tail_terms \"\")))"
+        ),
+        "{s}"
+    );
+    let s = parse_ok("cu tagji se danre");
+    assert!(
+        s.contains("(terms_full (CU_clause (CU_core \"cu\")) \
+                    (bridi_tail (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"tagji\"))) \
+                    (tanru_unit (SE_clause (SE_core \"se\")) (BRIVLA_clause (BRIVLA_core \"danre\"))))) \
+                    (tail_terms \"\"))"),
+        "{s}"
+    );
+}
+
+#[test]
+fn 項が空のcu文_既存木不変() {
+    // 既存木不変ピン1: 項あり文は terms_full の第1枝のまま
+    // (terms ~ CU_clause ~ bridi_tail。CU_clause は terms_full の子のまま)
+    let s = parse_ok("mi cu se klama");
+    assert!(
+        s.contains(
+            "(terms_full (terms (term (sumti (KOhA_clause (KOhA_core \"mi\"))))) \
+                    (CU_clause (CU_core \"cu\")) \
+                    (bridi_tail (selbri (s_mark (SE_clause (SE_core \"se\")))"
+        ),
+        "{s}"
+    );
+
+    // 既存木不変ピン2: 項無し文は従来どおり sentence の bridi_tail 枝を通る
+    // (terms_full 第2枝に進まず CU_clause を出現させない)
+    let s = parse_ok("klama");
+    assert!(
+        s.contains("(sentence (bridi_tail (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\"))))) \
+                    (tail_terms \"\")))"),
+        "{s}"
+    );
+    // selbri 前の時制も bridi_tail 枝のまま
+    let s = parse_ok("pu klama");
+    assert!(
+        s.contains("(sentence (PU_clause (PU_core \"pu\")) \
+                    (bridi_tail (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\"))))) \
+                    (tail_terms \"\")))"),
+        "{s}"
+    );
+
+    // 第2枝の安全設計固定: bridi_tail は必須で、cu 単独 / cu mi のような
+    // 述語を欠く形は拒否する(z0 も拒否を実測)
+    assert!(LojbanParser::parse(Rule::text, "cu").is_err());
+    assert!(LojbanParser::parse(Rule::text, "cu mi").is_err());
+}

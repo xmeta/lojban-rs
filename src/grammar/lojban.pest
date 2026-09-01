@@ -100,7 +100,13 @@ fragment  = { terms ~ (sp1 ~ VAU_clause)? ~ (sp1 ~ free)? ~ !(sp1 ~ tense_mark) 
 tense_item = { tense_marks ~ (sp1 ~ VAU_clause)? }
 
 sentence   = { frees_s? ~ sp1? ~ tense_marks? ~ sp1? ~ (terms_full | bridi_tail) ~ frees_m? }
-terms_full = { terms ~ (sp1 ~ CU_clause)? ~ sp1 ~ frees_mid? ~ bridi_tail }
+// 第2枝: 項が空の cu 文(cu klama / cu pu klama / cu tai klama 等)。
+// camxes の terms-80(terms の空許容)相当で、z0 も受理する。
+// 第1枝の terms は必須のため項無し入力では失敗し、第2枝が選択される。
+// 既存入力は第1枝が先に一致して木は不変(項無し文は従来どおり
+// sentence の bridi_tail 枝を通る)
+terms_full = { terms ~ (sp1 ~ CU_clause)? ~ sp1 ~ frees_mid? ~ bridi_tail
+             | CU_clause ~ sp1 ~ frees_mid? ~ bridi_tail }
 frees_mid  = _{ free ~ (sp1 ~ free)* }
 
 // 項間・項前後の自由修飾語を許容(mi .ui do tavla)。
@@ -332,6 +338,16 @@ tanru_post = _{ frees_m ~ sp1
 tanru_unit = { (BAhE_clause ~ sp1)? ~ (
      zei_compound ~ (sp1 ~ linked_args)?
    | !("ija" | "ije" | "ijo" | "iju")
+   // tanru 単位の SE/NAhE 前置(tagji se klama 等。v0.104)。
+   // z0 実測スコープ: SE と NAhE のみで、NA / JAhA は不可
+   // (tagji na klama / tagji ja'a klama / tagji se ja'a klama は z0 も拒否)。
+   // selbri 直下の s_marks 経由の se/na'e(単独 selbri の se danre 等)は
+   // 先行する s_marks が消費するため本前置は出番がなく、既存木は不変。
+   // NAhE? ~ SE? の順序で NAhE+SE の重ね掛け(tagji na'e se klama)も
+   // z0 整合で受理する。BAhE 強調との組合せは ba'e se broda の形
+   // (BAhE ~ sp1 ~ NAhE? ~ SE? ~ BRIVLA)
+   ~ (NAhE_clause ~ sp1)?
+   ~ (SE_clause ~ sp1)?
    ~ !(GANAI_joint | GINAI_joint | SEBAI_joint | SEDUHU_joint | IBO_joint
      | MAI_core | UI_clause | NAhU_clause | MOhE_clause | UINAI_joint
      | VEhA_clause | VIhA_clause | PEhO_clause | MAhO_clause | KUhE_clause
