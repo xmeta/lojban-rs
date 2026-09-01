@@ -2464,3 +2464,92 @@ fn 量化sumtiへの木統合と既存不変ピン() {
     // 否定系維持
     assert!(lojban::parse("qqq").is_err());
 }
+
+#[test]
+fn bai_rai補完と_h変体() {
+    // v0.102: BAI_core に ba'i/ci'o/rai と h 変体11語を追加。
+    // 動機は zantufa(z0)が受理する「se rai」(traji 由来)のタグ付き項。
+    // 対象文の木: lebna + terms[lo tajgai, tagged(se rai, lo ka junri simlu)]
+    let s = parse_ok("lebna lo tajgai se rai lo ka junri simlu");
+    assert!(s.contains("tagged"), "{s}");
+    assert!(s.contains("SE_clause (SE_core \"se\")"), "{s}");
+    assert!(s.contains("BAI_clause (BAI_core \"rai\")"), "{s}");
+    assert!(s.contains("desc"), "{s}");
+    // タグ付き項は tail_terms 内の第2項として現れる
+    let tail = s.find("tail_terms").unwrap();
+    let tagged = s.find("tagged").unwrap();
+    assert!(tail < tagged, "{s}");
+
+    // z0 プローブで受理を実測した追加語(ba'i/ci'o)
+    parse_ok("lebna lo tajgai se ba'i lo ka junri simlu");
+    parse_ok("lebna lo tajgai se ci'o lo ka junri simlu");
+    // h 変体の代表(' ↔ h 規約。seho は z0 がタグ付き項位置で拒否するが規約整合で収録)
+    parse_ok("lebna lo tajgai se bahi lo ka junri simlu");
+    parse_ok("lebna lo tajgai se cuhu lo ka junri simlu");
+    parse_ok("lebna lo tajgai se tahi lo ka junri simlu");
+    parse_ok("lebna lo tajgai se ciho lo ka junri simlu");
+
+    // 既存 BAI の受理維持(回帰確認)
+    let s = parse_ok("lebna lo tajgai se ta'i lo ka junri simlu");
+    assert!(s.contains("BAI_clause (BAI_core \"ta'i\")"), "{s}");
+    parse_ok("lebna lo tajgai se bai lo ka junri simlu");
+    parse_ok("lebna lo tajgai se mu'i lo ka junri simlu");
+
+    // 非語彙は引き続きエラー
+    assert!(lojban::parse("qqq").is_err());
+}
+
+#[test]
+fn bai_追加語彙と_z0差分ピン() {
+    // v0.102 続き: di'o/du'i/ga'a/te'i と h 変体9語、さらに ca'i と h 変体6語
+    // (cahi/jahe/pahu/kahe/puha+zuhe(zu'e の機械変換))を追加。
+    // いずれも z0 のタグ位置プローブで受理を実測済み(追加は z0 語彙に整合)。
+    // 収録後の BAI_core は総数72語 = base 40語 + h 形32語(うち cihu は legacy)
+    let s = parse_ok("lebna lo tajgai se di'o lo ka junri simlu");
+    assert!(s.contains("BAI_clause (BAI_core \"di'o\")"), "{s}");
+    parse_ok("lebna lo tajgai se du'i lo ka junri simlu");
+    parse_ok("lebna lo tajgai se ga'a lo ka junri simlu");
+    parse_ok("lebna lo tajgai se te'i lo ka junri simlu");
+    // ca'i(by authority of)と h 形6語(cahi/jahe/pahu/kahe/puha/zuhe。z0 実測形。
+    // ri'i/ka'a は機械変換形 rihi/kaha ではなく rihu/kahe を採用)
+    let s = parse_ok("lebna lo tajgai se ca'i lo ka junri simlu");
+    assert!(s.contains("BAI_clause (BAI_core \"ca'i\")"), "{s}");
+
+    // h 変体の残りを網羅(bahi/cuhu/tahi/ciho は既存テスト、seho は下の差分ピン)
+    for w in [
+        "duho", "muhi", "nihi", "riha", "vaho", "rahi", "muhu", "kihu", "sihu", "rihu", "dehi",
+        "diho", "duhi", "gaha", "tehi", "cahi", "jahe", "pahu", "kahe", "puha", "zuhe",
+    ] {
+        let s = parse_ok(&format!("lebna lo tajgai se {w} lo ka junri simlu"));
+        assert!(s.contains(&format!("BAI_core \"{w}\"")), "{s}");
+    }
+
+    // z0 との受理差分(収録72語のタグ付き項位置プローブで実測): z0 は
+    // se seho / se se'o の2語をこの位置でのみ拒否するが、' ↔ h 規約・
+    // CLL 整合のため収録する(z0 は selbri 前タグ位置では両語を受理する)
+    let s = parse_ok("lebna lo tajgai se seho lo ka junri simlu");
+    assert!(s.contains("BAI_clause (BAI_core \"seho\")"), "{s}");
+    // 差分ペアのもう一方(se'o は pre-existing)
+    let s = parse_ok("lebna lo tajgai se se'o lo ka junri simlu");
+    assert!(s.contains("BAI_clause (BAI_core \"se'o\")"), "{s}");
+
+    // BAI + NAI 枝(tagged の (sp1 ~ NAI_clause)? )
+    let s = parse_ok("lebna lo tajgai se rai nai lo ka junri simlu");
+    assert!(
+        s.contains("BAI_clause (BAI_core \"rai\")") && s.contains("NAI_clause (NAI_core \"nai\")"),
+        "{s}"
+    );
+
+    // 文頭タグ位置: terms_full → term → tagged として解析される
+    // (z0 もこの文形を受理することを実測済み)
+    let s = parse_ok("se rai lo ka junri simlu cu se lebna");
+    assert!(s.contains("tagged"), "{s}");
+    assert!(s.contains("SE_clause (SE_core \"se\")"), "{s}");
+    assert!(s.contains("BAI_clause (BAI_core \"rai\")"), "{s}");
+    // タグ付き項は terms(文頭項列)内に現れる
+    let terms = s.find("terms_full").unwrap();
+    let tagged = s.find("tagged").unwrap();
+    assert!(terms < tagged, "{s}");
+    // 後続の cu と selbri が続く完全文
+    assert!(s.contains("CU_clause (CU_core \"cu\")"), "{s}");
+}

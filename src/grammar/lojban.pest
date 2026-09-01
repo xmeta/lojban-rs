@@ -7,8 +7,9 @@
 // - WHITESPACE ルールは定義しない(ポーズ=空白・. , ! ? は意味を持つため
 //   sp ルールで明示管理する)
 // - 補助ルールは silent(_{}) にして解析木を清潔に保つ
-// - 語彙リスト(cmavo 各クラス)は実験的 cmavo を除く標準 CLL 系の主要語に絞った
-//   (拡張は各クラスの選択肢に追加するだけでよい)
+// - 語彙リスト(cmavo 各クラス)は標準 CLL 系の主要語を中心に構成した
+//   (クラスにより実験的 cmavo や ' ↔ h 規約の h 変体を含む。
+//   拡張は各クラスの選択肢に追加するだけでよい)
 // =====================================================================
 
 // ---------------------------------------------------------------------
@@ -609,14 +610,37 @@ r_hyphen = _{ r ~ &consonant | n ~ &r }
 // cmavo クラス(標準 CLL 系の主要語。アポストロフィ付き語は ^"...\" 表記)
 // ---------------------------------------------------------------------
 A_core = @{ ( "a" | "e" | "o" | "u") ~ &word_boundary }
-// 注: tai は様態タグ(selma'o TAI)。zantufa の BAI:tai として記述内 tanru 等に現れる
+// BAI: 総数72語 = base 40語 + h 形32語(うち cihu は legacy)(v0.102)。
+// base 語は標準 CLL 系の主要語に、zantufa(z0)のタグ位置プローブ
+// (「… se X lo …」形)で受理を実測した語を加えたもの。
+// apostrophe を含む base 32語は全て h 形を持つ(z0 実測形を採用。
+// ri'i/ka'a は機械変換形 rihi/kaha ではなく rihu/kahe)。
+// z0 との受理差分(収録72語のタグ付き項位置プローブで実測)は se'o/seho の
+// 2語(z0 はこの位置でのみ両語を拒否するが、CLL 整合・規約整合のため収録。
+// z0 は selbri 前タグ位置では両語を受理する)。
+// z0 が非 BAI cmavo(caku 等)をタグ位置で緩く受理する点は CLL 規範優先で追わない。
+// 注1: tai は様態タグ(selma'o TAI)。zantufa の BAI:tai として記述内 tanru 等に現れる
+// 注2: cihu は ci'o の綴り揺れであり、同時に ci'u の正規の h 変体でもある。
+//      pre-existing のため維持し、正規の ciho も併せて収録する
 BAI_core = @{ (^"bau" | ^"bai" | ^"cau" | ^"cu'u" | ^"mu'i" | ^"mu'u" | ^"ni'i"
                | ^"ri'a" | ^"ta'i" | ^"tai" | ^"ki'u" | ^"kai" | ^"pa'u" | ^"se'o" | ^"si'u"
                | ^"va'o" | ^"zu'e" | ^"ja'e" | ^"ra'i" | ^"ri'i" | ^"de'i" | ^"du'o"
                | ^"fau" | ^"ka'a" | ^"gau" | ^"piho" | ^"pi'o"
                | ^"cihu" | ^"ci'u" | ^"pu'a"
                | ^"jihe" | ^"ji'e" | ^"jihu" | ^"ji'u" | ^"jiho" | ^"ji'o"
-               | ^"raha" | ^"ra'a") ~ &word_boundary }
+               | ^"raha" | ^"ra'a"
+               // v0.102: ba'i/ci'o/rai と h 変体11語
+               | ^"ba'i" | ^"ci'o" | ^"rai"
+               | ^"bahi" | ^"cuhu" | ^"duho" | ^"muhi" | ^"nihi" | ^"riha"
+               | ^"seho" | ^"vaho" | ^"rahi" | ^"tahi" | ^"ciho"
+               // v0.102 続き: di'o/du'i/ga'a/te'i と h 変体9語
+               // (いずれも z0 のタグ位置プローブで受理を実測済み)
+               | ^"di'o" | ^"du'i" | ^"ga'a" | ^"te'i"
+               | ^"muhu" | ^"kihu" | ^"sihu" | ^"rihu" | ^"dehi"
+               | ^"diho" | ^"duhi" | ^"gaha" | ^"tehi"
+               // v0.102 続き2: ca'i と h 変体6語(cahi/jahe/pahu/kahe/puha/zuhe。
+               // いずれも z0 のタグ位置プローブで受理を実測済み)
+               | ^"ca'i" | ^"cahi" | ^"jahe" | ^"pahu" | ^"kahe" | ^"puha" | ^"zuhe") ~ &word_boundary }
 BE_core = @{ ( ^"be") ~ &word_boundary }
 BEI_core = @{ ( ^"bei") ~ &word_boundary }
 BEhO_core = @{ ( ^"be'o" | ^"beho") ~ &word_boundary }
@@ -759,7 +783,13 @@ PA_seq   = @{ PA_word+ ~ &word_boundary }
 // roi に同系列の序数頻度タグ re'u を追加(CLL: selma'o ROI)。h 表記 rehu も併記
 ROI_core = @{ ( ^"roi" | ^"re'u" | ^"rehu") ~ &word_boundary }
 SE_core = @{ ( ^"se" | ^"te" | ^"ve" | ^"xe") ~ &word_boundary }
-// SE+BAI の結合表記(pi'o va'u mu'i cau ja'e cu'u ba'i ki'u ri'a ka'a の se 変換)
+// SE+BAI の結合表記(pi'o va'u mu'i cau ja'e cu'u ba'i ki'u ri'a ka'a の se 変換)。
+// 注: CLL 上 SE+BAI は全 BAI に生産的だが、本リストは pre-existing の部分集合のまま
+//     (seba'i/sebahi はあるが seci'o/serai 等の結合形は未整備。2語形は tagged の
+//     SE_clause ~ BAI_clause 枝が担うため実用上の穴は限定的)。
+//     既存の揺れとして、結合形 seva'u/sevahu がある一方で単独形 va'u は
+//     BAI_core 未収録のため 2語形 se va'u は解析不能。本差分では
+//     BAI_core の語彙拡張のみを行い、この揺れは意図的に維持する
 SEBAI_joint = @{ (^"sepi'o" | ^"sepiho" | ^"seva'u" | ^"sevahu"
                 | ^"semu'i" | ^"semuhi" | ^"secau"
                 | ^"seja'e" | ^"secu'u" | ^"secuhu"

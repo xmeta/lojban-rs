@@ -7,7 +7,7 @@
 | selma'o | 語彙 | 統語接続 |
 |---|---|---|
 | A |  | ✅ |
-| BAI | `bau` `bai` `cau` `cu'u` `mu'i` `mu'u` `ni'i` `ri'a` `ta'i` `tai` `ki'u` `kai` `pa'u` `se'o` `si'u` `va'o` `zu'e` `ja'e` `ra'i` `ri'i` `de'i` `du'o` `fau` `ka'a` `gau` `piho` `pi'o` `cihu` `ci'u` `pu'a` `jihe` `ji'e` `jihu` `ji'u` `jiho` `ji'o` `raha` `ra'a` | ✅ |
+| BAI | `bau` `bai` `cau` `cu'u` `mu'i` `mu'u` `ni'i` `ri'a` `ta'i` `tai` `ki'u` `kai` `pa'u` `se'o` `si'u` `va'o` `zu'e` `ja'e` `ra'i` `ri'i` `de'i` `du'o` `fau` `ka'a` `gau` `piho` `pi'o` `cihu` `ci'u` `pu'a` `jihe` `ji'e` `jihu` `ji'u` `jiho` `ji'o` `raha` `ra'a` `ba'i` `ci'o` `rai` `bahi` `cuhu` `duho` `muhi` `nihi` `riha` `seho` `vaho` `rahi` `tahi` `ciho` `di'o` `du'i` `ga'a` `te'i` `muhu` `kihu` `sihu` `rihu` `dehi` `diho` `duhi` `gaha` `tehi` `ca'i` `cahi` `jahe` `pahu` `kahe` `puha` `zuhe` | ✅ |
 | BE | `be` | ✅ |
 | BEI | `bei` | ✅ |
 | BEhO | `be'o` `beho` | ✅ |
