@@ -1,10 +1,31 @@
 # 開発ステータス
 
-## 現在の状態: v0.102 完成(全テストグリーン)
+## 現在の状態: v0.103 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語167 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体230 + doc 11 = 計241テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語169 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体232 + doc 11 = 計243テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.102.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.103.0)
+
+## v0.103 で追加(tanru 単位間の自由修飾語)
+- 文法: tanru の繰り返しに第3枝 tanru_post(サイレント規則)を追加。
+  tanru 単位間に free 修飾語(vocative/UI 等)を挟めるように。
+  後続に単位/link/DOhU が無い free は本枝が失敗して tail free に
+  フォールバック(既存の「selbri+末尾 free」の木不変)
+- 動機: Alice 翻訳の実文「.i .oi ta ca'o farlu ju'i cnita」がエラー。
+  z0 の木は selbri = ca'o + tanru(farlu, [free ju'i], cnita)+DOhU elided
+  ——tanru 単位間の free で、呼格引数ではない
+- 効果: 対象文受理。ハーネス(421+449行)で退行ゼロ・受理変動ゼロ・
+  木変化ゼロ(861 both-ok 行の sexpr 比較)
+- z0 整合の拒否を維持: 裸 DOhU(klama dohu)/link 直後の free
+  (farlu je ju'i cnita)は z0 も拒否
+- 既知差分: 過剰受容2件(farlu .ui dohu / farlu .ui cnita dohu——z0 は err。
+  DOhU 枝が free 語種を表明しない設計上の限界、受容側に倒す)+既知 GAP 1件
+  (farlu ju'i co cnita——z0 は co 転換 selbri 継続を受理するが本実装未対応。
+  将来候補)
+- z0 との木形状差異: z0 は後続 selbri を post_clause 内に右再帰ネスト、
+  本実装は tanru 繰り返しの平準形(受理・読みは同一)
+- テスト: 統語 167→169。全体は 243(単体232+doc11、example 内 5 は別途)
+- ベンチ: 方向性劣化なし(環境ノイズ大)。WASM ok
 
 ## v0.102 で追加(BAI の語彙完全化)
 - 文法: BAI_core を 72語に完全化(base 40語=公式 BAI 36語+実験 ji'e/ji'o/ji'u+ci'u、
