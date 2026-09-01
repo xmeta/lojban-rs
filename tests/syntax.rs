@@ -482,11 +482,10 @@ fn 描述内の埋め込みsumti() {
     // !mex ガードで拒否。2系統ある:
     // ・zantufa も拒否(本実装と一致): 数詞+相対節 / 数詞+VUhO
     // ・zantufa は sumti_tail_1 の quantifier sumti 枝で受理するが、
-    //   本実装は既知差異として拒否: 数詞+JOI 項接続 / 数詞+所有形 /
+    //   本実装は既知差異として拒否: 数詞+所有形 /
     //   尾部形の表面形 lo pa le gerku ku(語順 pa le gerku ku のみ
     //   quant_desc で受理済み)
     for input in [
-        "lo pa joi re gerku cu barda",
         "lo pa poi gerku barda cu cadzu",
         "lo pa vu'o mi gerku cu barda",
         "lo pa mi gerku",
@@ -494,6 +493,20 @@ fn 描述内の埋め込みsumti() {
     ] {
         assert!(LojbanParser::parse(Rule::text, input).is_err(), "{input}");
     }
+    // 数詞+JOI 項接続(lo pa joi re gerku)は v0.100 まで既知差異として
+    // 拒否していたが、v0.101 から mex 演算子の接続詞枝(mex_conn)により
+    // 「pa joi re」が mex(中置接続詞演算子)として解析され、
+    // sumti_tail の mex 枝経由で受理される(z0 も受理。実測)。
+    // 木は z0 の sumti_tail_1 quantifier sumti 枝ではなく mex 枝だが、
+    // 受理は z0 と一致(既知差異の解消)
+    let s = parse_ok("lo pa joi re gerku cu barda");
+    assert!(s.contains("desc"), "{s}");
+    assert!(s.contains("JOI_core \"joi\""), "{s}");
+    assert!(
+        s.contains("PA_core \"pa\"") && s.contains("PA_core \"re\""),
+        "{s}"
+    );
+    assert!(s.contains("BRIVLA_core \"gerku\""), "{s}");
     // 埋め込み sumti 単独では描述が閉じない(zantufa z0/z1 と一致)
     assert!(LojbanParser::parse(Rule::text, "lo di'u cu barda").is_err());
     // 入れ子描述は ku なしでは内側 tanru が貪欲吸収され zantufa とともに拒否
@@ -2212,6 +2225,242 @@ fn prenex_sentence先試行順序交換の例外と境界() {
     assert!(s.contains("(prenex_sentence (sumti (desc"), "{s}");
     assert!(s.contains("KEI_core \"kei\""), "{s}");
     assert!(s.contains("BRIVLA_core \"klama\""), "{s}");
+    // 否定系維持
+    assert!(lojban::parse("qqq").is_err());
+}
+
+#[test]
+fn mex接続詞演算子と前置形による量化sumti() {
+    // v0.101: ユーザー報告「.i se ju no da mi tolprali lo nu troci」が
+    // エラーになる問題を修正(zantufa z0/z1 は受理)。
+    // z0 の解析: 「se ju」は文接続詞ではなく mex(数理表現)の演算子。
+    // operator <- SE_clause operator(joik_ek(joik(JOI ju))) の前置形で
+    // 演算子 se ju が被演算子 no を取り、quantifier(mex) + sumti_5(da)
+    // の量化 sumti を成す。3つのギャップを解消:
+    // ① mex_operator に (SE)? ~ mex_conn(A/JOI/JA系 + BIhI)を追加
+    //   (CLL 16 の接続詞演算子。JOI_core は zantufa 準拠で ja/je/jo/ju を
+    //   含むように拡張)
+    // ② mex_operand に前置形 (SE)? ~ mex_conn ~ mex_operand を追加
+    // ③ sumti_core に quant_sumti(mex + sumti_core)を追加
+    // 対象文: quant_sumti(mex(SE_clause se + JOI_clause ju + number no)
+    // + KOhA_clause da) の1項として解析される
+    let s = parse_ok(".i se ju no da mi tolprali lo nu troci");
+    assert!(s.contains("sentence"), "{s}");
+    assert!(
+        s.contains(
+            "(quant_sumti (mex (SE_clause (SE_core \"se\")) (JOI_clause (JOI_core \"ju\")) \
+             (number (PA_clause (PA_core \"no\")))) (KOhA_clause (KOhA_core \"da\")))"
+        ),
+        "{s}"
+    );
+    assert!(s.contains("KOhA_core \"mi\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"tolprali\""), "{s}");
+    assert!(s.contains("NU_core \"nu\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"troci\""), "{s}");
+    // 文頭でない形(述語の前項・後項・cu 文)
+    let s = parse_ok("se ju no da klama");
+    assert!(
+        s.contains(
+            "(quant_sumti (mex (SE_clause (SE_core \"se\")) (JOI_clause (JOI_core \"ju\")) \
+             (number (PA_clause (PA_core \"no\")))) (KOhA_clause (KOhA_core \"da\")))"
+        ),
+        "{s}"
+    );
+    let s = parse_ok("mi viska se ju no da");
+    assert!(s.contains("BRIVLA_core \"viska\""), "{s}");
+    assert!(
+        s.contains(
+            "(quant_sumti (mex (SE_clause (SE_core \"se\")) (JOI_clause (JOI_core \"ju\")) \
+             (number (PA_clause (PA_core \"no\")))) (KOhA_clause (KOhA_core \"da\")))"
+        ),
+        "{s}"
+    );
+    let s = parse_ok(".i se ju no da mi cu klama");
+    assert!(s.contains("quant_sumti"), "{s}");
+    assert!(s.contains("KOhA_core \"mi\""), "{s}");
+    assert!(s.contains("CU_core \"cu\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"klama\""), "{s}");
+    // SE 変換 + A/JA 系(z0 は ja を JOI_clause として分類)
+    let s = parse_ok(".i se ja no da klama");
+    assert!(
+        s.contains(
+            "(mex (SE_clause (SE_core \"se\")) (JOI_clause (JOI_core \"ja\")) \
+             (number (PA_clause (PA_core \"no\"))))"
+        ),
+        "{s}"
+    );
+    // SE 変換 + BIhI(区間演算子)
+    let s = parse_ok(".i se bi'i no da klama");
+    assert!(
+        s.contains(
+            "(mex (SE_clause (SE_core \"se\")) (BIhI_clause (BIhI_core \"bi'i\")) \
+             (number (PA_clause (PA_core \"no\"))))"
+        ),
+        "{s}"
+    );
+    // NAI 付き joik 演算子
+    let s = parse_ok(".i se ju nai no da klama");
+    assert!(
+        s.contains(
+            "(mex (SE_clause (SE_core \"se\")) (JOI_clause (JOI_core \"ju\")) \
+             (NAI_clause (NAI_core \"nai\")) (number (PA_clause (PA_core \"no\"))))"
+        ),
+        "{s}"
+    );
+    // SE なしの前置形(ju 単独の joik 演算子)
+    let s = parse_ok(".i ju no da klama");
+    assert!(s.contains("quant_sumti"), "{s}");
+    // 中置形の接続詞演算子(li pa se ju re = 1 whether-or-not 2。z0 も受理)
+    let s = parse_ok("li pa se ju re");
+    assert!(s.contains("li_mex"), "{s}");
+    assert!(s.contains("SE_clause"), "{s}");
+    assert!(s.contains("JOI_core \"ju\""), "{s}");
+    // 木変化ピン(v0.100→v0.101): li 内の接続詞は旧来
+    // 「li_mex(mex(pa)) + ek_joik(joi) + sumti(number re)」の2項接続
+    // だったが、mex_operator の接続詞枝により単一の
+    // 「li_mex(mex(pa joi re))」(中置演算子)に変化した。
+    // z0 の木(gerna_cipra js/zantufa-0.9999.js で実測)は
+    // li_clause > mex > mex_1(operand(pa) + operator(joik_ek(joi))
+    // + mex_1(operand(re))) の単一 mex 読みで、本実装の新木形と一致する
+    let s = parse_ok("li pa joi re");
+    assert!(
+        s.contains(
+            "(li_mex (LI_clause (LI_core \"li\")) (mex (number (PA_clause (PA_core \"pa\"))) \
+             (JOI_clause (JOI_core \"joi\")) (number (PA_clause (PA_core \"re\")))))"
+        ),
+        "{s}"
+    );
+    // A 系の項接続詞も同様に単一 mex の中置演算子になる
+    // (z0 は operator(joik_ek(ek(A_clause a))) の単一 mex 読み。実測)
+    let s = parse_ok("li pa a re");
+    assert!(
+        s.contains(
+            "(mex (number (PA_clause (PA_core \"pa\"))) (A_clause (A_core \"a\")) \
+             (number (PA_clause (PA_core \"re\"))))"
+        ),
+        "{s}"
+    );
+    assert!(!s.contains("(sumti (number"), "{s}");
+    // 多被演算子 mex による量化 sumti(quant_sumti 側の木変化)。
+    // 「pa joi re da」は旧来 bare_number(pa) + ek_joik(joi) +
+    // quant_selbri(re …) 等の複数項だったが、v0.101 からは
+    // quant_sumti(mex(pa joi re) + KOhA(da)) の1項。
+    // z0 の木は sumti_4(quantifier(mex(pa joi re)) + sumti_5(da)) の
+    // 単一項読みで一致する(実測)
+    let s = parse_ok("pa joi re da");
+    assert!(
+        s.contains(
+            "(quant_sumti (mex (number (PA_clause (PA_core \"pa\"))) \
+             (JOI_clause (JOI_core \"joi\")) (number (PA_clause (PA_core \"re\")))) \
+             (KOhA_clause (KOhA_core \"da\")))"
+        ),
+        "{s}"
+    );
+    // BO は演算子に付かない(z0 も .i se ju bo no da klama を拒否)。
+    // BO を含めないのは項・文接続のスコープ短縮であって演算子の修飾ではないため
+    assert!(lojban::parse(".i se ju bo no da klama").is_err());
+    // 既存の BIhI 中置形の木は不変(mex_conn がサイレントのため)
+    let s = parse_ok("li ci bi'i vo");
+    assert!(
+        s.contains(
+            "(mex (number (PA_clause (PA_core \"ci\"))) (BIhI_clause (BIhI_core \"bi'i\")) \
+             (number (PA_clause (PA_core \"vo\"))))"
+        ),
+        "{s}"
+    );
+    // 項接続への波及(z0 整合の受理拡張): JOI_core が JA 系を含むことで
+    // ek_joik 経由の項論理接続も受理される(z0 は mi ja do / mi ju do を受理)
+    let s = parse_ok("mi ja do klama");
+    assert!(s.contains("JOI_core \"ja\""), "{s}");
+    assert!(
+        s.contains("KOhA_core \"mi\"") && s.contains("KOhA_core \"do\""),
+        "{s}"
+    );
+    let s = parse_ok("mi ju do klama");
+    assert!(s.contains("JOI_core \"ju\""), "{s}");
+    // 既存の joi 項接続の木は不変
+    let s = parse_ok("mi joi do klama");
+    assert!(s.contains("JOI_core \"joi\""), "{s}");
+    // 否定系維持
+    assert!(lojban::parse("qqq").is_err());
+}
+
+#[test]
+fn 量化sumtiへの木統合と既存不変ピン() {
+    // v0.101: sumti_core に quant_sumti(mex + sumti_core)を追加したことに
+    // よる木形状変化の固定と、既存規則(quant_desc/quant_selbri/prenex)の
+    // 非変化ピン。
+    // 木変化: 「数詞+KOhA」(no da / pa da / ro da 等)は旧来
+    // bare_number + KOhA_clause の2項だったが、z0 の
+    // quantifier(mex) + sumti_5 に合わせて quant_sumti 1項に統合される。
+    // 受理自体は不変(旧経路でも受理されていた)で、木形のみの変化
+    let s = parse_ok("no da klama");
+    assert!(
+        s.contains(
+            "(quant_sumti (mex (number (PA_clause (PA_core \"no\")))) \
+             (KOhA_clause (KOhA_core \"da\")))"
+        ),
+        "{s}"
+    );
+    // 旧2項(bare_number + KOhA_clause)が sumti_core 直下に並ぶ形は消える
+    assert!(!s.contains("(bare_number"), "{s}");
+    let s = parse_ok("pa da klama");
+    assert!(
+        s.contains(
+            "(quant_sumti (mex (number (PA_clause (PA_core \"pa\")))) \
+             (KOhA_clause (KOhA_core \"da\")))"
+        ),
+        "{s}"
+    );
+    // 述語の後ろの項も同様
+    let s = parse_ok("mi klama no da");
+    assert!(s.contains("quant_sumti"), "{s}");
+    // 空白区切りの数詞連鎖は1つの number として mex に入る
+    // (z0 の quantifier(number(pa re)) + sumti_5 と整合)
+    let s = parse_ok("pa re da klama");
+    assert!(
+        s.contains(
+            "(quant_sumti (mex (number (PA_clause (PA_core \"pa\")) (PA_clause (PA_core \"re\")))) \
+             (KOhA_clause (KOhA_core \"da\")))"
+        ),
+        "{s}"
+    );
+    // 既存不変ピン1: 数詞+selbri は quant_selbri のまま
+    // (quant_sumti は quant_selbri より後に試行される)
+    let s = parse_ok("pa re prenu cu klama");
+    assert!(s.contains("quant_selbri"), "{s}");
+    assert!(!s.contains("quant_sumti"), "{s}");
+    // 既存不変ピン2: 量化描述は quant_desc のまま
+    let s = parse_ok("ro lo ci gerku cu klama");
+    assert!(s.contains("quant_desc"), "{s}");
+    assert!(!s.contains("quant_sumti"), "{s}");
+    // 既存不変ピン3: prenex の項は PA_seq/KOhA_clause の2項のまま
+    // (prenex_term の選言順序は変更していない)
+    let s = parse_ok("su'o da zo'u da klama");
+    assert!(
+        s.contains(
+            "(prenex_sentence (PA_seq \"su'o\") (KOhA_clause (KOhA_core \"da\")) (ZOhU_clause"
+        ),
+        "{s}"
+    );
+    // prenex 内文の項は従来どおり KOhA 単独
+    let s = parse_ok("ro lo ci gerku zo'u mi klama");
+    assert!(
+        s.contains("(prenex_sentence (PA_seq \"ro\") (sumti (desc"),
+        "{s}"
+    );
+    // 数詞+MOI/ROI は従来どおりガードで譲る(quant_sumti はガードを持たないが
+    // sumti_core の後続枝が失敗するため影響しない)
+    parse_ok("lo re moi prenu cu barda");
+    parse_ok("mi za'u re'u klama");
+    // 単独数詞は bare_number(サイレントのため木は number)のまま
+    // (quant_sumti は後続 sumti を要求するため単独では失敗する)
+    let s = parse_ok("mi viska pa");
+    assert!(
+        s.contains("(sumti (number (PA_clause (PA_core \"pa\"))))"),
+        "{s}"
+    );
+    assert!(!s.contains("quant_sumti"), "{s}");
     // 否定系維持
     assert!(lojban::parse("qqq").is_err());
 }

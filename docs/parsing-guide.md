@@ -37,6 +37,7 @@ text        入力全体(ルート)
 | `KOhA_clause` | 代名詞(mi do ri ke'a di'u …) |
 | `desc` | 冠詞句(le / lo / la / lo'e … + 述語)。述語の前に埋め込み sumti を置ける(`lo mi gerku` / `lo di'u valsi`) |
 | `quant_desc` / `quant_selbri` | 数量詞+描述 / 数量詞+述語(pa prenu)。数詞の直後が間隔プロパティ語(ROI/TAhE/ZAhO)の場合は quant_selbri にならない(タグ読みに譲る) |
+| `quant_sumti` | mex による量化詞+sumti(no da / se ju no da など。数詞+代名詞を1項の量化 sumti にまとめる) |
 | `bare_number` | 裸の数詞(直後が MOI / ROI・TAhE・ZAhO の場合は項にならない) |
 | `abstraction` | 抽象(nu / ka / du'u … + 文 + kei?)。`sedu'u` 結合形含む |
 | `lahe_sumti` | LAhE 参照(la'e X / lu'e X、終端詞 lu'u で明示閉鎖可)と結合形 `la'edi'u` |

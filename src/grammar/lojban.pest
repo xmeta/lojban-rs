@@ -158,7 +158,7 @@ sumti      = { sumti_core ~ (sp1 ~ relative_clauses)?
 // 注: 裸の数詞項は直後が MOI 述語(re moi 等)なら項としない。
 //     PEG の繰り返しは成功で確定するため、ここで拒否しないと
 //     bridi_tail 側の「数詞+MOI」述語が届かない
-sumti_core = _{ bu_lerfu | KOhA_clause | lahe_sumti | desc | BY_clause | quant_desc | quant_selbri | bare_number | abstraction
+sumti_core = _{ bu_lerfu | KOhA_clause | lahe_sumti | desc | BY_clause | quant_desc | quant_selbri | quant_sumti | bare_number | abstraction
                | lu_quote | zo_quote | gek_sumti | li_mex | zoi_quote }
 // 注: 直後が ROI/TAhE/ZAhO の場合は数詞単独の項としない。
 //     「so'i re'u」「za'u ro re'u」等の数詞+間隔プロパティは複合タグ
@@ -177,6 +177,18 @@ bare_number = _{ number ~ !(sp1 ~ MOI_clause)
 //     term_2 の !tag sumti ガードに相当
 quant_selbri = { number ~ !(sp1 ~ (ROI_clause | TAhE_clause | ZAhO_clause))
                ~ sp1 ~ selbri ~ (sp1 ~ KU_clause)? }
+// 量化 sumti(mex による量化詞 + sumti。zantufa の
+// `sumti_4 <- quantifier? sumti_5` の quantifier あり形、camxes の
+// quantifier(mex) + sumti_5 相当)。「no da(ゼロが…)」「se ju no da
+// (se 変換した joik 演算子 se ju を演算子とする mex による量化)」等。
+// 配置は quant_selbri の後・bare_number の前: 既存の quant_desc
+// (ro lo ci gerku)/quant_selbri(pa re prenu)の木を保ちつつ、
+// 「数詞+KOhA」(no da / pa da / ro da 等)を旧来の2項
+// (bare_number + KOhA_clause)から量化 sumti 1項に統合する(z0 整合)。
+// 注: mex は被演算子の先頭で sumti_core を再帰呼び出しし得る(MOhE 枝)が、
+//     いずれの経路も入力を消費するため左再帰にはならない。
+//     また mex の失敗は非 PA 先頭語で高速(既存の sumti_tail ガードと同様)
+quant_sumti = { mex ~ sp1 ~ sumti_core }
 // LAhE 項修飾(la'e = 参照先 / lu'e = 参照元)。lu'u による明示閉鎖も許容
 // (LAhE の終端は LUhU。ge'u は GOI 関係節の終端)
 lahe_sumti = { LAHEDI_joint | LAhE_clause ~ sp1 ~ sumti ~ (sp1 ~ LUhU_clause)? }
@@ -204,9 +216,10 @@ abstr_head  = _{ SEDUHU_joint | NU_clause }
 //     ・zantufa も拒否する系(本実装と一致): 数詞+相対節
 //       (lo pa poi gerku barda)/ 数詞+VUhO(lo pa vu'o mi)
 //     ・zantufa は sumti_tail_1 の「quantifier sumti」尾部形で受理するが、
-//       本実装は既知差異として拒否する系: 数詞+JOI 項接続
-//       (lo pa joi re gerku)/ 数詞+所有形(lo pa mi gerku)。
+//       本実装は既知差異として拒否する系: 数詞+所有形(lo pa mi gerku)。
 //       尾部形の完全対応は sumti_tail の2層構造への再編を要するため見送り。
+//     数詞+JOI 項接続(lo pa joi re gerku)は v0.101 から mex_conn により
+//     mex 枝経由で受理される(quant_sumti/mex_conn の注参照。旧既知差異の解消)
 //     mex は非演算子先頭語で高速に失敗するためガードのコストは無視できる
 // 注: 尾部形の表面形 lo pa le gerku ku は未対応(GAP)。意味的に近接する
 //     語順 pa le gerku ku のみ quant_desc で受理済み
@@ -329,15 +342,39 @@ linked_args = { BE_clause ~ sp1 ~ sumti ~ (sp1 ~ BEI_clause ~ sp1 ~ sumti)* ~ (s
 // BIhE 以降は残り全体を 1 オペランドとして右結合(camxes mex_1 準拠)
 mex         = { mex_items ~ (sp1 ~ BIhE_clause ~ sp1 ~ mex_operator ~ sp1 ~ mex)? }
 mex_items   = _{ mex_operand ~ (sp1 ~ mex_operator ~ sp1 ~ mex_operand)* }
+// 演算子の SE 変換と接続詞演算子: zantufa の
+// `operator <- SE_clause operator / … / joik_ek !CU` のうち SE 前置と
+// 接続詞(joik_ek)に相当する枝。CLL 16 の接続詞演算子(数理表現にも
+// 論理・非論理接続詞が使える)で、「se ju(= whether or not の SE 変換)」
+// 「bi'i(区間)」等が中置・前置両方の演算子として立つ。
+// 旧来の裸 BIhI_clause 枝を (SE)? ~ mex_conn に置換したが、mex_conn は
+// サイレント規則なので既存の BIhI 中置形(li ci bi'i vo 等)の木は不変
 mex_operator = _{ (SE_clause ~ sp1)? ~ VUhU_clause | FIhU_clause
                  | NAhU_clause ~ sp1 ~ tanru ~ (sp1 ~ TEhU_clause)?
                  | MAhO_clause ~ sp1 ~ mex ~ (sp1 ~ TEhU_clause)?
-                 | BIhI_clause }
+                 | (SE_clause ~ sp1)? ~ mex_conn }
 mex_operand = _{ number | vei_group | BY_clause | MOhE_clause ~ sp1 ~ sumti
                 | peho_group
                 // 前置単項演算子(va'a pa = -1 等)。通常の位置では
                 // 数詞が先に一致するため既存解析に影響しない
-                | VUhU_clause ~ sp1 ~ mex_operand }
+                | VUhU_clause ~ sp1 ~ mex_operand
+                // 前置接続詞演算子(se ju no = 演算子 se ju に被演算子 no を
+                // 取る形。z0 は operator(SE operator(joik_ek)) + operand(no)
+                // の前置形で受理)。VUhU 前置枝と同様、通常の位置では数詞が
+                // 先に一致するため既存解析に影響しない
+                | (SE_clause ~ sp1)? ~ mex_conn ~ sp1 ~ mex_operand }
+// mex 演算子用の接続詞(CLL 16 の接続詞演算子)。項接続の ek_joik から
+// BO を除いた構造で、**BO を含めない**: BO は項・文接続のスコープ短縮
+// であって演算子の修飾ではなく、z0 も「.i se ju bo no da klama」を
+// 拒否する(実測)。BIhI は両端に GAhO を取れる(ke'i bi'i ga'o 等の
+// 区間境界指定。ek_joik の BIhI 枝と同形式)。
+// 接続詞本体は A/JOI(JOI_core は zantufa 準拠で JA 系論理接続詞
+// ja/je/jo/ju を含む。JOI_core の注を参照)+ NAI、BIhI + GAhO 両端 + NAI。
+// 注: ek_joik の A/JOI/BIhI 各枝を変更する際は本規則も同期すること
+//     (両規則の差分は BO の有無のみ。mex は BO を取らない)
+mex_conn = _{ (A_clause | JOI_clause) ~ (sp1 ~ NAI_clause)?
+            | (GAhO_clause ~ sp1)? ~ BIhI_clause ~ (sp1 ~ GAhO_clause)?
+              ~ (sp1 ~ NAI_clause)? }
 // 先置数理(peho su'i re ci = 2+3)。kuhe による明示閉鎖は省略可。
 // 被演算子は連結数詞を展開しない単一形(re ci を2桁数と読む number との競合回避)
 peho_group  = { PEhO_clause ~ sp1 ~ mex_operator ~ sp1 ~ fore_operand
@@ -652,7 +689,21 @@ SU_core   = @{ ( ^"su") ~ &word_boundary }
 JA_core = @{ ( ^"ja" | ^"je" | ^"jo" | ^"ju") ~ &word_boundary }
 // 結合形(.ijanai 等)用: 語境界ガードなしの素の JA
 JA_bare = _{ ^"ja" | ^"je" | ^"jo" | ^"ju" }
-JOI_core = @{ ( ^"jo'e" | ^"joi" | ^"fa'u" | ^"ku'a" | ^"johu" | ^"jo'u") ~ &word_boundary }
+// 接続詞 JOI。注: zantufa の JOI 終端は接続詞の総称で、JA 系論理接続詞
+// (ja/je/jo/ju)を含む(z0 は「se ju no da」の ju を JOI_clause として
+// 分類し、「mi ja do」の項接続も joik_ek(JOI ja)で受理。実測)。
+// 本実装でも JA メンバーを JOI_core に追加し、mex 演算子(mex_conn)と
+// 項接続(ek_joik)で z0 整合の受理とする。
+// 注: CLL の規範では項接続に JA 系論理接続詞は使えず、項の論理接続は
+//     A 系(.a/.e/.o/.u)のみ。JA 系による項接続の受理は zantufa 準拠の
+//     意図的拡張である。
+// 注: ji(接続詞疑問)は z0 が JOI に含み「mi ji do klama」を受理するが
+//     (実測。JOI ji の項接続)、本実装は JA_core/JOI_core のいずれにも
+//     収録していないため拒否する(GAP: 既知差分)。
+//     jo は jo'e/johu/jo'u の前置衝突を避けるため長い語形より後に置く
+//     (語彙選択のクセ。KOhA_core の注を参照)
+JOI_core = @{ ( ^"jo'e" | ^"joi" | ^"fa'u" | ^"ku'a" | ^"johu" | ^"jo'u"
+              | ^"ja" | ^"je" | ^"jo" | ^"ju") ~ &word_boundary }
 KE_core = @{ ( ^"ke") ~ &word_boundary }
 KEhE_core = @{ ( ^"ke'e" | ^"kehe") ~ &word_boundary }
 KEI_core = @{ ( ^"kei") ~ &word_boundary }

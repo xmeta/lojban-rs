@@ -52,7 +52,7 @@
 | SI | `si` | ✅ |
 | SU | `su` | ✅ |
 | JA | `ja` `je` `jo` `ju` | ✅ |
-| JOI | `jo'e` `joi` `fa'u` `ku'a` `johu` `jo'u` | ✅ |
+| JOI | `jo'e` `joi` `fa'u` `ku'a` `johu` `jo'u` `ja` `je` `jo` `ju` | ✅ |
 | KE | `ke` | ✅ |
 | KEhE | `ke'e` `kehe` | ✅ |
 | KEI | `kei` | ✅ |

@@ -68,6 +68,7 @@ const RULE_HELP = {
   desc: 'le / lo / la などで作る記述句です。',
   quant_desc: '数量詞を伴う記述句です。',
   quant_selbri: 'pa prenu のような数量詞+述語の項です。',
+  quant_sumti: 'no da / se ju no da のような、数式(mex)による量化を伴う1項の sumti です。',
   bare_number: '単独で項として使われる数詞です。',
   abstraction: 'nu / ka / du\'u などで文を抽象化した項です。',
   lahe_sumti: 'la\'e / lu\'e などで参照先を変換した項です。',
