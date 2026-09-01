@@ -1,10 +1,31 @@
 # 開発ステータス
 
-## 現在の状態: v0.103 完成(全テストグリーン)
+## 現在の状態: v0.104 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語169 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体232 + doc 11 = 計243テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語173 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体236 + doc 11 = 計247テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.103.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.104.0)
+
+## v0.104 で追加(tanru 単位の se/na'e 前置と空項 cu 文)
+- 文法①: tanru_unit の BRIVLA 枝に `(NAhE_clause ~ sp1)? ~ (SE_clause ~ sp1)?` の
+  オプション前置を追加。tanru の2単位目以降に se/te/ve/xe 変換および
+  na'e/to'e/no'e/je'a スケール反転を取れるように。SE/NAhE のみで na/ja'a は含めない
+  (z0 実測スコープ: tagji se klama ok / tagji na'e klama ok / tagji na klama err /
+  tagji ja'a klama err / tagji se ja'a klama err / tagji se na'e klama err=順序固定)。
+  副次効果: tagji na'e se klama と klama se broda(tanru 継続)も受理(z0 ok 実測)
+- 文法②: terms_full に第2枝 `| CU_clause ~ sp1 ~ frees_mid? ~ bridi_tail` を追加。
+  項が空の cu 文(cu klama / cu pu klama / cu tai klama / cu tagji se danre)を受理
+  (camxes terms-80 の空許容相当)。第1枝優先で既存木不変、cu 単独や cu mi は
+  拒否(bridi_tail 必須)
+- 動機: Alice 翻訳の実文「.i lo .abu xejni'a cu tai tagji se danre lo jamfu ja'e
+  lo nu carmi nandu fa lo nu kargau lo moklu」がエラー。z0 の木:
+  terms(lo [a bu] xejni'a) + CU + selbri(BAI tai + tanru(tagji, se danre)) +
+  tail terms。selbri への BAI 前置は既存対応だったが、tanru 2単位目の se が
+  未対応だった
+- 効果: 対象文受理。ハーネス(421+449行)で退行ゼロ・受理変動ゼロ・木変化ゼロ。
+  z0 交叉 25文 mismatch 0
+- テスト: 統語 169→173。全体は 247(単体236+doc11、example 内 5 は別途)
+- ベンチ: 方向性劣化なし(環境ノイズ大)。WASM ok
 
 ## v0.103 で追加(tanru 単位間の自由修飾語)
 - 文法: tanru の繰り返しに第3枝 tanru_post(サイレント規則)を追加。
