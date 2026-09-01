@@ -1,10 +1,28 @@
 # 開発ステータス
 
-## 現在の状態: v0.101 完成(全テストグリーン)
+## 現在の状態: v0.102 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語165 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体228 + doc 11 = 計239テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語167 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体230 + doc 11 = 計241テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.101.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.102.0)
+
+## v0.102 で追加(BAI の語彙完全化)
+- 文法: BAI_core を 72語に完全化(base 40語=公式 BAI 36語+実験 ji'e/ji'o/ji'u+ci'u、
+  h 変体32語=apostrophe を含む全 base 32語をカバー。うち cihu は legacy)
+- 動機: Alice 翻訳の実文「lebna lo tajgai se rai lo ka junri simlu」が
+  エラーになった。rai(traji 由来「superlatively」)は公式 BAI だが未収録だった
+- 追加語: 公式8語(ba'i/ci'o/rai/di'o/du'i/ga'a/te'i/ca'i)+h 変体26語
+  (' ↔ h 規約。ri'i→rihu/ka'a→kahe は z0 実測形を採用)
+- z0 差分: タグ付き項位置で se'o/seho の2語のみ z0 が拒否
+  (selbri 前タグ位置では z0 も受理=z0 内部の BAI 二系統と整合)。
+  seho は規約整合での意図的収録、se'o は pre-existing
+- z0 が非 BAI cmavo(caku 等)をタグ位置で緩く受理する点は CLL 規範優先で追わない
+- SEBAI_joint に注記追加(結合形リストは pre-existing の部分集合。
+  seva'u があるのに va'u が BAI_core 未収録の揺れは意図的に維持)
+- テスト: 統語 165→167。全体は 241(単体230+doc11、example 内 5 は別途)
+- docs/coverage.md は BAI 行を同期済み。coverage_doc テストが全語彙検証で強制
+- ハーネス(421+449行): 退行ゼロ・木差分ゼロ。全72語の z0 タグ位置プローブ実測済み。
+  WASM ok。criterion ベンチ方向性劣化なし(環境ノイズ大)
 
 ## v0.101 で追加(mex 接続詞演算子と量化 sumti)
 - 文法: ①新規サイレント規則 `mex_conn`(A/JOI+NAI | GAhO? BIhI GAhO? NAI。
