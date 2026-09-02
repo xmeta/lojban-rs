@@ -349,14 +349,32 @@ tanru_unit = { (BAhE_clause ~ sp1)? ~ (
    // z0 整合で受理する。BAhE 強調との組合せは ba'e se broda の形
    // (BAhE ~ sp1 ~ NAhE? ~ SE? ~ BRIVLA)
    ~ (NAhE_clause ~ sp1)?
-   ~ (SE_clause ~ sp1)?
-   ~ !(GANAI_joint | GINAI_joint | SEBAI_joint | SEDUHU_joint | IBO_joint
-     | MAI_core | UI_clause | NAhU_clause | MOhE_clause | UINAI_joint
-     | VEhA_clause | VIhA_clause | PEhO_clause | MAhO_clause | KUhE_clause
-     | TEhU_clause | ZOhU_clause | MOI_clause | MEhU_clause
-     | NUhI_clause | NUhU_clause | FUhE_clause | FUhO_clause | CEhE_clause
-     | PEhE_clause | LAHEDI_joint | ROROI_joint | BIhE_clause | FEhE_clause)
-   ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
+    ~ (SE_clause ~ sp1)?
+     // レタル語(by/cy/…/abu/ebu/…/ybu)を tanru 単位の brivla としない(v0.106)。
+     // 形態論的にはレタル語は cmavo であり brivla ではないが、BRIVLA_core が
+     // 母音始まりのレタル語(abu/ebu 等)を fuhivla 扱いで誤マッチしていた。
+     // z0 実測(zantufa-0.9999.js): 「lo abu ku」/「lo ebu ku」は err(本実装の
+     // 旧版は誤受理)。実測参照源の注記: 実装側の当初実測は maftufa-1.9999.js
+     // だったが、tester が z0/z1(zantufa-0.9999.js / zantufa-1.9999.js)で
+     // 再検証済み・結果同一。
+     // このガードにより「lo mentu .abu sanli」型の描述が .abu を tanru に
+     // 吸収しなくなり、desc(lo mentu) + 項(.abu) + selbri(sanli) の
+     // sentence 経由の木(z0 整合の読み)になる。
+     // 注: BY_core は語境界ガード(&word_boundary)付きのため「byklesi」型の
+     //     レタル接頭 lujvo には一致せず、既存の lujvo 解析を壊さない。
+     //     「lo byklesi ku」(z0 実測 ok、zantufa-0.9999.js)が本実装で err なのは
+     //     既知 GAP であり、本ガードとは無関係(レタル接頭 lujvo の未対応)。
+     //     なお母音始まり fu'ivla(「lo aburobu ku」型)は本実装 ok / z0 err の
+     //     既存 OVER 差分(pre-existing。fuhivla 規則の注記参照)であり、
+     //     本ガードとは無関係。
+    ~ !(GANAI_joint | GINAI_joint | SEBAI_joint | SEDUHU_joint | IBO_joint
+      | MAI_core | UI_clause | NAhU_clause | MOhE_clause | UINAI_joint
+      | VEhA_clause | VIhA_clause | PEhO_clause | MAhO_clause | KUhE_clause
+      | TEhU_clause | ZOhU_clause | MOI_clause | MEhU_clause
+      | NUhI_clause | NUhU_clause | FUhE_clause | FUhO_clause | CEhE_clause
+      | PEhE_clause | LAHEDI_joint | ROROI_joint | BIhE_clause | FEhE_clause
+      | BY_core)
+    ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
    // 注: 「i+字母」で始まる語(.ije / .ijanai 等の文連結結合形)は tanru の先頭に来ないため除外。
    // 母音始まりの語そのもの(.a'onai 等)は述語のみの文として正当なので許容する
    | GOhA_clause ~ (sp1 ~ linked_args)?
@@ -616,6 +634,9 @@ brivla_rafsi = _{ &(syllable ~ consonantal_syllable* ~ syllable) ~ brivla_head ~
 stressed_fuhivla_rafsi = _{ fuhivla_head ~ stressed_syllable ~ consonantal_syllable* ~ !h ~ onset ~ y }
 fuhivla_rafsi = _{ &unstressed_syllable ~ fuhivla_head ~ !h ~ onset ~ y ~ h? }
 
+// 注: 母音始まりの fu'ivla(「lo aburobu ku」型)を受理するのは既存 OVER 差分
+//     (pre-existing)。fuhivla_head(brivla_head の &onset)が母音開始を許すためで、
+//     zantufa-0.9999.js(z0)は err 実測。本実装は受理のまま(既知差分・v0.106 で記録)
 fuhivla = _{ fuhivla_head ~ stressed_syllable ~ consonantal_syllable* ~ final_syllable }
 fuhivla_head = _{ !rafsi_string ~ brivla_head }
 brivla_head = _{ !cmavo ~ !slinkuhi ~ !h ~ &onset ~ unstressed_syllable* }

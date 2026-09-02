@@ -3111,3 +3111,170 @@ fn fai_と_faha_fa_a_補完_既存不変と_z0差分ピン() {
     // 語形不正は引き続きエラー
     assert!(lojban::parse("qqq").is_err());
 }
+
+#[test]
+fn レタル語は_tanru単位のbrivlaでない_v0_106回帰ピン() {
+    // 回帰(v0.105 ユーザー報告): BRIVLA_core が母音始まりのレタル語
+    // 「abu」を fuhivla 扱いで brivla 誤マッチし、「lo mentu .abu sanli」の
+    // 描述が tanru(mentu abu sanli) を吸収していた。その結果 sentence 経路
+    // の bridi_tail が空になり、gi'e 連鎖を伴う対象文が全文エラーに
+    // なっていた。v0.106 で tanru_unit の BRIVLA 枝に BY_core 否定先読みを
+    // 追加し、レタル語を tanru 単位の brivla としない。
+    // z0 実測の参照源は zantufa-0.9999.js(オーケストレーター実測)。実装側の
+    // 当初実測は maftufa-1.9999.js だったが、tester が z0/z1(zantufa-0.9999.js /
+    // zantufa-1.9999.js)で再検証済み・結果同一(唯一の差は既知 GAP lo byklesi ku)。
+
+    // z0 整合の新規拒否ピン: レタル語単独は描述の brivla にならない。
+    // z0 実測(zantufa-0.9999.js)err。v0.105 までは誤受理していた
+    // (拒否への変化=意図的修正)
+    assert!(LojbanParser::parse(Rule::text, "lo abu ku").is_err());
+    assert!(LojbanParser::parse(Rule::text, "lo ebu ku").is_err());
+
+    // 境界ピン: ybu/by の語形は旧版から拒否で不変(z0 実測 err、zantufa-0.9999.js)
+    assert!(LojbanParser::parse(Rule::text, "lo ybu ku").is_err());
+    assert!(LojbanParser::parse(Rule::text, "lo by ku").is_err());
+
+    // 個別拒否ピン: ibu/obu/ubu も同経路(z0 実測 err。v0.105 までは誤受理)
+    assert!(LojbanParser::parse(Rule::text, "lo ibu ku").is_err());
+    assert!(LojbanParser::parse(Rule::text, "lo obu ku").is_err());
+    assert!(LojbanParser::parse(Rule::text, "lo ubu ku").is_err());
+
+    // selbri 前置も不可: se abu は SE 変換+レタル語の brivla にならない
+    // (z0 実測 err、zantufa-0.9999.js。v0.105 までは se abu を brivla 誤受理)
+    assert!(LojbanParser::parse(Rule::text, "se abu broda").is_err());
+
+    // 木変化ピン: desc が .abu を tanru に吸収しなくなった新木
+    // (旧: fragment 内の desc(lo, tanru(mentu, abu, sanli)))
+    let s = parse_ok("lo mentu .abu sanli");
+    assert_eq!(
+        s,
+        "(text (content (item (sentence (terms_full (terms (term (sumti (desc (LE_clause (LE_core \
+         \"lo\")) (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"mentu\")))))))) (term \
+         (sumti (BY_clause (BY_core \"abu\"))))) (bridi_tail (selbri (tanru (tanru_unit \
+         (BRIVLA_clause (BRIVLA_core \"sanli\"))))) (tail_terms \"\")))))))"
+    );
+
+    // 木変化ピン: fragment → sentence への変化。注: sentence の tense_marks
+    // が ze'a を先に消費する既存設計(v0.94 系)のため、木は z0 の
+    // tagged(ZI ze'a, …) 項読みではなく ZI_clause 読みになる
+    // (v0.93/94 の既知クラス)
+    let s = parse_ok("ze'a lo mentu .abu sanli");
+    assert_eq!(
+        s,
+        "(text (content (item (sentence (ZI_clause (ZI_core \"ze'a\")) (terms_full (terms (term \
+         (sumti (desc (LE_clause (LE_core \"lo\")) (selbri (tanru (tanru_unit (BRIVLA_clause \
+         (BRIVLA_core \"mentu\")))))))) (term (sumti (BY_clause (BY_core \"abu\"))))) \
+         (bridi_tail (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"sanli\"))))) \
+         (tail_terms \"\")))))))"
+    );
+
+    // 木変化ピン: レタル語列の文。旧(v0.105): sentence の bridi_tail が
+    // tanru(BRIVLA abu, ebu, ibu) に誤読 → 新: fragment の terms 3項
+    // (各 BY_clause)に変化。受理は維持(z0 実測 ok、zantufa-0.9999.js)
+    let s = parse_ok(".abu .ebu .ibu");
+    assert_eq!(
+        s,
+        "(text (content (item (fragment (terms (term (sumti (BY_clause (BY_core \"abu\")))) \
+         (term (sumti (BY_clause (BY_core \"ebu\")))) (term (sumti (BY_clause (BY_core \
+         \"ibu\")))))))))"
+    );
+
+    // 木変化クラスの記録: 「pa abu broda」型。旧(v0.105): fragment の
+    // quant_selbri(number pa, selbri(tanru(abu, broda)) の数詞+selbri 誤読)→
+    // 新: sentence の quant_sumti(mex pa + BY abu)+ selbri broda。受理は維持で、
+    // z0 の quantifier+sumti 読みに近づく方向(z0 実測 ok、zantufa-0.9999.js)
+    let s = parse_ok("pa abu broda");
+    assert_eq!(
+        s,
+        "(text (content (item (sentence (terms_full (terms (term (sumti (quant_sumti (mex \
+         (number (PA_clause (PA_core \"pa\")))) (BY_clause (BY_core \"abu\")))))) \
+         (bridi_tail (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"broda\"))))) \
+         (tail_terms \"\")))))))"
+    );
+
+    // 受理ピン: ba'e abu broda。ba'e(BAhE 強調)は自由修飾語(bae_free)読みで
+    // abu を tanru 単位にしない(z0 実測 ok、zantufa-0.9999.js)。
+    // 木は v0.105 から不変(free + term(BY abu) + selbri broda)
+    let s = parse_ok("ba'e abu broda");
+    assert!(
+        s.contains("(free (free_unit (bae_free (BAhE_clause (BAhE_core \"ba'e\")))))"),
+        "{s}"
+    );
+    assert!(
+        s.contains("(term (sumti (BY_clause (BY_core \"abu\"))))"),
+        "{s}"
+    );
+    assert!(s.contains("(BRIVLA_clause (BRIVLA_core \"broda\"))"), "{s}");
+
+    // 既存 OVER 差分の記録(pre-existing、本変更と無関係): 母音始まり fu'ivla。
+    // fuhivla 規則が母音開始を許すため「aburobu」を fu'ivla 扱いで受理するが、
+    // z0 は拒否を実測(lo aburobu ku = err、zantufa-0.9999.js)。
+    // 本実装は受理のまま実態どおりピン(z0 実測ソース: zantufa-0.9999.js)
+    let s = parse_ok("lo aburobu ku");
+    assert!(
+        s.contains(
+            "(desc (LE_clause (LE_core \"lo\")) (selbri (tanru (tanru_unit \
+             (BRIVLA_clause (BRIVLA_core \"aburobu\"))))) (KU_clause (KU_core \"ku\")))"
+        ),
+        "{s}"
+    );
+
+    // ユーザー報告の対象文(z0 実測 ok、zantufa-0.9999.js)。木形状差異は上記の既知クラスに同じ
+    let s = parse_ok(
+        "ni'o ze'a lo mentu .abu sanli gi'e catlu lo zdani gi'e pensi \
+         lo du'u .ei ba zi zukte ma kau .i",
+    );
+    assert!(
+        s.contains("(sep (NIhO_clause (NIhO_core \"ni'o\")))"),
+        "{s}"
+    );
+    assert!(
+        s.contains("(sentence (ZI_clause (ZI_core \"ze'a\")) (terms_full"),
+        "{s}"
+    );
+    assert!(
+        s.contains(
+            "(term (sumti (desc (LE_clause (LE_core \"lo\")) (selbri (tanru (tanru_unit \
+             (BRIVLA_clause (BRIVLA_core \"mentu\")))))))) (term (sumti (BY_clause (BY_core \
+             \"abu\"))))"
+        ),
+        "{s}"
+    );
+    assert_eq!(
+        s.matches("(GIhA_clause (GIhA_core \"gi'e\"))").count(),
+        2,
+        "{s}"
+    );
+    assert!(s.contains("(BRIVLA_clause (BRIVLA_core \"sanli\"))"), "{s}");
+    assert!(s.contains("(BRIVLA_clause (BRIVLA_core \"catlu\"))"), "{s}");
+    assert!(s.contains("(BRIVLA_clause (BRIVLA_core \"zdani\"))"), "{s}");
+    assert!(s.contains("(BRIVLA_clause (BRIVLA_core \"pensi\"))"), "{s}");
+    assert!(s.contains("(NU_clause (NU_core \"du'u\"))"), "{s}");
+    assert!(s.contains("(UI_clause (UI_core \"ei\"))"), "{s}");
+    assert!(s.contains("(PU_clause (PU_core \"ba\"))"), "{s}");
+    assert!(s.contains("(ZI_clause (ZI_core \"zi\"))"), "{s}");
+    assert!(s.contains("(BRIVLA_clause (BRIVLA_core \"zukte\"))"), "{s}");
+    assert!(s.contains("(KOhA_clause (KOhA_core \"ma\"))"), "{s}");
+    assert!(s.contains("(UI_clause (UI_core \"kau\"))"), "{s}");
+    assert!(s.contains("(I_clause (I_core \"i\"))"), "{s}");
+
+    // ni'o / ze'a を外した形も z0 整合で受理(zantufa-0.9999.js 実測 ok)
+    parse_ok(".abu sanli gi'e catlu lo zdani gi'e pensi lo du'u .ei ba zi zukte ma kau");
+
+    // 既存不変: 通常文・gi'e 連鎖は従来どおり
+    let s = parse_ok("mi klama fa lo zarci");
+    assert!(s.contains("(BRIVLA_clause (BRIVLA_core \"zarci\"))"), "{s}");
+    let s = parse_ok("mi sanli gi'e catlu lo zdani");
+    assert_eq!(
+        s.matches("(GIhA_clause (GIhA_core \"gi'e\"))").count(),
+        1,
+        "{s}"
+    );
+
+    // 既知 GAP の維持: レタル接頭 lujvo(byklesi 型)は引き続き未対応
+    // (z0 実測 ok、zantufa-0.9999.js。本タスクでは修正せず、BY_core ガードとは無関係)
+    assert!(LojbanParser::parse(Rule::text, "lo byklesi ku").is_err());
+
+    // 語形不正は引き続きエラー
+    assert!(lojban::parse("qqq").is_err());
+}
