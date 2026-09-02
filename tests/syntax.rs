@@ -2965,3 +2965,149 @@ fn 項が空のcu文_既存木不変() {
     assert!(LojbanParser::parse(Rule::text, "cu").is_err());
     assert!(LojbanParser::parse(Rule::text, "cu mi").is_err());
 }
+
+#[test]
+fn fai_と_faha_fa_a_補完_対象文と受理() {
+    // v0.105: FA に fai(公式 FA・不定格)を、FAhA に fa'a/faha
+    // (v0.98 補完の取りこぼし)を追加。
+    // ユーザー報告の対象文(z0 実測 ok)が受理される
+    let s = parse_ok(
+        ".i .abu mutce gleki lo nu facki lo du'u lo cnebo cu jai frili \
+                      fai lo nu krobi'o fa'a ro da tai tu'a lo since",
+    );
+    // fai は FA_clause の tagged 項(jai frili の不定格項)
+    assert!(
+        s.contains(
+            "(tagged (FA_clause (FA_core \"fai\")) \
+                     (sumti (desc (LE_clause (LE_core \"lo\")) \
+                     (selbri (tanru (tanru_unit (nu_form (NU_clause (NU_core \"nu\")) \
+                     (sentence (bridi_tail (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"krobi'o\")))))"
+        ),
+        "{s}"
+    );
+    // fa'a は tense_tags(tense_mark の FAhA_clause 枝)経由の tagged 項
+    // (tense_tags は silent のため木には FAhA_clause が直接現れる)
+    assert!(
+        s.contains(
+            "(tagged (FAhA_clause (FAhA_core \"fa'a\")) \
+                     (sumti (quant_sumti (mex (number (PA_clause (PA_core \"ro\")))) \
+                     (KOhA_clause (KOhA_core \"da\")))))"
+        ),
+        "{s}"
+    );
+    // tai(BAI)項・tu'a 抽象項も従来どおり
+    assert!(
+        s.contains(
+            "(tagged (BAI_clause (BAI_core \"tai\")) (sumti (KOhA_clause (KOhA_core \"tu'a\"))))"
+        ),
+        "{s}"
+    );
+
+    // fai: 述語の前の項位置(z0 実測 ok)
+    let s = parse_ok("mi fai lo zarci klama");
+    assert!(
+        s.contains("(term (tagged (FA_clause (FA_core \"fai\")) (sumti (desc (LE_clause (LE_core \"lo\")) \
+                    (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"zarci\"))) \
+                    (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\")))))))))"),
+        "{s}"
+    );
+
+    // fai: selbri の後ろの tail 位置(z0 実測 ok)
+    let s = parse_ok("klama fai lo zarci");
+    assert!(
+        s.contains("(tail_terms (term (tagged (FA_clause (FA_core \"fai\")) (sumti (desc (LE_clause (LE_core \"lo\")) \
+                    (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"zarci\"))))))))))"),
+        "{s}"
+    );
+
+    // fa'a: 方位タグ付き項(z0 実測 ok)
+    let s = parse_ok("mi fa'a lo zdani klama");
+    assert!(
+        s.contains("(term (tagged (FAhA_clause (FAhA_core \"fa'a\")) (sumti (desc (LE_clause (LE_core \"lo\")) \
+                    (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"zdani\"))) \
+                    (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\")))))))))"),
+        "{s}"
+    );
+
+    // h 変体 faha も同一経路(z0 実測 ok)
+    let s = parse_ok("mi faha lo zdani klama");
+    assert!(s.contains("(FAhA_clause (FAhA_core \"faha\"))"), "{s}");
+
+    // fa'a: tail 位置のタグ付き項(z0 実測 ok)
+    let s = parse_ok("mi klama fa'a ro da");
+    assert!(
+        s.contains(
+            "(tail_terms (term (tagged (FAhA_clause (FAhA_core \"fa'a\")) \
+                     (sumti (quant_sumti (mex (number (PA_clause (PA_core \"ro\")))) \
+                     (KOhA_clause (KOhA_core \"da\")))))))"
+        ),
+        "{s}"
+    );
+
+    // 連続する fai 項(z0 実測 ok。fragment: mi + fai 項 + fai 項。
+    // 第2 fai 項の描述が後続 klama を tanru として吸収する)
+    let s = parse_ok("mi fai lo zarci fai lo zdani klama");
+    assert_eq!(s.matches("(FA_clause (FA_core \"fai\"))").count(), 2, "{s}");
+    assert!(
+        s.contains(
+            "(term (tagged (FA_clause (FA_core \"fai\")) \
+                     (sumti (desc (LE_clause (LE_core \"lo\")) \
+                     (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"zdani\"))) \
+                     (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\"))))))))))))"
+        ),
+        "{s}"
+    );
+
+    // 文頭の fai 項(z0 実測 ok。fragment: tagged 項のみ。描述が
+    // 後続 klama を tanru として吸収する)
+    let s = parse_ok("fai lo zarci klama");
+    assert!(
+        s.contains(
+            "(fragment (terms (term (tagged (FA_clause (FA_core \"fai\")) \
+                     (sumti (desc (LE_clause (LE_core \"lo\")) \
+                     (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"zarci\"))) \
+                     (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\"))))))))))))"
+        ),
+        "{s}"
+    );
+}
+
+#[test]
+fn fai_と_faha_fa_a_補完_既存不変と_z0差分ピン() {
+    // z0 整合拒否ピン: va'a/vaha は VUhU の単項演算子(加法逆元。除算は fe'i)
+    // であり FAhA ではない。z0 も拒否を実測のため収録しない
+    assert!(LojbanParser::parse(Rule::text, "mi va'a lo zdani klama").is_err());
+    assert!(LojbanParser::parse(Rule::text, "mi vaha lo zdani klama").is_err());
+
+    // 既存 FA の受理と木は不変(v0.104 までの fa〜fu)
+    let s = parse_ok("mi klama fa lo zarci");
+    assert!(
+        s.contains("(tail_terms (term (tagged (FA_clause (FA_core \"fa\")) (sumti (desc (LE_clause (LE_core \"lo\")) \
+                    (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"zarci\"))))))))))"),
+        "{s}"
+    );
+
+    // 既存 FAhA の受理と木は不変(v0.98 補完の ca'u 等)
+    let s = parse_ok("mi klama ca'u lo zdani");
+    assert!(
+        s.contains("(tail_terms (term (tagged (FAhA_clause (FAhA_core \"ca'u\")) (sumti (desc (LE_clause (LE_core \"lo\")) \
+                    (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"zdani\"))))))))))"),
+        "{s}"
+    );
+
+    // fi'a(不定スロットの疑問格)は既存どおり FA_core で受理
+    let s = parse_ok("mi fi'a lo zarci klama");
+    assert!(s.contains("(FA_clause (FA_core \"fi'a\"))"), "{s}");
+
+    // fai を含む複合(tail 位置に fai 項と fa'a 項を連続。z0 実測 ok)
+    let s = parse_ok("mi klama fai lo zdani fa'a lo zarci");
+    assert!(s.contains("(FA_clause (FA_core \"fai\"))"), "{s}");
+    assert!(s.contains("(FAhA_clause (FAhA_core \"fa'a\"))"), "{s}");
+
+    // FA+NAI 既知 GAP のピン: tagged の FA 枝は NAI を取らないため
+    // fai nai は拒否(z0 は受理を実測。fa nai も同経路の既知 GAP)
+    assert!(LojbanParser::parse(Rule::text, "fai nai lo zarci klama").is_err());
+
+    // 語形不正は引き続きエラー
+    assert!(lojban::parse("qqq").is_err());
+}

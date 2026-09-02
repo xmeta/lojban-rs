@@ -124,6 +124,8 @@ pehe_conn = _{ JA_clause | ek_joik }
 term  = { tagged | na_ku | termset | sumti }
 // 項set(nu'i X Y [nu'u]): 複数項を 1 対象として接続・タグ付けできる
 termset = { NUhI_clause ~ sp1 ~ terms ~ (sp1 ~ NUhU_clause)? }
+// 注: FA 枝は NAI を取らない(直下の BAI 枝 (sp1 ~ NAI_clause)? との対比)。
+//     fa nai / fai nai は z0 が受理する既知 GAP(v0.105 実測。FA の否定は未対応)
 tagged = { FA_clause ~ sp1 ~ sumti
          | (SE_clause ~ sp1)? ~ BAI_clause ~ (sp1 ~ NAI_clause)? ~ sp1 ~ sumti
          | SEBAI_joint ~ sp1 ~ sumti
@@ -696,13 +698,25 @@ COI_core = @{ (^"coi" | ^"co'o" | ^"je'e" | ^"ju'i" | ^"re'i" | ^"nu'e" | ^"fi'i
                | ^"viho" | ^"vi'o" | ^"keho" | ^"ke'o" | ^"doi") ~ &word_boundary }
 CU_core = @{ ( ^"cu") ~ &word_boundary }
 DOhU_core = @{ ( ^"do'u" | ^"dohu") ~ &word_boundary }
-FA_core = @{ ( ^"fi'a" | ^"fa" | ^"fe" | ^"fi" | ^"fo" | ^"fu") ~ &word_boundary }
-FAhA_core = @{ (^"ca'u" | ^"cahu" | ^"ti'a" | ^"tiha" | ^"zu'a" | ^"zuha"
+// fai は公式 FA(不定格。CLL 9.6・任意スロット用)。fi'a の後ろに追加。
+// 選言順序: fa は fai の接頭辞のため fai を先に置く(教訓6の mi'a/mi'ai 前例と同型。
+// 素の形 fa が先だと fai 入力で fa が一致した時点で選択が確定し、
+// word_boundary の失敗で選択肢はやり直されないため先置必須)
+// FA と FAhA のどちらにも似た語形の va'a(VUhU の単項演算子。加法逆元。除算は fe'i)
+// は収録しない(z0 も FAhA 扱いしないことを実測。詳細は FAhA_core の注記)
+FA_core = @{ ( ^"fi'a" | ^"fai" | ^"fa" | ^"fe" | ^"fi" | ^"fo" | ^"fu") ~ &word_boundary }
+// v0.98 補完(bu'u/du'a/vu'a/ze'o/zo'i)の取りこぼし fa'a を追加(h 変体 faha も併記)。
+// v0.98 補完語の並び順を壊さず末尾に追加。
+// fa'a は FAhA(「〜の方へ」)。va'a/vaha は z0 も拒否を実測のため収録しない
+// (va'a は VUhU の単項演算子(加法逆元。除算は fe'i)で FAhA ではない)
+FAhA_core = @{(^"ca'u" | ^"cahu" | ^"ti'a" | ^"tiha" | ^"zu'a" | ^"zuha"
               | ^"ga'u" | ^"gahu" | ^"ni'a" | ^"niha" | ^"ru'u" | ^"ruhu"
               | ^"ne'i" | ^"pa'o" | ^"paho" | ^"te'e" | ^"ne'a" | ^"re'o"
               // CLL 10.12 の残り5語を補完(既存の並び順を壊さず末尾に追加。h 表記も併記)
               | ^"bu'u" | ^"buhu" | ^"du'a" | ^"duha"
-              | ^"vu'a" | ^"vuha" | ^"ze'o" | ^"zeho" | ^"zo'i" | ^"zohi") ~ &word_boundary }
+              | ^"vu'a" | ^"vuha" | ^"ze'o" | ^"zeho" | ^"zo'i" | ^"zohi"
+              // v0.105: fa'a(v0.98 補完の取りこぼし。h 変体 faha も併記)
+              | ^"fa'a" | ^"faha") ~ &word_boundary }
 MOhI_core = @{ ( ^"mo'i" | ^"mohi") ~ &word_boundary }
 FAhO_core = @{ ( ^"fa'o" | ^"faho") ~ &word_boundary }
 FEhU_core = @{ ( ^"fe'u" | ^"fehu") ~ &word_boundary }

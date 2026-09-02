@@ -17,8 +17,8 @@
 | COI | `coi` `co'o` `je'e` `ju'i` `re'i` `nu'e` `fi'i` `fe'o` `mu'o` `mi'e` `ta'a` `pe'u` `ki'e` `viho` `vi'o` `keho` `ke'o` `doi` | ✅ |
 | CU | `cu` | ✅ |
 | DOhU | `do'u` `dohu` | ✅ |
-| FA | `fi'a` `fa` `fe` `fi` `fo` `fu` | ✅ |
-| FAhA | `ca'u` `cahu` `ti'a` `tiha` `zu'a` `zuha` `ga'u` `gahu` `ni'a` `niha` `ru'u` `ruhu` `ne'i` `pa'o` `paho` `te'e` `ne'a` `re'o` `bu'u` `buhu` `du'a` `duha` `vu'a` `vuha` `ze'o` `zeho` `zo'i` `zohi` | ✅ |
+| FA | `fi'a` `fai` `fa` `fe` `fi` `fo` `fu` | ✅ |
+| FAhA | `ca'u` `cahu` `ti'a` `tiha` `zu'a` `zuha` `ga'u` `gahu` `ni'a` `niha` `ru'u` `ruhu` `ne'i` `pa'o` `paho` `te'e` `ne'a` `re'o` `bu'u` `buhu` `du'a` `duha` `vu'a` `vuha` `ze'o` `zeho` `zo'i` `zohi` `fa'a` `faha` | ✅ |
 | MOhI | `mo'i` `mohi` | ✅ |
 | FAhO | `fa'o` `faho` | ✅ |
 | FEhU | `fe'u` `fehu` | ✅ |
