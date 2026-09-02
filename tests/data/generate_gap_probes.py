@@ -232,21 +232,102 @@ STRUCTURAL_PROBES = [
     # sumti+ku の二重閉鎖(全参照 err を想定の整合確認)
     "mi klama fa mi ku",
     "mi klama va'u mi ku",
-    # free 後の co 継続(v0.103 既知 GAP)
+    # free 後の co 継続(v0.103 既知 GAP → v0.109 解消)
     "farlu ju'i co cnita",
     ".oi ta ca'o farlu ju'i co cnita",
     "mi farlu ju'i co cnita",
-    # 裸 tanru BO 接続(v0.95 既知 GAP)
+    # v0.109: co 継続の受理スコープ(z0 交叉実測)
+    "farlu ju'i co se cnita",
+    "farlu ju'i co na'e cnita",
+    "farlu ju'i co nu broda kei",
+    "farlu ju'i co cnita co brodi",
+    "farlu ju'i co cnita gi'e brodi",
+    "mi klama .ui co broda",
+    "farlu ju'i co ja'a cnita",
+    "farlu ju'i co na cnita",
+    "farlu ju'i co cnita dohu",
+    "farlu ju'i co cnita ku",
+    "farlu ju'i co broda gi broda",
+    # 裸 tanru BO 接続(v0.95 既知 GAP → v0.109 解消)
     "mi klama bo cadzu",
-    # NAhE+BO(短スコープ結合の NAhE 版)
-    "na'e bo broda",
+    # v0.109: 裸 BO の受理スコープ(z0 交叉実測)
+    "mi klama bo cadzu bo bajra",
+    "mi broda bo brode",
+    "mi viska lo broda bo brode ku",
+    "mi broda gi'e brode bo brodi",
+    "mi klama co cadzu bo bajra",
     "mi na'e bo broda",
+    "na'e bo broda",
     "to'e bo broda",
     # jai + se 変換タグ
     "jai se gau",
     "mi jai se gau broda",
     "mi jai gau broda",
     "mi jai se gau klama lo zdani",
+    # v0.109: JAI+SE/NAhE 変換タグの受理スコープ(z0 交叉実測)
+    "mi jai se ta'i broda",
+    "mi jai na'e gau broda",
+    "mi jai se na'e gau broda",
+    "mi jai na'e se gau broda",
+    "mi jai se pu broda",
+    "mi jai se gau broda co brodi",
+    "mi jai na gau broda",
+    "mi jai ja'a gau broda",
+    "mi jai se ja'a gau broda",
+    "mi jai se go broda",
+    # v0.109: bridi_tail 連結部の JOI/BIhI 接続(z0 交叉実測)
+    "mi broda joi brode",
+    "mi broda jo'e brode",
+    "mi broda fa'u brode",
+    "mi broda ku'a brode",
+    "mi broda johu brode",
+    "mi broda jo'u brode",
+    "mi broda ji brode",
+    "mi broda joi nai brode",
+    "mi broda joi bo brode",
+    "mi broda se joi brode",
+    "mi broda bi'i brode",
+    "mi broda ga'o bi'i ke'i brode",
+    "mi broda bi'i nai brode",
+    "mi broda se bi'i brode",
+    "mi broda joi brode gi'e brodi",
+    "mi broda joi brode joi brodi",
+    "mi broda joi brode co brodi",
+    "mi broda joi brode .ui brodi",
+    "mi broda joi ju'i dohu brode",
+    # v0.109 残差: 呼格+sumti 引数の継続形(z0/z1/maf は受理するが ours err)。
+    # z0 実測では vocative は sumti を引数に取れるため「ju'i do」全体が
+    # vocative 系 free として連結詞の直後に置ける。本実装の vocative_arg は
+    # CMEVLA/desc のみで KOhA を取れず、gihek_free 側の vocative_closed は
+    # DOhU 必須のため DOhU 省略形が届かない。
+    # なお連結後に cmevla 引数を取る「mi klama gi'e ju'i la alen. cadzu」は
+    # z0/z1/maf とも拒否(参照一致)で、残差は KOhA 引数の DOhU 省略形に限られる
+    "mi klama gi'e ju'i do cadzu",
+    "farlu ju'i do cnita",
+    # v0.109 残差(GAP 候補): gihek の (NA? SE?) 前置。zantufa の gihek は
+    # NA? SE? GIhA、joik は GAhO? NA? SE? JOI GAhO? で前置スロットを持つため
+    # 参照 3 種は受理するが、本実装は gihek_link に前置スロットがない
+    # (v0.109 で gihek_joik の JOI/BIhI 枝に SE 前置のみ実装済みで
+    # GIhA 枝との非対称)。実装は次バッチ課題。
+    # 注: 単独形「na joi」「na se joi」は z0 が拒否(z1/maf ok)のため
+    # 単独プローブは参照分裂になる。連結部のスロットを直接測る文脈付き形で記録
+    "mi broda na joi brode",
+    "mi broda na se joi brode",
+    "mi broda na gi'e brode",
+    "mi broda se gi'e brode",
+    "mi broda na gi'a brode",
+    "mi broda se gi'a brode",
+    "mi broda e brode",
+    "mi broda a brode",
+    "mi broda joi ju'i brode",
+    "mi broda je ju'i brode",
+    "mi klama gi'e ju'i cadzu",
+    "mi broda joi brode gi brodi",
+    "mi broda je brode ku brodi",
+    # v0.109: 描述内 selbri の JOI 接続(z0 は selbri_4 の joik で受理するが
+    # 本実装は gihek 経路のため未対応の残差。既知差分として記録)
+    "mi viska lo broda joi brode ku",
+    "mi viska lo broda bi'i brode ku",
     # mex + mai(free <- mex_2 MAI の mex 全体形)
     "mi broda vei ny su'i pa mai",
     "mi broda li pa mai",

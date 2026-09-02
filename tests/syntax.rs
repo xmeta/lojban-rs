@@ -888,9 +888,18 @@ fn 既存_bo_経路は維持される() {
     // BO を含まないタグの解析木は不変
     parse_ok("ni'i mi klama");
     parse_ok(".i ni'i mi klama");
-    // 裸の tanru BO 接続(zantufa selbri_6 相当)は本件のスコープ外で
-    // 従来どおり拒否(tanru_link は JA 付きのみ)
-    assert!(lojban::parse("mi klama bo cadzu").is_err());
+    // 裸の tanru BO 接続(zantufa selbri_6 相当)は v0.109 で受理
+    // (z0 実測: selbri_6 = tanru_unit (BO tanru_unit)* の tanru 接続。
+    // 詳細は 裸tanru_bo接続_v0_109 を参照)
+    let s = parse_ok("mi klama bo cadzu");
+    assert!(
+        s.contains(
+            "(tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\"))) \
+             (BO_clause (BO_core \"bo\")) \
+             (tanru_unit (BRIVLA_clause (BRIVLA_core \"cadzu\"))))"
+        ),
+        "{s}"
+    );
     // 非文は拒否
     assert!(lojban::parse("qqq").is_err());
 }
@@ -3886,6 +3895,351 @@ fn 裸タグ項_追ピン_v0_108() {
             "(terms (term (tagged (FA_clause (FA_core \"fa\"))))) \
              (bridi_tail (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"broda\"))))) \
              (tail_terms \"\"))"
+        ),
+        "{s}"
+    );
+}
+
+#[test]
+fn 裸tanru_bo接続_v0_109() {
+    // GAP_裸tanru_BO接続(v0.109 解消)。tanru_link に BO 単独の選択肢を追加。
+    // z0 実測(zantufa-0.9999.js): 「mi klama bo cadzu」は selbri_6 =
+    // tanru_unit (BO tanru_unit)* の tanru 接続(gihek/bridi_tail ではない)。
+    // 本実装は tanru 繰り返しの平準形(z0 は selbri_6 ノード。既知クラスの
+    // 木形状差異で、受理・読みは同一)
+    let s = parse_ok("mi klama bo cadzu");
+    assert!(
+        s.contains(
+            "(tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\"))) \
+             (BO_clause (BO_core \"bo\")) \
+             (tanru_unit (BRIVLA_clause (BRIVLA_core \"cadzu\"))))"
+        ),
+        "{s}"
+    );
+
+    // BO 連鎖(z0 も selbri_6 の繰り返しで受理)
+    let s = parse_ok("mi klama bo cadzu bo bajra");
+    assert_eq!(s.matches("BO_core \"bo\"").count(), 2, "{s}");
+    assert!(s.contains("BRIVLA_core \"bajra\""), "{s}");
+
+    // 描述内の tanru BO(z0 実測 ok)
+    let s = parse_ok("mi viska lo broda bo brode ku");
+    assert!(
+        s.contains("(BO_clause (BO_core \"bo\"))")
+            && s.contains("BRIVLA_core \"broda\"")
+            && s.contains("BRIVLA_core \"brode\""),
+        "{s}"
+    );
+    parse_ok("lo broda bo brode ku barda");
+
+    // gihek との組合せ(z0 実測 ok): 2個目の bridi_tail の selbri が BO で継続
+    parse_ok("mi broda gi'e brode bo brodi");
+    // co_tail 内の tanru BO(z0 実測 ok)
+    parse_ok("mi klama co cadzu bo bajra");
+    // 項接続の BO は ek_joik の既存経路(不変)
+    parse_ok("mi joi bo do klama");
+
+    // NAhE + BO は z0 も拒否(s_marks の後の tanru は単位で始まる必要がある)
+    assert!(LojbanParser::parse(Rule::text, "mi na'e bo broda").is_err());
+    assert!(LojbanParser::parse(Rule::text, "na'e bo broda").is_err());
+    assert!(LojbanParser::parse(Rule::text, "to'e bo broda").is_err());
+}
+
+#[test]
+fn gihekによるjoi接続_v0_109() {
+    // GAP_JOIによるselbri接続(v0.109 解消)。gihek_link に gihek_joik
+    // (JOI/BIhI)を追加。z0 実測: gihek は NA? SE? GIhA のみだが、zantufa の
+    // joik は総称接続詞(JOI+JA系+BIhI)を selbri_4/selbri_5 の接続で取るため
+    // 「mi broda joi brode」が受理される。本実装は camxes 系 gihek 拡張に倣い
+    // bridi_tail 連結部で受ける(木形状差異 = 既知クラス: z0 は selbri_4 の
+    // joik で2つの selbri を結ぶが、本実装は gihek_link で2つの bridi_tail を
+    // 結ぶ。受理・読みは同一)
+    let s = parse_ok("mi broda joi brode");
+    assert!(
+        s.contains(
+            "(bridi_tail (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"broda\"))))) \
+             (tail_terms \"\") (JOI_clause (JOI_core \"joi\")) \
+             (bridi_tail (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"brode\"))))) \
+             (tail_terms \"\")))"
+        ),
+        "{s}"
+    );
+
+    // JOI 系の各語(gap_tracker GAP_JOIによるselbri接続 と同一入力。
+    // いずれも z0/z1/maftufa 実測 ok)
+    for input in [
+        "mi broda joi brode",
+        "mi broda jo'e brode",
+        "mi broda fa'u brode",
+        "mi broda ku'a brode",
+        "mi broda johu brode",
+        "mi broda jo'u brode",
+        // 接続詞疑問 ji(v0.108 で JOI_core 収録。副次効果で緑化)
+        "mi broda ji brode",
+    ] {
+        parse_ok(input);
+    }
+
+    // NAI 後置 / BO 後置 / SE 変換(z0/z1/maf 実測 ok。CLL 14 の
+    // 接続詞 NAI・短スコープ BO・SE 変換)
+    parse_ok("mi broda joi nai brode");
+    parse_ok("mi broda joi bo brode");
+    parse_ok("mi broda joi nai bo brode");
+    parse_ok("mi broda se joi brode");
+    // BIhI(GAhO 両端 / NAI 後置 / SE 前置。z0/z1/maf 実測 ok)
+    parse_ok("mi broda bi'i brode");
+    // BIhI_core の残り語形 mi'i(単独形。z0/z1/maf 実測 ok)
+    parse_ok("mi broda mi'i brode");
+    parse_ok("mi broda ga'o bi'i ke'i brode");
+    parse_ok("mi broda ke'i bi'o ga'o brode");
+    parse_ok("mi broda bi'i nai brode");
+    parse_ok("mi broda se bi'i brode");
+    // 連鎖と混合(z0 実測 ok)
+    parse_ok("mi broda joi brode ji brodi");
+    parse_ok("mi broda ji brode joi brodi");
+    parse_ok("mi broda joi brode gi'e brodi");
+    parse_ok("mi broda joi brode joi brodi");
+    parse_ok("mi broda joi brode bo brodi");
+    parse_ok("mi broda joi brode co brodi");
+    parse_ok("mi broda jo'e brode gi'e brodi");
+    parse_ok("mi broda ku'a brode bo brodi");
+    // 連結詞直後の自由修飾語(gihek_free。z0 実測 ok)
+    parse_ok("mi broda joi brode .ui brodi");
+    parse_ok("mi broda joi .ui brode");
+    parse_ok("mi broda joi brode vau");
+
+    // A 系は z0/z1/maf とも拒否(ek_joik との差分。項接続の A は別位置)
+    assert!(LojbanParser::parse(Rule::text, "mi broda e brode").is_err());
+    assert!(LojbanParser::parse(Rule::text, "mi broda a brode").is_err());
+    // JA 単独の裸形は tanru_link の JA 経路が先に消費されるため gihek には
+    // 到達しない(「mi broda je brode」は tanru の木のまま = 下の不変ピン)
+    // vocative は連結詞の直後に置けない(z0/z1/maf 実測 err。gihek_free)
+    assert!(LojbanParser::parse(Rule::text, "mi broda joi ju'i brode").is_err());
+    assert!(LojbanParser::parse(Rule::text, "mi broda je ju'i brode").is_err());
+    // DOhU 明示閉鎖の vocative は受理(z0/z1/maf 実測 ok)
+    parse_ok("mi broda joi ju'i dohu brode");
+    // gi は GIhA ではない(z0 実測 err)
+    assert!(LojbanParser::parse(Rule::text, "mi broda joi brode gi brodi").is_err());
+    // 後続の ku は宙に浮く(z0 実測 err)
+    assert!(LojbanParser::parse(Rule::text, "mi broda je brode ku brodi").is_err());
+}
+
+#[test]
+fn gihek拡張_既存不変ピン_v0_109() {
+    // GIhA 経路の木は不変(gihek_link の第1枝を維持)
+    let s = parse_ok("mi klama gi'e cadzu");
+    assert!(s.contains("GIhA_core \"gi'e\""), "{s}");
+    assert!(s.contains("(GIhA_clause (GIhA_core \"gi'e\"))"), "{s}");
+    // guhek(gu'e … gi …)経路も不変
+    let s = parse_ok("mi gu'e broda gi broda");
+    assert!(
+        s.contains("GUhA_core \"gu'e\"") && s.contains("GI_core \"gi\""),
+        "{s}"
+    );
+    // 項接続(ek_joik)の木は不変
+    let s = parse_ok("mi joi do klama");
+    assert!(s.contains("JOI_core \"joi\""), "{s}");
+    // JA の tanru 接続の木は不変(je は gihek に到達しない)
+    let s = parse_ok("mi broda je brode");
+    assert!(
+        s.contains(
+            "(tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"broda\"))) \
+             (JA_clause (JA_core \"je\")) \
+             (tanru_unit (BRIVLA_clause (BRIVLA_core \"brode\"))))"
+        ),
+        "{s}"
+    );
+    // GIhA+BO(v0.95)の木は不変
+    let s = parse_ok("mi nelci gi'e bo citka");
+    assert!(s.contains("GIhA_core") && s.contains("BO_core"), "{s}");
+    // gihek 直後の ba'e(v0.92)の木は不変
+    let s = parse_ok("mi klama gi'e ba'e cadzu");
+    assert!(s.contains("GIhA_core \"gi'e\""), "{s}");
+    // 連結詞直後の感情標識(v0.92)。v0.109 で free* → gihek_free(silent)に
+    // 置換したため、旧実装の free ラッパは消失する(非 silent の free_unit は
+    // gihek_free_unit の参照経路で残り、bridi_tail の直接の子に平準化される。
+    // tail free 側は tail_terms > free > free_unit と free ラッパが残る
+    // 既知クラスの木形状差異)。新形状の木ピン(v0.109 レビュー対応)
+    let s = parse_ok("mi klama gi'e .ui cadzu");
+    assert!(
+        s.contains(
+            "(GIhA_clause (GIhA_core \"gi'e\")) \
+             (free_unit (ui_free (UI_clause (UI_core \"ui\")))) \
+             (bridi_tail (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"cadzu\")))))"
+        ),
+        "{s}"
+    );
+    // free ラッパのみ消失(gihek_free/gihek_free_unit は silent)
+    assert!(!s.contains("(free ("), "{s}");
+    // 裸 vocative は連結詞の直後に置けない(z0/z1/maf 実測 err。
+    // v0.92 からの過剰受容を v0.109 で gihek_free により解消)
+    assert!(LojbanParser::parse(Rule::text, "mi klama gi'e ju'i cadzu").is_err());
+    // DOhU 明示閉鎖なら受理(z0/z1/maf 実測 ok)
+    parse_ok("mi klama gi'e ju'i dohu cadzu");
+}
+
+#[test]
+fn jai_se変換タグ_v0_109() {
+    // GAP_jai_se変換タグ(v0.109 解消)。JAI 枝に (SE | NAhE)+ 変換タグの
+    // 選択肢を追加。z0 実測(zantufa-0.9999.js): 「mi jai se gau broda」は
+    // tanru_unit_1 = JAI_clause(tag) tanru_unit_1 の tag が SE+BAI を取る形
+    // (JAI ノード内に [JAI jai][SE se][BAI gau] と平準化)。
+    // 本実装は SE/NAhE を JAI の直下の兄弟ノードに平準化する(既知クラスの
+    // 木形状差異で、受理・読みは同一)
+    let s = parse_ok("mi jai se gau broda");
+    assert!(
+        s.contains(
+            "(tanru_unit (JAI_clause (JAI_core \"jai\")) \
+             (SE_clause (SE_core \"se\")) \
+             (BAI_clause (BAI_core \"gau\")) \
+             (tanru_unit (BRIVLA_clause (BRIVLA_core \"broda\"))))"
+        ),
+        "{s}"
+    );
+    // 尾項+描述(gap_tracker GAP_jai_se変換タグ と同一入力。z0/z1/maf 実測 ok)
+    parse_ok("mi jai se gau klama lo zdani");
+
+    // 変換タグの前置は SE/NAhE の連続(z0 実測: se gau / na'e gau /
+    // se na'e gau / na'e se gau / se pu / se ta'i は受理)
+    parse_ok("mi jai se ta'i broda");
+    parse_ok("mi jai na'e gau broda");
+    parse_ok("mi jai se na'e gau broda");
+    parse_ok("mi jai na'e se gau broda");
+    parse_ok("mi jai se pu broda");
+    // co との組合せ(z0 実測 ok)
+    parse_ok("mi jai se gau broda co brodi");
+
+    // z0 も拒否する形(実測 err): NA/JAhA は変換タグの前置になれない。
+    // s_marks 全体ではなく (SE | NAhE)+ とする理由
+    assert!(LojbanParser::parse(Rule::text, "mi jai na gau broda").is_err());
+    assert!(LojbanParser::parse(Rule::text, "mi jai ja'a gau broda").is_err());
+    assert!(LojbanParser::parse(Rule::text, "mi jai se ja'a gau broda").is_err());
+    // GA はタグではない(z0 実測 err)
+    assert!(LojbanParser::parse(Rule::text, "mi jai se go broda").is_err());
+    // タグだけのフラグメントは z0 も拒否(z0=0/z1=1/maf=1 の参照分裂のため
+    // gap_tracker には含まれない。z0 整合で拒否を維持)
+    assert!(LojbanParser::parse(Rule::text, "jai se gau").is_err());
+
+    // 既存木不変: SE 省略形と SE+BRIVLA 形は第1/第2枝が先に一致して木は不変
+    let s = parse_ok("mi jai frili");
+    assert!(
+        s.contains(
+            "(tanru_unit (JAI_clause (JAI_core \"jai\")) \
+             (tanru_unit (BRIVLA_clause (BRIVLA_core \"frili\"))))"
+        ),
+        "{s}"
+    );
+    let s = parse_ok("mi jai gau broda");
+    assert!(
+        s.contains(
+            "(tanru_unit (JAI_clause (JAI_core \"jai\")) \
+             (BAI_clause (BAI_core \"gau\")) \
+             (tanru_unit (BRIVLA_clause (BRIVLA_core \"broda\"))))"
+        ),
+        "{s}"
+    );
+    // 「jai se broda」は tanru_unit の SE 前置 brivla 経路(z0 も同じ木:
+    // SE は tanru_unit_1 側)
+    let s = parse_ok("mi jai se broda");
+    assert!(
+        s.contains(
+            "(tanru_unit (JAI_clause (JAI_core \"jai\")) \
+             (tanru_unit (SE_clause (SE_core \"se\")) \
+             (BRIVLA_clause (BRIVLA_core \"broda\"))))"
+        ),
+        "{s}"
+    );
+}
+
+#[test]
+fn free後のco転換selbri継続_v0_109() {
+    // GAP_free後のco転換selbri継続(v0.109 解消)。tanru_post に co_post 枝を
+    // 追加。z0 実測(zantufa-0.9999.js): 「farlu ju'i co cnita」は
+    // post_clause(free ju'i, selbri co cnita, DOhU elided)。
+    // 本実装は tanru 繰り返しの平準形(CO_clause と tanru が tanru の直接の
+    // 子として現れる。v0.103 と同じ既知クラスの木形状差異で、受理・読みは同一)
+    let s = parse_ok("farlu ju'i co cnita");
+    assert!(
+        s.contains(
+            "(tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"farlu\"))) \
+             (free (free_unit (vocative (COI_clause (COI_core \"ju'i\"))))) \
+             (CO_clause (CO_core \"co\")) \
+             (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"cnita\")))))"
+        ),
+        "{s}"
+    );
+    // gap_tracker と同一入力の残り2形(z0/z1/maf 実測 ok)
+    let s = parse_ok(".oi ta ca'o farlu ju'i co cnita");
+    assert!(
+        s.contains("CO_core \"co\"") && s.contains("BRIVLA_core \"cnita\""),
+        "{s}"
+    );
+    parse_ok("mi farlu ju'i co cnita");
+
+    // 複数 free の後の co(z0 実測 ok)
+    parse_ok("farlu ju'i .ui co cnita");
+    // 感情標識の後の co(z0 実測 ok。既存の tail free + co_tail 経路から
+    // tanru_post の co 継続に変わる新規受理)
+    parse_ok("mi klama .ui co broda");
+    // co 後の SE 前置(z0 実測 ok)
+    parse_ok("farlu ju'i co se cnita");
+    // NAhE は tanru_unit の前置で受理(z0 実測 ok)
+    parse_ok("farlu ju'i co na'e cnita");
+    // 抽象の継続(z0 実測 ok)
+    parse_ok("farlu ju'i co nu broda kei");
+    // co 連鎖(z0 実測 ok)
+    parse_ok("farlu ju'i co cnita co brodi");
+    // 連鎖途中の co+SE(z0 実測 ok)
+    parse_ok("farlu ju'i co cnita co se brodi");
+    // co 後の JA tanru 連接(z0 実測 ok)
+    parse_ok("farlu ju'i co brode je brodi");
+    // co 後の BO 連接(z0 実測 ok)
+    parse_ok("farlu ju'i co broda bo brodi");
+    // 継続後の gihek(z0 実測 ok)
+    parse_ok("farlu ju'i co cnita gi'e brodi");
+    // 継続後の free は tail free へ(z0 実測 ok)
+    parse_ok("farlu ju'i co cnita .ui");
+
+    // z0 も拒否する形(実測 err)
+    // s_marks 全体ではなく SE 前置まで: JAhA/NA は co の直後に置けない
+    assert!(LojbanParser::parse(Rule::text, "farlu ju'i co ja'a cnita").is_err());
+    assert!(LojbanParser::parse(Rule::text, "farlu ju'i co na cnita").is_err());
+    // DOhU 後置は不可(z0 実測 err)
+    assert!(LojbanParser::parse(Rule::text, "farlu ju'i co cnita dohu").is_err());
+    // ku 後置は不可(z0 実測 err)
+    assert!(LojbanParser::parse(Rule::text, "farlu ju'i co cnita ku").is_err());
+    // co 後の gek/gi は不可(z0 実測 err)
+    assert!(LojbanParser::parse(Rule::text, "farlu ju'i co broda gi broda").is_err());
+    assert!(LojbanParser::parse(Rule::text, "farlu ju'i co cnita gi broda").is_err());
+    // dangling な co(z0 実測 err)
+    assert!(LojbanParser::parse(Rule::text, "mi klama ju'i co").is_err());
+
+    // 既存木不変: co を含まない free 継続と、free で終わる入力は
+    // v0.103 の木のまま(フォールバック設計の維持)
+    let s = parse_ok("farlu ju'i cnita");
+    assert!(
+        s.contains(
+            "(tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"farlu\"))) \
+             (free (free_unit (vocative (COI_clause (COI_core \"ju'i\"))))) \
+             (tanru_unit (BRIVLA_clause (BRIVLA_core \"cnita\"))))"
+        ),
+        "{s}"
+    );
+    let s = parse_ok("klama .ui");
+    assert!(
+        s.contains("(tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\"))))"),
+        "{s}"
+    );
+    assert!(
+        s.contains("tail_terms (free (free_unit (ui_free (UI_clause (UI_core \"ui\")))))"),
+        "{s}"
+    );
+    // 通常の co_tail(selbri 直下)は free を伴わないため不変
+    let s = parse_ok("mi klama co broda");
+    assert!(
+        s.contains(
+            "(selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\")))) \
+             (CO_clause (CO_core \"co\"))"
         ),
         "{s}"
     );

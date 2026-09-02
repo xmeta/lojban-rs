@@ -299,7 +299,7 @@ line_no,input,ours,z0,z1,maftufa
 298,mi viska lo klama be lo zdani bei lo zarci be'o ku,1,1,1,1
 299,mi viska lo klama be lo zdani be'o ku,1,1,1,1
 300,mi viska lo klama be lo zdani beho ku,1,1,1,1
-301,mi klama bo cadzu,0,1,1,1
+301,mi klama bo cadzu,1,1,1,1
 302,mi pu bo klama,1,0,0,0
 303,li re boi su'i ci du xa,1,0,0,0
 304,mi klama lo zdani co broda,1,1,1,1
@@ -643,13 +643,13 @@ line_no,input,ours,z0,z1,maftufa
 642,mi jo do klama,1,1,1,1
 643,mi ju do klama,1,1,1,1
 644,mi ji do klama,1,1,1,1
-645,mi broda jo'e brode,0,1,1,1
-646,mi broda joi brode,0,1,1,1
-647,mi broda fa'u brode,0,1,1,1
-648,mi broda ku'a brode,0,1,1,1
-649,mi broda johu brode,0,1,1,1
-650,mi broda jo'u brode,0,1,1,1
-651,mi broda ji brode,0,1,1,1
+645,mi broda jo'e brode,1,1,1,1
+646,mi broda joi brode,1,1,1,1
+647,mi broda fa'u brode,1,1,1,1
+648,mi broda ku'a brode,1,1,1,1
+649,mi broda johu brode,1,1,1,1
+650,mi broda jo'u brode,1,1,1,1
+651,mi broda ji brode,1,1,1,1
 652,li pa jo'e re du vo,1,0,0,0
 653,li pa joi re du vo,1,0,0,0
 654,li pa fa'u re du vo,1,0,0,0
@@ -1407,32 +1407,87 @@ line_no,input,ours,z0,z1,maftufa
 1406,mi klama bai do,1,1,1,1
 1407,mi klama fa mi ku,0,0,0,0
 1408,mi klama va'u mi ku,0,0,0,0
-1409,farlu ju'i co cnita,0,1,1,1
-1410,.oi ta ca'o farlu ju'i co cnita,0,1,1,1
-1411,mi farlu ju'i co cnita,0,1,1,1
-1412,na'e bo broda,0,0,0,0
-1413,mi na'e bo broda,0,0,0,0
-1414,to'e bo broda,0,0,0,0
-1415,jai se gau,0,0,1,1
-1416,mi jai se gau broda,0,1,1,1
-1417,mi jai se gau klama lo zdani,0,1,1,1
-1418,mi broda vei ny su'i pa mai,0,0,0,0
-1419,mi broda li pa mai,1,0,0,0
-1420,mi klama ri,1,1,1,1
-1421,mi klama ra,1,1,1,1
-1422,mi klama ru,1,1,1,1
-1423,mi viska lo broda .i mi viska ri,1,1,1,1
-1424,mi klama lo ni broda ku,1,1,1,1
-1425,lo pa mi gerku ku barda,0,0,0,0
-1426,lo pa le gerku ku barda,0,1,1,1
-1427,mi pu bo ge broda gi broda,1,0,0,0
-1428,mi caku klama,1,1,1,1
-1429,caku mi klama,0,1,1,1
-1430,li pa du re,1,0,0,0
-1431,lo aburobu ku,1,0,0,0
-1432,mi klama lo broda be'o,0,0,0,0
-1433,mi klama ke lo zdani broda ke'e,0,1,1,1
-1434,ganai mi broda gi mi klama,1,1,1,0
-1435,mi ge broda gi brode,1,1,1,0
-1436,xu do klama,1,1,1,1
-1437,li vei ny su'i pa ve'o du re,1,0,0,0
+1409,farlu ju'i co cnita,1,1,1,1
+1410,.oi ta ca'o farlu ju'i co cnita,1,1,1,1
+1411,mi farlu ju'i co cnita,1,1,1,1
+1412,farlu ju'i co se cnita,1,1,1,1
+1413,farlu ju'i co na'e cnita,1,1,1,1
+1414,farlu ju'i co nu broda kei,1,1,1,1
+1415,farlu ju'i co cnita co brodi,1,1,1,1
+1416,farlu ju'i co cnita gi'e brodi,1,1,1,1
+1417,mi klama .ui co broda,1,1,1,1
+1418,farlu ju'i co ja'a cnita,0,0,0,0
+1419,farlu ju'i co na cnita,0,0,0,0
+1420,farlu ju'i co cnita dohu,0,0,0,0
+1421,farlu ju'i co cnita ku,0,0,0,0
+1422,farlu ju'i co broda gi broda,0,0,0,0
+1423,mi klama bo cadzu bo bajra,1,1,1,1
+1424,mi broda bo brode,1,1,1,1
+1425,mi viska lo broda bo brode ku,1,1,1,1
+1426,mi broda gi'e brode bo brodi,1,1,1,1
+1427,mi klama co cadzu bo bajra,1,1,1,1
+1428,mi na'e bo broda,0,0,0,0
+1429,na'e bo broda,0,0,0,0
+1430,to'e bo broda,0,0,0,0
+1431,jai se gau,0,0,1,1
+1432,mi jai se gau broda,1,1,1,1
+1433,mi jai se gau klama lo zdani,1,1,1,1
+1434,mi jai se ta'i broda,1,1,1,1
+1435,mi jai na'e gau broda,1,1,1,1
+1436,mi jai se na'e gau broda,1,1,1,0
+1437,mi jai na'e se gau broda,1,1,1,1
+1438,mi jai se pu broda,1,1,1,0
+1439,mi jai se gau broda co brodi,1,1,1,1
+1440,mi jai na gau broda,0,0,1,1
+1441,mi jai ja'a gau broda,0,0,1,1
+1442,mi jai se ja'a gau broda,0,0,0,0
+1443,mi jai se go broda,0,0,0,0
+1444,mi broda joi nai brode,1,1,1,1
+1445,mi broda joi bo brode,1,1,1,1
+1446,mi broda se joi brode,1,1,1,1
+1447,mi broda bi'i brode,1,1,1,1
+1448,mi broda ga'o bi'i ke'i brode,1,1,1,1
+1449,mi broda bi'i nai brode,1,1,1,1
+1450,mi broda se bi'i brode,1,1,1,1
+1451,mi broda joi brode gi'e brodi,1,1,1,1
+1452,mi broda joi brode joi brodi,1,1,1,1
+1453,mi broda joi brode co brodi,1,1,1,1
+1454,mi broda joi brode .ui brodi,1,1,1,1
+1455,mi broda joi ju'i dohu brode,1,1,1,1
+1456,mi klama gi'e ju'i do cadzu,0,1,1,1
+1457,farlu ju'i do cnita,0,1,1,1
+1458,mi broda na joi brode,0,1,1,1
+1459,mi broda na se joi brode,0,1,1,1
+1460,mi broda na gi'e brode,0,1,1,1
+1461,mi broda se gi'e brode,0,1,1,1
+1462,mi broda na gi'a brode,0,1,1,1
+1463,mi broda se gi'a brode,0,1,1,1
+1464,mi broda e brode,0,0,0,0
+1465,mi broda a brode,0,0,0,0
+1466,mi broda joi ju'i brode,0,0,0,0
+1467,mi broda je ju'i brode,0,0,0,0
+1468,mi klama gi'e ju'i cadzu,0,0,0,0
+1469,mi broda joi brode gi brodi,0,0,0,0
+1470,mi broda je brode ku brodi,0,0,0,0
+1471,mi viska lo broda joi brode ku,0,1,1,1
+1472,mi viska lo broda bi'i brode ku,0,1,1,1
+1473,mi broda vei ny su'i pa mai,0,0,0,0
+1474,mi broda li pa mai,1,0,0,0
+1475,mi klama ri,1,1,1,1
+1476,mi klama ra,1,1,1,1
+1477,mi klama ru,1,1,1,1
+1478,mi viska lo broda .i mi viska ri,1,1,1,1
+1479,mi klama lo ni broda ku,1,1,1,1
+1480,lo pa mi gerku ku barda,0,0,0,0
+1481,lo pa le gerku ku barda,0,1,1,1
+1482,mi pu bo ge broda gi broda,1,0,0,0
+1483,mi caku klama,1,1,1,1
+1484,caku mi klama,0,1,1,1
+1485,li pa du re,1,0,0,0
+1486,lo aburobu ku,1,0,0,0
+1487,mi klama lo broda be'o,0,0,0,0
+1488,mi klama ke lo zdani broda ke'e,0,1,1,1
+1489,ganai mi broda gi mi klama,1,1,1,0
+1490,mi ge broda gi brode,1,1,1,0
+1491,xu do klama,1,1,1,1
+1492,li vei ny su'i pa ve'o du re,1,0,0,0

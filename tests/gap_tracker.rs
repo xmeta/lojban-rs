@@ -111,6 +111,8 @@ fn GAP_単独_vau_と_se_vau() {
 
 #[test]
 fn GAP_free後のco転換selbri継続() {
+    // ✅ v0.109 で解消(tanru_post に co_post 枝を追加。下記の対象文は
+    //   緑化済みで回帰テストとして残す)
     // 対象文: 「farlu ju'i co cnita」「.oi ta ca'o farlu ju'i co cnita」
     //   (tanru 単位間の自由修飾語 ju'i に続き co 転換 selbri が継続する形)
     // 実測: z0=ok / z1=ok / maftufa=ok、本パーサー=err(全 3 形)
@@ -128,6 +130,8 @@ fn GAP_free後のco転換selbri継続() {
 
 #[test]
 fn GAP_裸tanru_BO接続() {
+    // ✅ v0.109 で解消(tanru_link に BO 単独の選択肢を追加。下記の対象文は
+    //   緑化済みで回帰テストとして残す)
     // 対象文: 「mi klama bo cadzu」(tanru 単位を BO で短スコープ接続)
     // 実測: z0=ok / z1=ok / maftufa=ok、本パーサー=err
     // 原因推定: tanru_link(lojban.pest L522)は JA 付き接続のみで、
@@ -145,6 +149,8 @@ fn GAP_裸tanru_BO接続() {
 
 #[test]
 fn GAP_JOIによるselbri接続() {
+    // ✅ v0.109 で解消(gihek_link に gihek_joik(JOI/BIhI)を追加。下記の
+    //   対象文は緑化済みで回帰テストとして残す)
     // 対象文: 「mi broda joi brode」「mi broda jo'e brode」
     //   「mi broda fa'u brode」「mi broda ku'a brode」(jo'u / johu も同様)
     //   (bridi_tail の連結部に JOI 系の非論理接続詞を置く形)
@@ -225,6 +231,8 @@ fn GAP_zoi区切り語のピリオド正規化() {
 
 #[test]
 fn GAP_jai_se変換タグ() {
+    // ✅ v0.109 で解消(JAI 枝に (SE | NAhE)+ 変換タグの選択肢を追加。
+    //   下記の対象文は緑化済みで回帰テストとして残す)
     // 対象文: 「mi jai se gau broda」「mi jai se gau klama lo zdani」
     //   (JAI + SE 変換タグ。jai gau の se 変換形)
     // 実測: z0=ok / z1=ok / maftufa=ok、本パーサー=err。

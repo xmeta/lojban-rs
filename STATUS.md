@@ -1,21 +1,23 @@
 # 開発ステータス
 
-## 現在の状態: v0.108 完成(gap_tracker の意図的失敗 8 件を除き全テストグリーン)
+## 現在の状態: v0.109 完成(gap_tracker の意図的失敗 4 件を除き全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語193 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体256 + doc 11 = 計267テスト + example 内 unit test 5 全パス
-- tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件を解消し緑化
-  (GAP_接続詞疑問_ji / GAP_単独_vau_と_se_vau / GAP_FA_nai_不定格の否定 / GAP_時制タグの_nai)。
-  残り 8 件は GAP 解消まで意図的に失敗する(下記「既知GAP」参照)。cargo test 全体はこの分だけ失敗する状態が正
+- ライブラリ20 / 形態論11 / 統語198 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体261 + doc 11 = 計272テスト + example 内 unit test 5 全パス
+- tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件、
+  v0.109 でバッチ2(接続詞・前置系)の 4 件を解消し緑化
+  (バッチ2: GAP_裸tanru_BO接続 / GAP_JOIによるselbri接続 / GAP_jai_se変換タグ / GAP_free後のco転換selbri継続)。
+  残り 4 件は GAP 解消まで意図的に失敗する(下記「既知GAP」参照)。cargo test 全体はこの分だけ失敗する状態が正
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.108.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.109.0)
 
-## 既知GAP(未解決・残り 8 件は意図的に失敗するテストあり)
+## 既知GAP(未解決・残り 4 件は意図的に失敗するテストあり)
 
 zantufa 系参照パーサー(z0 = zantufa-0.9999.js / z1 = zantufa-1.9999.js /
 maftufa = maftufa-1.9999.js)が受理するのに本パーサーが拒否する形(GAP)を、
 語彙×統語位置のプローブ行列で体系的掃引し、tests/gap_tracker.rs に
-意図的に失敗するテスト(RED)として固定した。v0.108 でバッチ1の 4 件を
-解消(下記「v0.108 で追加」)し、残り 8 件は未対応。
+意図的に失敗するテスト(RED)として固定した。v0.108 でバッチ1の 4 件、
+v0.109 でバッチ2の 4 件を解消(下記「v0.108 で追加」「v0.109 で追加」)し、
+残り 4 件は未対応。
 
 ### スイープ方法論
 
@@ -23,21 +25,21 @@ maftufa = maftufa-1.9999.js)が受理するのに本パーサーが拒否する�
   `*_core` 語彙リストを機械抽出し(coverage_doc.rs と同手法)、クラスごとの
   代表統語位置(タグ4位置 / 項3位置 / 自由修飾語2位置 / クラス固有テンプレート)
   に流し込む。加えて既知 GAP 候補と OVER 記録用の構造プローブ。
-  生成物は tests/data/gap_probes.txt(1,412 行)
+  生成物は tests/data/gap_probes.txt(1,492 行)
 - 一括比較: tests/data/run_gap_sweep.sh が本パーサー(CLI `--lines` バッチ)と
   参照パーサー 3 種(tests/data/refparse.js。camxes_preproc.js を parse 前に
   適用)を走らせ、比較表 tests/data/gap_sweep_results.csv
-  (1,412 行 × {ours, z0, z1, maftufa})を出力
-- 掃引結果(v0.108 レビュー対応後に再実行。プローブ 1,437 行=語彙追加で
-  va'u/vahu/ji の行 10 行、タグ契約 KU・裸タグ・排他化確認の構造プローブ
-  15 行が追加): ours ok 1,372 / z0 ok 1,294 / z1 ok 1,309 /
-  maftufa ok 1,263。GAP 候補(参照 ok / ours err)34 件、
-  OVER 候補(ours ok / 参照全 err)90 件。
-  v0.107 時点(1,412 行)からの変化は err→ok 12 行(緑化対象)+追加プローブ
-  15 行(12 行 ours ok=全参照 ok、2 行 ours err=全参照 err の整合確認、
-  1 行 fa nai ku は FA+NAI と同じ参照割れ)で**ok→err はゼロ**。
-  OVER +1 件は ji を加えた mex 演算子位置の「li pa ji re du vo」で、
-  既存の「li … du …」拒否クラス(joi 版も z0 は拒否)の兄弟行
+  (1,492 行 × {ours, z0, z1, maftufa})を出力
+- 掃引結果(v0.109 実施。プローブ 1,492 行=バッチ2 の BO/JOI/jai/co の
+  受理スコープと過剰受理確認の構造プローブ 47 行+レビュー対応で呼格残差と
+  gihek の (NA? SE?) 前置の記録プローブ 8 行を追加):
+  ours ok 1,414 / z0 ok 1,333 / z1 ok 1,350 / maftufa ok 1,302。
+  GAP 候補(参照 ok / ours err)33 件、OVER 候補(ours ok / 参照全 err)90 件。
+  v0.108 時点(1,437 行)からの変化は err→ok 13 行(緑化対象の
+  BO 1 行+JOI 7 行+co 3 行+jai se 2 行)+追加プローブ 55 行
+  (いずれも z0 交叉で受理スコープを確認済み)で**ok→err はゼロ**、
+  OVER 増減もゼロ(新規過剰受理なし。逆に gihek 直後の裸 vocative の
+  過剰受容 1 クラスを z0 整合で解消)
 - 採用基準: 参照パーサーが受理する正当なロジバン形のみ。次の 4 クラスは
   意図的差分として GAP に入れていない(比較表には残る):
   - z0/z1 のみの緩受理: 裸 mo'i・fe'e のタグ位置(maftufa は拒否)
@@ -49,7 +51,7 @@ maftufa = maftufa-1.9999.js)が受理するのに本パーサーが拒否する�
     既存経路で受理、「数式+mai」の mex 全体形は参照 3 種も拒否のため
     GAP は不在
 
-### GAP 一覧(12 件。tests/gap_tracker.rs の各テストが 1:1 対応。✅=v0.108 で解消)
+### GAP 一覧(12 件。tests/gap_tracker.rs の各テストが 1:1 対応。✅=v0.108/0.109 で解消)
 
 | 入力 | z0 | z1 | maftufa | 原因推定 |
 |---|---|---|---|---|
@@ -57,26 +59,133 @@ maftufa = maftufa-1.9999.js)が受理するのに本パーサーが拒否する�
 | fa nai mi klama / mi klama fa nai / fai nai mi klama | ok | ok | err | ✅ v0.108 解消。tagged の FA 枝に NAI 後置+sumti 省略(裸タグ項)を追加 |
 | mi ji do klama / do ji mi broda | ok | ok | ok | ✅ v0.108 解消。ji を JOI_core に収録 |
 | va'u mi klama / se va'u mi klama / mi klama se va'u lo nu broda | ok | ok | ok | ✅ v0.108 解消。va'u/vahu を BAI_core に収録 |
-| farlu ju'i co cnita(.oi ta ca'o… も同形) | ok | ok | ok | tanru_post の継続枝に co 枝なし(L390-393) |
-| mi klama bo cadzu | ok | ok | ok | 裸 BO の selbri 接続(selbri_6 相当)未実装(tanru_link L522) |
-| mi broda joi brode(jo'e/fa'u/ku'a/jo'u/johu も同形) | ok | ok | ok | gihek_link が GIhA のみで JOI を含まない(L521。項接続/mex 演算子は v0.101 で対応済み) |
+| farlu ju'i co cnita(.oi ta ca'o… も同形) | ok | ok | ok | ✅ v0.109 解消。tanru_post に co_post 枝を追加 |
+| mi klama bo cadzu | ok | ok | ok | ✅ v0.109 解消。tanru_link に裸 BO 枝を追加 |
+| mi broda joi brode(jo'e/fa'u/ku'a/jo'u/johu も同形) | ok | ok | ok | ✅ v0.109 解消。gihek_link に gihek_joik(JOI/BIhI)を追加 |
 | mi viska lo broda vu'o noi mi klama | ok | ok | ok | sumti の VUhO 枝は項連結のみで関係節共有がない(L223-224) |
 | mi pu nai klama / mi ba nai klama / mi ca nai klama | ok | ok | ok | ✅ v0.108 解消。tense_mark に NAI 後置を追加 |
 | mi cusku zoi gy. broda .gy | ok | ok | ok | normalize_zoi(lib.rs)が区切り語を生トークン完全一致で比較(gy. ≠ .gy) |
-| mi jai se gau broda / mi jai se gau klama lo zdani | ok | ok | ok | tanru_unit の JAI 枝に SE 変換タグ経路なし(L447) |
+| mi jai se gau broda / mi jai se gau klama lo zdani | ok | ok | ok | ✅ v0.109 解消。JAI 枝に (SE \| NAhE)+ 変換タグ経路を追加 |
 | mi klama ke lo zdani broda ke'e | ok | ok | ok | ke_group は selbri のみ括り bridi_tail を括れない(L459) |
 
 ### gap_tracker の扱い
 
-- tests/gap_tracker.rs は GAP ごとに 1 テスト(計 12)。未解決の 8 件は
-  受理をアサートするため失敗する(RED)。v0.108 で解消した 4 件は
+- tests/gap_tracker.rs は GAP ごとに 1 テスト(計 12)。未解決の 4 件は
+  受理をアサートするため失敗する(RED)。v0.108/v0.109 で解消した 8 件は
   テストを変更せず緑化。
-  既存テストの拒否ピンは fai nai(tests/syntax.rs fai_と_faha_fa_a_補完)の
-  1 件が存在し、v0.108 で受理ピンに更新済み(残る lo byklesi ku /
-  mi klama bo cadzu の 2 件は GAP 解消時に更新すること)
+  既存テストの拒否ピンのうち、v0.109 で解消した
+  mi klama bo cadzu(tests/syntax.rs 既存_bo_経路は維持される)は受理ピンに
+  更新済み(残る lo byklesi ku の 1 件は GAP 解消時に更新すること)
 - 再実行手順: `bash tests/data/run_gap_sweep.sh`
   (gerna_cipra の clone 先を GERNA_CIPRA_JS で指定可。既定
   /tmp/opencode/gerna_cipra/js)
+
+## v0.109 で追加(バッチ2 GAP 解消: 接続詞・前置系の再配線)
+
+語彙追加はなし(既存語彙の統語接続の拡張のみ。coverage.md に変更なし)。
+
+- 文法①(裸 tanru BO 接続): tanru_link に BO 単独の選択肢を追加。
+  z0 実測: 「mi klama bo cadzu」は selbri_6 = tanru_unit (BO tanru_unit)*
+  の tanru 接続(gihek ではない)。tanru 繰り返しの平準形は既知クラスの
+  木形状差異(v0.103 と同型)で、受理・読みは同一。
+  連鎖「mi klama bo cadzu bo bajra」、描述内「lo broda bo brode ku」、
+  「gi'e brode bo brodi」「co cadzu bo bajra」も z0 受理実測で同時緑化。
+  「mi na'e bo broda」は z0 も拒否(既存の拒否ピンを維持)
+- 文法②(gihek の JOI/BIhI 拡張): gihek_link に gihek_joik を追加
+  (GIhA 枝は第1枝に維持し「mi broda gi'e brode」の既存木は不変)。
+  z0 実測: gihek は NA? SE? GIhA のみだが、zantufa の joik は総称接続詞
+  (JOI+JA系+BIhI)を selbri_4/selbri_5 の selbri 接続で取るため
+  「mi broda joi brode」が受理される。本実装は camxes 系 gihek 拡張に倣い
+  bridi_tail 連結部で受ける(木形状差異 = 既知クラス: z0 は selbri_4 の
+  joik で 2 つの selbri を結ぶが、本実装は gihek_link で 2 つの bridi_tail
+  を結ぶ。受理・読みは同一)。
+  含めるもの(z0/z1/maf 実測): joi/jo'e/fa'u/ku'a/johu/jo'u/ji、
+  NAI 後置(joinai)、BO 後置(joi bo)、SE 変換(se joi / se bi'i)、
+  BIhI+GAhO 両端(ga'o bi'i ke'i)+NAI 後置。
+  含めないもの(z0 交叉で確認):
+  - A 系(a/e/o/u)は z0/z1/maf とも拒否のため含めない(ek_joik との差分)
+  - JA 単独の新設枝は置かない。JOI_core の総称構成員として ja/je/jo/ju も
+    この位置に到達し得るが、裸形は tanru_link の JA 経路が selbri 解析中に
+    先に消費するため gihek には到達しない(「mi broda je brode」の tanru 木
+    は不変。je+free 形は z0 も拒否のため gihek_free 側で除外)
+  - JOI 枝の GAhO 前置(ga'o joi ke'i)は z0/z1 のみ受理で
+    CLL 規範上 GAhO は BIhI の境界指定のため含めない(意図的差分)
+  - 前置の否定(nai / na)は含めない。実測差分は前置語で分裂する:
+    nai 前置(nai joi / nai gi'a)は z0/z1 のみ受理・maftufa は拒否
+    (zantufa の joik 内 NA? スロットと nai を UI free として読む緩さの
+    帰結)、na 前置(na joi / na gi'a 等)は z0/z1/maf の 3 種とも受理。
+    CLL 規範上 NAI は接続詞の後置のため前置は実装せず、nai 前置は
+    z0/z1 のみの緩受理・na 前置は GAP 候補として記録(下記残差節)
+  副次効果: 「mi broda ji brode」(v0.108 掃引で検出された残存 GAP 行)も緑化
+- 文法③(gihek 直後の vocative 制限): bridi_tail 連結部の free ループを
+  gihek_free(vocative 制限版)に変更。「mi klama gi'e ju'i cadzu」は
+  z0/z1/maf とも拒否(v0.92 からの過剰受容)に対し、感情標識等
+  (.ui / xu / pe'i / ba'e)は z0/z1/maf 受理の実測。vocative は
+  DOhU 明示閉鎖形のみ許容(「gi'e ju'i dohu cadzu」は z0/z1/maf 受理)。
+  v0.109 で追加する JOI/BIhI 枝にも同じ制限が要るため連結部で一括定義
+  (「mi broda joi ju'i brode」「mi broda je ju'i brode」は z0/z1/maf とも拒否)。
+  木形状差異(既知クラス): 旧実装の free*(非 silent)を silent の
+  gihek_free に置換したため、「mi klama gi'e .ui cadzu」等の既存受容入力の
+  解析木から free ラッパが消失する(非 silent の free_unit は
+  gihek_free_unit の参照経路で残り、bridi_tail の直接の子に平準化される。
+  tail free 側は tail_terms > free > free_unit と free ラッパが残る)。
+  受理集合の変化は vocative の制限のみ(実測ピンは
+  tests/syntax.rs gihek拡張_既存不変ピン_v0_109)。
+  なお gihek_free_unit は free_unit と語彙を単一ソース化
+  (`!COI_clause ~ free_unit | vocative_closed` の二択。COI で始まる
+  free_unit は vocative のみのためガード分離は受理不変)
+- 文法④(JAI+SE/NAhE 変換タグ): tanru_unit の JAI 枝に第3選択肢
+  (SE | NAhE)+ ~ tense_mark ~ tanru_unit を追加。
+  z0 実測: 「mi jai se gau broda」は tanru_unit_1 = JAI(tag) tanru_unit_1 の
+  tag が SE+BAI を取る形(JAI ノード内に [jai][se][gau] と平準化)。
+  本実装は SE/NAhE を JAI の兄弟ノードに平準化(既知クラスの木形状差異)。
+  変換タグの前置は (SE | NAhE)+ のみ: z0 実測で se gau / na'e gau /
+  se na'e gau / na'e se gau / se pu / se ta'i は受理、na gau / ja'a gau /
+  se ja'a gau は拒否(z1/maf は na/ja'a も受理する参照分裂だが z0 整合優先)。
+  採用側にも参照分裂あり: se pu(「mi jai se pu broda」)と
+  se na'e gau(「mi jai se na'e gau broda」)は z0/z1 受理・maftufa は拒否
+  (z0 整合優先で受理)。
+  第3枝は既存2枝の後に配置: 「mi jai frili」「mi jai gau broda」
+  「mi jai se broda」(tanru_unit の SE 前置 brivla)は既存木のまま(z0 も
+  SE を tanru_unit_1 側で取る同形)。「jai se gau」(タグだけ)は z0 も拒否
+  のため拒否維持
+- 文法⑤(free 後の co 転換 selbri 継続): tanru_post に co_post 枝を追加。
+  z0 実測: 「farlu ju'i co cnita」は post_clause(free ju'i,
+  selbri co cnita, DOhU elided)。tanru 繰り返しの平準形は既知クラスの
+  木形状差異。受理スコープ(z0 交叉実測): co 後は tanru と SE 前置
+  (co se cnita)まで — s_marks 全体ではない(co ja'a / co na は z0 も拒否)、
+  NAhE は tanru_unit の前置で受理(co na'e cnita)。連鎖 co
+  (co cnita co brodi / co cnita co se brodi)と連鎖途中の co+SE も受理。
+  DOhU 後置不可(farlu ju'i co cnita dohu は z0 も拒否)、ku 後置不可、
+  co 後の gek/gi 不可(co broda gi broda は z0 も拒否)。
+  free のみで後続が無い入力は従来どおり tail free にフォールバック
+  (klama .ui / klama ju'i .ui の既存木は不変)。
+  PEG 実装上の注意: 連鎖の2個目以降は区切りの sp1 から始まるため
+  繰り返し本体の先頭に sp1 を置く(CO_clause はアトムで空白を消費しないため、
+  本体に sp1 を含めないと2個目の co が必ず失敗する。実測で発見)
+- 残差の記録(非 GAP・意図的差分): 描述内 selbri の JOI 接続
+  「mi viska lo broda joi brode ku」は z0/z1/maf とも受理するが、z0 の読みは
+  selbri_4 の joik(selbri 内接続)で、本実装の gihek 経路は描述の sumti_tail
+  内には現れないため未対応。構造プローブとして比較表に記録
+  (バッチ2 のスコープ外。selbri レベルの接続導入が要る)
+- 残差の記録(GAP 候補。いずれも z0/z1/maf ok / ours err。構造プローブで記録:
+  - 呼格+sumti 引数の DOhU 省略形: 「mi klama gi'e ju'i do cadzu」
+    「farlu ju'i do cnita」は z0 では vocative が sumti を引数に取れるため
+    受理される。本実装の vocative_arg は CMEVLA/desc のみで KOhA を取れず、
+    gihek_free 側の vocative_closed は DOhU 必須のため届かない。
+    なお cmevla 引数形「mi klama gi'e ju'i la alen. cadzu」は z0/z1/maf とも
+    拒否(参照一致)で、残差は KOhA 引数の DOhU 省略形に限られる
+    (gap_tracker への RED 化は次バッチ候補として記録のみ)
+  - gihek の (NA? SE?) 前置: zantufa の gihek は NA? SE? GIhA、joik は
+    GAhO? NA? SE? JOI GAhO? で前置スロットを持つため「mi broda na joi brode」
+    「mi broda na se joi brode」「mi broda na gi'e brode」「mi broda
+    se gi'e brode」「mi broda na gi'a brode」「mi broda se gi'a brode」の
+    6 形が z0/z1/maf とも受理。本実装は gihek_link に前置スロットがなく、
+    v0.109 で gihek_joik の JOI/BIhI 枝に SE 前置を実装済みのため
+    「se joi」は受理だが GIhA 枝の「se gi'e」は拒否の非対称。
+    (NA? SE?) 前置の実装は次バッチ課題(gap_tracker への RED 化は記録のみ)。
+    注: 単独形「na joi」「na se joi」は z0 が拒否(z1/maf ok)のため
+    プローブは連結部のスロットを直接測る文脈付き形で記録
 
 ## v0.108 で追加(バッチ1 GAP 解消: 語彙 ji/va'u と NAI 後置)
 - 文法①: JOI_core に ji(接続詞疑問)を追加。zantufa の JOI 終端は接続詞の
