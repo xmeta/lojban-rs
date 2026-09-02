@@ -44,6 +44,8 @@ fn GAP_レタル接頭lujvo_byklesi() {
 
 #[test]
 fn GAP_FA_nai_不定格の否定() {
+    // ✅ v0.108 で解消(tagged の FA 枝に NAI 後置+KU/sumti 省略の
+    //   タグ契約を実装。下記の対象文は緑化済みで回帰テストとして残す)
     // 対象文: 「fa nai mi klama」「mi klama fa nai」「fai nai mi klama」
     //   (FA スロット割当て語 + NAI)
     // 実測: z0=ok / z1=ok / maftufa=err(参照側で見解が分かれるが z0/z1 は受理)、
@@ -51,8 +53,8 @@ fn GAP_FA_nai_不定格の否定() {
     // 原因推定: tagged の FA 枝(lojban.pest L187)が NAI を取らない
     //   (L185-186 の注記に既知 GAP として記録済み)
     // 発見経緯: 既知 GAP(v0.105 STATUS 記録)。掃引 L1373-1377 で裏取り。
-    //   現状の拒否を tests/syntax.rs L3108-3109(fai nai)がピンしているため、
-    //   解消時はそちらも更新すること
+    //   現状の拒否をピンしていた tests/syntax.rs(fai nai)は v0.108 で
+    //   受理ピンに更新済み
     for input in ["fa nai mi klama", "mi klama fa nai", "fai nai mi klama"] {
         assert!(
             lojban::parse(input).is_ok(),
@@ -63,6 +65,8 @@ fn GAP_FA_nai_不定格の否定() {
 
 #[test]
 fn GAP_接続詞疑問_ji() {
+    // ✅ v0.108 で解消(JOI_core に ji を収録。下記の対象文は緑化済みで
+    //   回帰テストとして残す)
     // 対象文: 「mi ji do klama」「mi ji do klama lo zdani」「do ji mi broda」
     //   (ji = 接続詞疑問。項・selbri・文の接続に用いる)
     // 実測: z0=ok / z1=ok / maftufa=ok、本パーサー=err(全 3 形)
@@ -84,6 +88,8 @@ fn GAP_接続詞疑問_ji() {
 
 #[test]
 fn GAP_単独_vau_と_se_vau() {
+    // ✅ v0.108 で解消(BAI_core に va'u/vahu を収録。下記の対象文は
+    //   緑化済みで回帰テストとして残す)
     // 対象文: 「va'u mi klama」「se va'u mi klama」「mi klama se va'u lo nu broda」
     //   (va'u = BAI タグ「~のおかげで」。結合形 seva'u の単独 2 語形)
     // 実測: z0=ok / z1=ok / maftufa=ok、本パーサー=err(全 3 形)
@@ -179,6 +185,8 @@ fn GAP_VUhO後の関係節共有() {
 
 #[test]
 fn GAP_時制タグの_nai() {
+    // ✅ v0.108 で解消(tense_mark に NAI 後置を追加。下記の対象文は
+    //   緑化済みで回帰テストとして残す)
     // 対象文: 「mi pu nai klama」「mi ba nai klama」「mi ca nai klama」
     //   (時制タグ + NAI。「過去ではない」等の否定付き時制)
     // 実測: z0=ok / z1=ok / maftufa=ok、本パーサー=err(全 3 形)

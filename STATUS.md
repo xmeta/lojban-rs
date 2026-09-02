@@ -1,19 +1,21 @@
 # 開発ステータス
 
-## 現在の状態: v0.107 完成(gap_tracker の意図的失敗 12 件を除き全テストグリーン)
+## 現在の状態: v0.108 完成(gap_tracker の意図的失敗 8 件を除き全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語180 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体243 + doc 11 = 計254テスト + example 内 unit test 5 全パス
-- tests/gap_tracker.rs は既知 GAP の追跡用 12 テストで、GAP 解消まで意図的に失敗する(下記「既知GAP」参照)。cargo test 全体はこの分だけ失敗する状態が正
+- ライブラリ20 / 形態論11 / 統語193 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体256 + doc 11 = 計267テスト + example 内 unit test 5 全パス
+- tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件を解消し緑化
+  (GAP_接続詞疑問_ji / GAP_単独_vau_と_se_vau / GAP_FA_nai_不定格の否定 / GAP_時制タグの_nai)。
+  残り 8 件は GAP 解消まで意図的に失敗する(下記「既知GAP」参照)。cargo test 全体はこの分だけ失敗する状態が正
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.107.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.108.0)
 
-## 既知GAP(未解決・v0.107 時点で意図的に失敗するテストあり)
+## 既知GAP(未解決・残り 8 件は意図的に失敗するテストあり)
 
 zantufa 系参照パーサー(z0 = zantufa-0.9999.js / z1 = zantufa-1.9999.js /
 maftufa = maftufa-1.9999.js)が受理するのに本パーサーが拒否する形(GAP)を、
 語彙×統語位置のプローブ行列で体系的掃引し、tests/gap_tracker.rs に
-意図的に失敗するテスト(RED)として固定した。文法(src/grammar/lojban.pest)
-の変更は行っていない(調査+テスト追加のみ)。
+意図的に失敗するテスト(RED)として固定した。v0.108 でバッチ1の 4 件を
+解消(下記「v0.108 で追加」)し、残り 8 件は未対応。
 
 ### スイープ方法論
 
@@ -26,8 +28,16 @@ maftufa = maftufa-1.9999.js)が受理するのに本パーサーが拒否する�
   参照パーサー 3 種(tests/data/refparse.js。camxes_preproc.js を parse 前に
   適用)を走らせ、比較表 tests/data/gap_sweep_results.csv
   (1,412 行 × {ours, z0, z1, maftufa})を出力
-- 掃引結果: ours ok 1,338 / z0 ok 1,272 / z1 ok 1,287 / maftufa ok 1,242。
-  GAP 候補(参照 ok / ours err)45 件、OVER 候補(ours ok / 参照全 err)89 件
+- 掃引結果(v0.108 レビュー対応後に再実行。プローブ 1,437 行=語彙追加で
+  va'u/vahu/ji の行 10 行、タグ契約 KU・裸タグ・排他化確認の構造プローブ
+  15 行が追加): ours ok 1,372 / z0 ok 1,294 / z1 ok 1,309 /
+  maftufa ok 1,263。GAP 候補(参照 ok / ours err)34 件、
+  OVER 候補(ours ok / 参照全 err)90 件。
+  v0.107 時点(1,412 行)からの変化は err→ok 12 行(緑化対象)+追加プローブ
+  15 行(12 行 ours ok=全参照 ok、2 行 ours err=全参照 err の整合確認、
+  1 行 fa nai ku は FA+NAI と同じ参照割れ)で**ok→err はゼロ**。
+  OVER +1 件は ji を加えた mex 演算子位置の「li pa ji re du vo」で、
+  既存の「li … du …」拒否クラス(joi 版も z0 は拒否)の兄弟行
 - 採用基準: 参照パーサーが受理する正当なロジバン形のみ。次の 4 クラスは
   意図的差分として GAP に入れていない(比較表には残る):
   - z0/z1 のみの緩受理: 裸 mo'i・fe'e のタグ位置(maftufa は拒否)
@@ -39,34 +49,98 @@ maftufa = maftufa-1.9999.js)が受理するのに本パーサーが拒否する�
     既存経路で受理、「数式+mai」の mex 全体形は参照 3 種も拒否のため
     GAP は不在
 
-### GAP 一覧(12 件。tests/gap_tracker.rs の各テストが 1:1 対応)
+### GAP 一覧(12 件。tests/gap_tracker.rs の各テストが 1:1 対応。✅=v0.108 で解消)
 
 | 入力 | z0 | z1 | maftufa | 原因推定 |
 |---|---|---|---|---|
 | lo byklesi ku / mi byklesi / lo cyklesi ku | ok | ok | ok | レタル接頭 lujvo 未対応(BY_core L842-845 + tanru_unit BRIVLA ガード L412-431) |
-| fa nai mi klama / mi klama fa nai / fai nai mi klama | ok | ok | err | tagged の FA 枝が NAI を取らない(L187。参照側で見解が分かれるが z0/z1 は受理) |
-| mi ji do klama / do ji mi broda | ok | ok | ok | ji が JOI_core/JA_core 未収録(L866-867) |
-| va'u mi klama / se va'u mi klama / mi klama se va'u lo nu broda | ok | ok | ok | va'u が BAI_core 未収録(SEBAI_joint 注記 L927-929 の既知揺れ) |
+| fa nai mi klama / mi klama fa nai / fai nai mi klama | ok | ok | err | ✅ v0.108 解消。tagged の FA 枝に NAI 後置+sumti 省略(裸タグ項)を追加 |
+| mi ji do klama / do ji mi broda | ok | ok | ok | ✅ v0.108 解消。ji を JOI_core に収録 |
+| va'u mi klama / se va'u mi klama / mi klama se va'u lo nu broda | ok | ok | ok | ✅ v0.108 解消。va'u/vahu を BAI_core に収録 |
 | farlu ju'i co cnita(.oi ta ca'o… も同形) | ok | ok | ok | tanru_post の継続枝に co 枝なし(L390-393) |
 | mi klama bo cadzu | ok | ok | ok | 裸 BO の selbri 接続(selbri_6 相当)未実装(tanru_link L522) |
 | mi broda joi brode(jo'e/fa'u/ku'a/jo'u/johu も同形) | ok | ok | ok | gihek_link が GIhA のみで JOI を含まない(L521。項接続/mex 演算子は v0.101 で対応済み) |
 | mi viska lo broda vu'o noi mi klama | ok | ok | ok | sumti の VUhO 枝は項連結のみで関係節共有がない(L223-224) |
-| mi pu nai klama / mi ba nai klama / mi ca nai klama | ok | ok | ok | tense_mark の NAI 後置は BAI 枝と ip_tail のみ(L330-338) |
+| mi pu nai klama / mi ba nai klama / mi ca nai klama | ok | ok | ok | ✅ v0.108 解消。tense_mark に NAI 後置を追加 |
 | mi cusku zoi gy. broda .gy | ok | ok | ok | normalize_zoi(lib.rs)が区切り語を生トークン完全一致で比較(gy. ≠ .gy) |
 | mi jai se gau broda / mi jai se gau klama lo zdani | ok | ok | ok | tanru_unit の JAI 枝に SE 変換タグ経路なし(L447) |
 | mi klama ke lo zdani broda ke'e | ok | ok | ok | ke_group は selbri のみ括り bridi_tail を括れない(L459) |
 
 ### gap_tracker の扱い
 
-- tests/gap_tracker.rs は GAP ごとに 1 テスト(計 12)で、受理をアサートする
-  ため現時点では必ず失敗する(RED)。GAP 解消時に緑化される。
-  既存 254 テストは全パスを維持している
-- lo byklesi ku / fai nai / mi klama bo cadzu の 3 件は既存テスト
-  (tests/syntax.rs)が現状の拒否をピンしている。GAP 解消時は gap_tracker の
-  緑化と併せてピン側の更新が必要(各テストのコメントに記載)
+- tests/gap_tracker.rs は GAP ごとに 1 テスト(計 12)。未解決の 8 件は
+  受理をアサートするため失敗する(RED)。v0.108 で解消した 4 件は
+  テストを変更せず緑化。
+  既存テストの拒否ピンは fai nai(tests/syntax.rs fai_と_faha_fa_a_補完)の
+  1 件が存在し、v0.108 で受理ピンに更新済み(残る lo byklesi ku /
+  mi klama bo cadzu の 2 件は GAP 解消時に更新すること)
 - 再実行手順: `bash tests/data/run_gap_sweep.sh`
   (gerna_cipra の clone 先を GERNA_CIPRA_JS で指定可。既定
   /tmp/opencode/gerna_cipra/js)
+
+## v0.108 で追加(バッチ1 GAP 解消: 語彙 ji/va'u と NAI 後置)
+- 文法①: JOI_core に ji(接続詞疑問)を追加。zantufa の JOI 終端は接続詞の
+  総称で、v0.101 の ja/je/jo/ju と同クラスの語彙追加。
+  z0 実測: 「mi ji do klama」は joik_ek(JOI_clause ji)の項接続。
+  3 形とも z0/z1/maftufa 受理。mex 演算子位置(li pa ji re 等)も z0 受理
+- 文法②: BAI_core に va'u(〜のおかげで)と h 変体 vahu を追加
+  (v0.102 BAI 完全化時の漏れだった既知 GAP)。結合形 seva'u/sevahu
+  (SEBAI_joint)と単独 2 語形 se va'u の揺れを解消。
+  結合形経路は不変(長い語形の SEBAI_joint が優先)、2 語形は
+  tagged の SE+BAI 枝で受理
+- 文法③: tagged の FA 枝に (sp1 ~ NAI_clause)? を追加(fa nai / fai nai 等。
+  BAI 枝の既存形式と同型)。maftufa は FA+NAI を拒否する参照分裂だが
+  z0 整合優先で受理。併せて FA 枝の sumti を省略可能に:
+  z0 の tag_term は tag + (sumti | KU_elidible) で裸タグ項を受理するため
+  (「mi klama fa」/「mi klama fa nai」/裸 fa フラグメントが z0/z1 受理の実測)。
+  オプション化のため sumti 付き既存入力の木は不変
+- 文法⑤(レビュー対応): タグ契約の KU 半分を実装。FA/BAI 枝の sumti と
+  明示 KU を (sumti | KU_clause) の排他選択にし、「fa ku」「fa nai ku」
+  「fa fi'a ku」「fa ku do」「se va'u ku」を受理(z0/z1/maf 実測 ok)。
+  sumti+ku の二重閉鎖「fa mi ku」「va'u mi ku」は z0/z1/maf とも拒否の
+  実測のため排他(拒否ピン)。BAI 枝は sumti 省略化(裸 BAI 項「mi klama
+  va'u」。z0/z1/maf 実測 ok)で従来 tense_tags+KU 枝が受けていた
+  「va'u ku」「va'u nai ku」を本枝に移動(silent 規則のため木は同形。
+  exact-tree ピン)。
+  裸 BAI のみ、直後に BO か selbri が続く場合は確定しない否定先読みガード
+  を併設(z0 の tag_term ガード !(!tag selbri …) 相当)。term 位置で裸確定
+  すると「ni'i bo klama」等の selbri 前置タグが項に食われて文が閉塞する
+  PEG 部分成功確定の回避(v0.93 と同型の教訓)
+- 文法④: tense_mark(全タグ共通のサイレント規則)に (sp1 ~ NAI_clause)? を後置
+  (mi pu nai klama = 過去ではない)。BAI 枝の既存 in-branch 後置は維持
+  (bai nai nai は z0 受理実測。PU 単独の二重 nai pu nai nai は z0 ok/
+  本実装 err の残差。非掃引対象)。オプション後置のため nai を含まない
+  既存入力の木は不変
+- 文法⑥(レビュー対応): tense_mark の NAI/BO 後置を
+  (sp1 ~ (NAI_clause | BO_clause)) の排他選択に変更。組合せの
+  「pu nai bo klama」は z0/z1/maftufa とも拒否する実測のため
+  拒否に変更(v0.108 初版は受理していた z0 非整合の新規 OVER を解消。
+  「pu nai」自体が err だった HEAD 比較では退行なしの未記録分)。
+  逆順「pu bo nai」も z0 一致の拒否。単独「pu bo」は z0 は拒否するが
+  意図的拡張(受容優先)として BO 枝を維持
+- 読みの実測差異(z0 交叉): zantufa は「nai」をタグ直後の
+  post_clause(free(UI_clause nai))として読む(UI 拡張)。
+  本実装は NAI_clause のタグ否定(CLL 読み)で受理集合を整合させる。
+  木形状は既知の読み差異クラス(tests/syntax.rs に実測コメント記載)
+- 意図的残差: 二重 nai は z0/z1 ok・本実装 err(単一後置の限界)。
+  PU 直後の「mi ca nai nai klama」に加え、FA/BAI 尾項でも
+  「mi klama fa nai nai」「mi klama va'u nai nai」が同様
+  (z0/z1 ok / maftufa err の参照割れ。GIhA/UI 系の結合形
+  UINAI_joint とは別経路)。未掃引のため GAP に入れていない
+- docs/coverage.md は BAI 行(va'u/vahu)・JOI 行(ji)を同期
+  (coverage_doc テストが全語彙検証で強制)
+- 既存ピンの更新: fai nai の拒否ピン(tests/syntax.rs
+  fai_と_faha_fa_a_補完_既存不変と_z0差分ピン)を受理ピンに変更
+- テスト: 統語 180→193(ji/va'u/se va'u/fa nai/裸タグ項/時制 nai の
+  回帰+既存不変ピン 9 件、レビュー対応で排他化・タグ契約 KU・裸タグ
+  追ピン+木不変 exact-tree ピン 4 件)。gap_tracker は 4 件緑化
+  (ヘッダコメントに解消済みマーク。assertion は不変)・
+  8 件 RED のまま。全体は 267(単体256+doc11、example 内 5 は別途)+gap 12
+- スイープ再実行: err→ok 12 行(緑化対象のみ)・**ok→err ゼロ**(前節参照)。
+  クラス別 err→ok: FA+NAI 5 行 / ji 3 行 / va'u 3 行 / 時制 nai 1 行。
+  レビュー対応(排他化+タグ契約 KU)後の再実行でも既存行の受理集合は不変
+  (ok→err ゼロ・新規 OVER ゼロ)
+- ベンチ: --quick で方向性劣化なし(環境ノイズ大)。WASM ビルド ok
 
 ## v0.107 で追加(gek の項スロット)
 - 文法: 接続 gek(ga…gi…)に**項スロット**を追加。①terms_full の連続部選択に

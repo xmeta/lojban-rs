@@ -209,10 +209,29 @@ STRUCTURAL_PROBES = [
     "mi ji do klama",
     "mi ji do klama lo zdani",
     "do ji mi broda",
+    "li pa ji nai re",
     # 単独 va'u / se va'u(SEBAI_joint の注記既知 GAP)
     "va'u mi klama",
     "se va'u mi klama",
     "mi klama se va'u lo nu broda",
+    # タグ契約の KU 半分と裸タグ項(v0.108 レビュー。FA/BAI の tag +
+    # (sumti | KU_elidible) 契約)
+    "mi klama fa ku",
+    "fa ku",
+    "mi klama fa ku do",
+    "mi klama fa nai ku",
+    "mi klama fa fi'a ku",
+    "mi klama va'u",
+    "mi klama se va'u ku",
+    "se va'u ku mi klama",
+    "mi fa klama",
+    "fa broda",
+    # 裸 BAI の過剰受理チェック(タグが直後の項を貪欲に取る既存形との整合)
+    "mi klama va'u do",
+    "mi klama bai do",
+    # sumti+ku の二重閉鎖(全参照 err を想定の整合確認)
+    "mi klama fa mi ku",
+    "mi klama va'u mi ku",
     # free 後の co 継続(v0.103 既知 GAP)
     "farlu ju'i co cnita",
     ".oi ta ca'o farlu ju'i co cnita",

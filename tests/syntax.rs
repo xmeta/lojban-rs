@@ -3104,9 +3104,13 @@ fn fai_と_faha_fa_a_補完_既存不変と_z0差分ピン() {
     assert!(s.contains("(FA_clause (FA_core \"fai\"))"), "{s}");
     assert!(s.contains("(FAhA_clause (FAhA_core \"fa'a\"))"), "{s}");
 
-    // FA+NAI 既知 GAP のピン: tagged の FA 枝は NAI を取らないため
-    // fai nai は拒否(z0 は受理を実測。fa nai も同経路の既知 GAP)
-    assert!(LojbanParser::parse(Rule::text, "fai nai lo zarci klama").is_err());
+    // FA+NAI(v0.108): tagged の FA 枝が (sp1 ~ NAI_clause)? を取るように
+    // なり fai nai / fa nai を受理(z0/z1 実測 ok。maftufa は拒否の参照分裂
+    // だが z0 整合優先。かつては拒否ピンだったが GAP 解消で受理に変更)
+    let s = parse_ok("fai nai lo zarci klama");
+    assert!(s.contains("(NAI_clause (NAI_core \"nai\"))"), "{s}");
+    let s = parse_ok("fa nai mi klama");
+    assert!(s.contains("(NAI_clause (NAI_core \"nai\"))"), "{s}");
 
     // 語形不正は引き続きエラー
     assert!(lojban::parse("qqq").is_err());
@@ -3385,4 +3389,504 @@ fn 項の後の先接続文_拒否ピン() {
     assert!(LojbanParser::parse(Rule::text, "mi ku ge broda gi broda").is_err());
     // 語形不正は引き続きエラー
     assert!(lojban::parse("qqq").is_err());
+}
+
+// ===== v0.108: バッチ1 GAP 解消(語彙 ji/va'u + NAI 後置)の回帰テスト =====
+
+#[test]
+fn ji_接続詞疑問の項接続_v0_108() {
+    // ji(接続詞疑問「〜かそれとも〜か?」)を JOI_core に収録。
+    // z0 実測(zantufa-0.9999.js): 「mi ji do klama」は joik_ek(JOI_clause ji)
+    // の項接続で受理。JOI 終端に ji を含める zantufa 準拠(v0.101 の
+    // ja/je/jo/ju 追加と同クラスの語彙追加)
+    let s = parse_ok("mi ji do klama");
+    assert!(s.contains("(JOI_clause (JOI_core \"ji\"))"), "{s}");
+    // 項接続は sumti の繰り返し(ek_joik 経路)で構築される
+    assert!(
+        s.contains(
+            "(sumti (KOhA_clause (KOhA_core \"mi\")) \
+             (JOI_clause (JOI_core \"ji\")) \
+             (sumti (KOhA_clause (KOhA_core \"do\"))))"
+        ),
+        "{s}"
+    );
+
+    // 3 形とも z0/z1/maftufa 実測 ok(gap_tracker の GAP_接続詞疑問_ji と同一入力)
+    parse_ok("mi ji do klama lo zdani");
+    parse_ok("do ji mi broda");
+
+    // NAI との組合せ(ji nai)も JOI 既存語と同型
+    let s = parse_ok("mi ji nai do klama");
+    assert!(s.contains("(JOI_clause (JOI_core \"ji\"))"), "{s}");
+    assert!(s.contains("(NAI_clause (NAI_core \"nai\"))"), "{s}");
+}
+
+#[test]
+fn ji_既存_joi_不変ピン_v0_108() {
+    // 既存 JOI 語の項接続と木は不変(ji 追加は選言の末尾追加のみ)
+    let s = parse_ok("mi joi do klama");
+    assert!(s.contains("(JOI_clause (JOI_core \"joi\"))"), "{s}");
+    let s = parse_ok("mi ja do klama");
+    assert!(s.contains("(JOI_clause (JOI_core \"ja\"))"), "{s}");
+
+    // ji は JA_core(文接続・gek 頭部)には入れていない。z0 実測 err と一致
+    assert!(LojbanParser::parse(Rule::text, "mi ji broda gi broda").is_err());
+    // JA_core の既存語形と tanru 接続経路は不変
+    let s = parse_ok("mi klama je cadzu");
+    assert!(s.contains("(JA_clause (JA_core \"je\"))"), "{s}");
+
+    // 演算子位置(mex_conn)でも ji を受理(v0.101 の ek_joik 共用経路)
+    let s = parse_ok("li re su'i ji ci");
+    assert!(s.contains("(JOI_clause (JOI_core \"ji\"))"), "{s}");
+}
+
+#[test]
+fn vau_単独タグと_h変体_v0_108() {
+    // va'u(〜のおかげで)を BAI_core に追加。z0 実測(zantufa-0.9999.js):
+    // 「va'u mi klama」は tag_term(BAI_clause + sumti mi) + bridi_tail(klama)。
+    // 本実装は文頭タグを tense_marks が先取りする既知クラス(mu'i 等と同一の
+    // 木形状差異で、受理・読みは同一)
+    let s = parse_ok("va'u mi klama");
+    assert!(
+        s.contains("(sentence (BAI_clause (BAI_core \"va'u\"))"),
+        "{s}"
+    );
+
+    // h 変体(' ↔ h 規約)。z0/z1/maftufa 実測 ok
+    let s = parse_ok("vahu mi klama");
+    assert!(s.contains("(BAI_clause (BAI_core \"vahu\"))"), "{s}");
+
+    // 尾項位置(2語形タグ)
+    let s = parse_ok("mi klama va'u lo zdani");
+    assert!(s.contains("(BAI_clause (BAI_core \"va'u\"))"), "{s}");
+    let s = parse_ok("mi klama vahu lo zdani");
+    assert!(
+        s.contains("(tagged (BAI_clause (BAI_core \"vahu\"))"),
+        "{s}"
+    );
+
+    // NAI 後置は BAI 枝の既存形式(tense_mark の BAI 枝内 (sp1 ~ NAI_clause)?)
+    let s = parse_ok("va'u nai mi klama");
+    assert!(s.contains("(BAI_clause (BAI_core \"va'u\"))"), "{s}");
+    assert!(s.contains("(NAI_clause (NAI_core \"nai\"))"), "{s}");
+}
+
+#[test]
+fn se_vau_2語形と_結合形の揺れ解消_v0_108() {
+    // se va'u は tagged の SE+BAI 2語形経路。z0 実測:
+    // tag_term(SE_clause? + BAI_clause va'u + sumti) 相当で読みは同一
+    let s = parse_ok("se va'u mi klama");
+    assert!(
+        s.contains(
+            "(term (tagged (SE_clause (SE_core \"se\")) \
+             (BAI_clause (BAI_core \"va'u\")) \
+             (sumti (KOhA_clause (KOhA_core \"mi\")))))"
+        ),
+        "{s}"
+    );
+
+    // 尾項位置+描述
+    let s = parse_ok("mi klama se va'u lo nu broda");
+    assert!(
+        s.contains(
+            "(tagged (SE_clause (SE_core \"se\")) \
+             (BAI_clause (BAI_core \"va'u\")) \
+             (sumti (desc (LE_clause (LE_core \"lo\"))"
+        ),
+        "{s}"
+    );
+
+    // 結合形 seva'u/sevahu(SEBAI_joint)の既存経路は不変
+    // (BAI_core に va'u を追加しても結合形が優先される = 語形が長いSEBAI_joint
+    //  を選択肢に置く既存順序の維持)
+    let s = parse_ok("seva'u do mi klama");
+    assert!(s.contains("SEBAI_joint \"seva'u\""), "{s}");
+    assert!(!s.contains("(SE_clause (SE_core \"se\"))"), "{s}");
+    let s = parse_ok("sevahu do mi klama");
+    assert!(s.contains("SEBAI_joint \"sevahu\""), "{s}");
+}
+
+#[test]
+fn fa_nai_不定格の否定_v0_108() {
+    // tagged の FA 枝に (sp1 ~ NAI_clause)? を追加(fa/fe/fi/fo/fu/fi'a/fai 共通)。
+    // z0 実測(zantufa-0.9999.js): 「fa nai mi klama」は tag_term 内の FA_clause に
+    // post_clause(free(UI_clause nai)) が付いた形 —— zantufa は nai を UI 自由修飾語
+    // として読む。本実装は BAI 枝と同型の NAI 後置(タグ否定の CLL 読み)で
+    // 受理集合を整合させる(木形状は既知の読み差異クラス)。
+    // maftufa は fa nai 形を拒否する(参照分裂。z0 整合優先で受理)
+    let s = parse_ok("fa nai mi klama");
+    assert!(
+        s.contains(
+            "(term (tagged (FA_clause (FA_core \"fa\")) \
+             (NAI_clause (NAI_core \"nai\")) \
+             (sumti (KOhA_clause (KOhA_core \"mi\")))))"
+        ),
+        "{s}"
+    );
+
+    let s = parse_ok("fai nai lo zarci klama");
+    assert!(
+        s.contains(
+            "(tagged (FA_clause (FA_core \"fai\")) \
+             (NAI_clause (NAI_core \"nai\"))"
+        ),
+        "{s}"
+    );
+
+    // 尾項位置(スロットの否定)も受理
+    parse_ok("mi klama fe nai");
+    parse_ok("mi klama fai nai");
+}
+
+#[test]
+fn fa_nai_裸タグ項_v0_108() {
+    // z0 の tag_term は tag + (sumti | KU_elidible) で、sumti を伴わない
+    // 裸タグ項を受理する(実測: mi klama fa / mi klama fa nai / fa / fa nai が
+    // z0/z1 ok)。FA 枝の sumti を省略可能にし同経路を再現。
+    // sumti の省略はオプション化のため既存入力の木は不変
+    let s = parse_ok("mi klama fa nai");
+    assert!(
+        s.contains(
+            "(tail_terms (term (tagged (FA_clause (FA_core \"fa\")) \
+             (NAI_clause (NAI_core \"nai\")))))"
+        ),
+        "{s}"
+    );
+
+    // 裸 fa の発話フラグメント(z0 実測 ok)
+    let s = parse_ok("fa");
+    assert!(
+        s.contains("(fragment (terms (term (tagged (FA_clause (FA_core \"fa\"))))))"),
+        "{s}"
+    );
+    let s = parse_ok("fa nai");
+    assert!(
+        s.contains("(FA_clause (FA_core \"fa\")) (NAI_clause (NAI_core \"nai\"))"),
+        "{s}"
+    );
+
+    // 裸タグ項の直後に描述を続ける形(z0 実測 ok。この形は z0 も
+    // tag+sumti の同束読みで、受理集合は一致)
+    parse_ok("mi klama fa nai lo zarci");
+}
+
+#[test]
+fn fa_既存不変_v0_108() {
+    // FA 枝の NAI 後置・sumti 省略化はオプション追加のみで既存の木は不変
+    let s = parse_ok("mi klama fa lo zarci");
+    assert!(
+        s.contains(
+            "(tail_terms (term (tagged (FA_clause (FA_core \"fa\")) \
+             (sumti (desc (LE_clause (LE_core \"lo\")) \
+             (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"zarci\"))))))))))"
+        ),
+        "{s}"
+    );
+    let s = parse_ok("mi fi'a lo zarci klama");
+    assert!(s.contains("(FA_clause (FA_core \"fi'a\"))"), "{s}");
+
+    // FA+FAhA 連続の既存木も不変
+    let s = parse_ok("mi klama fai lo zdani fa'a lo zarci");
+    assert!(s.contains("(FA_clause (FA_core \"fai\"))"), "{s}");
+    assert!(s.contains("(FAhA_clause (FAhA_core \"fa'a\"))"), "{s}");
+
+    // 裸 fa(NAI 無し)も z0 同様の裸タグ項として受理(z0 実測 ok)
+    parse_ok("mi klama fa");
+}
+
+#[test]
+fn 時制タグの_nai_v0_108() {
+    // tense_mark(全タグ共通)に (sp1 ~ NAI_clause)? を後置。
+    // z0/z1/maftufa 実測 ok(gap_tracker の GAP_時制タグの_nai と同一入力)。
+    // z0 実測(zantufa-0.9999.js): 「mi pu nai klama」の nai はタグ直後の
+    // post_clause(free(UI_clause nai))。本実装は selbri 内 tense_marks の
+    // NAI_clause(「過去ではない」のタグ否定読み)で受理集合を整合させる
+    let s = parse_ok("mi pu nai klama");
+    assert!(
+        s.contains(
+            "(selbri (PU_clause (PU_core \"pu\")) \
+             (NAI_clause (NAI_core \"nai\")) \
+             (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\")))))"
+        ),
+        "{s}"
+    );
+
+    parse_ok("mi ba nai klama");
+    let s = parse_ok("mi ca nai klama");
+    assert!(
+        s.contains("(PU_clause (PU_core \"ca\")) (NAI_clause (NAI_core \"nai\"))"),
+        "{s}"
+    );
+
+    // 時制連鎖+BAI の組合せ(z0 実測 ok)
+    let s = parse_ok("mi pu nai bai klama");
+    assert!(
+        s.contains(
+            "(PU_clause (PU_core \"pu\")) (NAI_clause (NAI_core \"nai\")) \
+             (BAI_clause (BAI_core \"bai\"))"
+        ),
+        "{s}"
+    );
+
+    // タグ付き項位置(時制タグ+NAI+sumti。z0 実測 ok)
+    let s = parse_ok("mi ba nai lo zdani klama");
+    assert!(
+        s.contains(
+            "(tagged (PU_clause (PU_core \"ba\")) \
+             (NAI_clause (NAI_core \"nai\")) \
+             (sumti (desc (LE_clause (LE_core \"lo\"))"
+        ),
+        "{s}"
+    );
+}
+
+#[test]
+fn 時制タグ_nai_既存不変ピン_v0_108() {
+    // NAI を含まない既存入力の木は不変(オプション後置のみ)
+    let s = parse_ok("mi pu klama");
+    assert!(
+        s.contains(
+            "(selbri (PU_clause (PU_core \"pu\")) \
+             (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\")))))"
+        ),
+        "{s}"
+    );
+    assert!(!s.contains("NAI_clause"), "{s}");
+
+    // BAI 枝の既存 in-branch NAI 後置(bai nai)は不変
+    let s = parse_ok("mi klama bai nai lo zdani");
+    assert!(
+        s.contains("(BAI_clause (BAI_core \"bai\")) (NAI_clause (NAI_core \"nai\"))"),
+        "{s}"
+    );
+
+    // 文頭 BAI+NAI(v0.108 前から tense_mark の BAI 枝で受理)
+    let s = parse_ok("va'u nai mi klama");
+    assert!(s.contains("(BAI_clause (BAI_core \"va'u\"))"), "{s}");
+    assert!(s.contains("(NAI_clause (NAI_core \"nai\"))"), "{s}");
+
+    // 意図的拡張の既存ピン(タグ+BO)も不変
+    let s = parse_ok("mi pu bo klama");
+    assert!(
+        s.contains("(PU_clause (PU_core \"pu\")) (BO_clause (BO_core \"bo\"))"),
+        "{s}"
+    );
+}
+
+// ===== v0.108 レビュー対応: tense_mark 後置の排他化とタグ契約の KU 半分 =====
+
+#[test]
+fn 時制タグ_nai_bo_排他_v0_108() {
+    // tense_mark の後置は NAI と BO の排他選択(sp1 ~ (NAI | BO))。
+    // 組合せの「pu nai bo」は z0/z1/maftufa とも拒否する実測のため
+    // 拒否ピン(v0.108 初版は受理していた z0 非整合の新規 OVER を解消)
+    assert!(LojbanParser::parse(Rule::text, "mi pu nai bo klama").is_err());
+    assert!(LojbanParser::parse(Rule::text, "mi pu nai bo ge broda gi broda").is_err());
+    // 逆順の「pu bo nai」も z0 実測 err と一致
+    assert!(LojbanParser::parse(Rule::text, "mi pu bo nai klama").is_err());
+
+    // 単独の「pu bo」は z0 は拒否するが本パーサーの意図的拡張(受容優先)。
+    // 排他化後も BO 枝が生きていることの確認(木は不変)
+    let s = parse_ok("mi pu bo klama");
+    assert!(
+        s.contains("(PU_clause (PU_core \"pu\")) (BO_clause (BO_core \"bo\"))"),
+        "{s}"
+    );
+
+    // 単独の「pu nai」は不変
+    let s = parse_ok("mi pu nai klama");
+    assert!(
+        s.contains("(PU_clause (PU_core \"pu\")) (NAI_clause (NAI_core \"nai\"))"),
+        "{s}"
+    );
+}
+
+#[test]
+fn fa_と_bai_の_タグ契約_v0_108() {
+    // z0 の tag_term 契約 = tag + (sumti | KU_elidible) の KU 半分(v0.108
+    // レビュー)。FA 枝に (sp1 ~ KU_clause)? を追加し、「mi klama fa ku」等の
+    // 明示 ku 閉鎖を受理(z0/z1/maf 実測 ok)。sumti と KU は排他
+    let s = parse_ok("mi klama fa ku");
+    assert!(
+        s.contains(
+            "(tail_terms (term (tagged (FA_clause (FA_core \"fa\")) \
+             (KU_clause (KU_core \"ku\")))))"
+        ),
+        "{s}"
+    );
+    // 裸 fa ku のフラグメント
+    let s = parse_ok("fa ku");
+    assert!(
+        s.contains(
+            "(fragment (terms (term (tagged (FA_clause (FA_core \"fa\")) \
+             (KU_clause (KU_core \"ku\"))))))"
+        ),
+        "{s}"
+    );
+    // fa ku 項 + do 項(スロットに do が当たる読み)
+    let s = parse_ok("mi klama fa ku do");
+    assert!(s.contains("(KU_clause (KU_core \"ku\"))"), "{s}");
+    assert!(s.contains("(KOhA_clause (KOhA_core \"do\"))"), "{s}");
+    // NAI 後置 + KU
+    let s = parse_ok("mi klama fa nai ku");
+    assert!(
+        s.contains(
+            "(tagged (FA_clause (FA_core \"fa\")) (NAI_clause (NAI_core \"nai\")) \
+             (KU_clause (KU_core \"ku\")))"
+        ),
+        "{s}"
+    );
+    // fi'a でも KU 閉鎖は同経路(z0/z1/maf 実測 ok)
+    parse_ok("mi klama fa fi'a ku");
+
+    // BAI 枝の sumti 省略化(裸 BAI 項)+ KU。「mi klama va'u」は
+    // z0/z1/maf 実測 ok(裸 tag_term。tag … KU_elidible)
+    let s = parse_ok("mi klama va'u");
+    assert!(
+        s.contains("(tail_terms (term (tagged (BAI_clause (BAI_core \"va'u\")))))"),
+        "{s}"
+    );
+    // SE 変換 + KU(se va'u ku は v0.108 初版では拒否だった z0 整合の受理拡張)
+    let s = parse_ok("mi klama se va'u ku");
+    assert!(
+        s.contains(
+            "(tagged (SE_clause (SE_core \"se\")) (BAI_clause (BAI_core \"va'u\")) \
+             (KU_clause (KU_core \"ku\")))"
+        ),
+        "{s}"
+    );
+    parse_ok("se va'u ku mi klama");
+
+    // sumti+ku の二重閉鎖は z0/z1/maf とも拒否する実測のため拒否ピン
+    // (tag 契約は (sumti | KU_elidible) の排他)
+    assert!(LojbanParser::parse(Rule::text, "mi klama fa mi ku").is_err());
+    assert!(LojbanParser::parse(Rule::text, "mi klama va'u mi ku").is_err());
+    // sumti 直後の ku 余りは二重 selbri 非文として z0 も拒否(実測)
+    assert!(LojbanParser::parse(Rule::text, "mi klama ni'i klama").is_err());
+
+    // 過剰受理チェック(既存形との受理の z0 一致): 裸 BAI の直後が項でも
+    // タグが sumti を貪欲に取る(z0 の tag+sumti と同束の読み)
+    let s = parse_ok("mi klama va'u do");
+    assert!(
+        s.contains(
+            "(tagged (BAI_clause (BAI_core \"va'u\")) \
+             (sumti (KOhA_clause (KOhA_core \"do\"))))"
+        ),
+        "{s}"
+    );
+    parse_ok("mi klama bai do");
+    parse_ok("mi klama bai ku");
+}
+
+#[test]
+fn fa_と_bai_の_タグ契約_木不変_v0_108() {
+    // sumti あり・nai 無しの既存入力の木は不変(KU 追加・sumti 省略化は
+    // オプション化のため)
+    let s = parse_ok("mi klama fa lo zarci");
+    assert!(
+        s.contains(
+            "(tail_terms (term (tagged (FA_clause (FA_core \"fa\")) \
+             (sumti (desc (LE_clause (LE_core \"lo\")) \
+             (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"zarci\"))))))))))"
+        ),
+        "{s}"
+    );
+    let s = parse_ok("mi klama va'u lo zdani");
+    assert!(
+        s.contains(
+            "(tagged (BAI_clause (BAI_core \"va'u\")) \
+             (sumti (desc (LE_clause (LE_core \"lo\")) \
+             (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"zdani\"))))))))"
+        ),
+        "{s}"
+    );
+    let s = parse_ok("se va'u mi klama");
+    assert!(
+        s.contains(
+            "(term (tagged (SE_clause (SE_core \"se\")) \
+             (BAI_clause (BAI_core \"va'u\")) \
+             (sumti (KOhA_clause (KOhA_core \"mi\")))))"
+        ),
+        "{s}"
+    );
+    let s = parse_ok("fa nai mi klama");
+    assert!(
+        s.contains(
+            "(term (tagged (FA_clause (FA_core \"fa\")) \
+             (NAI_clause (NAI_core \"nai\")) \
+             (sumti (KOhA_clause (KOhA_core \"mi\")))))"
+        ),
+        "{s}"
+    );
+
+    // 経路変更の木不変: 「va'u ku」「va'u nai ku」は従来 tagged の
+    // tense_tags+KU 枝が受けていたが、BAI 枝の KU 追加で本枝に移動する。
+    // tense_tags/tense_mark は silent のため tagged の子の並びは同一
+    // (exact-tree ピン)
+    let s = parse_ok("mi klama va'u ku");
+    assert!(
+        s.contains(
+            "(tail_terms (term (tagged (BAI_clause (BAI_core \"va'u\")) \
+             (KU_clause (KU_core \"ku\")))))"
+        ),
+        "{s}"
+    );
+    let s = parse_ok("mi klama va'u nai ku");
+    assert!(
+        s.contains(
+            "(tagged (BAI_clause (BAI_core \"va'u\")) \
+             (NAI_clause (NAI_core \"nai\")) \
+             (KU_clause (KU_core \"ku\")))"
+        ),
+        "{s}"
+    );
+    // selbri 前置タグ(ni'i bo 等)が裸 BAI 項に食われないことの確認
+    // (tagged BAI 枝の selbri 否定先読みガード)
+    let s = parse_ok("mi ni'i bo klama");
+    assert!(
+        s.contains(
+            "(bridi_tail (selbri (BAI_clause (BAI_core \"ni'i\")) \
+             (BO_clause (BO_core \"bo\")) \
+             (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\")))))"
+        ),
+        "{s}"
+    );
+}
+
+#[test]
+fn 裸タグ項_追ピン_v0_108() {
+    // 項位置の裸 FA タグ(z0/z1/maf 実測 ok)。tagged(FA) 項 + bridi_tail
+    let s = parse_ok("mi fa klama");
+    assert!(
+        s.contains(
+            "(terms (term (sumti (KOhA_clause (KOhA_core \"mi\")))) \
+             (term (tagged (FA_clause (FA_core \"fa\"))))) \
+             (bridi_tail (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\")))))"
+        ),
+        "{s}"
+    );
+
+    // mex 演算子の ji+nai(v0.101 の mex_conn 経路。z0/z1/maf 実測 ok)
+    let s = parse_ok("li pa ji nai re");
+    assert!(
+        s.contains(
+            "(mex (number (PA_clause (PA_core \"pa\"))) \
+             (JOI_clause (JOI_core \"ji\")) \
+             (NAI_clause (NAI_core \"nai\")) \
+             (number (PA_clause (PA_core \"re\"))))"
+        ),
+        "{s}"
+    );
+
+    // 裸タグ+selbri の文(z0/z1/maf 実測 ok)。実木は fragment ではなく
+    // sentence(terms の tagged 項 + bridi_tail)として構築される
+    let s = parse_ok("fa broda");
+    assert!(
+        s.contains(
+            "(terms (term (tagged (FA_clause (FA_core \"fa\"))))) \
+             (bridi_tail (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"broda\"))))) \
+             (tail_terms \"\"))"
+        ),
+        "{s}"
+    );
 }

@@ -70,6 +70,8 @@ mi pahu klama
 mi kahe klama
 mi puha klama
 mi zuhe klama
+mi va'u klama
+mi vahu klama
 mi bau lo zdani klama
 mi bai lo zdani klama
 mi cau lo zdani klama
@@ -142,6 +144,8 @@ mi pahu lo zdani klama
 mi kahe lo zdani klama
 mi puha lo zdani klama
 mi zuhe lo zdani klama
+mi va'u lo zdani klama
+mi vahu lo zdani klama
 bau lo zdani klama
 bai lo zdani klama
 cau lo zdani klama
@@ -214,6 +218,8 @@ pahu lo zdani klama
 kahe lo zdani klama
 puha lo zdani klama
 zuhe lo zdani klama
+va'u lo zdani klama
+vahu lo zdani klama
 mi klama bau lo zdani
 mi klama bai lo zdani
 mi klama cau lo zdani
@@ -286,6 +292,8 @@ mi klama pahu lo zdani
 mi klama kahe lo zdani
 mi klama puha lo zdani
 mi klama zuhe lo zdani
+mi klama va'u lo zdani
+mi klama vahu lo zdani
 mi viska lo klama be lo zdani ku
 mi viska lo klama be lo zdani bei lo zarci be'o ku
 mi viska lo klama be lo zdani be'o ku
@@ -633,12 +641,14 @@ mi ja do klama
 mi je do klama
 mi jo do klama
 mi ju do klama
+mi ji do klama
 mi broda jo'e brode
 mi broda joi brode
 mi broda fa'u brode
 mi broda ku'a brode
 mi broda johu brode
 mi broda jo'u brode
+mi broda ji brode
 li pa jo'e re du vo
 li pa joi re du vo
 li pa fa'u re du vo
@@ -649,6 +659,7 @@ li pa ja re du vo
 li pa je re du vo
 li pa jo re du vo
 li pa ju re du vo
+li pa ji re du vo
 mi klama ke broda je brode
 mi klama ke broda je brode ke'e
 mi klama ke broda je brode kehe
@@ -1375,12 +1386,26 @@ mi klama fa nai
 fai nai mi klama
 mi klama fai nai
 fe nai mi klama
-mi ji do klama
 mi ji do klama lo zdani
 do ji mi broda
+li pa ji nai re
 va'u mi klama
 se va'u mi klama
 mi klama se va'u lo nu broda
+mi klama fa ku
+fa ku
+mi klama fa ku do
+mi klama fa nai ku
+mi klama fa fi'a ku
+mi klama va'u
+mi klama se va'u ku
+se va'u ku mi klama
+mi fa klama
+fa broda
+mi klama va'u do
+mi klama bai do
+mi klama fa mi ku
+mi klama va'u mi ku
 farlu ju'i co cnita
 .oi ta ca'o farlu ju'i co cnita
 mi farlu ju'i co cnita
