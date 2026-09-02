@@ -1,10 +1,25 @@
 # 開発ステータス
 
-## 現在の状態: v0.104 完成(全テストグリーン)
+## 現在の状態: v0.105 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語173 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体236 + doc 11 = 計247テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語175 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体238 + doc 11 = 計249テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.104.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.105.0)
+
+## v0.105 で追加(fai と fa'a の語彙補完)
+- 文法: FA_core に fai(公式 FA 不定格)を追加。fa は fai の接頭辞のため
+  fai を先に配置(教訓6 前例)。FAhA_core に fa'a/faha を追加
+  (v0.98 FAhA 補完の取りこぼし)。va'a は VUhU の単項演算子(加法逆元)で
+  FAhA ではないため未収録(z0 実測で va'a/vaha は拒否)
+- 動機: Alice 翻訳の実文「.i .abu mutce gleki lo nu facki lo du'u lo cnebo cu
+  jai frili fai lo nu krobi'o fa'a ro da tai tu'a lo since」がエラー。
+  z0 は受理(JAI 転換 selbri・BAI+LAhE タグ項は既存対応、fai/fa'a の語彙欠落が原因)
+- 効果: 対象文受理。ハーネス(421+449行)で退行ゼロ・受理変動ゼロ・
+  木変化ゼロ(861 both-ok 行 sexpr 一致)。z0 交叉 29/29 一致
+- 既知差分: FA 枝は NAI を取らないため「fa nai」「fai nai」は
+  z0 受理/本実装拒否の既知 GAP(実測・コメント記録済み)
+- テスト: 統語 173→175。全体は 249(単体238+doc11、example 内 5 は別途)
+- ベンチ: 方向性劣化なし(環境ノイズ大)。WASM ok
 
 ## v0.104 で追加(tanru 単位の se/na'e 前置と空項 cu 文)
 - 文法①: tanru_unit の BRIVLA 枝に `(NAhE_clause ~ sp1)? ~ (SE_clause ~ sp1)?` の
