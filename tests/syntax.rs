@@ -3278,3 +3278,111 @@ fn レタル語は_tanru単位のbrivlaでない_v0_106回帰ピン() {
     // 語形不正は引き続きエラー
     assert!(lojban::parse("qqq").is_err());
 }
+
+// =====================================================================
+// 項の後に先接続文(gek)が続く形(v0.107)
+// sentence の第3代替 gek_after_terms(camxes sentence-50 相当)。
+// ユーザ報告の解析エラーの回帰ピン。z0(zantufa-0.9999.js)実測と突き合わせ済み
+// =====================================================================
+
+#[test]
+fn 項の後の先接続文_ユーザ報告文() {
+    // ユーザ報告の対象文。v0.106 では err(fragment が ca 項だけ食って
+    // gek 以降が宙に浮き text の EOI が満たされなかった)。z0 実測 ok
+    let s = parse_ok(".i ca lo nu .abu cu za'u re'u mipri catlu kei ge la finpe selfu ba'o cliva gi lo drata cu zutse lo loldi ne'a lo vorme gi'e bebna catlu fa'a lo tsani");
+    // gek_after_terms は silent のため GA/GI と内側 sentence が
+    // sentence の直接の子として平準化される
+    assert!(s.contains("(GA_clause (GA_core \"ge\"))"), "{s}");
+    assert!(s.contains("(GI_clause (GI_core \"gi\"))"), "{s}");
+    // ca は sentence の tense_marks 経路で先取りされる
+    // (z0 は「ca lo nu … kei」全体をタグ付き項に取る既知クラス差異)
+    assert!(s.contains("(PU_clause (PU_core \"ca\"))"), "{s}");
+    // 抽象項 lo nu .abu cu za'u re'u mipri catlu kei
+    assert!(s.contains("(NU_clause (NU_core \"nu\"))"), "{s}");
+    assert!(s.contains("(KEI_clause (KEI_core \"kei\"))"), "{s}");
+    assert!(s.contains("(ROI_clause (ROI_core \"re'u\"))"), "{s}");
+    // gek 直後の内側文1: la finpe selfu ba'o cliva
+    assert!(s.contains("(BRIVLA_clause (BRIVLA_core \"selfu\"))"), "{s}");
+    assert!(s.contains("(ZAhO_clause (ZAhO_core \"ba'o\"))"), "{s}");
+    assert!(s.contains("(BRIVLA_clause (BRIVLA_core \"cliva\"))"), "{s}");
+    // gi 直後の内側文2: lo drata cu zutse lo loldi ne'a lo vorme
+    // gi'e bebna catlu fa'a lo tsani
+    assert!(s.contains("(BRIVLA_clause (BRIVLA_core \"zutse\"))"), "{s}");
+    assert!(s.contains("(BRIVLA_clause (BRIVLA_core \"vorme\"))"), "{s}");
+    assert!(s.contains("(BRIVLA_clause (BRIVLA_core \"tsani\"))"), "{s}");
+    // 内側文2の gi'e 連鎖と fa'a タグは従来経路
+    assert!(s.contains("(GIhA_clause (GIhA_core \"gi'e\"))"), "{s}");
+    assert!(s.contains("(FAhA_clause (FAhA_core \"fa'a\"))"), "{s}");
+}
+
+#[test]
+fn 項の後の先接続文_z0実測プローブ() {
+    // タグ付き項+gek(v0.106 までのギャップ本体)
+    let s = parse_ok("ca lo nu .abu cu za'u re'u mipri catlu kei ge mi cliva gi mi cadzu");
+    assert!(s.contains("(GA_clause (GA_core \"ge\"))"), "{s}");
+    assert!(s.contains("(GI_clause (GI_core \"gi\"))"), "{s}");
+    assert!(s.contains("(PU_clause (PU_core \"ca\"))"), "{s}");
+    assert_eq!(
+        s.matches("(KOhA_clause (KOhA_core \"mi\"))").count(),
+        2,
+        "{s}"
+    );
+    assert!(s.contains("(BRIVLA_clause (BRIVLA_core \"cliva\"))"), "{s}");
+    assert!(s.contains("(BRIVLA_clause (BRIVLA_core \"cadzu\"))"), "{s}");
+
+    // 項+ga
+    let s = parse_ok("mi ga broda gi broda");
+    assert!(s.contains("(GA_clause (GA_core \"ga\"))"), "{s}");
+    // 項+cu+ge
+    let s = parse_ok("mi cu ge broda gi broda");
+    assert!(s.contains("(CU_clause (CU_core \"cu\"))"), "{s}");
+    assert!(s.contains("(GA_clause (GA_core \"ge\"))"), "{s}");
+    // 量化項+ge
+    parse_ok("da ge broda gi broda");
+    // 項+裸タグ+ge。z0 は裸タグ(pu 等)を terms 内の tag_term として取るが、
+    // 本実装は gek_after_terms の tense_marks? スロットで受ける
+    parse_ok("mi pu ge broda gi broda");
+    // 裸タグ+ge(項なし)/ cu 前置も z0 実測 ok で受理
+    parse_ok("pu ge broda gi broda");
+    parse_ok("cu ge broda gi broda");
+}
+
+#[test]
+fn 項の後の先接続文_既存不変ピン() {
+    // 裸 gek は従来どおり gek_sentence 経路(item/inner_sentence では
+    // gek_sentence が先に試行されるため gek_after_terms に奪われない)
+    let s = parse_ok("ge mi cliva gi mi cadzu");
+    assert!(
+        s.contains("(gek_sentence (GA_clause (GA_core \"ge\")) (sentence"),
+        "{s}"
+    );
+    assert!(s.contains("(GI_clause (GI_core \"gi\"))"), "{s}");
+
+    // gek を含まないタグ付き項の通常文は従来どおり sentence 経路
+    // (gek_after_terms を経ないため木は不変)
+    let s = parse_ok("ca lo nu .abu cu za'u re'u mipri catlu kei mi cliva");
+    assert!(!s.contains("GA_clause"), "{s}");
+    assert!(s.contains("(PU_clause (PU_core \"ca\"))"), "{s}");
+    assert!(
+        s.contains(
+            "(bridi_tail (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"cliva\")))))"
+        ),
+        "{s}"
+    );
+
+    // 項+selbri の通常文は従来どおり terms_full の bridi_tail 経路
+    let s = parse_ok("mi klama");
+    assert!(s.contains("(terms_full (terms (term (sumti (KOhA_clause (KOhA_core \"mi\"))))) (bridi_tail (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\"))))) (tail_terms \"\")))"), "{s}");
+}
+
+#[test]
+fn 項の後の先接続文_拒否ピン() {
+    // gek の後に文が無い形。z0 も拒否する(zantufa-0.9999.js 実測 err)。
+    // fragment(mi)が項を消費した後 text の EOI が満たされず全体を拒否
+    assert!(LojbanParser::parse(Rule::text, "mi ge").is_err());
+    // 裸 ku はタグとして取れない(tense_marks はタグ付きでしか KU を取らない。
+    // z0 実測 err と一致)
+    assert!(LojbanParser::parse(Rule::text, "mi ku ge broda gi broda").is_err());
+    // 語形不正は引き続きエラー
+    assert!(lojban::parse("qqq").is_err());
+}

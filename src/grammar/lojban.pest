@@ -99,14 +99,72 @@ fragment  = { terms ~ (sp1 ~ VAU_clause)? ~ (sp1 ~ free)? ~ !(sp1 ~ tense_mark) 
 // 注: ku 付き形は fragment(tagged)経路が先行するため本規則の KU 枝は実質予備
 tense_item = { tense_marks ~ (sp1 ~ VAU_clause)? }
 
-sentence   = { frees_s? ~ sp1? ~ tense_marks? ~ sp1? ~ (terms_full | bridi_tail) ~ frees_m? }
+sentence   = { frees_s? ~ sp1? ~ tense_marks? ~ sp1? ~ (terms_full | bridi_tail
+             | gek_head) ~ frees_m? }
 // 第2枝: 項が空の cu 文(cu klama / cu pu klama / cu tai klama 等)。
 // camxes の terms-80(terms の空許容)相当で、z0 も受理する。
 // 第1枝の terms は必須のため項無し入力では失敗し、第2枝が選択される。
 // 既存入力は第1枝が先に一致して木は不変(項無し文は従来どおり
 // sentence の bridi_tail 枝を通る)
-terms_full = { terms ~ (sp1 ~ CU_clause)? ~ sp1 ~ frees_mid? ~ bridi_tail
+// 第1枝の連続部に gek_tail を置く(下記注を参照)
+terms_full = { terms ~ ((sp1 ~ CU_clause)? ~ sp1 ~ frees_mid? ~ bridi_tail
+                       | gek_tail)
              | CU_clause ~ sp1 ~ frees_mid? ~ bridi_tail }
+// 第3枝: 項が前置されない gek 文頭形(裸タグ+gek / cu+gek)。
+//   (cu)? (タグ連鎖)? gek 文 gi 文
+// z0(zantufa-0.9999.js)実測 ok: pu ge broda gi broda(裸タグ+gek、項なし)/
+// cu ge broda gi broda(cu 前置)。terms を解析しないため追加コストは
+// ga_joint までの単語判定のみ(性能。下記 gek_tail の注も参照)
+gek_head = _{ (sp0 ~ CU_clause)? ~ gek_after_terms }
+// 項の後に先接続文(gek)が続く形。camxes の sentence-50
+// (terms-80 gek sentence-41 gik sentence-41)相当。
+//   terms (cu)? (タグ連鎖)? gek 文 gi 文
+// z0 実測で受理・v0.106 まで未対応だった形:
+// ・タグ付き項+gek: ca lo nu .abu cu za'u re'u mipri catlu kei ge mi cliva gi mi cadzu
+// ・項+ga: mi ga broda gi broda / 項+cu+ge: mi cu ge broda gi broda
+// ・量化項+ge: da ge broda gi broda / 項+裸タグ+ge: mi pu ge broda gi broda
+// ・タグ連鎖+ge: mi pu ca ge broda gi broda / 間隔タグ: mi za'u re'u ge broda gi broda
+// (v0.106 ではいずれも err。fragment が項だけ食って残りが宙に浮き、
+//  text の EOI が満たされず拒否されていた)
+// 形の対応: z0 は裸タグ(pu 等の KU 省略 tag_term)を terms 内の項として
+// 取るが、本実装の term/tagged は裸タグ項を持たないため、tags を
+// gek_after_terms の tense_marks? スロットで受ける。
+// cu も z0 では gek 枝にスロットが無く bridi_tail 側(gek_bridi_tail)で
+// 受けるが、本実装は gek_tail の (sp1 ~ CU)? で受ける。
+// 一致する拒否(z0 実測 err): mi ku ge broda gi broda(裸 ku は
+// tense_marks の末尾 (sp1 ~ KU)? がタグ付きでしか取らないため拒否)。
+// 意図的拡張(受容優先。既存の「mi pu bo klama」と同クラス):
+// mi pu bo ge broda gi broda は z0 が拒否するが、tense_mark の
+// (sp1 ~ BO)? が透過するため受理する
+// 配置(性能。v0.100 の順序交換教訓の再発防止): gek_tail は terms_full の
+// terms を**再解析しない**位置——terms の直後の連続部選択——に置く。
+// 文レベルの選言に「gek_after_terms(terms? 付き)」を置く形は、
+// 入れ子失敗経路(引用 lo nu … kei 等)で各階層の terms を二重解析し
+// 指数時間になる(fuzz の lu 深度テストで実測。v0.30/v0.100 教訓の再発)。
+// 連続部選択なら terms は1回の解析で共用でき、通常文(mi klama 等)は
+// bridi_tail 枝が先に成功するため gek_tail は試行すらされない(ゼロコスト)。
+// gek_tail を bridi_tail 枝の**後**に置くのは木保全のため:
+// mi gu'e broda gi broda(GUhA 先置 tanru)は bridi_tail の guhek_selbri 枝が
+// 先に一致して従来どおり selbri(guhek)の木になる(GA_core は裸 gu も取るが
+// gu'e は一語のため gek_tail の ga_joint には一致しない。なお裸 gu 形
+// mi gu broda gi broda は v0.106 では未受理で、本枝により z0 整合で新規受理)
+// 木形状: gek_tail はサイレントのため terms / CU_clause / GA_clause /
+// 内側 sentence / GI_clause / 内側 sentence が terms_full の直接の子として
+// 平準化される(z0 は sentence 直下に gek ノードを置くが、terms 単一解析を
+// 優先し terms_full 直下とする既知差異。gek_sentence は非 silent で
+// gek_sentence ノードを張る。裸 gek(ge mi cliva gi mi cadzu)は
+// item/inner_sentence で gek_sentence が先に試行されるため従来どおり
+// gek_sentence 経路で木は不変)。
+// z0 との木形状差異(既知クラス): z0 は sentence = terms? (CU bridi_tail /
+// gek sentence gik sentence) の形で「ca lo nu … kei」全体を1つのタグ付き項
+// (tag_term)として terms に取るが、本実装は sentence の tense_marks が ca を
+// 先に消費し、lo nu … kei を desc 項として別に取る(v0.93/94 で確認済みの
+// 「文頭タグを tense_marks が先取りする」クラスの差異。受理・読みは同一)。
+// また z0 は gek/gik をノード化するが、本実装は GA_clause/GI_clause を
+// 直接晒す(既存 gek_sentence と同方針)。
+gek_tail        = _{ (sp1 ~ CU_clause)? ~ gek_after_terms }
+gek_after_terms = _{ sp1? ~ tense_marks? ~ sp1? ~ ga_joint ~ sp1 ~ inner_sentence
+                   ~ sp1 ~ gi_joint ~ sp1 ~ inner_sentence }
 frees_mid  = _{ free ~ (sp1 ~ free)* }
 
 // 項間・項前後の自由修飾語を許容(mi .ui do tavla)。
