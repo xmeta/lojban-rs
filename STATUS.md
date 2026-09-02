@@ -1,10 +1,34 @@
 # 開発ステータス
 
-## 現在の状態: v0.105 完成(全テストグリーン)
+## 現在の状態: v0.106 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語175 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体238 + doc 11 = 計249テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語176 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体239 + doc 11 = 計250テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.105.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.106.0)
+
+## v0.106 で追加(レタル語の tanru 誤吸収修正)
+- 文法: tanru_unit の BRIVLA 枝の否定先読みガード群に BY_core を追加。
+  レタル語(abu/ebu/ibu/obu/ubu 等)を tanru 単位の brivla としない
+  (形態論規範。zantufa-0.9999.js 実測: lo abu ku err)。
+  word_boundary 付き BY_core により byklesi 型レタル接頭 lujvo には
+  一致しない(非破壊性実測済み)
+- 動機: Alice 翻訳の実文「ni'o ze'a lo mentu .abu sanli gi'e catlu lo zdani
+  gi'e pensi lo du'u .ei ba zi zukte ma kau .i」がエラー。
+  BRIVLA_core が「abu」を brivla 誤マッチし、描述の tanru が
+  「mentu abu sanli」を吸収→sentence の bridi_tail が空になり失敗
+  (PEG 部分成功確定)
+- 効果: 対象文受理。**意図的な受理縮小5件**(ハーネス退行ゼロ規約に対する
+  例外的な z0 整合修正): lo abu/ebu/ibu/obu/ubu ku が誤受理から
+  z0 整合の拒否に変化。受理拡張2件(対象文+
+  ze'a lo mentu .abu sanli gi'e catlu)。木変化3件(lo mentu .abu sanli→
+  desc+項+selbri、ze'a lo mentu .abu catlu lo zdani→sentence 読み、
+  .abu .ebu .ibu→fragment(BY 項列))、pa abu broda→quant_sumti 読み
+- 既知差分: lo byklesi ku(z0 ok/ours err——レタル接頭 lujvo 未対応、
+  既存 GAP)/ lo aburobu ku(ours ok/z0 err——母音始まり fu'ivla の
+  既存 OVER、本変更と無関係)
+- テスト: 統語 175→176。全体は 250(単体239+doc11、example 内 5 は別途)
+- ベンチ: 全指標 p>0.05(環境ノイズ大)。WASM ok。z0/z1 交叉一致
+  (maftufa 参照は tester が z0/z1 で再検証済み・結果同一)
 
 ## v0.105 で追加(fai と fa'a の語彙補完)
 - 文法: FA_core に fai(公式 FA 不定格)を追加。fa は fai の接頭辞のため
