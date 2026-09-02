@@ -1,10 +1,37 @@
 # 開発ステータス
 
-## 現在の状態: v0.106 完成(全テストグリーン)
+## 現在の状態: v0.107 完成(全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語176 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体239 + doc 11 = 計250テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語180 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体243 + doc 11 = 計254テスト + example 内 unit test 5 全パス
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.106.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.107.0)
+
+## v0.107 で追加(gek の項スロット)
+- 文法: 接続 gek(ga…gi…)に**項スロット**を追加。①terms_full の連続部選択に
+  `gek_tail`(terms 共用。通常文は bridi_tail 枝が先に成功し gek_tail は
+  試行されない=ゼロコスト。裸タグ pu/cu を吸う tense_marks? スロット付き)
+  ②文レベル第3代替 `gek_head`(項なし形専用)
+- 性能上の重要判断: 当初計画の文レベル gek_after_terms(terms? 付き)は、
+  入れ子失敗経路(引用 lu…li'u 等)で各階層の terms を二重解析し
+  **指数時間化**(fuzz lu ネスト d=7 で 11.8s→112s 実測)。
+  terms を1回だけ解析する構造(gek_tail+gek_head)に再設計し
+  lu d=8 が 40.9s(v0.106 37.4s)に復帰。
+  v0.30/v0.100 の教訓(terms 二重解析禁止)の反映
+- 動機: Alice 翻訳の実文 `.i ca lo nu .abu cu za'u re'u mipri catlu kei
+  ge la finpe selfu ba'o cliva gi lo drata cu zutse lo loldi ne'a lo vorme
+  gi'e bebna catlu fa'a lo tsani` がエラー。z0 は受理
+  (camxes `sentence-50 <- terms? gek sentence gik sentence` 相当)
+- 効果: 対象文受理。ハーネス(521行)で退行ゼロ・木変化ゼロ、
+  受理拡張13行(`ca項+gek`/`mi ga`/`mi cu ge`/`da ge`/`mi pu ge`/
+  `mi gu broda gi broda` 等)。z0 交叉 24/25
+- 意図的拡張: `mi pu bo ge broda gi broda`(v107 ok/z0 err、
+  既存 `mi pu bo klama` と同クラス)
+- 木形状差異: gek_tail はサイレントで GA/GI/内側 sentence が
+  terms_full 直下に平準化(z0 は gek ノード)。
+  ca を tense_marks が先取りする v0.93/94 既知クラス
+- テスト: 統語 176→180。全体は 254(単体243+doc11、example 内 5 は別途)
+- ベンチ: 交互 A/B 実測で比率 0.94〜1.01(方向性劣化なし)、
+  全指標 p>0.05(環境ノイズ大)。WASM 8/8 PASS
 
 ## v0.106 で追加(レタル語の tanru 誤吸収修正)
 - 文法: tanru_unit の BRIVLA 枝の否定先読みガード群に BY_core を追加。

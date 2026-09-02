@@ -158,7 +158,7 @@ See [docs/parsing-guide.md](docs/parsing-guide.md) for rule-name meanings and
 ## Development
 
 ```console
-$ cargo test      # all tests (250 = 239 unit + 11 doc; includes 418 corpus sentences)
+$ cargo test      # all tests (254 = 243 unit + 11 doc; includes 418 corpus sentences)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 $ cargo bench    # performance benchmarks (criterion)
