@@ -158,7 +158,8 @@ See [docs/parsing-guide.md](docs/parsing-guide.md) for rule-name meanings and
 ## Development
 
 ```console
-$ cargo test      # all tests (254 = 243 unit + 11 doc; includes 418 corpus sentences)
+$ cargo test      # all tests (254 = 243 unit + 11 doc; includes 418 corpus sentences.
+                  # 12 gap_tracker tests intentionally fail while tracking known gaps — see STATUS.md)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 $ cargo bench    # performance benchmarks (criterion)
@@ -208,6 +209,7 @@ Reproduce with: `cargo run --release --example speed_check`
 | `tests/syntax.rs` | Syntactic structure verification |
 | `tests/fuzz.rs` | Lightweight fuzzing (random input, mutations, nesting sweep). Heavy variants: `cargo test -- --ignored` |
 | `tests/corpus.rs` | **418 real-world sentences** (Tatoeba sentences, CC BY 2.0 FR + curated CLL-style examples; 2 known failures excluded) |
+| `tests/gap_tracker.rs` | Known-gap tracker (forms accepted by the reference parsers are pinned as RED tests; each turns green when the gap is fixed — see STATUS.md) |
 
 The real-sentence corpus uses Lojban sentences from [Tatoeba](https://tatoeba.org).
 

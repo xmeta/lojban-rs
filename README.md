@@ -148,7 +148,8 @@ println!("{}", tree::to_json(pairs));
 ## 開発
 
 ```console
-$ cargo test      # 全テスト(254件=単体243+doc 11、実文418文を含む)
+$ cargo test      # 全テスト(254件=単体243+doc 11、実文418文を含む。
+                  # gap_tracker 12件は既知GAP追跡用に意図的に失敗。STATUS.md 参照)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 $ cargo bench    # 性能ベンチマーク(criterion)
@@ -197,6 +198,7 @@ src/
 | `tests/syntax.rs` | 統語構造の検証 |
 | `tests/fuzz.rs` | 簡易ファジング(ランダム・変異・深さ掃引)。重量版は `cargo test -- --ignored` |
 | `tests/corpus.rs` | **実文418文**(Tatoeba 実文 + CLL 風厳選例文。既知失敗2文を除く) |
+| `tests/gap_tracker.rs` | 未解決 GAP の追跡(参照パーサーが受理する形を RED テストで固定。GAP 解消時に緑化。詳細は STATUS.md) |
 
 実文コーパスは [Tatoeba](https://tatoeba.org) のロジバン文を使用しています。
 

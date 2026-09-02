@@ -1,10 +1,72 @@
 # 開発ステータス
 
-## 現在の状態: v0.107 完成(全テストグリーン)
+## 現在の状態: v0.107 完成(gap_tracker の意図的失敗 12 件を除き全テストグリーン)
 
 - ライブラリ20 / 形態論11 / 統語180 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体243 + doc 11 = 計254テスト + example 内 unit test 5 全パス
+- tests/gap_tracker.rs は既知 GAP の追跡用 12 テストで、GAP 解消まで意図的に失敗する(下記「既知GAP」参照)。cargo test 全体はこの分だけ失敗する状態が正
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
 - Cargo.toml の版数を STATUS 版数に同期(0.107.0)
+
+## 既知GAP(未解決・v0.107 時点で意図的に失敗するテストあり)
+
+zantufa 系参照パーサー(z0 = zantufa-0.9999.js / z1 = zantufa-1.9999.js /
+maftufa = maftufa-1.9999.js)が受理するのに本パーサーが拒否する形(GAP)を、
+語彙×統語位置のプローブ行列で体系的掃引し、tests/gap_tracker.rs に
+意図的に失敗するテスト(RED)として固定した。文法(src/grammar/lojban.pest)
+の変更は行っていない(調査+テスト追加のみ)。
+
+### スイープ方法論
+
+- プローブ生成: tests/data/generate_gap_probes.py が lojban.pest から全
+  `*_core` 語彙リストを機械抽出し(coverage_doc.rs と同手法)、クラスごとの
+  代表統語位置(タグ4位置 / 項3位置 / 自由修飾語2位置 / クラス固有テンプレート)
+  に流し込む。加えて既知 GAP 候補と OVER 記録用の構造プローブ。
+  生成物は tests/data/gap_probes.txt(1,412 行)
+- 一括比較: tests/data/run_gap_sweep.sh が本パーサー(CLI `--lines` バッチ)と
+  参照パーサー 3 種(tests/data/refparse.js。camxes_preproc.js を parse 前に
+  適用)を走らせ、比較表 tests/data/gap_sweep_results.csv
+  (1,412 行 × {ours, z0, z1, maftufa})を出力
+- 掃引結果: ours ok 1,338 / z0 ok 1,272 / z1 ok 1,287 / maftufa ok 1,242。
+  GAP 候補(参照 ok / ours err)45 件、OVER 候補(ours ok / 参照全 err)89 件
+- 採用基準: 参照パーサーが受理する正当なロジバン形のみ。次の 4 クラスは
+  意図的差分として GAP に入れていない(比較表には残る):
+  - z0/z1 のみの緩受理: 裸 mo'i・fe'e のタグ位置(maftufa は拒否)
+  - 無ポーズ隣接単語: caku mi klama 等(README 記載の意図的非対応)
+  - v0.97 で見送りを明記した尾部形 quantifier+sumti(lo pa le gerku ku。
+    拒否ピンあり)
+  - 差分なしの確認項目: 抽象詞 li'i/su'u/ni と逆参照 ri/ra/ru は本パーサーも
+    受理、je'i は z0/z1 が未収録(ours ok の逆差分)、na'e bo broda は
+    既存経路で受理、「数式+mai」の mex 全体形は参照 3 種も拒否のため
+    GAP は不在
+
+### GAP 一覧(12 件。tests/gap_tracker.rs の各テストが 1:1 対応)
+
+| 入力 | z0 | z1 | maftufa | 原因推定 |
+|---|---|---|---|---|
+| lo byklesi ku / mi byklesi / lo cyklesi ku | ok | ok | ok | レタル接頭 lujvo 未対応(BY_core L842-845 + tanru_unit BRIVLA ガード L412-431) |
+| fa nai mi klama / mi klama fa nai / fai nai mi klama | ok | ok | err | tagged の FA 枝が NAI を取らない(L187。参照側で見解が分かれるが z0/z1 は受理) |
+| mi ji do klama / do ji mi broda | ok | ok | ok | ji が JOI_core/JA_core 未収録(L866-867) |
+| va'u mi klama / se va'u mi klama / mi klama se va'u lo nu broda | ok | ok | ok | va'u が BAI_core 未収録(SEBAI_joint 注記 L927-929 の既知揺れ) |
+| farlu ju'i co cnita(.oi ta ca'o… も同形) | ok | ok | ok | tanru_post の継続枝に co 枝なし(L390-393) |
+| mi klama bo cadzu | ok | ok | ok | 裸 BO の selbri 接続(selbri_6 相当)未実装(tanru_link L522) |
+| mi broda joi brode(jo'e/fa'u/ku'a/jo'u/johu も同形) | ok | ok | ok | gihek_link が GIhA のみで JOI を含まない(L521。項接続/mex 演算子は v0.101 で対応済み) |
+| mi viska lo broda vu'o noi mi klama | ok | ok | ok | sumti の VUhO 枝は項連結のみで関係節共有がない(L223-224) |
+| mi pu nai klama / mi ba nai klama / mi ca nai klama | ok | ok | ok | tense_mark の NAI 後置は BAI 枝と ip_tail のみ(L330-338) |
+| mi cusku zoi gy. broda .gy | ok | ok | ok | normalize_zoi(lib.rs)が区切り語を生トークン完全一致で比較(gy. ≠ .gy) |
+| mi jai se gau broda / mi jai se gau klama lo zdani | ok | ok | ok | tanru_unit の JAI 枝に SE 変換タグ経路なし(L447) |
+| mi klama ke lo zdani broda ke'e | ok | ok | ok | ke_group は selbri のみ括り bridi_tail を括れない(L459) |
+
+### gap_tracker の扱い
+
+- tests/gap_tracker.rs は GAP ごとに 1 テスト(計 12)で、受理をアサートする
+  ため現時点では必ず失敗する(RED)。GAP 解消時に緑化される。
+  既存 254 テストは全パスを維持している
+- lo byklesi ku / fai nai / mi klama bo cadzu の 3 件は既存テスト
+  (tests/syntax.rs)が現状の拒否をピンしている。GAP 解消時は gap_tracker の
+  緑化と併せてピン側の更新が必要(各テストのコメントに記載)
+- 再実行手順: `bash tests/data/run_gap_sweep.sh`
+  (gerna_cipra の clone 先を GERNA_CIPRA_JS で指定可。既定
+  /tmp/opencode/gerna_cipra/js)
 
 ## v0.107 で追加(gek の項スロット)
 - 文法: 接続 gek(ga…gi…)に**項スロット**を追加。①terms_full の連続部選択に
