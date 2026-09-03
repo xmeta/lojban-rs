@@ -90,6 +90,9 @@ pub fn friendly_error(e: &Error<Rule>) -> String {
 /// `unknown` のいずれか。先頭のポーズ文字(`. , ! ?`)は呼び出し側で
 /// 除去しておくことを推奨。
 ///
+/// [`MAX_TOKEN_CHARS`] を超える語は形態論解析(再帰が語長に比例して深く
+/// なりスタックオーバーフローし得る)を行わず `unknown` を返す。
+///
 /// # Examples
 ///
 /// ```
@@ -102,6 +105,9 @@ pub fn friendly_error(e: &Error<Rule>) -> String {
 pub fn classify_word(word: &str) -> &'static str {
     use grammar::{LojbanParser, Rule};
     use pest::Parser;
+    if word.chars().count() > MAX_TOKEN_CHARS {
+        return "unknown";
+    }
     [
         (Rule::jbocme, "cmevla"),
         (Rule::zifcme, "cmevla"),
@@ -199,6 +205,9 @@ pub fn parse(text: &str) -> Result<Pairs<'_, Rule>, Error<Rule>> {
     }
     let normalized = normalize_zoi(text).map_err(err)?;
     let erased = apply_erasure(normalized.as_ref()).map_err(err)?;
+    // 語長ガードは ZOI 正規化・消去の後に適用する(zoi 本文内の長い語は
+    // zo'e へ置換済み、「長い語 si」は消去後に語が残らないため受理)
+    check_token_lengths(erased.as_ref()).map_err(err)?;
     match erased {
         Cow::Borrowed(_) => match normalized {
             Cow::Borrowed(s) => LojbanParser::parse(Rule::text, s),
@@ -211,6 +220,42 @@ pub fn parse(text: &str) -> Result<Pairs<'_, Rule>, Error<Rule>> {
 /// 入れ子深度の上限。PEG のバックトラックが引用・括弧の深い入れ子で
 /// 指数時間になるため、リソース保護として受理を打ち切る。
 const MAX_NEST: i32 = 8;
+
+/// 1語(空白・ポーズ区切りのトークン)の最大文字数。
+///
+/// pest は packrat 型でないため、rafsi 分割のバックトラックが語長に対して
+/// 指数時間になる(kaprenmit 型 CVC 連鎖の実測: 9文字あたり約2.1倍。
+/// 54文字で2.1秒・72文字で9.2秒)。また語に比例した規則の相互再帰が
+/// 深くなり、10万字級のトークンではスタックオーバーフローで異常終了する
+/// (参照実装 zantufa-0.9999 も JS のスタック上限で約1万字超は
+/// RangeError 破綻となり、受理上限は環境依存で文法上の保証がない)。
+///
+/// 上限 50 は実測データに基づく: 正当な語の実用最長はコーパス・参照実装
+/// テストデータ全体で 29 文字(oicairo'aro'ero'iro'oro'ure'e)に対し
+/// 十分なマージンがあり、上限ちょうどの最悪トークンでも約1.5秒で
+/// 解析が完了する。超過トークンは解析前にクリーンエラーとする。
+pub(crate) const MAX_TOKEN_CHARS: usize = 50;
+
+/// 1語あたりの文字数が上限([`MAX_TOKEN_CHARS`])を超えていないか検査する。
+///
+/// 超過トークンは pest の rafsi 分割バックトラックで指数時間になり、
+/// さらに長いものは再帰深度のスタックオーバーフローで異常終了するため、
+/// 解析前にクリーンエラーへ切り替える(リソース保護)。
+///
+/// トークンの分割は空白とポーズ記号(`.` `,` `!` `?`)。これは文法の
+/// `space_char` と一致し、実トークンより長めに括る保守的な分割になる
+/// (語を短く分割しすぎてガードをすり抜けることはない)。
+fn check_token_lengths(text: &str) -> Result<(), String> {
+    for tok in text.split(|c: char| c.is_ascii_whitespace() || matches!(c, '.' | ',' | '!' | '?')) {
+        if tok.chars().count() > MAX_TOKEN_CHARS {
+            let head: String = tok.chars().take(12).collect();
+            return Err(format!(
+                "語が長すぎます(上限 {MAX_TOKEN_CHARS} 文字): 「{head}…」で始まる語"
+            ));
+        }
+    }
+    Ok(())
+}
 
 /// 引用(lu / lohu)と数式括弧(vei)の入れ子深度を検査する。
 ///

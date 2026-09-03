@@ -186,3 +186,101 @@ fn 入れ子の各深度で有限時間で応答する() {
         let _ = parse(&v);
     }
 }
+
+// -------------------------------------------------------------------------
+// 語長上限(v0.113: MAX_TOKEN_CHARS = 50 のリソース保護)
+//
+// 背景(実測): pest は packrat 型でないため kaprenmit 型の CVC 連鎖トークン
+// で rafsi 分割のバックトラックが指数時間になり(9文字あたり約2.1倍)、
+// さらに長いトークンでは規則の相互再帰がスタックオーバーフローして
+// プロセスが異常終了していた(参照実装 z0 も JS スタック上限で約1万字超は
+// RangeError 破綻のため、受理上限は文法上の保証ではなく環境依存)。
+// -------------------------------------------------------------------------
+
+/// kaprenmit 型(CVC 連鎖・クラスタあり)の最悪トークンを生成する
+fn worst_chain(chars: usize) -> String {
+    let base = "kaprenmit";
+    let reps = chars / base.len();
+    let mut s = base.repeat(reps);
+    s.push_str(&base[..chars - s.len()]);
+    s
+}
+
+/// 上限ちょうどの最悪トークンは受理され、所要時間が実用範囲に収まる
+#[test]
+fn 語長上限ちょうどの最悪トークンは時間内に受理される() {
+    let s = worst_chain(50);
+    let t0 = std::time::Instant::now();
+    let _pairs = parse(&s).unwrap_or_else(|e| panic!("上限ちょうどの語でエラー: {e}"));
+    let dt = t0.elapsed();
+    // 受理可否は文法の問題(50文字の kaprenmit 連鎖は cmevla として受理実測)。
+    // このテストの主眼は panic・ハングなしで完了すること
+    // (release 実測 約1.5秒だが cargo test は debug ビルドで十数倍遅いため
+    // 上限は寛容に。ハング(指数爆発)はこの上限を容易に超える)
+    assert!(
+        parse(&s).is_ok(),
+        "上限ちょうどの語は受理されるべき(cmevla)"
+    );
+    assert!(dt.as_secs() < 60, "語長上限の解析が遅すぎる: {dt:?}");
+}
+
+/// 上限 +1 文字は panic せずクリーンなエラーになる
+#[test]
+fn 語長上限超過はクリーンエラー() {
+    let s = worst_chain(51);
+    let err = parse(&s).expect_err("上限超過の語が受理された");
+    let msg = err.to_string();
+    assert!(msg.contains("語が長すぎます"), "{msg}");
+    assert!(msg.contains("50"), "{msg}");
+    // カスタムメッセージ部はトークン全体でなく先頭12文字+…の truncate 形。
+    // 注: pest Error の Display はキャレット図に入力行全体を表示するため、
+    // メッセージ全体の文字数上限では断言できない(切断はメッセージ部の役割)
+    assert!(msg.contains("「kaprenmitkap…」"), "{msg}");
+
+    // スタックオーバーフローしていた規模(10万字)でも即座にエラー
+    let huge = worst_chain(100_000);
+    let t0 = std::time::Instant::now();
+    let err = parse(&huge).expect_err("10万字トークンが受理された");
+    assert!(err.to_string().contains("語が長すぎます"));
+    assert!(t0.elapsed().as_secs() < 2, "長大トークンの拒否が遅い");
+}
+
+/// classify_word / lujvo 分解も長大入力でパニックしない
+/// (旧実装は --classify・--split-lujvo で10万字入力時に SIGABRT していた)
+#[test]
+fn 長大トークンの分類と分解でパニックしない() {
+    use lojban::classify_word;
+    use lojban::lujvo;
+
+    let huge = worst_chain(100_000);
+    // 旧実装: fatal runtime error: stack overflow, aborting
+    assert_eq!(classify_word(&huge), "unknown");
+    assert!(lujvo::decompose(&huge).is_err());
+
+    // 境界: 上限ちょうどは従来どおり分類を試み、超過は unknown
+    assert_ne!(classify_word(&worst_chain(50)), "");
+    assert_eq!(classify_word(&worst_chain(51)), "unknown");
+}
+
+/// 語長ガードは ZOI 正規化・SI 消去の後に適用される
+/// (zoi 本文の長い語は zo'e に置換済み。「長い語 si」は消去後に残らない)
+#[test]
+fn 語長ガードは前処理後に適用される() {
+    // zoi 本文に長い非ロジバン語(URL 等)が来ても受理される
+    let long_junk = "a".repeat(300);
+    assert!(parse(&format!("mi cusku zoi gy. {long_junk} .gy")).is_ok());
+    // 消去された長い語は解析対象にならないため受理
+    let long_tok = worst_chain(60);
+    assert!(parse(&format!("mi {long_tok} si cadzu")).is_ok());
+    // 消去されずに残る長い語は拒否
+    assert!(parse(&format!("mi {long_tok} cadzu")).is_err());
+}
+
+/// 線形時間の語形(cmavo 連鎖・y 係音)は上限以内であれば従来どおり受理
+#[test]
+fn 上限以内の長いcmavo連鎖は受理される() {
+    // UI 連鎖(コーパス実在最長は 29 文字)
+    assert!(parse("oicairo'aro'ero'iro'oro'ure'e").is_ok());
+    // y 係音の連鎖(ためらい音。Y_core は線形時間)
+    assert!(parse(&"y".repeat(48)).is_ok());
+}

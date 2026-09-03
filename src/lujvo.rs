@@ -522,6 +522,11 @@ impl<'a> Decomp<'a> {
 /// [`build`] の逆操作であり、生成テストで双方向の整合を検証している。
 /// 入力は本プロジェクトの文法で brivla として受理される語であること。
 pub fn decompose(lujvo: &str) -> Result<Vec<Part>, DecomposeError> {
+    // seg() は再帰的なバックトラック探索のため、長大な入力では再帰深度が
+    // 語長に比例しスタックオーバーフローする。上限超過は高速に拒否する
+    if lujvo.chars().count() > crate::MAX_TOKEN_CHARS {
+        return Err(DecomposeError(lujvo.into()));
+    }
     let d = Decomp {
         b: lujvo.as_bytes(),
     };
