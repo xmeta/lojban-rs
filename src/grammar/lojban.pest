@@ -304,8 +304,11 @@ quant_selbri = { number ~ !(sp1 ~ (ROI_clause | TAhE_clause | ZAhO_clause))
 //     いずれの経路も入力を消費するため左再帰にはならない。
 //     また mex の失敗は非 PA 先頭語で高速(既存の sumti_tail ガードと同様)
 quant_sumti = { mex ~ sp1 ~ sumti_core }
-// LAhE 項修飾(la'e = 参照先 / lu'e = 参照元)。lu'u による明示閉鎖も許容
+// LAhE 項修飾(la'e = 参照先 / lu'e = 参照元 / tu'a = 要約抽象。v0.114 で
+// tu'a を KOhA から移設)。lu'u による明示閉鎖も許容
 // (LAhE の終端は LUhU。ge'u は GOI 関係節の終端)
+// 後続 sumti は必須(z0 の sumti_5 = LAhE sumti LUhU_elidible と同形。
+// 裸 LAhE 語は sumti として成立しない)
 lahe_sumti = { LAHEDI_joint | LAhE_clause ~ sp1 ~ sumti ~ (sp1 ~ LUhU_clause)? }
 
 desc        = { LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
@@ -1153,10 +1156,19 @@ KEI_core = @{ ( ^"kei") ~ &word_boundary }
 // 注: アポストロフィ付き形は必ずその素の接頭辞(mi/do/di 等)より先に置く。
 //      素の形が先だと境界先読みで失敗した際に後続の長い形が試されない
 //      (pest の文字列選択のクセ。最小再現済み。既存語もこの順序に従っていた)
+// v0.114: tu'a を KOhA_core から削除し LAhE_core へ移設した。
+//      zantufa-0.9999.js の LAhE 形態論は tu'a(tuha)を含み、sumti_5 の
+//      LAhE 枝(LAhE relative_clauses? sumti LUhU_elidible)で後続 sumti が
+//      必須。KOhA 読みのままでは「tai tu'a lo since」がタグ付き KOhA 項 +
+//      別項の 2 項読みになり(z0 は LAhE 項の 1 項で束ねる)、裸 tu'a
+//      (「tu'a klama」「mi tu'a klama」「mi viska tu'a」等)が過剰受理
+//      だった。実文の意味論が変わるため z0 整合の意図的受理縮小
+//      (裸 tu'a は拒否。tests/syntax.rs の
+//      tu_a_は_lahe_経路で後続_sumti_を束ねる を参照)
 KOhA_core = @{ (^"zo'e" | ^"zu'i" | ^"ke'a" | ^"mi'o" | ^"ko'a" | ^"ko'e" | ^"ko'i"
                | ^"ko'o" | ^"ko'u" | ^"fo'a" | ^"fo'e" | ^"fo'i" | ^"fo'o" | ^"fo'u"
                | ^"vo'a" | ^"vo'e" | ^"vo'i" | ^"vo'o" | ^"vo'u"
-               | ^"mi'ai" | ^"miahi" | ^"mi'a" | ^"ma'a" | ^"do'o" | ^"tu'a" | ^"dei"
+               | ^"mi'ai" | ^"miahi" | ^"mi'a" | ^"ma'a" | ^"do'o" | ^"dei"
                | ^"di'u" | ^"dihu" | ^"de'u" | ^"dehu" | ^"da'u" | ^"dahu"
                | ^"mi" | ^"do" | ^"ti" | ^"ta" | ^"tu" | ^"ri" | ^"ra" | ^"ru" | ^"ko"
                | ^"ma" | ^"da" | ^"de" | ^"di"
@@ -1168,7 +1180,15 @@ KOhA_core = @{ (^"zo'e" | ^"zu'i" | ^"ke'a" | ^"mi'o" | ^"ko'a" | ^"ko'e" | ^"ko
                | ^"ce'u" | ^"cehu" | ^"zi'o" | ^"ziho") ~ &word_boundary }
 KU_core = @{ ( ^"ku") ~ &word_boundary }
 KUhO_core = @{ ( ^"ku'o" | ^"kuho") ~ &word_boundary }
-LAhE_core = @{ ( ^"la'e" | ^"lu'e") ~ &word_boundary }
+// v0.114: tu'a(要約抽象「the event of …」)を KOhA_core から移設。
+//      zantufa-0.9999.js の LAhE 形態論(tuha/lahe/luhe/…)に tu'a が含まれ、
+//      sumti_5 は LAhE relative_clauses? sumti LUhU_elidible の 1 形のみで
+//      後続 sumti が必須(裸 tu'a は参照 3 種とも拒否の実測)。
+//      本実装では lahe_sumti(la'e/lu'e と同型: LAhE_clause ~ sumti ~ LUhU?)
+//      経路となり、木形状も z0 と同型になる。
+//      h 変体 tuha も z0/z1/maf 実測受理(v0.111 の '↔h 併記規約に従い併記。
+//      「tuha do」は従来 ours err の既存 GAP だった)
+LAhE_core = @{ ( ^"tu'a" | ^"tuha" | ^"la'e" | ^"lu'e") ~ &word_boundary }
 LE_core = @{ ( ^"le'i" | ^"lo'i" | ^"la'i" | ^"lei" | ^"loi" | ^"lai"
               | ^"lo'e" | ^"lehe" | ^"le'e"
               | ^"le" | ^"lo" | ^"la") ~ &word_boundary }

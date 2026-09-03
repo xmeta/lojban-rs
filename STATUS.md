@@ -1,13 +1,125 @@
 # 開発ステータス
 
-## 現在の状態: v0.113 完成(gap_tracker 全 12 テスト緑・全テストグリーン)
+## 現在の状態: v0.114 完成(tu'a の LAhE 移設・全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語216 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 8(+ignore 2) / gap_tracker 12 = 単体296 + doc 11 = 計307テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語218 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 8(+ignore 2) / gap_tracker 12 = 単体298 + doc 11 = 計309テスト + example 内 unit test 5 全パス
 - tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件、
   v0.109 でバッチ2(接続詞・前置系)の 4 件、v0.110 でバッチ3(形態論・共有・前処理系)の 4 件を
   解消し全 12 テストが緑(下記「既知GAP」参照)
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.113.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.114.0)
+
+## v0.114 で追加(tu'a の KOhA → LAhE 移設と不閉鎖 to の実測記録)
+
+### tu'a の誤束ねの修正(LAhE_core への移設・実文の意味論が変わる修正)
+
+`tu'a` が KOhA_core に含まれていたため、「tai tu'a lo since」が
+tagged(tai) + KOhA(tu'a) + desc(lo since) の**2つの別項**と読まれていた
+(タグが tu'a だけに付き lo since が別項)。z0(zantufa-0.9999.js)は
+LAhE(tu'a) + sumti(lo since) の**1項**で束ね、タグが tu'a 項全体にかかる
+——実文の意味論が変わる問題。また裸 tu'a(後続 sumti なし)が KOhA 項として
+過剰受理だった(「tu'a klama」「mi tu'a klama」「mi viska tu'a」の OVER 3 行)。
+
+### z0 の文法実測(LAhE 形態論と sumti_5)
+
+- zantufa-0.9999.js の LAhE 形態論は `tuha`(tu'a の h 表記)/`lahe`/`luhe`/
+  `luho`(lu'o)/`luhi`(lu'i)/`luha`(lu'a)等を含み **tu'a は LAhE 語**。
+  sumti_5 の LAhE 枝は `LAhE relative_clauses? sumti LUhU_elidible` の 1 形で
+  **後続 sumti が必須**(裸 LAhE 語の項は存在しない)
+- z0 の木(実測): 「tai tu'a lo since」= tag_term(tag(BAI tai), sumti_5(
+  LAhE_clause(tu'a), sumti(lo since), LUhU elided))。「lu'e tu'a lo si'o
+  broda」= LAhE(lu'e) → LAhE(tu'a) → sumti(lo si'o broda) の入れ子。
+  「mi djica tu'a do klama」は z0 も拒否(LAhE 項の後の selbri が届かない)
+- 注記(LAhE 直後 relative の構造差): z0 の LAhE 枝は
+  `LAhE relative_clauses? sumti` で LAhE 語の直後に relative_clauses の
+  スロットを持つが、本実装の lahe_sumti にはこのスロットがない
+  (tu'a 移設前から la'e/lu'e と共通の既知仕様)。ただし実測では
+  「tu'a noi broda ku do」「la'e noi broda ku do」型は z0/z1/maf とも
+  **拒否**されるため挙動上の差分は発生していない(ours も拒否で整合)。
+  内項の sumti 側に相対節を取る形「tu'a lo broda noi mi viska ke'a」は
+  既存の sumti 経路で z0/z1/maf・ours とも受理
+- h 変体 `tuha` は z0/z1/maf 実測で「tuha do」型が受理・「tuha klama」型は
+  拒否。v0.113 まで tuha は本実装で未収録(「tuha do」が err の既存 GAP)
+  だったため、'↔h 併記規約に従い LAhE_core に併記(GAP 解消)
+
+### 実装(lahe_sumti 経路)
+
+- KOhA_core から `tu'a` を削除し、LAhE_core に `tu'a`/`tuha` を追加。
+  既存の lahe_sumti(LAHEDI_joint | LAhE_clause ~ sp1 ~ sumti ~ (sp1 ~ LUhU)?)
+  がそのまま経路となり、規則の変更はなし(la'e/lu'e と同型の木)
+- 木形状は z0 の sumti_5(LAhE + sumti + LUhU elided)と同型:
+  「mi djica tu'a do」= tail term の sumti(lahe_sumti(LAhE_clause(tu'a),
+  sumti(do)))。「tai tu'a lo since」= tagged(BAI tai, lahe_sumti(tu'a, lo since))
+  の 1 項(タグが束ねる)。「tu'a lo broda cu brode」= 項(LAhE lo broda)
+  + cu 文。明示閉鎖 lu'u も受理(la'e/lu'e と同一スロット)
+- 受理集合の変化は KOhA 読みの裸 tu'a と、z0 が拒否する周辺形のみ(下記掃引)
+
+### スイープ結果(v0.114 実施。プローブ 2,062 → 2,097 行)
+
+- **既存行の受理変化は ok→err 3 行のみ**(いずれも KOhA 読みだった頃の
+  OVER 行が z0 整合の拒否に変わる意図的縮小): `tu'a klama` / `mi tu'a klama` /
+  `mi viska tu'a`(参照 3 種とも拒否)。**err→ok はゼロ**、参照列の変化もゼロ
+- 新規 35 行: LAhE 語彙プローブ 4 行(tu'a/tuha × `mi viska {W} di'u` /
+  `mi viska {W} lo broda ku`。ours ok 4 行・参照 3 種との不一致ゼロ)/
+  裸 tu'a 拒否ピン 5 行(mi djica tu'a / tai tu'a / tu'a zo'u broda /
+  mi cu tu'a lo since / tuha klama。参照 3 種とも拒否の整合)/
+  tu'a 束ね受理ピン 12 行(tai tu'a lo since / mi djica tu'a do lu'u /
+  lu'e tu'a lo si'o broda / mi klama tu'a lo zdani broda / tu'a do zo'u broda /
+  tuha do 等。全行 ours ok = 参照 3 種 ok)/ to 引用ピン 9 行(下記)/
+  既存 GAP 候補の記録 5 行(下記)
+- 集計: total=2,097 / ours_ok=1,892 / z0_ok=1,855 / z1_ok=1,858 / maf_ok=1,824。
+  GAP 候補 127 → 132 件(+5 は pre-existing の記録行。下記)/
+  OVER 候補 148 → 145 件(−3 は裸 tu'a の OVER 解消)
+- z0 が受理する既存の tu'a 形はすべて受理し続けることを確認:
+  描述の tanru が伸びる形(mi klama tu'a lo zdani broda。z0 は内項 lo zdani
+  broda の読み)、prenex 項(tu'a do zo'u broda)、lu'u 閉鎖、lu'e 入れ子、
+  zo'e/ri 内項(mi djica tu'a zo'e / mi djica tu'a ri)は既存経路で受理
+
+### 不閉鎖 to の実測(z0 と整合のため修正なし)
+
+「mi to klama .i do broda」型の不閉鎖 to が黙って後続(次文まで)を呑む問題
+について、z0 の文法と挙動を実測:
+
+- z0 の free 第5枝は `TO_clause text TOI_elidible`。text は入力の残り全体を
+  貪欲に吸収するため、**z0 も不閉鎖 to で後続の .i と次文まで呑む**
+  (z0 の木: free → TO_clause → text 内に .i do broda が内包される実測)
+- TOI は常に省略可で、**toi も text の word として先に消費されるため
+  閉鎖として機能しない**(「mi to klama toi do broda」の toi は引用内)
+- 本実装の to_quote(TO_clause ~ word* ~ TOI?)と**受理集合・挙動とも完全一致**
+  (to 系 12 形を z0/z1/maf 交叉実測し全形一致。うち 9 行を構造プローブと
+  して固定: gap_sweep_results.csv の line_no 2084〜2092。未採用の 3 形は
+  文頭引用+後続文(to mi klama toi mi broda)/ selbri 直後引用
+  (mi klama to broda toi brode)/ 参照 3 種とも拒否の抽象内形
+  (mi cusku lo se du'u to broda toi kei)で同型のため省略)。
+  修正は行わず、意味論上の注意のみ記録: 閉じられない to は発話の残り
+  全体を引用する(z0 と同じ挙動)
+
+### 既知差分の追加記録(スイープの GAP 候補に 5 行追加・pre-existing)
+
+tu'a/LAhE 関連で z0 が受理し本実装が拒否する既存差分(本版の変更とは無関係。
+v0.110 の残差記録と同様に構造プローブとして比較表に固定):
+
+- 呼格+LAhE sumti 引数(3 行): z0 の free 第3枝は vocative sumti?
+  DOhU_elidible で sumti に LAhE 形も取れる。「ju'i tu'a do」
+  「farlu ju'i tu'a do cnita」「mi klama gi'e ju'i tu'a do cadzu」。
+  本実装の vocative_arg/vocative_koha は CMEVLA/desc/KOhA のみで LAhE 形が
+  届かない(la'e/lu'e でも同様の既存 GAP)
+- mex operand の LAhE(2 行): z0 の operand は
+  (LAhE_clause / NAhE BO_clause) mex LUhU_elidible を取るため
+  「li la'e pa su'i re lohO」「li tu'a pa su'i re lohO」型が受理される。
+  本実装の mex_operand には LAhE 枝がない(la'e/lu'e でも同様の既存 GAP)
+
+### テスト・ドキュメント
+
+- 統語 216 → 218: `tu'a_は_lahe_経路で後続_sumti_を束ねる`(LAhE 経路の
+  exact-tree ピン・裸 tu'a 8 形の拒否ピン・tuha/prenex/lu'u/入れ子)+
+  `to_引用は_不閉鎖でも_参照実装と同じ挙動`(to 9 形の受理ピン+木形状)。
+  既存ピン更新: koha_tua_dei → koha_dei(tu'a の KOhA ピンを削除)/
+  fai_と_faha_fa_a_補完_対象文と受理 の tai tu'a ピンを lahe_sumti 読みに更新
+- docs/coverage.md: KOhA 行から `tu'a` を削除、LAhE 行に `tu'a` `tuha` を追加
+  (coverage_doc テストが語彙検証で強制)。README/README.en の LAhE 記述も同期
+- プローブ生成器: 構造プローブに v0.114 の tu'a/to ピンと GAP 候補記録 5 行を
+  追加(2,062 → 2,097 行)
 
 ## v0.113 で追加(長大トークンのリソース保護: 語長上限 MAX_TOKEN_CHARS=50)
 

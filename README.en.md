@@ -50,9 +50,10 @@ The parser engine is [pest](https://pest.rs); the grammar in
     `pu bi'o ba` / `ca bi'i ba`), **space intervals** (VEhA/VIhA as in
     `ve'i ne'i le zdani` / `vi'a ca'u`), and **tense tags taking a sumti**
     (`mi ca le cabdei cu klama` / `vi ne'i le zdani` / durations `ze'a lo cacra`)
-  - **Term reinforcement**: LAhE reference (`la'e di'u` / `lu'e le cukta`),
+  - **Term reinforcement**: LAhE reference (`la'e di'u` / `lu'e le cukta`,
+    abstractor `tu'a lo broda`),
     term-position negation with `naku` (NA KU), KOhA completion
-    (`mi'a` `ma'a` `do'o` `di'u` `tu'a` `dei`, etc.),
+    (`mi'a` `ma'a` `do'o` `di'u` `dei`, etc.),
     description articles `lo'e` / `le'e`
   - Quantifier + selbri terms (`pa prenu cu klama`), quantifiers inside descriptions
     (`le ci gerku`)

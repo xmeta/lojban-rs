@@ -56,10 +56,10 @@
 | KE | `ke` | ✅ |
 | KEhE | `ke'e` `kehe` | ✅ |
 | KEI | `kei` | ✅ |
-| KOhA | `zo'e` `zu'i` `ke'a` `mi'o` `ko'a` `ko'e` `ko'i` `ko'o` `ko'u` `fo'a` `fo'e` `fo'i` `fo'o` `fo'u` `vo'a` `vo'e` `vo'i` `vo'o` `vo'u` `mi'ai` `miahi` `mi'a` `ma'a` `do'o` `tu'a` `dei` `di'u` `dihu` `de'u` `dehu` `da'u` `dahu` `mi` `do` `ti` `ta` `tu` `ri` `ra` `ru` `ko` `ma` `da` `de` `di` `ce'u` `cehu` `zi'o` `ziho` | ✅ |
+| KOhA | `zo'e` `zu'i` `ke'a` `mi'o` `ko'a` `ko'e` `ko'i` `ko'o` `ko'u` `fo'a` `fo'e` `fo'i` `fo'o` `fo'u` `vo'a` `vo'e` `vo'i` `vo'o` `vo'u` `mi'ai` `miahi` `mi'a` `ma'a` `do'o` `dei` `di'u` `dihu` `de'u` `dehu` `da'u` `dahu` `mi` `do` `ti` `ta` `tu` `ri` `ra` `ru` `ko` `ma` `da` `de` `di` `ce'u` `cehu` `zi'o` `ziho` | ✅ |
 | KU | `ku` | ✅ |
 | KUhO | `ku'o` `kuho` | ✅ |
-| LAhE | `la'e` `lu'e` | ✅ |
+| LAhE | `tu'a` `tuha` `la'e` `lu'e` | ✅ |
 | LE | `le'i` `lo'i` `la'i` `lei` `loi` `lai` `lo'e` `lehe` `le'e` `le` `lo` `la` | ✅ |
 | LEhU | `le'u` `lehu` | ✅ |
 | LI | `li` | ✅ |

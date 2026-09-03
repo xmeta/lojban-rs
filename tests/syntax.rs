@@ -689,11 +689,118 @@ fn 肯定_jaha() {
 }
 
 #[test]
-fn koha_tua_dei() {
-    let s = parse_ok("mi djica tu'a do");
-    assert!(s.contains("KOhA_core \"tu'a\""), "{s}");
+fn koha_dei() {
+    // v0.114: tu'a は KOhA_core から LAhE_core へ移設された(下の
+    // tu'a_は_LAHE_経路で後続_sumti_を束ねる を参照)。KOhA の残りは不変
     let s = parse_ok("dei jetnu");
     assert!(s.contains("KOhA_core \"dei\""), "{s}");
+}
+
+#[test]
+fn tu_a_は_lahe_経路で後続_sumti_を束ねる() {
+    // v0.114: tu'a を KOhA_core から LAhE_core へ移設(z0 整合)。
+    // zantufa-0.9999.js の LAhE 形態論は tu'a(tuha)を含み、sumti_5 の
+    // LAhE 枝(LAhE relative_clauses? sumti LUhU_elidible)で後続 sumti が
+    // 必須・LUhU(lu'u)は省略可。旧 KOhA 読みでは「tai tu'a lo since」が
+    // tagged(tai)+KOhA(tu'a)+desc(lo since) の 2 項に分かれて実文の
+    // 意味論が変わっていたが、LAhE 経路ではタグが tu'a 項全体を束ねる
+    // 1 項になる(z0 の tag_term(tag tai, sumti_5(LAhE tu'a, sumti lo since,
+    // LUhU elided)) と同型)
+    let s = parse_ok("mi djica tu'a do");
+    assert!(s.contains("LAhE_core \"tu'a\""), "{s}");
+    assert!(!s.contains("KOhA_core \"tu'a\""), "{s}");
+    // 後続 sumti(do)を lahe_sumti の内項として束ねる exact-tree ピン
+    assert!(
+        s.contains(
+            "(tail_terms (term (sumti (lahe_sumti (LAhE_clause (LAhE_core \"tu'a\")) \
+                     (sumti (KOhA_clause (KOhA_core \"do\")))))))"
+        ),
+        "{s}"
+    );
+
+    // タグ付き位置: tai(BAI)が tu'a 項全体(lo since を含む)を束ねる
+    let s = parse_ok("tai tu'a lo since");
+    assert!(
+        s.contains(
+            "(term (tagged (BAI_clause (BAI_core \"tai\")) \
+                     (sumti (lahe_sumti (LAhE_clause (LAhE_core \"tu'a\")) \
+                     (sumti (desc (LE_clause (LE_core \"lo\")) \
+                     (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"since\"))))))))))))"
+        ),
+        "{s}"
+    );
+    // 2 項に分かれる旧読み(KOhA 裸項)は存在しない
+    assert!(!s.contains("(KOhA_clause (KOhA_core \"tu'a\"))"), "{s}");
+
+    // lu'e との入れ子(z0 も lu'e → tu'a → lo si'o broda の入れ子 LAhE)
+    let s = parse_ok("lu'e tu'a lo si'o broda");
+    assert!(s.contains("LAhE_core \"lu'e\""), "{s}");
+    assert!(s.contains("LAhE_core \"tu'a\""), "{s}");
+    assert!(s.contains("NU_core \"si'o\""), "{s}");
+
+    // 内項の tanru が先に伸びる(desc は selbri を含む。z0 実測 ok)
+    let s = parse_ok("mi klama tu'a lo zdani broda");
+    assert!(s.contains("LAhE_core \"tu'a\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"broda\""), "{s}");
+
+    // 明示閉鎖 lu'u(lahe_sumti の LUhU スロット)
+    let s = parse_ok("mi djica tu'a do lu'u");
+    assert!(s.contains("LAhE_core \"tu'a\""), "{s}");
+    assert!(s.contains("LUhU_core \"lu'u\""), "{s}");
+
+    // h 変体 tuha('↔h 規約。z0/z1/maf 実測受理。v0.113 まで ours err の GAP)
+    let s = parse_ok("mi djica tuha do");
+    assert!(s.contains("LAhE_core \"tuha\""), "{s}");
+    let s = parse_ok("tuha do");
+    assert!(s.contains("LAhE_core \"tuha\""), "{s}");
+
+    // prenex 項位置でも lahe_sumti 経路
+    let s = parse_ok("tu'a do zo'u broda");
+    assert!(s.contains("LAhE_core \"tu'a\""), "{s}");
+
+    // 裸 tu'a(後続 sumti なし)は拒否 = z0 整合の意図的受理縮小。
+    // 旧 KOhA 読みで過剰受理だった OVER 3 行(tu'a klama / mi tu'a klama /
+    // mi viska tu'a)を含む。z0/z1/maf 実測とも拒否
+    for s in [
+        "tu'a klama",
+        "mi tu'a klama",
+        "mi viska tu'a",
+        "mi djica tu'a",
+        "tai tu'a",
+        "tu'a zo'u broda",
+        // cu 直後は selbri しか始められないため tu'a 項は置けない(z0 も拒否)
+        "mi cu tu'a lo since",
+        "tuha klama",
+    ] {
+        assert!(lojban::parse(s).is_err(), "裸 tu'a が受理された: {s}");
+    }
+}
+
+#[test]
+fn to_引用は_不閉鎖でも_参照実装と同じ挙動() {
+    // v0.114 実測記録。z0(zantufa-0.9999.js)の free 第5枝は
+    // TO_clause text TOI_elidible で、text が入力の残りを貪欲に吸収するため:
+    // ・不閉鎖の to は後続の .i と次文まで吸う(free 内の text に内包)
+    // ・toi も text の word として先に消費され、閉鎖として機能しない
+    // ・TOI は常に省略可(後続が尽きたときのみ実質閉鎖)
+    // 本実装の to_quote(TO_clause ~ word* ~ TOI?)と受理集合・挙動とも一致。
+    // 意味論上の注意: 閉じられない to は発話の残り全体を引用する
+    assert!(lojban::parse("mi to klama .i do broda").is_ok());
+    assert!(lojban::parse("mi to klama toi do broda").is_ok());
+    assert!(lojban::parse("mi to klama").is_ok());
+    assert!(lojban::parse("mi to klama toi").is_ok());
+    assert!(lojban::parse("to broda").is_ok());
+    assert!(lojban::parse("to broda toi").is_ok());
+    assert!(lojban::parse("mi viska do to do klama toi").is_ok());
+    assert!(lojban::parse("mi to klama toi broda").is_ok());
+    assert!(lojban::parse("mi to klama .i do broda toi").is_ok());
+
+    // 木形状: to_quote は後続の全 word(.i と次文を含む)を吸収する
+    let s = parse_ok("mi to klama .i do broda");
+    assert!(s.contains("to_quote"), "{s}");
+    assert!(s.contains("(TO_clause (TO_core \"to\"))"), "{s}");
+    assert!(s.contains("(CMAVO_core \"i\")"), "{s}");
+    assert!(s.contains("(BRIVLA_core \"broda\")"), "{s}");
 }
 
 #[test]
@@ -3013,10 +3120,14 @@ fn fai_と_faha_fa_a_補完_対象文と受理() {
         ),
         "{s}"
     );
-    // tai(BAI)項・tu'a 抽象項も従来どおり
+    // tai(BAI)項・tu'a 項も従来どおり。v0.114 から tu'a は LAhE 経路で
+    // 後続 sumti(lo since)を束ねる 1 項(z0 の tag_term と同型)
     assert!(
         s.contains(
-            "(tagged (BAI_clause (BAI_core \"tai\")) (sumti (KOhA_clause (KOhA_core \"tu'a\"))))"
+            "(tagged (BAI_clause (BAI_core \"tai\")) \
+                     (sumti (lahe_sumti (LAhE_clause (LAhE_core \"tu'a\")) \
+                     (sumti (desc (LE_clause (LE_core \"lo\")) \
+                     (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"since\")))))))))))"
         ),
         "{s}"
     );

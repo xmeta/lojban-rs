@@ -467,6 +467,60 @@ STRUCTURAL_PROBES = [
     "mi broda dai brode",
     "mi pau broda",
     "mi klama dai ru'e",
+    # v0.114: tu'a の LAhE 移設(KOhA_core → LAhE_core)。
+    # zantufa-0.9999.js の LAhE 形態論は tu'a(tuha)を含み、sumti_5 の
+    # LAhE 枝(LAhE relative_clauses? sumti LUhU_elidible)で後続 sumti が必須。
+    # 上段: 裸 tu'a は参照 3 種とも拒否(KOhA 読みだった頃の OVER 3 行
+    # tu'a klama / mi tu'a klama / mi viska tu'a を含む。z0 整合の意図的縮小)。
+    # 下段: タグが LAhE 項を束ねる形を含む受理ピン(z0 の木と同型)。
+    # tuha は h 変体('↔h 規約。z0/z1/maf 実測受理)
+    "tu'a klama",
+    "mi tu'a klama",
+    "mi viska tu'a",
+    "mi djica tu'a",
+    "tai tu'a",
+    "tu'a zo'u broda",
+    "mi cu tu'a lo since",
+    "tuha klama",
+    "tai tu'a lo since",
+    "mi djica tu'a do",
+    "mi djica tu'a do lu'u",
+    "tu'a do",
+    "tu'a lo broda cu brode",
+    "tu'a mi klama",
+    "mi klama tu'a lo zdani",
+    "mi klama tu'a lo zdani broda",
+    "lu'e tu'a lo si'o broda",
+    "tu'a do zo'u broda",
+    "tuha do",
+    "mi djica tuha do",
+    # v0.114: 不閉鎖 to の実測記録。z0 の free 第5枝は
+    # TO_clause text TOI_elidible で text が入力の残りを吸収し、TOI は常に
+    # 省略可・閉鎖として機能しない(text が toi を word として先に消費)。
+    # 本実装の to_quote(TO_clause ~ word* ~ TOI?)と挙動一致
+    # (不閉鎖 to が後続の .i と次文まで吸われる点も含めて参照 3 種と整合)。
+    # 意味論上の既知クラス:「to」は閉じられない限り発話の残りを引用する
+    "mi to klama .i do broda",
+    "mi to klama toi do broda",
+    "mi to klama",
+    "mi to klama toi",
+    "to broda",
+    "to broda toi",
+    "mi viska do to do klama toi",
+    "mi to klama toi broda",
+    "mi to klama .i do broda toi",
+    # v0.114 記録(既存 GAP 候補。tu'a 移設とは無関係の pre-existing):
+    # 呼格+LAhE sumti 引数。z0 の free 第3枝は vocative sumti? DOhU_elidible
+    # で sumti に LAhE 形(la'e/lu'e/tu'a)も取れるが、本実装の vocative_arg /
+    # vocative_koha は CMEVLA/desc/KOhA のみで LAhE 形が届かない
+    "ju'i tu'a do",
+    "farlu ju'i tu'a do cnita",
+    "mi klama gi'e ju'i tu'a do cadzu",
+    # v0.114 記録(既存 GAP 候補。mex operand の LAhE。z0 の operand は
+    # (LAhE_clause / NAhE BO_clause) mex LUhU_elidible を取る。la'e/lu'e でも
+    # 同様の既存 GAP。tu'a 移設後に lahe_sumti 経路の補完候補として記録)
+    "li la'e pa su'i re lohO",
+    "li tu'a pa su'i re lohO",
 ]
 
 

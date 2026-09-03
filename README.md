@@ -44,9 +44,10 @@ guskant 氏の **zantufa-1.9999.peg** を Rust/pest 向けに移植したもの�
     MOhI 移動指定 `mo'i ca'u`)、**時制間隔**(ZEhA `pu bi'o ba` / `ca bi'i ba`)、
     **sumti を取る時制タグ**
     (`mi ca le cabdei cu klama` / `vi ne'i le zdani` / 期間 `ze'a lo cacra`)
-  - **項の補強**: LAhE 参照(`la'e di'u` / `lu'e le cukta`)、
+  - **項の補強**: LAhE 参照(`la'e di'u` / `lu'e le cukta` / 要約抽象
+    `tu'a lo broda`)、
     `naku`(NA KU)による項位置の否定、KOhA 補完(`mi'a` `ma'a` `do'o` `di'u`
-    `tu'a` `dei` 等)、記述詞 `lo'e` / `le'e`
+    `dei` 等)、記述詞 `lo'e` / `le'e`
   - 数量詞+述語の項(`pa prenu cu klama`)、描述内数量詞(`le ci gerku`)
   - **前置スコープ**(`su'o da zo'u da prami mi`)/ **項set**(`nu'i X Y [nu'u]`)
     / **項グループ接続**(`pe'e je`)/ 項の明示区切り(`ce'e`)

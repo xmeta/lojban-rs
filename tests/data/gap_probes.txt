@@ -688,7 +688,6 @@ miahi klama
 mi'a klama
 ma'a klama
 do'o klama
-tu'a klama
 dei klama
 di'u klama
 dihu klama
@@ -737,7 +736,6 @@ mi miahi klama
 mi mi'a klama
 mi ma'a klama
 mi do'o klama
-mi tu'a klama
 mi dei klama
 mi di'u klama
 mi dihu klama
@@ -786,7 +784,6 @@ mi viska miahi
 mi viska mi'a
 mi viska ma'a
 mi viska do'o
-mi viska tu'a
 mi viska dei
 mi viska di'u
 mi viska dihu
@@ -814,8 +811,12 @@ mi viska ziho
 lo broda ku klama
 lo broda poi mi viska ke'a ku'o barda
 lo broda poi mi viska ke'a kuho barda
+mi viska tu'a di'u
+mi viska tuha di'u
 mi viska la'e di'u
 mi viska lu'e di'u
+mi viska tu'a lo broda ku
+mi viska tuha lo broda ku
 mi viska la'e lo broda ku
 mi viska lu'e lo broda ku
 mi viska le'i broda ku
@@ -2060,3 +2061,37 @@ mi klama ca'e broda
 mi broda dai brode
 mi pau broda
 mi klama dai ru'e
+tu'a klama
+mi tu'a klama
+mi viska tu'a
+mi djica tu'a
+tai tu'a
+tu'a zo'u broda
+mi cu tu'a lo since
+tuha klama
+tai tu'a lo since
+mi djica tu'a do
+mi djica tu'a do lu'u
+tu'a do
+tu'a lo broda cu brode
+tu'a mi klama
+mi klama tu'a lo zdani
+mi klama tu'a lo zdani broda
+lu'e tu'a lo si'o broda
+tu'a do zo'u broda
+tuha do
+mi djica tuha do
+mi to klama .i do broda
+mi to klama toi do broda
+mi to klama
+mi to klama toi
+to broda
+to broda toi
+mi viska do to do klama toi
+mi to klama toi broda
+mi to klama .i do broda toi
+ju'i tu'a do
+farlu ju'i tu'a do cnita
+mi klama gi'e ju'i tu'a do cadzu
+li la'e pa su'i re lohO
+li tu'a pa su'i re lohO
