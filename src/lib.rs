@@ -355,6 +355,12 @@ fn apply_erasure(text: &str) -> Result<Cow<'_, str>, String> {
 /// ZOI がなければ元テキストをそのまま返す([`Cow::Borrowed`])。
 /// 未閉鎖の場合はエラーメッセージを返す。直前の語が `zo`(単語引用)の
 /// 場合は ZOI として扱わない。
+///
+/// 区切り語の一致規則(v0.110): 区切り語トークンの前後のポーズ記号
+/// (`.` `,` `!` `?`)は語の一部ではないため、比較前に両端から除去する。
+/// zantufa(z0)の形態論では区切り語は lojban_word で、前後のポーズは
+/// spaces 側が消費する(「zoi gy. broda .gy」の開き区切り語は `gy`、
+/// 閉じは `gy`。`gy.` / `.gy` / `.gy.` はいずれも受理)。
 fn normalize_zoi(text: &str) -> Result<Cow<'_, str>, String> {
     let b = text.as_bytes();
 
@@ -375,6 +381,11 @@ fn normalize_zoi(text: &str) -> Result<Cow<'_, str>, String> {
         spans.push((start, i));
     }
 
+    // トークン両端のポーズ記号を除去した語形(区切り語の一致に使う)
+    fn bare_delim(tok: &str) -> &str {
+        tok.trim_matches(['.', ',', '!', '?'])
+    }
+
     let mut out: Option<String> = None;
     let mut copied = 0usize; // ここまで text からコピー済み
     let mut k = 0usize;
@@ -386,19 +397,25 @@ fn normalize_zoi(text: &str) -> Result<Cow<'_, str>, String> {
             k += 1;
             continue;
         }
-        // 区切り語
+        // 区切り語(ポーズ記号を除いた語形で対応を取る)
         let (ds, de) = spans[k + 1];
         let delim = &text[ds..de];
-        // 同一トークンの再出現を探す
+        let delim_bare = bare_delim(delim);
+        if delim_bare.is_empty() {
+            return Err(format!(
+                "zoi 引用の区切り語 {delim:?} が語形として不正です(ポーズ記号のみ)"
+            ));
+        }
+        // ポーズ記号を除いた語形が一致するトークンの再出現を探す
         let close = spans[k + 2..]
             .iter()
-            .position(|&(a, c)| &text[a..c] == delim)
+            .position(|&(a, c)| bare_delim(&text[a..c]).eq_ignore_ascii_case(delim_bare))
             .map(|off| spans[k + 2 + off]);
         let (cs, ce) = match close {
             Some(p) => p,
             None => {
                 return Err(format!(
-                    "未閉鎖の zoi 引用です(区切り語 {delim:?} が再出現しません)"
+                    "未閉鎖の zoi 引用です(区切り語 {delim_bare:?} が再出現しません)"
                 ))
             }
         };
@@ -495,10 +512,27 @@ mod tests {
     fn zoi_引用() {
         assert!(parse("mi cusku zoi .ky. hello world .ky.").is_ok());
         assert!(parse("zoi gy English text gy").is_ok());
+        // v0.110: 区切り語の前後のポーズ記号は語の一部ではないため、
+        // 両端を除去した語形で対応を取る(z0 形態論整合)。
+        // 「zoi gy. broda .gy」型の標準的な書記形(GAP_ zoi区切り語の
+        // ピリオド正規化。z0/z1/maf 実測 ok)
+        assert!(parse("zoi gy. broda .gy").is_ok());
+        assert!(parse("mi cusku zoi gy. broda .gy").is_ok());
+        // 開き/閉じのどちらか片方だけポーズ付きの形も受理(z0 実測 ok)
+        assert!(parse("zoi gy. broda gy").is_ok());
+        assert!(parse("zoi gy broda .gy").is_ok());
+        assert!(parse("zoi gy. broda .gy.").is_ok());
+        assert!(parse("zoi .gy. broda .gy.").is_ok());
+        // 本文が空の形(z0 実測 ok)
+        assert!(parse("zoi gy. .gy").is_ok());
+        // 引用後に本文が続く形(z0 実測 ok)
+        assert!(parse("zoi gy. broda .gy brode").is_ok());
         // 未閉鎖
         assert!(parse("mi cusku zoi .ky. abc").is_err());
         // 区切り語不一致
         assert!(parse("zoi .ky. abc .bz.").is_err());
+        // ポーズ記号のみの区切り語は語形として不正
+        assert!(parse("zoi . abc .").is_err());
         // zo 単語引用の対象としての zoi は影響なし
         assert!(parse("zo zoi cu cmavo").is_ok());
     }

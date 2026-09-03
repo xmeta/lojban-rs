@@ -1073,8 +1073,8 @@ line_no,input,ours,z0,z1,maftufa
 1072,mi klama o'i,1,1,1,1
 1073,mi klama su'a,1,1,1,1
 1074,mi klama vau,1,1,1,1
-1075,mi viska lo broda vu'o noi mi klama,0,1,1,1
-1076,mi viska lo broda vuho noi mi klama,0,1,1,1
+1075,mi viska lo broda vu'o noi mi klama,1,1,1,1
+1076,mi viska lo broda vuho noi mi klama,1,1,1,1
 1077,mi pu nai klama,1,1,1,1
 1078,mi broda ja nai brode,1,1,1,1
 1079,mi broda pa pamai,1,1,1,1
@@ -1377,11 +1377,11 @@ line_no,input,ours,z0,z1,maftufa
 1376,mi klama fuho,1,1,1,1
 1377,mi klama fu'o,1,1,1,1
 1378,mi cusku zo broda,1,1,1,1
-1379,mi cusku zoi gy. broda .gy,0,1,1,1
-1380,lo byklesi ku,0,1,1,1
-1381,lo cyklesi ku,0,1,1,1
-1382,mi byklesi,0,1,1,1
-1383,mi klama lo byklesi ku,0,1,1,1
+1379,mi cusku zoi gy. broda .gy,1,1,1,1
+1380,lo byklesi ku,1,1,1,1
+1381,lo cyklesi ku,1,1,1,1
+1382,mi byklesi,1,1,1,1
+1383,mi klama lo byklesi ku,1,1,1,1
 1384,fa nai mi klama,1,1,1,0
 1385,mi klama fa nai,1,1,1,0
 1386,fai nai mi klama,1,1,1,0
@@ -1454,14 +1454,14 @@ line_no,input,ours,z0,z1,maftufa
 1453,mi broda joi brode co brodi,1,1,1,1
 1454,mi broda joi brode .ui brodi,1,1,1,1
 1455,mi broda joi ju'i dohu brode,1,1,1,1
-1456,mi klama gi'e ju'i do cadzu,0,1,1,1
-1457,farlu ju'i do cnita,0,1,1,1
-1458,mi broda na joi brode,0,1,1,1
-1459,mi broda na se joi brode,0,1,1,1
-1460,mi broda na gi'e brode,0,1,1,1
-1461,mi broda se gi'e brode,0,1,1,1
-1462,mi broda na gi'a brode,0,1,1,1
-1463,mi broda se gi'a brode,0,1,1,1
+1456,mi klama gi'e ju'i do cadzu,1,1,1,1
+1457,farlu ju'i do cnita,1,1,1,1
+1458,mi broda na joi brode,1,1,1,1
+1459,mi broda na se joi brode,1,1,1,1
+1460,mi broda na gi'e brode,1,1,1,1
+1461,mi broda se gi'e brode,1,1,1,1
+1462,mi broda na gi'a brode,1,1,1,1
+1463,mi broda se gi'a brode,1,1,1,1
 1464,mi broda e brode,0,0,0,0
 1465,mi broda a brode,0,0,0,0
 1466,mi broda joi ju'i brode,0,0,0,0
@@ -1486,7 +1486,7 @@ line_no,input,ours,z0,z1,maftufa
 1485,li pa du re,1,0,0,0
 1486,lo aburobu ku,1,0,0,0
 1487,mi klama lo broda be'o,0,0,0,0
-1488,mi klama ke lo zdani broda ke'e,0,1,1,1
+1488,mi klama ke lo zdani broda ke'e,1,1,1,1
 1489,ganai mi broda gi mi klama,1,1,1,0
 1490,mi ge broda gi brode,1,1,1,0
 1491,xu do klama,1,1,1,1

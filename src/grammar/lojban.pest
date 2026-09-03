@@ -179,7 +179,22 @@ terms_atom  = _{ free | term
                | PEhE_clause ~ sp1 ~ pehe_conn ~ sp1 ~ term }
 // pe'e 後の接続詞(論理 je / 非論理 joi / 間隔 bi'o 等。camxes joik_jek 準拠)
 pehe_conn = _{ JA_clause | ek_joik }
-term  = { tagged | na_ku | termset | sumti }
+term  = { tagged | na_ku | termset
+        // v0.110: 項レベルの ke グループ(ke … ke'e 内に項を括る)。
+        // GAP_ke_group内の項。z0 実測(zantufa-0.9999.js):
+        // term_2 = KE_clause term+ KEhE_elidible の項グループで、
+        // 「mi klama ke lo zdani broda ke'e」は tail_terms 内の
+        // term(KE + [lo zdani broda(描述、selbri は tanru zdani+broda)] + ke'e)
+        // として受理される(ke_group は selbri しか括れないため届かなかった)。
+        // 複数項も可(「ke lo zdani lo broda ke'e」z0 実測 ok)。
+        // KEhE は省略可(「mi klama ke lo zdani broda」z0 実測 ok)。
+        // 過剰受理チェック(z0 交叉・実測): グループ内が sumti で始まらない形
+        // (「ke mi broda ke'e」「ke lo zdani broda ke'e brode」)は z0 も
+        // 拒否するため、term の繰り返しが sumti で止まり ke'e も取れない
+        // 本実装も拒否のまま。既存の tanru_unit 側 ke_group(KE selbri KEhE?)
+        // は「ke broda ke'e」型の selbri グループを先に処理するため木は不変
+        | KE_clause ~ sp1 ~ term ~ (sp1 ~ term)* ~ (sp1 ~ KEhE_clause)?
+        | sumti }
 // 項set(nu'i X Y [nu'u]): 複数項を 1 対象として接続・タグ付けできる
 termset = { NUhI_clause ~ sp1 ~ terms ~ (sp1 ~ NUhU_clause)? }
 // 注: FA 枝も NAI 後置を取る(v0.108。fa nai / fai nai 等。FA の否定スロット。
@@ -243,7 +258,17 @@ tense_tags = _{ tense_mark ~ (sp1 ~ tense_mark)* }
 na_ku      = { NAKU_joint | NA_clause ~ sp1 ~ KU_clause }
 NAKU_joint = { ^"naku" ~ &word_boundary }
 
+// v0.110: VUhO 後の関係節共有(vu'o noi … / vu'o poi …)。GAP_VUhO後の関係節共有。
+// z0 実測(zantufa-0.9999.js): sumti = sumti_1 (VUhO_clause relative_clauses)?
+// の形で、vu'o の直後は relative_clauses(noi/poi/voi または GOI)のみ。
+// 「mi viska lo broda vu'o noi mi klama」は sumti の (VUhO relative_clauses)?
+// スロットで受理される。なお z0 は「vu'o + sumti」の項連結を持たない
+// (「mi viska lo broda vu'o mi」は z0 実測 err)が、本実装の既存の
+// VUhO 項連結枝は pre-existing の受理のため維持する(既知 OVER 差分)。
+// 第2枝を第3枝(連結ループ)の前に置くのは、PEG の選択成功確定により
+// 「vu'o noi …」を連結ループの VUhO 枝に食わせないため
 sumti      = { sumti_core ~ (sp1 ~ relative_clauses)?
+              ~ (sp1 ~ VUhO_clause ~ sp1 ~ relative_clauses)?
               ~ ((sp1 ~ ek_joik | sp1 ~ VUhO_clause) ~ sp1 ~ sumti)* }
 // 注: 裸の数詞項は直後が MOI 述語(re moi 等)なら項としない。
 //     PEG の繰り返しは成功で確定するため、ここで拒否しないと
@@ -351,7 +376,21 @@ gihek_free = _{ (gihek_free_unit ~ (sp1 ~ gihek_free_unit)*)? }
 // DOhU 必須の vocative_closed を別途許容する二択)。
 // vocative は DOhU 明示閉鎖必須(z0 実測)。それ以外の free_unit は
 // free と同じ語彙(z0 実測: .ui / xu / pe'i / ba'e は gihek 直後に受理)
-gihek_free_unit = _{ !COI_clause ~ free_unit | vocative_closed }
+gihek_free_unit = _{ !COI_clause ~ free_unit | vocative_closed
+                   // v0.110: 呼格+KOhA 引数の DOhU 省略形(呼格+sumti 継続)。
+                   // GAP(呼格+sumti 継続)。z0 実測: 「mi klama gi'e ju'i do cadzu」
+                   // は gihek の post_clause の free(vocative ju'i, sumti do,
+                   // DOhU 省略)で受理。裸 vocative(引数なし)は引き続き拒否
+                   // (「gi'e ju'i cadzu」は z0/z1/maf とも拒否。z0 は free の
+                   // 第2枝 vocative selbri DOhU_elidible が selbri を free 内に
+                   // 取り込むため、後続の bridi_tail が尽きる)。cmevla 引数形
+                   // 「gi'e ju'i la alen. cadzu」は z0/z1/maf とも拒否のため
+                   // KOhA 引数のみ(既存の拒否と整合)
+                   | vocative_koha }
+// 呼格+KOhA 引数(引数必須・DOhU 省略可)。裸 vocative と区別するため
+// 引数を必須にする
+vocative_koha   = _{ COI_clause ~ (sp1 ~ NAI_clause)? ~ sp1 ~ KOhA_clause
+                     ~ (sp1 ~ DOhU_clause)? }
 vocative_closed = _{ COI_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ vocative_arg)?
                      ~ sp1 ~ DOhU_clause }
 // 述語と項の間・項間の自由修飾語を許容(mi cusku .ui do / cusku sei … do)。
@@ -513,6 +552,32 @@ tanru_unit = { (BAhE_clause ~ sp1)? ~ (
       | PEhE_clause | LAHEDI_joint | ROROI_joint | BIhE_clause | FEhE_clause
       | BY_core)
     ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
+   // v0.110: レタル接頭融合語(byklesi / cyklesi / dyjamynai 等)。
+   // GAP_レタル接頭lujvo_byklesi。z0 実測(zantufa-0.9999.js):
+   // 「lo byklesi ku」は brivla ではなく、by+brivla の無ポーズ隣接
+   // (cmavo の post_word = pause / !nucleus lojban_word 経路)により
+   // sumti_tail 内で lerfu_string(by) + BOI(省略) + selbri(klesi) として
+   // 解析される(形態論的な単一 brivla ではない。maftufa も同読み)。
+   // 本実装は無ポーズ隣接を一般にサポートしないため、融合語トークンを
+   // tanru_unit の選択肢として受理する(木形状差異 = 既知クラス。
+   // z0 は lerfu 項+selbri の2要素、本実装は tanru_unit 1要素)。
+   // 受理スコープ(z0 交叉・実測): 子音レタル17語(by/cy/dy/fy/gy/jy/ky/ly/
+   // my/ny/py/ry/sy/ty/vy/xy/zy)+ 直後に無ポーズで続く有効な brivla。
+   // 「lo byklesi ku」「mi byklesi」「lo byklama ku」「lo dyjamynai ku」
+   // (jamynai は CVCy_lujvo)等。母音レタル(abu/ebu 等)は前置しない
+   // (「lo abu ku」は z0 も拒否。v0.106 の BY_core ガードと整合)。
+   // 「cybu'u」は bu'u が cmavo のため brivla が始まらず z0 も拒否。
+   // 既存 lujvo の受理は不変: BRIVLA 枝を先に試すため、融合語トークンが
+   // 有効な brivla である場合は既存経路が優先される(C+y で始まる有効な
+   // brivla は存在しないことを全レタル×主要語形で実測)。
+   // !(NAKU_joint) ガード: BRIVLA_core が「naku」(cmavo NA+KU)を lujvo 形
+   // (CVCV)に誤マッチする実装上の性質があるため、naku 誤読
+   // (「lo bynaku ku」が desc selbri になる。z0 実測 err = 新規 OVER)を防止。
+   // 「mi bynaku klama」(z0 は by 項+naku 項+klama の読みで受理)は本実装
+   // でも拒否になる(z0 実測 ok = GAP 残差として次バッチ候補に記録。
+   // naku を brivla 誤読のままで受容するより誠実な拒否が正。v0.106 の
+   // lo abu ku 処置と同型の判断)
+   | BY_prefix ~ !(NAKU_joint) ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
    // 注: 「i+字母」で始まる語(.ije / .ijanai 等の文連結結合形)は tanru の先頭に来ないため除外。
    // 母音始まりの語そのもの(.a'onai 等)は述語のみの文として正当なので許容する
    | GOhA_clause ~ (sp1 ~ linked_args)?
@@ -623,8 +688,23 @@ ek_joik      = _{ (A_clause | JOI_clause) ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clau
 // selbri_6 経路)、「mi na'e bo broda」z0 err(本実装も selbri の s_marks
 // の後の tanru は単位で始まる必要があるため拒否のまま)、「mi pu bo
 // klama」は従来どおり sentence/selbri の tense_mark 後置 BO が先取り
-gihek_link   = _{ GIhA_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clause)?
-                | gihek_joik }
+// v0.110: gihek の (NA? SE?) 前置スロット。GAP(gihek の (NA? SE?) 前置)。
+//   zantufa の gihek は NA? SE? GIhA、joik は GAhO? NA? SE? JOI GAhO? で
+//   前置を取るため「mi broda na joi brode」「mi broda na se joi brode」
+//   「mi broda na gi'e brode」「mi broda se gi'e brode」「mi broda
+//   na gi'a brode」「mi broda se gi'a brode」は z0/z1/maf とも受理。
+//   z0 の木は GIhA 形では「na」を前の bridi_tail の tail_terms の
+//   裸 NA 項(na ku の KU 省略形)として取るが、本実装は gihek_link の
+//   前置スロットで受ける(木形状差異 = 既知クラス。受理・読みは同一)。
+//   JOI/BIhI 形は z0 も selbri_4 の joik(NA? SE? JOI)で前置を取る。
+//   含めないもの(z0 交叉・実測): NAI 前置(nai joi / nai gi'a)は z0/z1 のみ
+//   受理・maftufa は拒否の緩受理のため含めない(既知クラス維持)。
+//   「se na gi'e」(SE と NA の逆順)は z0 も拒否(前置の順序は NA→SE 固定)。
+//   「na nai gi'e」(NA 前置+NAI)は z0 が na 項+nai(UI free)+gihek の
+//   別読みで受理するが、本実装は未対応のまま(残差記録)
+gihek_link   = _{ (NA_clause ~ sp1)? ~ (SE_clause ~ sp1)?
+                   ~ GIhA_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clause)?
+                 | gihek_joik }
 // v0.109: bridi_tail 連結部の非 GIhA 接続(mi broda joi brode 等)。
 // GAP_JOIによるselbri接続。z0 実測: gihek は NA? SE? GIhA のみだが、
 // zantufa の joik(GAhO? NA? SE? JOI GAhO?)は JOI 終端が総称接続詞
@@ -657,10 +737,11 @@ gihek_link   = _{ GIhA_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clause)?
 //   本実装は gihek_link の GIhA 枝に前置スロットがなく、gihek_joik の
 //   SE 前置は JOI/BIhI 枝のみで GIhA 枝との非対称(「se joi」は受理だが
 //   「se gi'e」は拒否)。NA 前置も全体未実装
-gihek_joik   = _{ (SE_clause ~ sp1)? ~ JOI_clause ~ (sp1 ~ NAI_clause)?
-                   ~ (sp1 ~ BO_clause)?
-                 | (GAhO_clause ~ sp1)? ~ (SE_clause ~ sp1)? ~ BIhI_clause
-                   ~ (sp1 ~ GAhO_clause)? ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clause)? }
+gihek_joik   = _{ (NA_clause ~ sp1)? ~ (SE_clause ~ sp1)? ~ JOI_clause
+                   ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clause)?
+                 | (GAhO_clause ~ sp1)? ~ (NA_clause ~ sp1)? ~ (SE_clause ~ sp1)?
+                   ~ BIhI_clause ~ (sp1 ~ GAhO_clause)? ~ (sp1 ~ NAI_clause)?
+                   ~ (sp1 ~ BO_clause)? }
 tanru_link   = _{ JA_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clause)?
                 | BO_clause }
 // 先接続は GA+NAI の結合形(ganai)と分離形(ga nai)の両方、
@@ -705,7 +786,16 @@ to_quote = { TO_clause ~ (sp0 ~ (word ~ (sp1 ~ word)*)?)? ~ (sp1 ~ TOI_clause)? 
 
 vocative     = { COI_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ vocative_arg)?
                ~ (sp1 ~ DOhU_clause)? }
-vocative_arg = _{ CMEVLA_clause | desc }
+// v0.110: 呼格の sumti 引数に KOhA を許容(呼格+sumti 継続の DOhU 省略形)。
+// GAP(呼格+sumti 継続)。z0 実測(zantufa-0.9999.js): free の第3枝は
+// vocative sumti? DOhU_elidible で、sumti は代名詞も取れる
+// (「farlu ju'i do cnita」は free(vocative ju'i, sumti do, DOhU 省略)+
+// selbri cnita の tanru 継続で受理)。
+// 注意(z0 交叉・実測): 連結部(gihek 直後)の cmevla 引数形
+// 「gi'e ju'i la alen. cadzu」は z0/z1/maf とも拒否(前処理の制約)のため、
+// 連結部では KOhA 引数のみ許容(gihek_free_unit の vocative_koha 参照)。
+// tanru 継続位置(farlu ju'i do cnita)では本規則経由で受理
+vocative_arg = _{ CMEVLA_clause | desc | KOhA_clause }
 
 // 語ラッパー(後続ポーズを自己消費)
 word = { CMEVLA_clause | CMAVO_clause | BRIVLA_clause }
@@ -990,6 +1080,14 @@ BY_core   = @{ (^"by" | ^"cy" | ^"dy" | ^"fy" | ^"gy" | ^"jy" | ^"ky" | ^"ly"
               | ^"my" | ^"ny" | ^"py" | ^"ry" | ^"sy" | ^"ty" | ^"vy" | ^"xy"
               | ^"zy" | ^"abu" | ^"ebu" | ^"ibu" | ^"obu" | ^"ubu" | ^"ybu")
               ~ &word_boundary }
+// レタル接頭融合語の前置部分(byklesi の「by」)。語境界ガードなし
+// (直後に brivla が無ポーズで続く融合トークンの前置を切るため)。
+// tanru_unit の BY_prefix 枝でのみ使用し、BRIVLA_clause の直前で
+// 常に試行されるため単独では確定しない。注: coverage_doc の語彙抽出
+// (*_core 対象)に載らないよう _core 接尾を付けていない
+BY_prefix = @{ (^"by" | ^"cy" | ^"dy" | ^"fy" | ^"gy" | ^"jy" | ^"ky" | ^"ly"
+              | ^"my" | ^"ny" | ^"py" | ^"ry" | ^"sy" | ^"ty" | ^"vy" | ^"xy"
+              | ^"zy") }
 BU_core   = @{ ( ^"bu") ~ &word_boundary }
 GUhA_core = @{ ( ^"gu'a" | ^"gu'e" | ^"gu'o" | ^"gu'u") ~ &word_boundary }
 SI_core   = @{ ( ^"si") ~ &word_boundary }

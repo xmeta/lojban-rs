@@ -3284,9 +3284,12 @@ fn レタル語は_tanru単位のbrivlaでない_v0_106回帰ピン() {
         "{s}"
     );
 
-    // 既知 GAP の維持: レタル接頭 lujvo(byklesi 型)は引き続き未対応
-    // (z0 実測 ok、zantufa-0.9999.js。本タスクでは修正せず、BY_core ガードとは無関係)
-    assert!(LojbanParser::parse(Rule::text, "lo byklesi ku").is_err());
+    // 旧既知 GAP の解消(v0.110): レタル接頭融合語(byklesi 型)。
+    // z0 実測(zantufa-0.9999.js)では by+brivla の無ポーズ隣接により
+    // lerfu_string + BOI(省略) + selbri の読みで受理される。本実装は
+    // tanru_unit の BY_prefix 枝(BY_prefix + BRIVLA_clause)で受理する
+    // (木形状差異 = 既知クラス)。下記のレタル接頭融合語テストを参照
+    assert!(LojbanParser::parse(Rule::text, "lo byklesi ku").is_ok());
 
     // 語形不正は引き続きエラー
     assert!(lojban::parse("qqq").is_err());
@@ -4243,4 +4246,290 @@ fn free後のco転換selbri継続_v0_109() {
         ),
         "{s}"
     );
+}
+
+// =====================================================================
+// v0.110: バッチ3 GAP 解消(レタル接頭融合語 / VUhO 関係節共有 /
+// zoi 区切り語のピリオド正規化 / 項レベル ke グループ / gihek の
+// (NA? SE?) 前置 / 呼格+sumti 継続)
+// =====================================================================
+
+#[test]
+fn レタル接頭融合語_v0_110() {
+    // GAP_レタル接頭lujvo_byklesi(v0.110 解消)。
+    // z0 実測(zantufa-0.9999.js): 「lo byklesi ku」は brivla ではなく、
+    // by+brivla の無ポーズ隣接(cmavo の post_word = pause /
+    // !nucleus lojban_word 経路)により、sumti_tail 内で
+    // lerfu_string(by) + BOI(省略) + selbri(klesi) として解析される
+    // (maftufa も同読み。形態論的な単一 brivla ではない)。
+    // 本実装は無ポーズ隣接を一般にサポートしないため、融合語トークンを
+    // tanru_unit の BY_prefix 枝(BY_prefix + BRIVLA_clause)で受理する
+    // (木形状差異 = 既知クラス。z0 は lerfu 項+selbri の2要素、
+    // 本実装は tanru_unit 1要素。受理・読みは同一)
+    let s = parse_ok("lo byklesi ku");
+    assert!(
+        s.contains(
+            "(desc (LE_clause (LE_core \"lo\")) \
+             (selbri (tanru (tanru_unit (BY_prefix \"by\") \
+             (BRIVLA_clause (BRIVLA_core \"klesi\"))))) \
+             (KU_clause (KU_core \"ku\")))"
+        ),
+        "{s}"
+    );
+    // gap_tracker GAP_レタル接頭lujvo_byklesi と同一入力(z0/z1/maf 実測 ok)
+    let s = parse_ok("mi byklesi");
+    assert!(
+        s.contains(
+            "(bridi_tail (selbri (tanru (tanru_unit (BY_prefix \"by\") \
+             (BRIVLA_clause (BRIVLA_core \"klesi\"))))) (tail_terms \"\"))"
+        ),
+        "{s}"
+    );
+    parse_ok("lo cyklesi ku");
+    parse_ok("mi klama lo byklesi ku");
+    // CVCy_lujvo を後続に取る形(z0 実測 ok。jamynai = jam+y+nai)
+    parse_ok("lo dyjamynai ku");
+    // tanru 継続・be 連結(z0 実測 ok)
+    parse_ok("lo byklesi broda");
+    parse_ok("mi byklesi broda");
+    parse_ok("lo byklesi be do ku");
+    parse_ok("lo byklesi je broda ku");
+    // 大文字小文字(z0 実測 ok)
+    parse_ok("lo BYklesi ku");
+    // 全子音レタル(z0 実測 ok: by/cy/dy/fy/gy/jy/ky/ly/my/ny/py/ry/sy/ty/vy/xy/zy)
+    for l in [
+        "by", "cy", "dy", "fy", "gy", "jy", "ky", "ly", "my", "ny", "py", "ry", "sy", "ty", "vy",
+        "xy", "zy",
+    ] {
+        parse_ok(&format!("lo {l}klesi ku"));
+    }
+
+    // 過剰受理チェック(z0 交叉・実測):
+    // - 母音レタルは前置しない(「lo abu ku」は z0 も拒否。v0.106 の
+    //   BY_core ガードと整合。既存の拒否ピンは不変)
+    assert!(LojbanParser::parse(Rule::text, "lo abu ku").is_err());
+    assert!(LojbanParser::parse(Rule::text, "lo ebu ku").is_err());
+    // - 後続が brivla でない融合語は z0 も拒否(bu'u は FAhA cmavo、
+    //   ku は KU cmavo のため selbri が始まらない)
+    assert!(LojbanParser::parse(Rule::text, "lo cybu'u ku").is_err());
+    assert!(LojbanParser::parse(Rule::text, "lo byku ku").is_err());
+    // - 既存 lujvo の受理は不変: BRIVLA 枝を先に試すため、融合語トークンが
+    //   有効な brivla である場合は既存経路が優先される
+    let s = parse_ok("lo klama ku");
+    assert!(s.contains("(BRIVLA_clause (BRIVLA_core \"klama\"))"), "{s}");
+    // byfyklesi / bycyklesi 型の多レタル接頭は z0 が受理するが(by+fy+klesi 等
+    // の lerfu_string 連鎖)、本実装は単一レタル接頭のみのため拒否
+    // (サブセット。残差記録)
+    assert!(LojbanParser::parse(Rule::text, "lo byfyklesi ku").is_err());
+    assert!(LojbanParser::parse(Rule::text, "lo bycyklesi ku").is_err());
+    // - naku は BRIVLA_core が CVCV 形を lujvo に誤マッチする実装上の性質を
+    //   持つため !(NAKU_joint) ガードで誤読を防止:
+    //   「lo bynaku ku」は z0 実測 err(ガードなしの旧実装は desc selbri 誤読の
+    //   新規 OVER)で z0 整合の拒否。「mi bynaku klama」は z0 が by 項+naku
+    //   (NA KU)項+klama の読みで受理するが、本実装は項分離読み未対応のため
+    //   拒否(残差記録。誤読受容より誠実な拒否が正。v0.106 の lo abu ku 処置と同型)
+    assert!(LojbanParser::parse(Rule::text, "lo bynaku ku").is_err());
+    assert!(LojbanParser::parse(Rule::text, "mi bynaku klama").is_err());
+    // - 形態論ストレステスト(z0 交叉・実測)で確認した既知クラス:
+    //   brivla+レタル接頭融合語の無ポーズ隣接(tanru 2単位目・gihek 後・
+    //   selbri 直後)は z0 が拒否するが本実装は受容(受容優先の既知クラス。
+    //   v0.95 タグ+BO / v0.107 mi pu bo ge と同型。非正規字形で実害なし)
+    parse_ok("mi klama byklesi");
+    parse_ok("mi klesi byklesi");
+    parse_ok("mi klama gi'e byklesi");
+    //   受理一致で読みが異なる形: 「mi suta byklesi」は z0 では su(消去)+ta
+    //   (KOhA 項)への形態論分割の読み(su_clause が intro に現れる)、本実装は
+    //   tanru(suta, by+klesi)。受理一致の既知読み差異クラス
+    parse_ok("mi suta byklesi");
+    //   z0 ok / 本実装 err の残差(GAP 方向。次バッチ候補として記録):
+    //   関係節が続く形(z0 は sumti_tail の埋め込み lerfu 項+selbri+relative
+    //   の読み)、レタル+タグ cmavo の隣接(z0 は by 項+BAI/PU タグ+selbri の
+    //   読み)は項分離読みの実装が要るため未対応
+    assert!(LojbanParser::parse(Rule::text, "lo byklesi noi broda ku").is_err());
+    assert!(LojbanParser::parse(Rule::text, "mi byta'e klama").is_err());
+    assert!(LojbanParser::parse(Rule::text, "mi byca klama").is_err());
+    drop(s);
+    // 通常のレタル項(空白あり)は既存経路のまま(BY_clause)
+    let s = parse_ok("lo by klesi ku");
+    assert!(s.contains("(BY_clause (BY_core \"by\"))"), "{s}");
+    // 語形不正は引き続きエラー
+    assert!(lojban::parse("qqq").is_err());
+}
+
+#[test]
+fn vuho後の関係節共有_v0_110() {
+    // GAP_VUhO後の関係節共有(v0.110 解消)。
+    // z0 実測(zantufa-0.9999.js): sumti = sumti_1 (VUhO_clause relative_clauses)?
+    // の形で、vu'o の直後は relative_clauses(noi/poi/voi または GOI)のみ。
+    // 「mi viska lo broda vu'o noi mi klama」は sumti の
+    // (VUhO relative_clauses)? スロットで受理される。
+    // なお z0 は「vu'o + sumti」の項連結を持たない(「vu'o mi」は z0 実測 err)
+    // が、本実装の既存の VUhO 項連結枝は pre-existing の受理のため維持
+    // (既知 OVER 差分。ok→err 回帰の防止)
+    let s = parse_ok("mi viska lo broda vu'o noi mi klama");
+    assert!(
+        s.contains(
+            "(desc (LE_clause (LE_core \"lo\")) \
+             (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"broda\")))))) \
+             (VUhO_clause (VUhO_core \"vu'o\")) \
+             (relative_clauses (relative_clause (NOI_clause (NOI_core \"noi\"))"
+        ),
+        "{s}"
+    );
+    // gap_tracker GAP_VUhO後の関係節共有 と同一入力(z0/z1/maf 実測 ok)
+    parse_ok("mi viska lo broda vuho noi mi klama");
+    // poi / voi 形(z0 実測 ok)
+    parse_ok("mi viska lo broda vu'o poi mi klama");
+    parse_ok("mi viska lo broda vu'o voi mi klama");
+    // GOI 形の関係節(z0 実測 ok)
+    parse_ok("mi viska lo broda vu'o pe mi");
+    // 既存の VUhO 項連結は不変(z0 は拒否の既知 OVER 差分。受理維持)
+    parse_ok("mi viska lo broda vu'o mi");
+    // 連結後の関係節共有は z0 も拒否(単一スロット)
+    assert!(LojbanParser::parse(
+        Rule::text,
+        "mi viska lo broda vu'o noi mi klama vu'o poi brode"
+    )
+    .is_err());
+    // 語形不正は引き続きエラー
+    assert!(lojban::parse("qqq").is_err());
+}
+
+#[test]
+fn 項レベルのkeグループ_v0_110() {
+    // GAP_ke_group内の項(v0.110 解消)。
+    // z0 実測(zantufa-0.9999.js): term_2 = KE_clause term+ KEhE_elidible の
+    // 項グループで、「mi klama ke lo zdani broda ke'e」は tail_terms 内の
+    // term(KE + [lo zdani broda(描述、selbri は tanru zdani+broda)] + ke'e)
+    // として受理される。既存の tanru_unit 側 ke_group(KE selbri KEhE?)は
+    // 「ke broda ke'e」型の selbri グループを先に処理するため木は不変
+    let s = parse_ok("mi klama ke lo zdani broda ke'e");
+    assert!(
+        s.contains(
+            "(term (KE_clause (KE_core \"ke\")) \
+             (term (sumti (desc (LE_clause (LE_core \"lo\")) \
+             (selbri (tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"zdani\"))) \
+             (tanru_unit (BRIVLA_clause (BRIVLA_core \"broda\")))))))) \
+             (KEhE_clause (KEhE_core \"ke'e\")))"
+        ),
+        "{s}"
+    );
+    // KEhE 省略(z0 実測 ok)
+    parse_ok("mi klama ke lo zdani broda");
+    // 複数項(z0 実測 ok)
+    parse_ok("mi klama ke lo zdani lo broda ke'e");
+    // KOhA 項(z0 実測 ok)
+    parse_ok("mi klama ke do ke'e");
+    // 明示 ku 付き描述(z0 実測 ok)
+    parse_ok("mi klama ke lo zdani ku ke'e");
+    // 過剰受理チェック(z0 交叉・実測): グループ内が sumti で始まらない形、
+    // および ke'e の後に続く形は z0 も拒否
+    assert!(LojbanParser::parse(Rule::text, "mi klama ke mi broda ke'e").is_err());
+    assert!(LojbanParser::parse(Rule::text, "mi klama ke lo zdani broda ke'e brode").is_err());
+    // 既存の tanru_unit 側 ke_group(selbri グループ)の木は不変
+    let s = parse_ok("mi klama ke broda ke'e");
+    assert!(
+        s.contains("(tanru_unit (ke_group (KE_clause (KE_core \"ke\")) (selbri"),
+        "{s}"
+    );
+    // 語形不正は引き続きエラー
+    assert!(lojban::parse("qqq").is_err());
+}
+
+#[test]
+fn gihekの_na_se前置_v0_110() {
+    // GAP(gihek の (NA? SE?) 前置。v0.110 解消)。
+    // z0 実測(zantufa-0.9999.js): gihek = NA? SE? GIhA、joik = GAhO? NA? SE?
+    // JOI GAhO? で前置スロットを持つ。GIhA 形の z0 の木は「na」を前の
+    // bridi_tail の tail_terms の裸 NA 項(na ku の KU 省略形)として取るが、
+    // 本実装は gihek_link の前置スロットで受ける(木形状差異 = 既知クラス。
+    // 受理・読みは同一)。JOI/BIhI 形は z0 も selbri_4 の joik(NA? SE? JOI)
+    // で前置を取る
+    let s = parse_ok("mi broda na gi'e brode");
+    assert!(
+        s.contains("(NA_clause (NA_core \"na\")) (GIhA_clause (GIhA_core \"gi'e\"))"),
+        "{s}"
+    );
+    parse_ok("mi broda se gi'e brode");
+    parse_ok("mi broda na se gi'e brode");
+    parse_ok("mi broda na gi'a brode");
+    parse_ok("mi broda se gi'a brode");
+    // JOI/BIhI 枝への (NA? SE?) 前置(z0/z1/maf 実測 ok)
+    parse_ok("mi broda na joi brode");
+    parse_ok("mi broda na se joi brode");
+    parse_ok("mi broda na bi'i brode");
+    parse_ok("mi broda na se bi'i brode");
+    // GAhO 両端との組合せ(z0 実測 ok)
+    parse_ok("mi broda ga'o na bi'i ke'i brode");
+    // 連鎖(z0 実測 ok)
+    parse_ok("mi broda na gi'e brode gi'a brodi");
+    // NAI 後置との組合せ(z0 実測 ok。nai は既存の後置スロットで受ける)
+    parse_ok("mi broda na gi'e nai brode");
+
+    // 含めないもの(z0 交叉・実測):
+    // - NAI 前置(nai joi / nai gi'a)は z0/z1 のみ受理・maftufa は拒否の
+    //   緩受理のため含めない(既知クラス維持)
+    assert!(LojbanParser::parse(Rule::text, "mi broda nai joi brode").is_err());
+    // - SE と NA の逆順は z0 も拒否(前置の順序は NA→SE 固定)
+    assert!(LojbanParser::parse(Rule::text, "mi broda se na gi'e brode").is_err());
+    // - NA 前置+NAI(na nai gi'e)は z0 が na 項+nai(UI free)+gihek の別読み
+    //   で受理するが、本実装は未対応のまま(残差記録)
+    assert!(LojbanParser::parse(Rule::text, "mi broda na nai gi'e brode").is_err());
+    // - 前置だけの宙吊り接続は拒否(z0 も拒否)
+    assert!(LojbanParser::parse(Rule::text, "mi broda na gi'e").is_err());
+    // 既存不変: 前置なし GIhA の木は不変
+    let s = parse_ok("mi klama gi'e cadzu");
+    assert!(s.contains("(GIhA_clause (GIhA_core \"gi'e\"))"), "{s}");
+    // 既存不変: na ku 項(明示 ku)は tail_terms 側のまま
+    let s = parse_ok("mi broda na ku gi'e brode");
+    assert!(s.contains("KU_clause"), "{s}");
+    // 語形不正は引き続きエラー
+    assert!(lojban::parse("qqq").is_err());
+}
+
+#[test]
+fn 呼格と_sumti引数の継続_v0_110() {
+    // GAP(呼格+sumti 継続。v0.110 解消)。
+    // z0 実測(zantufa-0.9999.js): free の第3枝は vocative sumti? DOhU_elidible
+    // で、sumti は代名詞も取れる。「farlu ju'i do cnita」は
+    // free(vocative ju'i, sumti do, DOhU 省略) + selbri cnita の tanru 継続、
+    // 「mi klama gi'e ju'i do cadzu」は gihek の post_clause の free で受理。
+    // 注意(z0 交叉・実測): 連結部の cmevla 引数形
+    // 「gi'e ju'i la alen. cadzu」は z0/z1/maf とも拒否のため、
+    // 連結部では KOhA 引数のみ許容(既存の拒否と整合)
+    let s = parse_ok("farlu ju'i do cnita");
+    assert!(
+        s.contains(
+            "(vocative (COI_clause (COI_core \"ju'i\")) \
+             (KOhA_clause (KOhA_core \"do\")))"
+        ),
+        "{s}"
+    );
+    // gap_tracker の対象文と同型(z0/z1/maf 実測 ok)
+    parse_ok("mi klama gi'e ju'i do cadzu");
+    parse_ok("mi klama gi'e ju'i mi cadzu");
+    parse_ok("mi klama gi'e ju'i ti cadzu");
+    // NAI 後置+KOhA 引数(z0 実測 ok)
+    parse_ok("mi klama gi'e ju'i nai do cadzu");
+    parse_ok("mi klama ju'i nai do");
+    // DOhU 明示閉鎖との併用(z0 実測 ok)
+    parse_ok("mi klama gi'e ju'i do dohu cadzu");
+    // 尾項位置の呼格+sumti(z0 実測 ok)
+    parse_ok("mi klama ju'i do");
+    // tanru 継続(z0 実測 ok)
+    parse_ok("mi klama ju'i do cadzu");
+
+    // 既存の拒否は不変(z0 交叉・実測):
+    // - 裸 vocative(引数なし)は連結部で拒否
+    assert!(LojbanParser::parse(Rule::text, "mi klama gi'e ju'i cadzu").is_err());
+    // - cmevla 引数の DOhU 省略形は連結部で拒否(z0/z1/maf 実測 err)
+    assert!(LojbanParser::parse(Rule::text, "mi klama gi'e ju'i la alen. cadzu").is_err());
+    // - 連結後の bridi_tail が無い形は拒否(z0 も拒否)
+    assert!(LojbanParser::parse(Rule::text, "mi klama gi'e ju'i do").is_err());
+    // 既存の受理は不変: DOhU 明示閉鎖形
+    parse_ok("mi klama gi'e ju'i dohu cadzu");
+    // cmevla 引数の vocative は tanru 継続位置では従来どおり受理
+    parse_ok("farlu ju'i la alen. cnita");
+    // 語形不正は引き続きエラー
+    assert!(lojban::parse("qqq").is_err());
 }

@@ -1,23 +1,21 @@
 # 開発ステータス
 
-## 現在の状態: v0.109 完成(gap_tracker の意図的失敗 4 件を除き全テストグリーン)
+## 現在の状態: v0.110 完成(gap_tracker 全 12 テスト緑・全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語198 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体261 + doc 11 = 計272テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語203 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体266 + doc 11 = 計277テスト + example 内 unit test 5 全パス
 - tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件、
-  v0.109 でバッチ2(接続詞・前置系)の 4 件を解消し緑化
-  (バッチ2: GAP_裸tanru_BO接続 / GAP_JOIによるselbri接続 / GAP_jai_se変換タグ / GAP_free後のco転換selbri継続)。
-  残り 4 件は GAP 解消まで意図的に失敗する(下記「既知GAP」参照)。cargo test 全体はこの分だけ失敗する状態が正
+  v0.109 でバッチ2(接続詞・前置系)の 4 件、v0.110 でバッチ3(形態論・共有・前処理系)の 4 件を
+  解消し全 12 テストが緑(下記「既知GAP」参照)
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.109.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.110.0)
 
-## 既知GAP(未解決・残り 4 件は意図的に失敗するテストあり)
+## 既知GAP(全 12 件解消済み。tests/gap_tracker.rs は全テスト緑)
 
 zantufa 系参照パーサー(z0 = zantufa-0.9999.js / z1 = zantufa-1.9999.js /
 maftufa = maftufa-1.9999.js)が受理するのに本パーサーが拒否する形(GAP)を、
 語彙×統語位置のプローブ行列で体系的掃引し、tests/gap_tracker.rs に
-意図的に失敗するテスト(RED)として固定した。v0.108 でバッチ1の 4 件、
-v0.109 でバッチ2の 4 件を解消(下記「v0.108 で追加」「v0.109 で追加」)し、
-残り 4 件は未対応。
+テストとして固定した。バッチ1(v0.108)・バッチ2(v0.109)・バッチ3(v0.110)
+で全 12 件を解消。
 
 ### スイープ方法論
 
@@ -30,16 +28,14 @@ v0.109 でバッチ2の 4 件を解消(下記「v0.108 で追加」「v0.109 で
   参照パーサー 3 種(tests/data/refparse.js。camxes_preproc.js を parse 前に
   適用)を走らせ、比較表 tests/data/gap_sweep_results.csv
   (1,492 行 × {ours, z0, z1, maftufa})を出力
-- 掃引結果(v0.109 実施。プローブ 1,492 行=バッチ2 の BO/JOI/jai/co の
-  受理スコープと過剰受理確認の構造プローブ 47 行+レビュー対応で呼格残差と
-  gihek の (NA? SE?) 前置の記録プローブ 8 行を追加):
-  ours ok 1,414 / z0 ok 1,333 / z1 ok 1,350 / maftufa ok 1,302。
-  GAP 候補(参照 ok / ours err)33 件、OVER 候補(ours ok / 参照全 err)90 件。
-  v0.108 時点(1,437 行)からの変化は err→ok 13 行(緑化対象の
-  BO 1 行+JOI 7 行+co 3 行+jai se 2 行)+追加プローブ 55 行
-  (いずれも z0 交叉で受理スコープを確認済み)で**ok→err はゼロ**、
-  OVER 増減もゼロ(新規過剰受理なし。逆に gihek 直後の裸 vocative の
-  過剰受容 1 クラスを z0 整合で解消)
+- 掃引結果(v0.110 実施。プローブ 1,492 行=バッチ3 の緑化確認+形態論ストレステスト
+  80 行(レタル接頭×各種後続。別途 /tmp 検証環境で z0/z1/maf 交叉実測済み)は
+  比較表には未登録。既存 1,492 行の受理集合は変化なし):
+  ours ok 1,430 / z0 ok 1,333 / z1 ok 1,350 / maftufa ok 1,302。
+  GAP 候補(参照 ok / ours err)17 件、OVER 候補(ours ok / 参照全 err)90 件。
+  v0.109 時点(1,492 行)からの変化は err→ok 16 行(緑化対象の
+  VUhO 2 行+zoi 1 行+レタル接頭 4 行+呼格+sumti 2 行+gihek 前置 6 行+
+  ke グループ 1 行)で**ok→err はゼロ**、OVER 増減もゼロ(新規過剰受理なし)
 - 採用基準: 参照パーサーが受理する正当なロジバン形のみ。次の 4 クラスは
   意図的差分として GAP に入れていない(比較表には残る):
   - z0/z1 のみの緩受理: 裸 mo'i・fe'e のタグ位置(maftufa は拒否)
@@ -51,34 +47,129 @@ v0.109 でバッチ2の 4 件を解消(下記「v0.108 で追加」「v0.109 で
     既存経路で受理、「数式+mai」の mex 全体形は参照 3 種も拒否のため
     GAP は不在
 
-### GAP 一覧(12 件。tests/gap_tracker.rs の各テストが 1:1 対応。✅=v0.108/0.109 で解消)
+### GAP 一覧(12 件。tests/gap_tracker.rs の各テストが 1:1 対応。✅=解消済み)
 
 | 入力 | z0 | z1 | maftufa | 原因推定 |
 |---|---|---|---|---|
-| lo byklesi ku / mi byklesi / lo cyklesi ku | ok | ok | ok | レタル接頭 lujvo 未対応(BY_core L842-845 + tanru_unit BRIVLA ガード L412-431) |
+| lo byklesi ku / mi byklesi / lo cyklesi ku | ok | ok | ok | ✅ v0.110 解消。tanru_unit にレタル接頭融合語枝(BY_prefix+BRIVLA)を追加 |
 | fa nai mi klama / mi klama fa nai / fai nai mi klama | ok | ok | err | ✅ v0.108 解消。tagged の FA 枝に NAI 後置+sumti 省略(裸タグ項)を追加 |
 | mi ji do klama / do ji mi broda | ok | ok | ok | ✅ v0.108 解消。ji を JOI_core に収録 |
 | va'u mi klama / se va'u mi klama / mi klama se va'u lo nu broda | ok | ok | ok | ✅ v0.108 解消。va'u/vahu を BAI_core に収録 |
 | farlu ju'i co cnita(.oi ta ca'o… も同形) | ok | ok | ok | ✅ v0.109 解消。tanru_post に co_post 枝を追加 |
 | mi klama bo cadzu | ok | ok | ok | ✅ v0.109 解消。tanru_link に裸 BO 枝を追加 |
 | mi broda joi brode(jo'e/fa'u/ku'a/jo'u/johu も同形) | ok | ok | ok | ✅ v0.109 解消。gihek_link に gihek_joik(JOI/BIhI)を追加 |
-| mi viska lo broda vu'o noi mi klama | ok | ok | ok | sumti の VUhO 枝は項連結のみで関係節共有がない(L223-224) |
+| mi viska lo broda vu'o noi mi klama | ok | ok | ok | ✅ v0.110 解消。sumti に (VUhO relative_clauses)? スロットを追加 |
 | mi pu nai klama / mi ba nai klama / mi ca nai klama | ok | ok | ok | ✅ v0.108 解消。tense_mark に NAI 後置を追加 |
-| mi cusku zoi gy. broda .gy | ok | ok | ok | normalize_zoi(lib.rs)が区切り語を生トークン完全一致で比較(gy. ≠ .gy) |
+| mi cusku zoi gy. broda .gy | ok | ok | ok | ✅ v0.110 解消。normalize_zoi(lib.rs)の区切り語一致をポーズ記号除去形に変更 |
 | mi jai se gau broda / mi jai se gau klama lo zdani | ok | ok | ok | ✅ v0.109 解消。JAI 枝に (SE \| NAhE)+ 変換タグ経路を追加 |
-| mi klama ke lo zdani broda ke'e | ok | ok | ok | ke_group は selbri のみ括り bridi_tail を括れない(L459) |
+| mi klama ke lo zdani broda ke'e | ok | ok | ok | ✅ v0.110 解消。term に項レベル ke グループ(KE term+ KEhE?)を追加 |
 
 ### gap_tracker の扱い
 
-- tests/gap_tracker.rs は GAP ごとに 1 テスト(計 12)。未解決の 4 件は
-  受理をアサートするため失敗する(RED)。v0.108/v0.109 で解消した 8 件は
-  テストを変更せず緑化。
-  既存テストの拒否ピンのうち、v0.109 で解消した
-  mi klama bo cadzu(tests/syntax.rs 既存_bo_経路は維持される)は受理ピンに
-  更新済み(残る lo byklesi ku の 1 件は GAP 解消時に更新すること)
+- tests/gap_tracker.rs は GAP ごとに 1 テスト(計 12)。全 12 件とも
+  受理をアサートするテストとして緑化済み(v0.108/v0.109/v0.110 で順次解消)。
+  既存テストの拒否ピンは解消時に受理ピンへ更新済み
+  (mi klama bo cadzu は v0.109、lo byklesi ku は v0.110 で更新)
 - 再実行手順: `bash tests/data/run_gap_sweep.sh`
   (gerna_cipra の clone 先を GERNA_CIPRA_JS で指定可。既定
   /tmp/opencode/gerna_cipra/js)
+
+## v0.110 で追加(バッチ3 GAP 解消: 形態論・共有・前処理系)
+
+語彙追加はなし(既存語彙の受理範囲拡張と lib.rs の前処理修正のみ。
+coverage.md に変更なし。BY_prefix は既存 BY_core の語境界なし前置形で
+新語彙ではないため coverage_doc の語彙抽出対象外)。
+
+- 文法①(レタル接頭融合語): tanru_unit に BY_prefix 枝
+  (BY_prefix ~ !(NAKU_joint) ~ BRIVLA_clause)を追加。
+  GAP_レタル接頭lujvo_byklesi 解消。「lo byklesi ku」「mi byklesi」
+  「lo dyjamynai ku」等。z0 実測(zantufa-0.9999.js):
+  「by」は brivla ではなく、by+brivla の無ポーズ隣接(cmavo の
+  post_word 経路)により sumti_tail 内で lerfu_string(by) + BOI(省略)
+  + selbri(klesi) として解析される(形態論的な単一 brivla ではない)。
+  本実装は無ポーズ隣接を一般にサポートしないため融合語トークンを
+  tanru_unit として受理(木形状差異 = 既知クラス)。
+  受理スコープ(z0 交叉・実測): 子音レタル17語+ 直後に無ポーズで続く
+  有効な brivla。母音レタルは前置しない(「lo abu ku」z0 も拒否)。
+  形態論ストレステスト(レタル×各種後続 80 行を z0/z1/maf 交叉実測):
+  - 過剰受理チェック: 「lo abu ku」「lo ebu ku」「lo cybu'u ku」
+    「lo byku ku」は拒否維持(z0 一致)。「lo bynaku ku」は z0 err の
+    新規 OVER として検出し、BRIVLA_core が CVCV 形「naku」を lujvo 誤
+    マッチする性質に対し !(NAKU_joint) ガードで拒否に修正(z0 整合。
+    v0.106 の lo abu ku 処置と同型)
+  - 受理一致で読みが異なる形: 「mi suta byklesi」は z0 では su(消去)+
+    ta(KOhA 項)への形態論分割読み(su_clause が intro に現れる)、
+    本実装は tanru(suta, by+klesi)。受理一致の既知読み差異クラス
+  - 受容優先の既知クラス(z0 は拒否・本実装は受理): brivla+レタル接頭
+    融合語の無ポーズ隣接(「mi klama byklesi」「mi klesi byklesi」
+    「mi klama gi'e byklesi」。tanru 2単位目・gihek 後・selbri 直後。
+    非正規字形で実害なし。v0.95 タグ+BO / v0.107 mi pu bo ge と同型)
+  - 残差(z0 ok / 本実装 err。次バッチ候補として記録): 多レタル接頭
+    (lo byfyklesi ku。z0 は lerfu_string 連鎖)、関係節が続く形
+    (lo byklesi noi broda ku。z0 は埋め込み lerfu 項+selbri+relative)、
+    レタル+タグ cmavo 隣接(mi byta'e klama / mi byca klama。z0 は
+    by 項+BAI/PU タグ+selbri)、naku 項隣接(mi bynaku klama。z0 は
+    by 項+naku 項+klama)は項分離読みの実装が要るため未対応
+- 文法②(VUhO 後の関係節共有): sumti に
+  (sp1 ~ VUhO_clause ~ sp1 ~ relative_clauses)? の第2スロットを追加。
+  GAP_VUhO後の関係節共有 解消。z0 実測: sumti = sumti_1
+  (VUhO relative_clauses)? の形で vu'o の直後は relative_clauses のみ。
+  「mi viska lo broda vu'o noi mi klama」型(noi/poi/voi/GOI)。第2枝を
+  連結ループの前に置き「vu'o noi …」を連結ループに食わせない設計。
+  なお z0 は「vu'o + sumti」の項連結を持たない(「vu'o mi」は z0 err)が、
+  既存の VUhO 項連結枝は pre-existing 受理のため維持(既知 OVER 差分)。
+  連結後の二重関係節共有は z0 も拒否のため単一スロット
+- 文法③(zoi 区切り語のピリオド正規化): lib.rs の normalize_zoi を修正
+  (統語でなく前処理の問題)。GAP_zoi区切り語のピリオド正規化 解消。
+  区切り語トークンの前後のポーズ記号(. , ! ?)は語の一部ではないため、
+  比較前に両端から除去する(zantufa 形態論では区切り語は lojban_word で
+  前後のポーズは spaces 側が消費。「gy.」/「.gy」/「.gy.」はいずれも
+  「gy」に対応)。開き/閉じの片方だけポーズ付き・本文空・引用後継続も
+  z0 実測 ok で受理。ポーズ記号のみの区切り語(「zoi . abc .」)は
+  語形不正としてエラー。lib.rs 内の zoi 引用ユニットテストを拡充
+- 文法④(項レベル ke グループ): term に KE_clause ~ sp1 ~ term ~
+  (sp1 ~ term)* ~ (sp1 ~ KEhE_clause)? 枝を追加。
+  GAP_ke_group内の項 解消。z0 実測: term_2 = KE term+ KEhE_elidible の
+  項グループで「mi klama ke lo zdani broda ke'e」は tail_terms 内の
+  term(KE + 描述 + ke'e)として受理される。複数項・KOhA・明示 ku・
+  KEhE 省略も z0 受理実測で同時緑化。グループ内が sumti で始まらない形
+  (「ke mi broda ke'e」「ke lo zdani broda ke'e brode」)は z0 も拒否。
+  既存の tanru_unit 側 ke_group(KE selbri KEhE?)は selbri グループを
+  先に処理するため木は不変
+- 文法⑤(gihek の (NA? SE?) 前置): gihek_link の GIhA 枝と gihek_joik の
+  両枝に (NA_clause ~ sp1)? ~ (SE_clause ~ sp1)? 前置スロットを追加。
+  スイープ新記録 GAP 候補 6 行解消。zantufa の gihek は NA? SE? GIhA、
+  joik は GAhO? NA? SE? JOI GAhO? で前置スロットを持つ。
+  「mi broda na gi'e brode」「mi broda se gi'e brode」「mi broda na joi
+  brode」「mi broda na se joi brode」「mi broda na gi'a brode」
+  「mi broda se gi'a brode」等が z0/z1/maf 実測 ok。GIhA 形の z0 の木は
+  「na」を前の bridi_tail の裸 NA 項(na ku の KU 省略形)として取るが、
+  本実装は gihek_link の前置スロットで受ける(木形状差異 = 既知クラス)。
+  含めないもの(z0 交叉・実測): NAI 前置(nai joi / nai gi'a)は z0/z1 のみ
+  受理・maftufa は拒否の緩受理のため実装しない(既知クラス維持)。
+  「se na gi'e」(SE と NA の逆順)は z0 も拒否。「na nai gi'e」は z0 が
+  na 項+nai(UI free)+gihek の別読みで受理するが本実装は未対応のまま
+  (残差記録)
+- 文法⑥(呼格+KOhA 引数の継続): vocative_arg に KOhA_clause を追加し、
+  gihek_free_unit に vocative_koha(COI + KOhA 引数必須 + DOhU 省略可)
+  を追加。スイープ新記録 GAP 候補 2 行解消。z0 実測: free の第3枝は
+  vocative sumti? DOhU_elidible で sumti は代名詞も取れる
+  (「mi klama gi'e ju'i do cadzu」「farlu ju'i do cnita」)。
+  裸 vocative(引数なし)は連結部で引き続き拒否(「gi'e ju'i cadzu」は
+  z0/z1/maf とも拒否)。cmevla 引数形(「gi'e ju'i la alen. cadzu」)は
+  z0/z1/maf とも拒否のため連結部では KOhA 引数のみ(既存の拒否と整合)。
+  tanru 継続位置(「farlu ju'i la alen. cnita」)は既存 vocative_arg 経路
+  (CMEVLA/desc)のまま受理
+- スイープ再実行: err→ok 16 行(緑化対象のみ)・**ok→err ゼロ**・
+  OVER 増減ゼロ。z0/z1 交叉(バッチ3 全修正プローブ 83 行)で
+  受理系は完全一致、拒否系の差分は上記の記録済み残差のみ
+- テスト: 統語 198→203(レタル接頭融合語/VUhO 関係節共有/項レベル ke/
+  gihek 前置/呼格+sumti の回帰+既存不変ピン)。gap_tracker は残り 4 件
+  緑化(全 12 件緑)
+- レビュー対応(naku 誤読防止): 形態論ストレステストで検出した
+  「lo bynaku ku」の新規 OVER(BRIVLA_core の CVCV lujvo 誤マッチ)を
+  !(NAKU_joint) ガードで解消(z0 整合の拒否)
+- ベンチ: --quick で方向性劣化なし。WASM ビルド ok
 
 ## v0.109 で追加(バッチ2 GAP 解消: 接続詞・前置系の再配線)
 
@@ -169,6 +260,7 @@ v0.109 でバッチ2の 4 件を解消(下記「v0.108 で追加」「v0.109 で
   内には現れないため未対応。構造プローブとして比較表に記録
   (バッチ2 のスコープ外。selbri レベルの接続導入が要る)
 - 残差の記録(GAP 候補。いずれも z0/z1/maf ok / ours err。構造プローブで記録:
+  【v0.110 で両方とも解消。下記は v0.109 時点の記録】:
   - 呼格+sumti 引数の DOhU 省略形: 「mi klama gi'e ju'i do cadzu」
     「farlu ju'i do cnita」は z0 では vocative が sumti を引数に取れるため
     受理される。本実装の vocative_arg は CMEVLA/desc のみで KOhA を取れず、
