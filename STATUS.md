@@ -1,13 +1,13 @@
 # 開発ステータス
 
-## 現在の状態: v0.110 完成(gap_tracker 全 12 テスト緑・全テストグリーン)
+## 現在の状態: v0.111 完成(gap_tracker 全 12 テスト緑・全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語203 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) / gap_tracker 12 = 単体278 + doc 11 = 計289テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語209 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) / gap_tracker 12 = 単体284 + doc 11 = 計295テスト + example 内 unit test 5 全パス
 - tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件、
   v0.109 でバッチ2(接続詞・前置系)の 4 件、v0.110 でバッチ3(形態論・共有・前処理系)の 4 件を
   解消し全 12 テストが緑(下記「既知GAP」参照)
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.110.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.111.0)
 
 ## 既知GAP(全 12 件解消済み。tests/gap_tracker.rs は全テスト緑)
 
@@ -23,19 +23,22 @@ maftufa = maftufa-1.9999.js)が受理するのに本パーサーが拒否する�
   `*_core` 語彙リストを機械抽出し(coverage_doc.rs と同手法)、クラスごとの
   代表統語位置(タグ4位置 / 項3位置 / 自由修飾語2位置 / クラス固有テンプレート)
   に流し込む。加えて既知 GAP 候補と OVER 記録用の構造プローブ。
-  生成物は tests/data/gap_probes.txt(1,492 行)
+  生成物は tests/data/gap_probes.txt(1,909 行。v0.111 の語彙追加で +113、
+  UI+NAI 無空白結合形テンプレートの追加でさらに +252 = UI 語形 126 ×
+  文頭/文末の 2 型)
 - 一括比較: tests/data/run_gap_sweep.sh が本パーサー(CLI `--lines` バッチ)と
   参照パーサー 3 種(tests/data/refparse.js。camxes_preproc.js を parse 前に
   適用)を走らせ、比較表 tests/data/gap_sweep_results.csv
-  (1,492 行 × {ours, z0, z1, maftufa})を出力
-- 掃引結果(v0.110 実施。プローブ 1,492 行=バッチ3 の緑化確認+形態論ストレステスト
-  80 行(レタル接頭×各種後続。別途 /tmp 検証環境で z0/z1/maf 交叉実測済み)は
-  比較表には未登録。既存 1,492 行の受理集合は変化なし):
-  ours ok 1,430 / z0 ok 1,333 / z1 ok 1,350 / maftufa ok 1,302。
-  GAP 候補(参照 ok / ours err)17 件、OVER 候補(ours ok / 参照全 err)90 件。
-  v0.109 時点(1,492 行)からの変化は err→ok 16 行(緑化対象の
-  VUhO 2 行+zoi 1 行+レタル接頭 4 行+呼格+sumti 2 行+gihek 前置 6 行+
-  ke グループ 1 行)で**ok→err はゼロ**、OVER 増減もゼロ(新規過剰受理なし)
+  (1,909 行 × {ours, z0, z1, maftufa})を出力
+- 掃引結果(v0.111 実施。プローブ 1,909 行=v0.110 の 1,544 行+
+  v0.111 新語彙 113 行(ce'u/cehu/zi'o/ziho の項3位置 12 行、UI 新語
+  43 語形の自由修飾語2位置 86 行、構造プローブ 15 行)+ UI+NAI 結合形
+  252 行。既存 1,657 行の受理集合は変化なし):
+  ours ok 1,717 / z0 ok 1,723 / z1 ok 1,740 / maftufa ok 1,692。
+  GAP 候補(参照 ok / ours err)127 件、OVER 候補(ours ok / 参照全 err)97 件。
+  v0.111 語彙追加直後(1,657 行)からの変化は UI+NAI 結合形テンプレートの
+  GAP 追加 100 行(文頭形。STATUS 次バッチ課題参照)**のみで ok→err はゼロ**、
+  OVER 増減もゼロ。新規 113 行は ours ok 113 行で参照 3 種との不一致ゼロ
 - 採用基準: 参照パーサーが受理する正当なロジバン形のみ。次の 4 クラスは
   意図的差分として GAP に入れていない(比較表には残る):
   - z0/z1 のみの緩受理: 裸 mo'i・fe'e のタグ位置(maftufa は拒否)
@@ -73,6 +76,93 @@ maftufa = maftufa-1.9999.js)が受理するのに本パーサーが拒否する�
 - 再実行手順: `bash tests/data/run_gap_sweep.sh`
   (gerna_cipra の clone 先を GERNA_CIPRA_JS で指定可。既定
   /tmp/opencode/gerna_cipra/js)
+
+## v0.111 で追加(KOhA の ce'u/zi'o と CLL 標準 UI の欠落語彙)
+
+ユーザー報告「.i sy mintu lo purdykurji lo ka ma kau tarmi ce'u .i clani
+kurfa gi'e plita gi'e se kojna lo xance jo'u lo jamfu」が拒否される問題の修正。
+二分法で失敗点は「lo ka ma kau tarmi ce'u」、さらに「mi klama ce'u」も拒否
+(z0/z1/maf 実測: lo ka tarmi ce'u / mi klama ce'u / mi klama zi'o /
+ma klama ce'u は全て参照 ok)から、**KOhA_core に ce'u(ラムダ変数)と
+zi'o(消去項)が欠落**していると特定。
+
+### スイープの盲点の教訓
+
+語彙抽出式スイープ(generate_gap_probes.py)は文法に存在しない語を
+プローブできない。ce'u/zi'o は「文法に無い語」ゆえに従来の掃引では
+検出不能だった(教訓: 参照パーサー側の語彙リストとの差分突合を
+追加の検証経路とする)。v0.111 では zantufa-0.9999.js.peg の
+KOhA/UI 語彙リストを h→' 変換の上で本実装と突合し、欠落候補を
+全数プローブして仕分けした。
+
+### 語彙追加
+
+- KOhA_core: `ce'u`/`cehu`(ラムダ変数)と `zi'o`/`ziho`(消去項)。
+  z0/z1/maf とも項位置で受理の実測。h 変体は規約どおり併記
+- UI_core(CLL 標準 UI の欠落 23 語+h 変体 20 語形の計 43 語形):
+  `a'i`(努力) `a'o`(希望) `ca'e`(CAhE 前置肯定) `dai`(共感)
+  `e'a`(容易) `io`(敬意) `ju'a`(断定) `ke'u`(反復) `le'o`(不寛容)
+  `li'o`(省略) `o'e`(親密) `pau`(問い) `pa'e`(議論好み) `ra'u`(特に)
+  `ro'a`(社会的反応) `ro'o`(精神的反応) `se'a`(自己充足) `si'a`(類似)
+  `ta'u`(明示) `ti'e`(伝聞) `to'u`(省略表現) `va'i`(言い換え)
+  `vu'e`(徳)。アポストロフィ語は h 変体(ahi/aho/cahe/eha/juha/kehu/
+  leho/liho/ohe/pahe/rahu/roha/roho/seha/siha/tahu/tihe/tohu/vahi/vuhe)
+  も併記(z0 実測受理形)
+- 追加条件は従来どおり「z0/z1/maf で受理かつ ours が拒否」。ki'e は
+  COI(呼格)、se'o は BAI、cai/sai/ru'e/cu'i は CAI として既存収録済み
+  のため重複収録しない
+
+### プローブで確認して不採用とした語
+
+- `cei`(CLL の代入。z0/z1/maf とも「ko'a cei broda」は拒否。ただし
+  zantufa は selbri_4 末尾の「mi broda cei brode」形を独自受理するため
+  次バッチ課題として記録)
+- `sa'i`(BAI)/`pe'o`(PEhO)/裸 `sei`(SEI は inner_sentence 必須の現行契約):
+  参照 3 種とも拒否のため不採用(ours も拒否で整合)
+- `bu'u` 裸タグの尾項位置(「mi klama bu'u」): 参照 3 種とも受理するが
+  本実装は FAhA タグに裸尾項経路がない構造差分。次バッチ課題
+
+### 次バッチ課題(zantufa 実験語彙・参照語彙差分の残り)
+
+- zantufa KOhA 実験語(2015-08-20 追加分。全て z0/z1/maf の項位置受理・
+  ours 拒否を確認済み): bo'a bo'e bo'i bo'o bo'u ca'au da'ai da'au da'e
+  de'e dei'e dei'ei dei'o dei'u di'au di'e di'ei di'oi do'ei do'i
+  kau'a kau'e kau'i lau'e lau'u mai'i mi'oi nau'u nei'o ri'au tu'oi xai
+  zai'o zi'oi zu'ai zu'i'a
+- zantufa UI 実験語(93 語。全て自由修飾語位置で z0/z1/maf 受理・
+  ours 拒否を確認済み): bi'a bi'u bo'oi bu'a'a cau'i ci'ai cu'ei dai'i
+  dai'o dau'a dau'i de'ai de'au de'oi do'a do'ai doi'a fai'a fu'au fu'i
+  ge'ei i'o i'u ia'u ie'i je'au jei'u ji'au ji'ei jo'a ju'oi kai'a kai'e
+  ke'e'u ko'oi koi'e lai'i li'oi mau'i mau'u me'ai mi'u moi'i mu'a na'i
+  na'oi ne'au ne'e oi'a oi'o oi'u pe'a pe'ai pei'a pei'e pei'o ra'i'au
+  re'e ri'e ro'e ro'i ro'u sa sa'a sa'u se'i sei'i si'au ta'ei ta'oi
+  te'i'o toi'e toi'o u'ai uai uau ue'i uei'e vei'i xa'a xa'a'a xa'i
+  xai'a xau'e'o xau'o'o xo'o xu'u'i xy'y zai'a zi'a zi'ai
+- 裸 `nai` の自由修飾語(「nai mi klama」。z0/z1/maf 受理・ours 拒否)、
+  `ra'o` の自由修飾語(「mi klama ra'o」。z0/z1 受理・maftufa 拒否の
+  参照分裂)
+- UI+NAI の無空白結合形(文頭形「dainai mi klama」。z0/z1/maf 全 ok・ours 拒否)。
+  v0.111 掃引で UI 語形 126 × 文頭/文末の全組合せを実測: 文頭形 126 行のうち
+  GAP(参照 3 種全 ok・ours 拒否)100 行、ours ok 25 行(UINAI_joint 既存語形
+  ta'onai/da'inai/ja'onai/ku'inai/po'onai/je'unai/la'anai/za'anai/ga'inai/
+  zu'unai/ba'anai/ju'onai/cu'inai/ji'anai/ru'anai/ehinai/e'inai/ihinai/i'inai/
+  ohanai/o'anai/kahunai/ka'unai/a'unai/u'inai/u'unai の 26 語形のうち UI_core
+  語形と対応する 25 行)、参照 3 種とも拒否の整合 1 行(kiahanai。ki'a の
+  結合形は参照の UI 語彙にも無い)。文末形(「mi klama dainai」)は 125 行が
+  ref 全 ok・ours ok だが、ours は fuhivla 緩さの tanru 誤読による偶然 ok
+  (v0.110 OVER 既知クラスと同族)で kiahanai のみ整合拒否。既存 UINAI_joint
+  には uinai/einai が未収録の欠落クラス。プローブテンプレートに両位置を
+  追加済み(掃引の GAP は 27 → 127 行)
+- 旧 UI 語の h 変体完成(26 形。全形 z0/z1/maf ok・ours 拒否を確認済み。
+  v0.111 の新 UI 語は ' / h 併記済みだが既存語は ' 形のみのものが残存):
+  sahe(←sa'e) ohi(←o'i) taho(←ta'o) pehi(←pe'i) juho(←ju'o) uhi(←u'i)
+  uhu(←u'u) ruhe(←ru'e。CAI_core 既存だが UI 単独自由修飾語位置では無効)
+  eho(←e'o) ehe(←e'e) ahe(←a'e) iha(←i'a) zoho(←zo'o) ahu(←a'u)
+  oho(←o'o) uha(←u'a) uhe(←u'e) ihe(←i'e) behe(←be'e) behu(←be'u)
+  dihai(←di'ai) fauhu(←fau'u) gehe(←ge'e) liha(←li'a) nihau(←ni'au)
+  suha(←su'a)
+- zantufa の selbri 末尾 `cei` 前置(「mi broda cei brode」。z0/z1/maf
+  受理・ours 拒否。CLL 形「ko'a cei broda」は参照 3 種とも拒否)
 
 ## v0.110 で追加(バッチ3 GAP 解消: 形態論・共有・前処理系)
 

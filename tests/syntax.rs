@@ -4582,3 +4582,116 @@ fn 呼格と_sumti引数の継続_v0_110() {
     // 語形不正は引き続きエラー
     assert!(lojban::parse("qqq").is_err());
 }
+
+// ---------------------------------------------------------------------
+// v0.111: KOhA の ce'u(ラムダ変数)/ zi'o(消去項)と CLL 標準 UI の欠落語。
+// ユーザー報告文「.i sy mintu lo purdykurji lo ka ma kau tarmi ce'u .i clani
+// kurfa gi'e plita gi'e se kojna lo xance jo'u lo jamfu」の失敗点
+// (lo ka ma kau tarmi ce'u → KOhA_core に ce'u が無い)の回帰。
+// z0/z1/maf 交叉は全形 ok(STATUS v0.111 参照)
+// ---------------------------------------------------------------------
+#[test]
+fn ユーザー報告文_ka_内_ceu() {
+    // 報告文全体の受理
+    parse_ok(
+        ".i sy mintu lo purdykurji lo ka ma kau tarmi ce'u .i clani kurfa \
+         gi'e plita gi'e se kojna lo xance jo'u lo jamfu",
+    );
+    // 報告の失敗点の単文
+    let s = parse_ok("sy mintu lo purdykurji lo ka ma kau tarmi ce'u");
+    assert!(s.contains("KOhA_core \"ce'u\""), "{s}");
+    // 項位置の ce'u(KOhA_core としての木)
+    let s = parse_ok("mi klama ce'u");
+    assert!(s.contains("KOhA_clause (KOhA_core \"ce'u\")"), "{s}");
+    // 項位置の zi'o
+    let s = parse_ok("mi viska zi'o");
+    assert!(s.contains("KOhA_clause (KOhA_core \"zi'o\")"), "{s}");
+    // 主語位置・質問詞併用(z0 実測 ok)
+    parse_ok("ma klama ce'u");
+    parse_ok("lo ka ma kau tarmi ce'u cu se nelci mi");
+}
+
+#[test]
+fn ceu_zio_の_h_変体() {
+    // アポストロフィ ↔ h 規約(z0/z1/maf 実測 ok)
+    let s = parse_ok("mi klama cehu");
+    assert!(s.contains("KOhA_core \"cehu\""), "{s}");
+    let s = parse_ok("mi viska ziho");
+    assert!(s.contains("KOhA_core \"ziho\""), "{s}");
+    // 語境界: cehu は cehau 等の前置に誤マッチしない(word_boundary ガード)
+    assert!(LojbanParser::parse(Rule::text, "mi klama cehau").is_err());
+    assert!(LojbanParser::parse(Rule::text, "mi klama cehuho").is_err());
+}
+
+#[test]
+fn ceu_zio_の組合せ() {
+    // 連続項(z0/z1/maf 実測 ok)
+    parse_ok("mi klama ce'u zi'o");
+    // 抽象内のラムダ変数(ka + kau 疑問詞)
+    parse_ok("mi djica lo ka ma kau tarmi ce'u");
+    // zi'o は GOhA/その他の項と同じ項位置で受理、既存 KOhA は不変
+    parse_ok("mi klama zo'e");
+    parse_ok("mi klama zu'i");
+    let s = parse_ok("mi klama ri");
+    assert!(s.contains("KOhA_core \"ri\""), "{s}");
+}
+
+#[test]
+fn ui_標準語彙の欠落語() {
+    // CLL 標準 UI の欠落語(dai/ca'e/ke'u/pau 等。z0/z1/maf 実測 ok)
+    for w in [
+        "a'i", "a'o", "ca'e", "dai", "e'a", "io", "ju'a", "ke'u", "le'o", "li'o", "o'e", "pau",
+        "pa'e", "ra'u", "ro'a", "ro'o", "se'a", "si'a", "ta'u", "ti'e", "to'u", "va'i", "vu'e",
+    ] {
+        let input = format!("mi klama {w}");
+        let s = parse_ok(&input);
+        assert!(s.contains(&format!("UI_core \"{w}\"")), "{input}: {s}");
+    }
+    // h 変体(アポストロフィ ↔ h 規約)
+    for w in [
+        "ahi", "aho", "cahe", "eha", "juha", "kehu", "leho", "liho", "ohe", "pahe", "rahu", "roha",
+        "roho", "seha", "siha", "tahu", "tihe", "tohu", "vahi", "vuhe",
+    ] {
+        let input = format!("mi klama {w}");
+        let s = parse_ok(&input);
+        assert!(s.contains(&format!("UI_core \"{w}\"")), "{input}: {s}");
+    }
+}
+
+#[test]
+fn ui_新語の統語位置() {
+    // 文頭自由修飾語(z0 実測 ok)
+    parse_ok("a'o mi klama");
+    parse_ok("ca'e mi klama");
+    parse_ok("dai mi klama");
+    // tanru 単位位置(z0 実測 ok)
+    parse_ok("mi klama ca'e broda");
+    parse_ok("mi broda dai brode");
+    parse_ok("mi pau broda");
+    // 質問詞 dai(xu+UI の重畳。z0 実測 ok)
+    parse_ok("xu dai do klama");
+    // UI+CAI 強度・NAI 後置(ui_free の既存契約)
+    parse_ok("mi klama dai ru'e");
+    parse_ok("mi klama pau nai");
+    // 感情強度との併用
+    parse_ok("mi nelci do .u'u dai");
+}
+
+#[test]
+fn ui_新語と既存語の選択不変() {
+    // 既存 UI 語は引き続き同形で受理される(選択順序の不変確認)
+    parse_ok("mi gleki ui");
+    let s = parse_ok("xu do djica");
+    assert!(s.contains("UI_core \"xu\""), "{s}");
+    // ki'e は COI(呼格)、se'o は BAI としての既存収録を維持
+    let s = parse_ok("mi klama ki'e");
+    assert!(s.contains("COI_core \"ki'e\""), "{s}");
+    parse_ok("mi klama se'o");
+    // 語境界: 新語の前置誤マッチ防止。
+    // pahu は BAI_core(pa'u)の有効語形だが、この統語位置では BAI タグ項が
+    // 成立しない(tagged の BAI 枝は裸確定時に直後 selbri を禁ずるガードで
+    // 「pahu broda」の selbri が残るため)ため拒否となる。tahuho は tahu の
+    // 後が語内文字 h で word_boundary が成立しない語形不正
+    assert!(LojbanParser::parse(Rule::text, "mi klama pahu broda").is_err());
+    assert!(LojbanParser::parse(Rule::text, "mi klama tahuho").is_err());
+}

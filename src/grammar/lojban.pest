@@ -1154,7 +1154,13 @@ KOhA_core = @{ (^"zo'e" | ^"zu'i" | ^"ke'a" | ^"mi'o" | ^"ko'a" | ^"ko'e" | ^"ko
                | ^"mi'ai" | ^"miahi" | ^"mi'a" | ^"ma'a" | ^"do'o" | ^"tu'a" | ^"dei"
                | ^"di'u" | ^"dihu" | ^"de'u" | ^"dehu" | ^"da'u" | ^"dahu"
                | ^"mi" | ^"do" | ^"ti" | ^"ta" | ^"tu" | ^"ri" | ^"ra" | ^"ru" | ^"ko"
-               | ^"ma" | ^"da" | ^"de" | ^"di") ~ &word_boundary }
+               | ^"ma" | ^"da" | ^"de" | ^"di"
+               // ラムダ変数 ce'u(抽象 ka 内の ce'u が示す未充填スロット)と
+               // 消去項 zi'o(CLL 7)。v0.110 まで欠落しており「mi klama ce'u」等が
+               // 拒否されていたユーザー報告文の失敗点。h 変換規約に従い cehu/ziho も
+               // 併記(z0/z1/maf 実測: いずれも項位置で受理)。KOhA_core 内に
+               // 素の接頭辞 ce/zi は無いため語形選択の衝突はない
+               | ^"ce'u" | ^"cehu" | ^"zi'o" | ^"ziho") ~ &word_boundary }
 KU_core = @{ ( ^"ku") ~ &word_boundary }
 KUhO_core = @{ ( ^"ku'o" | ^"kuho") ~ &word_boundary }
 LAhE_core = @{ ( ^"la'e" | ^"lu'e") ~ &word_boundary }
@@ -1227,7 +1233,26 @@ UI_core = @{ (^"u'i" | ^"u'u" | ^"ru'e" | ^"ju'o" | ^"pe'i" | ^"sa'e" | ^"ta'o"
                | ^"ui" | ^"oi" | ^"ie" | ^"ii" | ^"uu" | ^"ua" | ^"ue" | ^"uo"
                | ^"ia" | ^"iu" | ^"ei" | ^"xu"
                | ^"i'e" | ^"be'e" | ^"be'u" | ^"di'ai" | ^"fau'u" | ^"ge'e"
-               | ^"li'a" | ^"ni'au" | ^"pei" | ^"o'i" | ^"su'a") ~ &word_boundary }
+               | ^"li'a" | ^"ni'au" | ^"pei" | ^"o'i" | ^"su'a"
+               // v0.111: CLL 標準 UI の欠落語。z0/z1/maf で自由修飾語位置・tanru
+               // 単位位置とも受理、本実装が拒否していた分を語彙突合で収録
+               // (dai 共感 / ca'e CAhE 前置肯定 / pau 問い / ke'u 反復 / le'o 不寛容
+               // / li'o 省略 / pa'e 議論好み / ra'u 特に / ro'a 社会的反応
+               // / ro'o 精神的反応 / se'a 自己充足 / si'a 類似 / ta'u 明示 / ti'e 伝聞
+               // / to'u 省略表現 / va'i 言い換え / vu'e 徳 / a'i 努力 / a'o 希望
+               // / e'a 容易 / o'e 親密 / io 敬意 / ju'a 断定)。
+               // アポストロフィ語は規約どおり h 変体も併記(z0 実測受理形)。
+               // 注: ki'e は COI(呼格)、se'o は BAI として既存収録済み、
+               //     cai/sai/ru'e/cu'i は CAI との共通語形で既存。
+               //     zantufa の UI 内「nai」単独は語形衝突の懸念から次バッチ課題
+               | ^"a'i" | ^"ahi" | ^"a'o" | ^"aho" | ^"ca'e" | ^"cahe" | ^"dai"
+               | ^"e'a" | ^"eha" | ^"io" | ^"ju'a" | ^"juha"
+               | ^"ke'u" | ^"kehu" | ^"le'o" | ^"leho" | ^"li'o" | ^"liho"
+               | ^"o'e" | ^"ohe" | ^"pau" | ^"pa'e" | ^"pahe"
+               | ^"ra'u" | ^"rahu" | ^"ro'a" | ^"roha" | ^"ro'o" | ^"roho"
+               | ^"se'a" | ^"seha" | ^"si'a" | ^"siha"
+               | ^"ta'u" | ^"tahu" | ^"ti'e" | ^"tihe" | ^"to'u" | ^"tohu"
+               | ^"va'i" | ^"vahi" | ^"vu'e" | ^"vuhe") ~ &word_boundary }
 VAU_core = @{ ( ^"vau") ~ &word_boundary }
 VUhO_core = @{ ( ^"vu'o" | ^"vuho") ~ &word_boundary }
 Y_core = @{ ( ("y" | "Y")+) ~ &word_boundary }

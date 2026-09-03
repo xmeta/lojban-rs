@@ -56,7 +56,7 @@
 | KE | `ke` | ✅ |
 | KEhE | `ke'e` `kehe` | ✅ |
 | KEI | `kei` | ✅ |
-| KOhA | `zo'e` `zu'i` `ke'a` `mi'o` `ko'a` `ko'e` `ko'i` `ko'o` `ko'u` `fo'a` `fo'e` `fo'i` `fo'o` `fo'u` `vo'a` `vo'e` `vo'i` `vo'o` `vo'u` `mi'ai` `miahi` `mi'a` `ma'a` `do'o` `tu'a` `dei` `di'u` `dihu` `de'u` `dehu` `da'u` `dahu` `mi` `do` `ti` `ta` `tu` `ri` `ra` `ru` `ko` `ma` `da` `de` `di` | ✅ |
+| KOhA | `zo'e` `zu'i` `ke'a` `mi'o` `ko'a` `ko'e` `ko'i` `ko'o` `ko'u` `fo'a` `fo'e` `fo'i` `fo'o` `fo'u` `vo'a` `vo'e` `vo'i` `vo'o` `vo'u` `mi'ai` `miahi` `mi'a` `ma'a` `do'o` `tu'a` `dei` `di'u` `dihu` `de'u` `dehu` `da'u` `dahu` `mi` `do` `ti` `ta` `tu` `ri` `ra` `ru` `ko` `ma` `da` `de` `di` `ce'u` `cehu` `zi'o` `ziho` | ✅ |
 | KU | `ku` | ✅ |
 | KUhO | `ku'o` `kuho` | ✅ |
 | LAhE | `la'e` `lu'e` | ✅ |
@@ -80,7 +80,7 @@
 | SEhU | `se'u` `sehu` | ✅ |
 | TO | `to` | ✅ |
 | TOI | `toi` | ✅ |
-| UI | `u'i` `u'u` `ru'e` `ju'o` `pe'i` `sa'e` `ta'o` `e'o` `e'e` `ehu` `e'u` `ohu` `o'u` `a'e` `i'a` `buho` `bu'o` `kuhi` `ku'i` `ja'o` `po'o` `dahi` `da'i` `jehu` `je'u` `laha` `la'a` `zaha` `za'a` `gahi` `ga'i` `uho` `u'o` `ihi` `i'i` `oha` `o'a` `ehi` `e'i` `kahu` `ka'u` `kau` `ruha` `ru'a` `jiha` `ji'a` `zuhu` `zu'u` `baha` `ba'a` `ai` `au` `kiaha` `ki'a` `zo'o` `a'u` `o'o` `u'a` `u'e` `cai` `ui` `oi` `ie` `ii` `uu` `ua` `ue` `uo` `ia` `iu` `ei` `xu` `i'e` `be'e` `be'u` `di'ai` `fau'u` `ge'e` `li'a` `ni'au` `pei` `o'i` `su'a` | ✅ |
+| UI | `u'i` `u'u` `ru'e` `ju'o` `pe'i` `sa'e` `ta'o` `e'o` `e'e` `ehu` `e'u` `ohu` `o'u` `a'e` `i'a` `buho` `bu'o` `kuhi` `ku'i` `ja'o` `po'o` `dahi` `da'i` `jehu` `je'u` `laha` `la'a` `zaha` `za'a` `gahi` `ga'i` `uho` `u'o` `ihi` `i'i` `oha` `o'a` `ehi` `e'i` `kahu` `ka'u` `kau` `ruha` `ru'a` `jiha` `ji'a` `zuhu` `zu'u` `baha` `ba'a` `ai` `au` `kiaha` `ki'a` `zo'o` `a'u` `o'o` `u'a` `u'e` `cai` `ui` `oi` `ie` `ii` `uu` `ua` `ue` `uo` `ia` `iu` `ei` `xu` `i'e` `be'e` `be'u` `di'ai` `fau'u` `ge'e` `li'a` `ni'au` `pei` `o'i` `su'a` `a'i` `ahi` `a'o` `aho` `ca'e` `cahe` `dai` `e'a` `eha` `io` `ju'a` `juha` `ke'u` `kehu` `le'o` `leho` `li'o` `liho` `o'e` `ohe` `pau` `pa'e` `pahe` `ra'u` `rahu` `ro'a` `roha` `ro'o` `roho` `se'a` `seha` `si'a` `siha` `ta'u` `tahu` `ti'e` `tihe` `to'u` `tohu` `va'i` `vahi` `vu'e` `vuhe` | ✅ |
 | VAU | `vau` | ✅ |
 | VUhO | `vu'o` `vuho` | ✅ |
 | Y |  | ✅ |
@@ -123,3 +123,6 @@
 計 113 クラス定義 / 112 クラスが統語に接続。
 未接続の GIhI は対応する統語(文連結 gihi)が未実装のための予備定義。
 結合表記(joint)は次セクション。
+注: UI の `ca'e` は CLL 分類では CAhE(独立 selma'o)だが、参照 3 種(zantufa
+z0/z1・maftufa)が UI と同一挙動(自由修飾語位置・tanru 単位位置とも受理)で
+あるため UI_core に収録している(v0.111)。

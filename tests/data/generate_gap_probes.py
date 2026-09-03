@@ -133,7 +133,11 @@ TEMPLATES = {
     "TEhU": ["mi me lo broda {W} klama"],
     "XI": ["mi viska lo broda {W} re", "li pa {W} re du re"],
     # 自由修飾語系
-    "UI": FREE_TEMPLATES,
+    # UI は UI+NAI の無空白結合形(dainai 等)も掃引対象。
+    # 文頭形({W}nai mi klama)は z0/z1/maf 全 ok・ours 拒否の GAP 候補に、
+    # 文末形(mi klama {W}nai)は ref 全 ok だが ours は fuhivla 緩さの
+    # tanru 誤読で偶然 ok(v0.111 STATUS 次バッチ課題の記録行)
+    "UI": ["{W} mi klama", "mi klama {W}", "mi klama {W}nai", "{W}nai mi klama"],
     "CAI": ["mi u'i {W} broda"],
     "MAI": ["mi broda pa {W}"],
     "BAhE": ["mi {W} klama"],
@@ -436,6 +440,27 @@ STRUCTURAL_PROBES = [
     "lo broda pe mi cu barda",
     "li vei ny su'i pa ve'o du re",
     "mi klama vi lo zdani",
+    # v0.111: KOhA ce'u/zi'o(ラムダ変数・消去項)と CLL 標準 UI 欠落語。
+    # ユーザー報告文(ka 抽象内 ce'u の失敗)の回帰アンカー
+    ".i sy mintu lo purdykurji lo ka ma kau tarmi ce'u .i clani kurfa gi'e plita gi'e se kojna lo xance jo'u lo jamfu",
+    "sy mintu lo purdykurji lo ka ma kau tarmi ce'u",
+    "lo ka ma kau tarmi ce'u cu se nelci mi",
+    "mi djica lo ka ma kau tarmi ce'u",
+    "mi klama ce'u",
+    "mi klama zi'o",
+    "mi klama ce'u zi'o",
+    "ma klama ce'u",
+    "mi klama cehu",
+    "mi viska ziho",
+    # v0.111 UI 新語の位置別(z0/z1/maf 実測 ok)
+    "a'o mi klama",
+    "ca'e mi klama",
+    "xu dai do klama",
+    "mi nelci do .u'u dai",
+    "mi klama ca'e broda",
+    "mi broda dai brode",
+    "mi pau broda",
+    "mi klama dai ru'e",
 ]
 
 
