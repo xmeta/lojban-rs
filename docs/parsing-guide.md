@@ -20,12 +20,13 @@ text        入力全体(ルート)
 
 | 規則 | 意味 |
 |---|---|
-| `terms_full` | 主語等の項リスト + (`cu`) + 述語 |
-| `terms` / `term` | 項とその並び。項間には自由修飾語・`ce'e` 区切り・`pe'e` グループ接続が現れ得る |
-| `tagged` | タグ付き項(FA / BAI(+SE/NAI) / FIhO モダル / 時制マーク連鎖+sumti)。時制タグ単独+`ku` の「タグだけ項」(`ba zi ku …`)やタグ〜sumti 間の自由修飾語(`ta'i ba'e ma …`)も可 |
+| `terms_full` | 主語等の項リスト + (`cu`) + 述語。項が空の `cu` 文(`cu klama` / `cu pu klama` 等)も受理(v0.104)。項の後に先接続文が続く形は `gek_tail` へ |
+| `gek_tail` / `gek_head` | 項レベルの先接続文(v0.107)。`gek_tail` は「項 (`cu`)? (タグ連鎖)? `ge` 文 `gi` 文」の形(`mi ga broda gi broda` / `mi cu ge broda gi broda` 等)、`gek_head` は項なしの文頭形(`pu ge broda gi broda` 等)。どちらも silent 規則で GA/GI/内側文は terms_full・sentence の直接の子に平準化される(裸 `ge` 開始の `ganai … gi …` は従来どおり `gek_sentence` 経路) |
+| `terms` / `term` | 項とその並び。項間には自由修飾語・`ce'e` 区切り・`pe'e` グループ接続が現れ得る。`term` は項レベルの ke グループ(`ke … ke'e` で項を括る。KEhE 省略可。v0.110)も取れる |
+| `tagged` | タグ付き項(FA / BAI(+SE/NAI) / FIhO モダル / 時制マーク連鎖+sumti)。時制タグ単独+`ku` の「タグだけ項」(`ba zi ku …`)やタグ〜sumti 間の自由修飾語(`ta'i ba'e ma …`)も可。FA 枝は `nai` 後置(`fa nai`)と sumti 省略(裸タグ項 `mi klama fa`。sumti と明示 `ku` は排他)を取れる(v0.108) |
 | `na_ku` | 項位置の否定(`naku` / `na ku`) |
 | `termset` | 項set(`nu'i X Y [nu'u]`) |
-| `bridi_tail` | 述語とその項(tail)。`gihek`(gi'e 等)による連鎖を含む。接続詞直後に自由修飾語(UI 等)を置ける(`gi'e .u'a cadzu`) |
+| `bridi_tail` | 述語とその項(tail)。`gihek`(gi'e 等)による連鎖を含む。接続詞直後に自由修飾語(UI 等)を置ける(`gi'e .u'a cadzu`)。連結部の gihek は `na` → `se` の順の前置(`na se gi'e` 等。v0.110)と、JOI/BIhI による接続(`mi broda joi brode`。joi 系+JA 系+bi'i/bi'o/mi'i。NAI/BO 後置可。v0.109)を取れる |
 | `tail_terms` | 述語に続く項の列(自由修飾語混在可)+ `vau` |
 
 ## sumti(項)
@@ -40,7 +41,7 @@ text        入力全体(ルート)
 | `quant_sumti` | mex による量化詞+sumti(no da / se ju no da など。数詞+代名詞を1項の量化 sumti にまとめる) |
 | `bare_number` | 裸の数詞(直後が MOI / ROI・TAhE・ZAhO の場合は項にならない) |
 | `abstraction` | 抽象(nu / ka / du'u … + 文 + kei?)。`sedu'u` 結合形含む |
-| `lahe_sumti` | LAhE 参照(la'e X / lu'e X、終端詞 lu'u で明示閉鎖可)と結合形 `la'edi'u` |
+| `lahe_sumti` | LAhE 参照(la'e X / lu'e X / tu'a X。終端詞 lu'u で明示閉鎖可)と結合形 `la'edi'u` |
 | `lu_quote` / `zo_quote` / `zoi_quote` / `lohu_quote` | 各種引用 |
 | `li_mex` | 数理表現(li … loho) |
 | `gek_sumti` | 先接続項(ge X gi Y) |
@@ -48,14 +49,16 @@ text        入力全体(ルート)
 
 `sumti` はさらに関係節(`relative_clauses`: poi/noi + `ke'a` + `ku'o`)、
 項接続(`ek_joik`: e/joi/bi'o… + nai + bo)、`vu'o` 連結を後置できる。
+`vu'o` の直後に関係節を共有するスロットも持つ
+(`lo broda vu'o noi mi klama`。v0.110)。
 
 ## selbri(述語)
 
 | 規則 | 意味 |
 |---|---|
 | `s_marks` | 述語マーク(na 否定 / ja'a 肯定 / se te ve xe 変換 / na'e to'e no'e je'a) |
-| `tense_marks` | 時制・相・方位・モダルの連鎖(pu ca ba / ze'i ze'a ze'u / ROI / BAI / FAhA / MOhI / ZEhA / VEhA VIhA / cu'e / ki / naku / ZEhA・空間間隔 / 数詞+ROI/TAhE/ZAhO の複合タグ(so'u roi 等))。各タグの直後に `bo` を後置可(短スコープ結合。`ki'u bo` `ni'i bo` 等) |
-| `tanru` / `tanru_unit` | 複合述語。unit は brivla / GOhA / cmevla / nu_form / me_form(+me'u, MOI) / ke_group / JAI 変換 / 数詞+MOI / zei 複合 を取り得る(各 unit の前に BAhE(ba'e/za'e)強調を前置可) |
+| `tense_marks` | 時制・相・方位・モダルの連鎖(pu ca ba / ze'i ze'a ze'u / ROI / BAI / FAhA / MOhI / ZEhA / VEhA VIhA / cu'e / ki / naku / ZEhA・空間間隔 / 数詞+ROI/TAhE/ZAhO の複合タグ(so'u roi 等))。各タグの直後に `bo` を後置可(短スコープ結合。`ki'u bo` `ni'i bo` 等)。全タグ共通で `nai` 後置も可(`pu nai` = 過去ではない。v0.108) |
+| `tanru` / `tanru_unit` | 複合述語。unit は brivla / GOhA / cmevla / nu_form / me_form(+me'u, MOI) / ke_group / JAI 変換 / 数詞+MOI / zei 複合 / レタル接頭融合語(`by` + brivla の無ポーズ融合形 `byklesi` 等。v0.110) を取り得る。各 unit の前に BAhE(ba'e/za'e)強調、2単位目以降は `(NAhE)? (SE)?` の前置(`tagji se klama` 等。v0.104)を置ける。tanru 単位間には自由修飾語を挟め(`farlu ju'i cnita` 型。v0.103)、free の直後を `co` 転換 selbri で継続できる(`ju'i co cnita` 型。v0.109) |
 | `co_tail` | `co` による逆順 |
 | `guhek_selbri` | 先接続述語(gu'e … gi) |
 

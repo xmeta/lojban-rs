@@ -187,6 +187,28 @@ fn 入れ子の各深度で有限時間で応答する() {
     }
 }
 
+/// lu ネスト最悪深度(MAX_NEST=8)の境界性能。
+/// 実測(v0.113 調査): lu ネストは深度+1 で約 3 倍の指数成長
+/// (vei/gek/mex は平坦)。MAX_NEST ガードにより最悪ケースは深度 8 で
+/// 飽和するため、深度 8 の解析がハングせず時間上限内で完了することを
+/// 確認する(v0.107 の terms 二重解析による指数化退行の再発検出を兼ねる)。
+/// debug ビルドは release の約 13 倍遅いため上限は debug を考慮して寛容に
+#[test]
+fn luネストの最悪深度は時間上限内で完了する() {
+    let s = format!("{}{}", "lu ".repeat(8), "li'u ".repeat(8));
+    let t0 = std::time::Instant::now();
+    let _ = parse(&s);
+    let dt = t0.elapsed();
+    // 実測: release 約 2.5 秒 / debug 約 32 秒(約 13 倍)。
+    // 上限はその数倍の余裕。ハングや指数化退行(release で 10 倍級)は
+    // この上限を容易に超える
+    let limit_secs = if cfg!(debug_assertions) { 120 } else { 20 };
+    assert!(
+        dt.as_secs() < limit_secs,
+        "lu ネスト最悪深度の解析が遅すぎる(上限 {limit_secs} 秒): {dt:?}"
+    );
+}
+
 // -------------------------------------------------------------------------
 // 語長上限(v0.113: MAX_TOKEN_CHARS = 50 のリソース保護)
 //

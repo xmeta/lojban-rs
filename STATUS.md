@@ -2,12 +2,33 @@
 
 ## 現在の状態: v0.114 完成(tu'a の LAhE 移設・全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語218 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 8(+ignore 2) / gap_tracker 12 = 単体298 + doc 11 = 計309テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語218 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体299 + doc 11 = 計310テスト + example 内 unit test 5 全パス
 - tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件、
   v0.109 でバッチ2(接続詞・前置系)の 4 件、v0.110 でバッチ3(形態論・共有・前処理系)の 4 件を
   解消し全 12 テストが緑(下記「既知GAP」参照)
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
 - Cargo.toml の版数を STATUS 版数に同期(0.114.0)
+
+### 帳簿整理(v0.114 版数のまま。文法・受理挙動の変更なし)
+
+- OVER 候補の未分類 31 行を既知差分クラスとして記録(下記
+  「既知差分(OVER)」節。ZEhA 裸タグ 20 / soi 3 / CEhE 2 / kiaha 2 /
+  miahi 3 / CAhA nu'a 1。tu'a 3 行は v0.114 で解消済み)
+- zantufa UI 実験語の数を 93 語→111 語形に訂正(列挙 91 語からの
+  20 語形の列挙漏れを peg 全数突合+文頭/文末両位置の再実測で補完)
+- docs/parsing-guide.md に v0.100〜v0.110 追加分の規則
+  (gek_tail/gek_head・tanru_post/co_post・gihek_joik と gihek 前置・
+  項レベル ke・VUhO 関係節スロット・BY_prefix・tense_mark の NAI 後置と
+  FA 裸タグ項・空項 cu 文・tanru_unit の NAhE/SE 前置)を追記
+  (quant_sumti(v0.101)/prenex 拡張(v0.100)は既記載を確認)
+- docs/architecture.md のテスト体制表を現状に同期(syntax 218・cli 20・
+  corpus 418・doc 11・fuzz 9+2・battery/gap_tracker 行の追加)。
+  docs/README.md の comparison.md 時点数を 3→5 時点に修正
+- 「既知の性能特性」を architecture.md に記録(lu ネストは深度+1 で約 3 倍の
+  指数成長・MAX_NEST=8 で最悪数秒に飽和・vei/gek/mex は平坦・
+  語長上限 50 による rafsi 指数と stack overflow の封じ込み)。
+  tests/fuzz.rs に lu ネスト最悪深度の境界テストを 1 本追加
+  (fuzz の内訳 8→9。単体 298→299)
 
 ## v0.114 で追加(tu'a の KOhA → LAhE 移設と不閉鎖 to の実測記録)
 
@@ -314,6 +335,55 @@ maftufa = maftufa-1.9999.js)が受理するのに本パーサーが拒否する�
   (gerna_cipra の clone 先を GERNA_CIPRA_JS で指定可。既定
   /tmp/opencode/gerna_cipra/js)
 
+## 既知差分(OVER: 本実装が受理し zantufa 参照 3 種が拒否する既存クラス)
+
+スイープ(tests/data/gap_sweep_results.csv、2,097 行)の OVER 候補
+(ours ok・z0/z1/maftufa すべて err。v0.114 時点で 145 行)のうち、
+これまで版ごとの記録に分類されていなかった 31 行を既知差分クラスとして
+整理した(調査で判明した 34 行のうち tu'a 関連 3 行は v0.114 で解消済み)。
+いずれも「zantufa は拒否 / ours は受理」の差分で、CLL 規範・歴史的経緯
+(移植元実装・camxes の語彙/構造の踏襲)に基づく**維持判断**
+(受理集合を変更しない)であり、修正対象とはしない:
+
+- **ZEhA 区間語の裸タグ受理**(20 行): `mi bi'o klama` / `mi klama mi'i
+  lo zdani` 等。zi'i/zihi/bi'o/biho/bi'i/bihi/mi'i/mihi(ZEhA_core。
+  BIhI 区間語 bi'o/bi'i/mi'i を含む)を selbri 前タグ・尾項タグ位置の
+  間隔タグとして受理する。z0 の time_interval は `pu bi'o ba` 型の
+  両端オフセット付きのみ受理するため裸形は拒否。語彙は v0.22 導入済みで
+  裸タグ位置の過剰受理が未記録だった。位置別の内訳: selbri 前タグ
+  (mi {W} klama)・尾項タグ+sumti(mi klama {W} lo zdani)の 2 位置は
+  8 語形すべて OVER、selbri 前タグ+sumti(mi {W} lo zdani klama)・
+  文頭タグ+sumti({W} lo zdani klama)は zi'i/zihi のみ OVER
+  (bi'o/bi'i/mi'i 系は `mi bi'o lo zdani klama` 型で参照 3 種すべて受理。
+  文頭形は maftufa も受理するため OVER 外)。
+  CLL でも間隔タグは時制・空間タグの正当な語彙のため受理を維持
+- **soi 自由修飾語**(3 行): `mi klama soi vo'a vo'e [se'u]` 型。
+  ours の soi_free(SOI + sumti(+sumti)(+SEhU 省略可))は camxes/CLL の
+  free の soi 形相当で、CLL 的には ours の読みが正しい。zantufa の
+  free は soi を含まないため拒否。camxes/CLL 準拠の維持判断
+- **CEhE 項区切り**(2 行): `mi klama ce'e do`(+h 変形 cehe)。
+  v0.41 で camxes terms_2(term (CEhE term)*)準拠で導入。
+  zantufa は CEhE を語彙に持たないため拒否。
+  歴史的経緯(camxes 準拠)に基づく維持判断
+- **kiaha**(2 行): `kiaha mi klama` / `mi klama kiaha`。旧 UI 語 ki'a
+  (混乱)の h 変形で ours の UI_core が併録するが、z0 の UI 語彙は
+  ki'a(kiha)のみで kiaha を持たない(kiahanai も参照 3 種とも拒否。
+  v0.111 掃引で記録済み)。h↔' 規約の適用を優先した維持判断
+- **miahi**(3 行): `miahi klama` / `mi miahi klama` / `mi viska miahi`。
+  KOhA_core の実験語 mi'ai の h 変形で、z0/z1/maf は mi'ai を受理するが
+  miahi は語彙に持たない(h↔' 規約の適用範囲の揺れ)。ours は規約どおり
+  併録する維持判断
+- **CAhA nu'a**(1 行): `mi nu'a klama`。nu'a は CLL 標準語彙(NUhA。
+  selbri を数理演算子として前置する旗)で、ours は移植時から
+  CAhA_core に収録。z0 は NUhA を廃して nu'a を ME 系の語彙に移して
+  いるためタグ位置では拒否。CLL 規範に基づき ours が正の維持判断
+
+OVER 候補の残りは既存の記録済みクラス(li … du 型の mex 受容(v0.101)、
+裸数詞項 `mi viska {PA}` クラス(v0.112)、レタル接頭融合語の無ポーズ隣接
+(v0.110)、`lo kuku ku` 型 CVCV 短形残部(v0.110)、lo aburobu ku
+(v0.106)、mi pu bo ge broda gi broda 型(v0.107))と je'i(z0/z1 が
+未収録の逆差分。掃引方法論の節参照)で、いずれも記録済み。
+
 ## v0.111 で追加(KOhA の ce'u/zi'o と CLL 標準 UI の欠落語彙)
 
 ユーザー報告「.i sy mintu lo purdykurji lo ka ma kau tarmi ce'u .i clani
@@ -366,13 +436,26 @@ KOhA/UI 語彙リストを h→' 変換の上で本実装と突合し、欠落�
   de'e dei'e dei'ei dei'o dei'u di'au di'e di'ei di'oi do'ei do'i
   kau'a kau'e kau'i lau'e lau'u mai'i mi'oi nau'u nei'o ri'au tu'oi xai
   zai'o zi'oi zu'ai zu'i'a
-- zantufa UI 実験語(93 語。全て自由修飾語位置で z0/z1/maf 受理・
-  ours 拒否を確認済み): bi'a bi'u bo'oi bu'a'a cau'i ci'ai cu'ei dai'i
-  dai'o dau'a dau'i de'ai de'au de'oi do'a do'ai doi'a fai'a fu'au fu'i
-  ge'ei i'o i'u ia'u ie'i je'au jei'u ji'au ji'ei jo'a ju'oi kai'a kai'e
-  ke'e'u ko'oi koi'e lai'i li'oi mau'i mau'u me'ai mi'u moi'i mu'a na'i
+- zantufa UI 実験語(111 語形。全て自由修飾語位置(文頭・文末の両形)で
+  z0/z1/maf 受理・ours 拒否を確認済み。初期列挙は 91 語で、
+  zantufa-0.9999.js.peg の UI 語形リスト(h→' 変換)との全数突合により
+  20 語形の列挙漏れを修正(漏れ分も文頭/文末両位置で再実測済み):
+  a'a / au'u / ba'u / ci'au'u'au'i / cu'ei の母音スケール形 8 形
+  (cu'ei'a cu'ei'ai cu'ei'e cu'ei'ei cu'ei'i cu'ei'o cu'ei'oi cu'ei'u) /
+  fu'ei の母音スケール形 5 形(fu'ei'a fu'ei'e fu'ei'i fu'ei'o fu'ei'u。
+  基本形 fu'ei は maftufa のみ拒否のため含めない) /
+  ki'a'au'u'au'i / sai / cu'i。sai/cu'i は標準 CAI 語形だが zantufa は
+  CAI スケールを UI 語彙に包含するため裸形の自由修飾語として受理され、
+  ours は sai/cu'i を CAI_core(UI+強度)としてのみ収録するため拒否
+  (なお cai/ru'e は ours の UI_core にも収録済みのため本差分には出ない)):
+  a'a au'u ba'u bi'a bi'u bo'oi bu'a'a cau'i ci'ai ci'au'u'au'i cu'ei
+  cu'ei'a cu'ei'ai cu'ei'e cu'ei'ei cu'ei'i cu'ei'o cu'ei'oi cu'ei'u cu'i
+  dai'i dai'o dau'a dau'i de'ai de'au de'oi do'a do'ai doi'a fai'a fu'au
+  fu'ei'a fu'ei'e fu'ei'i fu'ei'o fu'ei'u fu'i ge'ei i'o i'u ia'u ie'i
+  je'au jei'u ji'au ji'ei jo'a ju'oi kai'a kai'e ke'e'u ki'a'au'u'au'i
+  ko'oi koi'e lai'i li'oi mau'i mau'u me'ai mi'u moi'i mu'a na'i
   na'oi ne'au ne'e oi'a oi'o oi'u pe'a pe'ai pei'a pei'e pei'o ra'i'au
-  re'e ri'e ro'e ro'i ro'u sa sa'a sa'u se'i sei'i si'au ta'ei ta'oi
+  re'e ri'e ro'e ro'i ro'u sa sa'a sai sa'u se'i sei'i si'au ta'ei ta'oi
   te'i'o toi'e toi'o u'ai uai uau ue'i uei'e vei'i xa'a xa'a'a xa'i
   xai'a xau'e'o xau'o'o xo'o xu'u'i xy'y zai'a zi'a zi'ai
 - 裸 `nai` の自由修飾語(「nai mi klama」。z0/z1/maf 受理・ours 拒否)、
