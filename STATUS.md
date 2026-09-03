@@ -1,13 +1,89 @@
 # 開発ステータス
 
-## 現在の状態: v0.111 完成(gap_tracker 全 12 テスト緑・全テストグリーン)
+## 現在の状態: v0.112 完成(gap_tracker 全 12 テスト緑・全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語209 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) / gap_tracker 12 = 単体284 + doc 11 = 計295テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語216 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) / gap_tracker 12 = 単体291 + doc 11 = 計302テスト + example 内 unit test 5 全パス
 - tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件、
   v0.109 でバッチ2(接続詞・前置系)の 4 件、v0.110 でバッチ3(形態論・共有・前処理系)の 4 件を
   解消し全 12 テストが緑(下記「既知GAP」参照)
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.111.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.112.0)
+
+## v0.112 で追加(PA_word の欠落語補完と fi'u の数詞読み統一)
+
+ユーザー報告「.i .ei mi xruti gi'e jitro so'o nuncatra noi mi pu minde」が
+拒否される問題の修正。二分法で失敗点は「so'o nuncatra」(quant_selbri)、
+**PA_word に so'o が欠落**(so'a/so'e/so'i/so'u は収録済み)と特定。
+全数調査の結果、CLL PA の欠落語を一括補完した。
+
+### 語彙追加(PA_word。z0 実測: 全語が quant_selbri・描述内 mex・
+li 内 mex・PA_seq 連結形で受理)
+
+- 量化系: `so'o` `rau`(enough)`du'e`(too many)`mo'a`(too few)
+- 数学定数系: `te'o`(指数 e)`ka'o`(虚数単位)`pai`(円周率)`ci'i`(無限大)
+  `tu'o`(空被演算子)`ce'i`(パーセント)`fi'u`(分数スラッシュ)
+- h 変体(z0 の '↔h 同値規約。個別に quant_selbri プローブで受理を実測してから収録):
+  `soho` `duhe` `moha` `teho` `kaho` `cehi` `fihu` `suho` `jihi`
+- 接頭辞衝突への注意: pai は pa の、ci'i は ci の、so'o/soho は so の
+  **前に**配置(word_boundary 失敗後に選択肢は再試行されないため。教訓6と同型)
+
+### ni は PA に収録しない(競合実測の結論)
+
+`ni` は NU(抽象詞)と同形。実測の結果、**PA への収録は行わない**判断:
+
+- z0/z1 の PA 形態論(生成パーサーからの語形抽出)に ni は存在しない(NU のみ)
+- z0 は「ni prenu cu klama」を**拒否**(ours は NU 抽象の項 + cu 文として
+  既に受理。PA 収録はこの OVER を拡大するだけ)
+- z0 の「ni broda」「lo ni broda」の受理は NU 抽象を tanru_unit に取る読みで、
+  本実装の nu_form / abstraction 経路と**同型の木**が既に成立している。
+  PA 収録すると sumti_core の選言順(quant_selbri が abstraction より先)と
+  sumti_tail の mex 枝が先取りして既存の抽象の木が壊れる
+- PA_seq に nisu'o 等の z0 非受理連結形が入り込む(z0 は「nisu'o prenu cu
+  klama」を NU ni + 無ポーズ su'o の別読みでのみ受理。本実装は無ポーズ
+  cmavo 連結未対応のため既知 GAP のまま)
+- 既存抽象の木の不変は tests/syntax.rs「ni_は数詞に収録せず抽象の木を維持」が
+  exact-tree 相当のピンで保証(lo ni broda = desc + nu_form、ni broda =
+  nu_form 単独文、ni prenu cu klama / ni broda cu brode = abstraction 項 + cu)
+
+### fi'u の mex 読み(z0 同期の木変化・1件のみ)
+
+fi'u を PA に収録した結果、空白区切りの「li re fi'u ci」は z0 と同様に
+PA 連続の**数詞**(number = PA_clause+)として読まれるようになった
+(z0 の実木では演算子分割は存在しない。fi'u は z0 でも PA)。これにより
+mex 内の FIhU 演算子枝は空白区切り形では到達しなくなるが、camxes 互換の
+予備として維持。既存テストで FIhU_core の出現をピンしていた
+「mex_fihu_と_前置単項」のみ PA_core \"fi'u\" ピンに更新(受容の意図は不変)。
+
+### PA_seq の実測(無ポーズ連結)
+
+PA_seq は PA_word+ のため新語は自動的に連結形へ反映されるが、**収録語は
+z0 の PA 形態論に含まれる語のみ**のため連結形も z0 整合(so'opa / paso'o /
+so'ore / te'opa / ka'opa / paipai / tu'ono / ce'ire / refi'u / sohore /
+suhopa / jihipa / fihure 等を z0 実測 ok)。z0 が拒否する連結形
+(nisu'o。ni 非収録により自然に排除)は PA_seq に入らないため
+**語形ガード(数字系/量化系の分離)は不要**と確認。
+
+### スイープ生成器の修正(PA 語彙プローブの復活)
+
+generate_gap_probes.py の委譲取得が `len(refs) == 1` 条件のため、
+PA_core = @{ PA_word ~ &word_boundary } の 2 参照で委譲が落ちており、
+**PA クラスの語彙プローブが 1 件も生成されていなかった**。委譲先を
+^"..." リテラルを持つ規則から選ぶ方式に修正し、PA 51 語 × 項3位置 =
+153 行のプローブを復活(総数 1,909 → 2,062 行)。
+
+### スイープ結果(v0.112 実施。プローブ 2,062 行)
+
+- **既存 1,909 行の ok→err はゼロ、err→ok もゼロ**(ni 競合・PA_seq 変更の
+  主要ゲート合格。既存入力の受理集合は完全不変)
+- 新規 153 行: ours ok 153 行。内訳: 参照 3 種全部 ok 88 行 /
+  z0・maf ok・z1 のみ拒否 14 行(za'u/ma'u/ni'u/ce'i/cehi/fi'u/fihu の
+  7 語 × 2 位置 =「{W} klama」「mi {W} klama」。za'u/ma'u/ni'u は
+  CLL 標準 PA のため z1 の PA 未収録ではなく z1 固有の制約) /
+  OVER(ours ok・参照全 err)51 行 = 裸数詞項「mi viska {PA}」の既存 OVER
+  クラス(mi klama re と同型。v0.112 の新語に限らず PA 51 語すべてに
+  一様に発生する既存受容で、生成器復活により初めて可視化されたもの)
+- GAP 候補 127 件(変化なし)/ OVER 候補 97 → 148 件(+51 は上記の
+  裸数詞項クラス)
 
 ## 既知GAP(全 12 件解消済み。tests/gap_tracker.rs は全テスト緑)
 

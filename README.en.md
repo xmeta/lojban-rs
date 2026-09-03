@@ -158,7 +158,7 @@ See [docs/parsing-guide.md](docs/parsing-guide.md) for rule-name meanings and
 ## Development
 
 ```console
-$ cargo test      # all tests (289 = 278 unit + 11 doc; includes 418 corpus sentences.
+$ cargo test      # all tests (302 = 291 unit + 11 doc; includes 418 corpus sentences.
                   # all 12 gap_tracker tests pass — see STATUS.md)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"

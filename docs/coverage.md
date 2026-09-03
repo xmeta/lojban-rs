@@ -73,7 +73,7 @@
 | NIhO | `ni'o` `niho` | ✅ |
 | NOI | `poi` `noi` `voi` | ✅ |
 | NU | `je'i` `mu'e` `pu'u` `zu'o` `li'i` `su'u` `si'o` `du'u` `nu` `ka` `ni` | ✅ |
-| PA |  | ✅ |
+| PA | `dau` `fei` `rei` `vai` `so'a` `so'e` `so'i` `so'u` `so'o` `soho` `za'u` `su'o` `suho` `suhe` `su'e` `daha` `da'a` `ji'i` `jihi` `xo` `pi` `rau` `du'e` `duhe` `mo'a` `moha` `te'o` `teho` `ka'o` `kaho` `tu'o` `pai` `pa` `re` `ci'i` `ci` `vo` `mu` `xa` `ze` `bi` `so` `no` `ro` `ki'o` `ma'u` `ni'u` `ce'i` `cehi` `fi'u` `fihu` | ✅ |
 | ROI | `roi` `re'u` `rehu` | ✅ |
 | SE | `se` `te` `ve` `xe` | ✅ |
 | SEI | `sei` | ✅ |

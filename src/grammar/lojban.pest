@@ -1070,6 +1070,11 @@ VUhU_core = @{ ( ^"su'i" | ^"vu'u" | ^"pi'i" | ^"fe'i" | ^"gei" | ^"de'o" | ^"te
                | ^"re'a" | ^"va'a" | ^"pa'i" | ^"si'i" | ^"fu'u") ~ &word_boundary }
 NAhU_core = @{ (^"na'u" | ^"nahu") ~ &word_boundary }
 // 除算スラッシュ(pa fi'u re = 1/2)
+// v0.112: fi'u/fihu は PA_word にも収録(z0 準拠)。z0 は mex 内の
+// 「li re fi'u ci」を演算子分割ではなく PA 連続の数詞(number = PA_clause+)
+// として読むため、本実装も PA 収録後に同一の木になる
+// (mex_operator の FIhU 枝は空間的な隣接を数詞が先取りするため
+// 空白区切り形では到達しなくなるが、camxes 互換の予備として維持)
 FIhU_core = @{ (^"fihu" | ^"fi'u") ~ &word_boundary }
 // 演算子強調(bi'e: 直後の演算子を右側にグルーピング)
 BIhE_core = @{ (^"bihe" | ^"bi'e") ~ &word_boundary }
@@ -1192,11 +1197,34 @@ LAHEDI_joint = @{ (^"la'edi'u") ~ &word_boundary }
 ROROI_joint = @{ (^"roroi") ~ &word_boundary }
 // 注: かつて16進桁の jai を収録していたが、JAI 変換(tanru_unit)と
 //     衝突するため削除(v0.31。dau fei rei vai は残置)
+// PA(zantufa-0.9999.js の PA 形態論と maftufa の語彙を基準にした主要語)。
+// v0.112: CLL PA の欠落語を補完(so'o / rau / du'e / mo'a / te'o / ka'o / pai /
+// tu'o / ci'i / ce'i / fi'u と h 変体 soho / duhe / moha / teho / kaho / cehi /
+// fihu / suho / jihi。z0 実測: 全語が「X broda」「X prenu cu klama」形の
+// quant_selbri・描述内 mex(lo te'o gerku / li te'o)・PA_seq 無空白連結形
+// (so'opa / te'opa / refi'u 等)で受理。h 変体は z0 の '↔h 同値規約により
+// 個別に受理を確認(soho/duhe/moha/teho/kaho/cehi/fihu/suho/jihi の
+// quant_selbri プローブ実測)。
+// **ni は収録しない**(NU 抽象詞と同形のため):
+// - z0/z1 の PA 形態論に ni は存在しない(NU にのみ存在)
+// - z0 は「ni prenu cu klama」を拒否する(ours は NU 抽象の項+cu 文で
+//   既に受理。PA 収録はこの OVER を拡大するだけ)
+// - z0 の「ni broda」「lo ni broda」は NU 抽象を tanru_unit に取る読みで、
+//   本実装の nu_form / abstraction 経路と同型。PA 収録すると sumti_core の
+//   選言順(quant_selbri が abstraction より先)と sumti_tail の mex 枝が
+//   先取りし、既存の抽象の木(lo ni broda = selbri(nu_form))が壊れる。
+//   また PA_seq に nisu'o 等の z0 非受理連結形が入り込む(z0 は nisu'o を
+//   NU ni + 無ポーズ su'o の別読みでのみ受理)
+// 注: 選択順序は接頭辞衝突に注意。pai は pa の、ci'i は ci の、
+//     so'o/soho は so の**前に**置く(素の短形が先だと word_boundary 失敗後に
+//     選択肢は再試行されない。教訓6の mi'a/mi'ai・fa/fai 前例と同型)
 PA_word  = _{ (^"dau" | ^"fei" | ^"rei" | ^"vai" | ^"so'a" | ^"so'e" | ^"so'i"
-               | ^"so'u" | ^"za'u" | ^"su'o" | ^"suhe" | ^"su'e" | ^"daha" | ^"da'a"
-               | ^"ji'i" | ^"xo" | ^"pi"
-               | ^"pa" | ^"re" | ^"ci" | ^"vo" | ^"mu" | ^"xa" | ^"ze" | ^"bi" | ^"so" | ^"no"
-               | ^"ro" | ^"ki'o" | ^"ma'u" | ^"ni'u") }
+               | ^"so'u" | ^"so'o" | ^"soho" | ^"za'u" | ^"su'o" | ^"suho" | ^"suhe" | ^"su'e"
+               | ^"daha" | ^"da'a" | ^"ji'i" | ^"jihi" | ^"xo" | ^"pi"
+               | ^"rau" | ^"du'e" | ^"duhe" | ^"mo'a" | ^"moha"
+               | ^"te'o" | ^"teho" | ^"ka'o" | ^"kaho" | ^"tu'o"
+               | ^"pai" | ^"pa" | ^"re" | ^"ci'i" | ^"ci" | ^"vo" | ^"mu" | ^"xa" | ^"ze" | ^"bi" | ^"so" | ^"no"
+               | ^"ro" | ^"ki'o" | ^"ma'u" | ^"ni'u" | ^"ce'i" | ^"cehi" | ^"fi'u" | ^"fihu") }
 PA_core  = @{ PA_word ~ &word_boundary }
 // 無ポーズ連結数詞(renono = 1200 等)
 PA_seq   = @{ PA_word+ ~ &word_boundary }

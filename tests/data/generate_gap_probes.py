@@ -49,7 +49,7 @@ def load_rule_bodies(src: str) -> dict:
 
 def extract_cores(bodies: dict) -> dict:
     """*_core クラスの語彙リスト(本体に ^"..." リテラルが無い場合は
-    参照先規則 1 個から委譲取得。PA_core -> PA_word)。"""
+    参照先規則から委譲取得。PA_core -> PA_word)。"""
     cores = {}
     for name, body in bodies.items():
         if not name.endswith("_core"):
@@ -58,8 +58,14 @@ def extract_cores(bodies: dict) -> dict:
         if not words:
             refs = re.findall(r"\b([A-Za-z_][A-Za-z0-9_]*)\b", body)
             refs = [r for r in refs if r in bodies and r != name]
-            if len(refs) == 1:
-                words = re.findall(r'\^"([^"]+)"', bodies[refs[0]])
+            # 委譲先は ^"..." リテラルを持つ規則(語彙本体)を選ぶ。
+            # PA_core = @{ PA_word ~ &word_boundary } のように語境界などの
+            # 補助規則が混ざる場合は無視する(v0.112 まで len==1 の条件で
+            # PA_core の委譲が落ちて PA 語彙プローブが生成されていなかった)
+            for ref in refs:
+                words = re.findall(r'\^"([^"]+)"', bodies[ref])
+                if words:
+                    break
         cores[name] = words
     return cores
 

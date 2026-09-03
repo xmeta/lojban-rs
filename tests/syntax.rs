@@ -1339,8 +1339,17 @@ fn 結合形と談話標識_バッテリー6() {
 
 #[test]
 fn mex_fihu_と_前置単項() {
+    // v0.112: fi'u を PA_word に収録(z0 準拠)したため、空白区切りの
+    // 「li pa fi'u re」は演算子分割ではなく PA 連続の数詞(number =
+    // PA_clause+)として読まれる(z0 の実木と同一。z0 は fi'u を PA とし、
+    // mex の被演算子 number を PA_clause+ の貪欲連続で構成する)。
+    // fi'u トークン自体は PA_core として木に現れる
     let s = parse_ok("li pa fi'u re du li pimu");
-    assert!(s.contains("FIhU_core"), "{s}");
+    assert!(s.contains("PA_core \"fi'u\""), "{s}");
+    assert!(!s.contains("FIhU_core"), "{s}");
+    // 無空白連結形も数詞1トークン(PA_seq)
+    let s = parse_ok("li refi'u du li pimu");
+    assert!(s.contains("PA_seq \"refi'u\""), "{s}");
     let s = parse_ok("li va'a pa du li ni'u pa");
     assert!(s.contains("VUhU_core \"va'a\""), "{s}");
 }
@@ -4694,4 +4703,247 @@ fn ui_新語と既存語の選択不変() {
     // 後が語内文字 h で word_boundary が成立しない語形不正
     assert!(LojbanParser::parse(Rule::text, "mi klama pahu broda").is_err());
     assert!(LojbanParser::parse(Rule::text, "mi klama tahuho").is_err());
+}
+
+// =====================================================================
+// v0.112: PA_word の欠落語補完(so'o/rau/du'e/mo'a/te'o/ka'o/pai/tu'o/
+// ci'i/ce'i/fi'u と h 変体 soho/duhe/moha/teho/kaho/cehi/fihu/suho/jihi)。
+// 出典: ユーザー報告「.i .ei mi xruti gi'e jitro so'o nuncatra noi mi pu minde」
+// が so'o(PA_word 未収録)のために拒否されていた問題の解消。
+// z0(zantufa-0.9999.js)交叉実測: 全語が quant_selbri(X broda /
+// X prenu cu klama)・描述内 mex(lo te'o gerku)・li 内 mex・PA_seq
+// 無空白連結形(so'opa 等)で受理。ni は NU 抽象詞と同形のため
+// 収録しない(下記の不変ピンを参照)
+// =====================================================================
+
+#[test]
+fn 対象文_ユーザー報告のsoo文() {
+    // 報告文: so'o が PA_word 未収録で拒否されていた(二分法により
+    // so'o nuncatra の quant_selbri が失敗と特定)。v0.112 で受理
+    let s = parse_ok(".i .ei mi xruti gi'e jitro so'o nuncatra noi mi pu minde");
+    assert!(s.contains("UI_core \"ei\""), "{s}");
+    assert!(s.contains("GIhA_core \"gi'e\""), "{s}");
+    assert!(s.contains("NOI_core \"noi\""), "{s}");
+    // so'o は quant_selbri の数詞(so'o nuncatra を1項として取る)
+    assert!(s.contains("quant_selbri"), "{s}");
+    assert!(s.contains("PA_core \"so'o\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"nuncatra\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"minde\""), "{s}");
+    // 相対節内の項も同一の経路
+    let s = parse_ok("mi jitro so'o nuncatra");
+    assert!(s.contains("PA_core \"so'o\""), "{s}");
+    assert!(s.contains("quant_selbri"), "{s}");
+}
+
+#[test]
+fn pa_word_新語のquant_selbri() {
+    // 「X broda」= fragment(項: quant_selbri)、「X prenu cu klama」=
+    // 文(項: quant_selbri + cu + selbri)。z0 実測 ok の受理形
+    let words = [
+        "so'o", "rau", "du'e", "mo'a", "te'o", "ka'o", "pai", "tu'o", "ci'i", "ce'i", "fi'u",
+        // h 変体(z0 の '↔h 同値規約。個別に quant_selbri プローブで受理を実測)
+        "soho", "duhe", "moha", "teho", "kaho", "cehi", "fihu", "suho", "jihi",
+    ];
+    for w in words {
+        let s = parse_ok(&format!("{w} broda"));
+        assert!(s.contains(&format!("PA_core \"{w}\"")), "{w}: {s}");
+        assert!(s.contains("quant_selbri"), "{w}: {s}");
+        let s = parse_ok(&format!("{w} prenu cu klama"));
+        assert!(s.contains(&format!("PA_core \"{w}\"")), "{w}: {s}");
+        assert!(s.contains("quant_selbri"), "{w}: {s}");
+        assert!(s.contains("CU_core \"cu\""), "{w}: {s}");
+        assert!(s.contains("BRIVLA_core \"klama\""), "{w}: {s}");
+        // 項位置(目的語)の quant_selbri
+        let s = parse_ok(&format!("mi ponse {w} gerku"));
+        assert!(s.contains(&format!("PA_core \"{w}\"")), "{w}: {s}");
+    }
+    // 空白区切りの複数数詞+selbri(za'u rau broda 等。z0 実測 ok)
+    for w in ["za'u rau", "su'o rau", "pa so'o"] {
+        let s = parse_ok(&format!("{w} broda"));
+        assert!(s.contains("quant_selbri"), "{w}: {s}");
+    }
+    // 描述内の数詞(lo so'o gerku cu klama 等。z0 実測 ok)
+    for w in [
+        "so'o", "rau", "du'e", "te'o", "ka'o", "pai", "ci'i", "ce'i", "fi'u",
+    ] {
+        let s = parse_ok(&format!("lo {w} gerku cu klama"));
+        assert!(s.contains(&format!("PA_core \"{w}\"")), "{w}: {s}");
+    }
+}
+
+#[test]
+fn pa_word_新語のmex内数詞() {
+    // li 内の被演算子(z0 実測 ok: li te'o / li ka'o / li pai / li ci'i /
+    // li ce'i / li fi'u / li tu'o)
+    for w in ["te'o", "ka'o", "pai", "ci'i", "ce'i", "fi'u", "tu'o"] {
+        let s = parse_ok(&format!("li {w}"));
+        assert!(s.contains(&format!("PA_core \"{w}\"")), "{w}: {s}");
+    }
+    // 演算子の被演算子位置(li pa su'i te'o。z0 実測 ok)
+    let s = parse_ok("li pa su'i te'o");
+    assert!(s.contains("PA_core \"te'o\""), "{s}");
+    assert!(s.contains("VUhU_core \"su'i\""), "{s}");
+    // te'o の VUhU(指数演算子)読みについて: 空白区切りでは PA 数詞読みに
+    // 統一され(li re te'o ci は z0 同様に PA 連続の数詞となる。下記の
+    // 選択不変テストを参照)、VUhU 読みは BIhE 経路でのみ到達する。
+    // 「li re bi'e te'o ci」は参照 3 種とも拒否(zantufa の VUhU は素の
+    // te'o を持たない。te'o は PA のみ)の ours 越受容だが、VUhU 経路の
+    // 到達性確認のピンとして残す
+    let s = parse_ok("li te'o su'i pa");
+    assert!(s.contains("PA_core \"te'o\""), "{s}");
+    let s = parse_ok("li re bi'e te'o ci");
+    assert!(s.contains("VUhU_core \"te'o\""), "{s}");
+    assert!(s.contains("BIhE_core \"bi'e\""), "{s}");
+    // 裸数詞の項(mi viska rau da 等。quant_sumti 経路。z0 実測 ok)
+    let s = parse_ok("mi viska rau da");
+    assert!(s.contains("PA_core \"rau\""), "{s}");
+    assert!(s.contains("KOhA_core \"da\""), "{s}");
+}
+
+#[test]
+fn pa_word_新語の間隔タグと付帯() {
+    // 数詞+ROI の複合タグ(so'o re'u broda 等。so'i re'u と同一経路)。
+    // quant_selbri / bare_number の ROI 直前ガードによりタグ読みに譲る
+    for (tag, roi) in [
+        ("so'o", "re'u"),
+        ("rau", "re'u"),
+        ("te'o", "re'u"),
+        ("ce'i", "re'u"),
+        ("fi'u", "re'u"),
+        ("so'o", "roi"),
+    ] {
+        let s = parse_ok(&format!("{tag} {roi} broda"));
+        // タグ位置は interval_property の PA_seq 枝(atomic のため
+        // PA_core 子ノードは出ない。so'i re'u と同一経路)
+        assert!(
+            s.contains(&format!("PA_core \"{tag}\"")) || s.contains(&format!("PA_seq \"{tag}\"")),
+            "{tag} {roi}: {s}"
+        );
+        assert!(
+            s.contains(&format!("ROI_core \"{roi}\"")),
+            "{tag} {roi}: {s}"
+        );
+        assert!(s.contains("BRIVLA_core \"broda\""), "{tag} {roi}: {s}");
+    }
+    // 数詞+MOI の tanru 単位(te'o moi broda 等。z0 実測 ok)
+    for w in ["te'o", "so'o", "rau"] {
+        let s = parse_ok(&format!("{w} moi broda"));
+        assert!(s.contains(&format!("PA_core \"{w}\"")), "{w}: {s}");
+        assert!(s.contains("MOI_core \"moi\""), "{w}: {s}");
+    }
+    // 発話序数(so'o mai。mai_free の number 経路。z0 実測 ok)
+    let s = parse_ok("so'o mai");
+    assert!(s.contains("PA_core \"so'o\""), "{s}");
+    assert!(s.contains("MAI_core \"mai\""), "{s}");
+    // 添字(broda xi so'o。xi_free の number 経路。z0 実測 ok)
+    let s = parse_ok("broda xi so'o");
+    assert!(s.contains("PA_core \"so'o\""), "{s}");
+    assert!(s.contains("XI_core \"xi\""), "{s}");
+}
+
+#[test]
+fn pa_seq_新語の無空白連結() {
+    // PA_seq は PA_word+ のため新語は自動的に連結形に反映される。
+    // z0 実測: so'opa / paso'o / so'ore / te'opa / refi'u 等は
+    // PA 連続の数詞として受理される(語形ガードは不要。
+    // z0 の PA 形態論に含まれる語のみ収録しているため連結形も z0 整合)
+    let forms = [
+        "so'opa", "paso'o", "so'ore", "te'opa", "ka'opa", "paipai", "tu'ono", "ce'ire", "ci'ipa",
+        "raupa", "du'ere", "mo'aci", "sohore", "suhopa", "jihipa", "fihure", "refi'u",
+    ];
+    for w in forms {
+        let s = parse_ok(&format!("li {w}"));
+        assert!(s.contains(&format!("PA_seq \"{w}\"")), "{w}: {s}");
+        // 数詞+selbri 形(z0 実測 ok)
+        let s = parse_ok(&format!("{w} prenu cu klama"));
+        assert!(s.contains(&format!("PA_seq \"{w}\"")), "{w}: {s}");
+        assert!(s.contains("quant_selbri"), "{w}: {s}");
+    }
+    // nisu'o は PA_seq に入らない(ni を PA に収録しないため)。
+    // z0 も ni を PA に持たず(NU のみ)、nisu'o を PA 連結としては
+    // 拒否する(NU ni + 無ポーズ su'o の別読みは本実装未対応の既知 GAP)。
+    // 「nisu'o」の現在の受理は BRIVLA(fuhivla 誤マッチ)の既存 OVER 差分
+    let s = parse_ok("nisu'o");
+    assert!(s.contains("BRIVLA_core \"nisu'o\""), "{s}");
+    assert!(LojbanParser::parse(Rule::text, "nisu'o prenu cu klama").is_err());
+}
+
+#[test]
+fn pa_word_既存数詞の選択不変() {
+    // 既存の数詞入力の受理・木は一切変わらないこと。
+    // 裸の renono は selbri 単独文の BRIVLA(fuhivla 誤マッチの既存 OVER
+    // クラス。「mi kuku」等と同型)として受理される実木で、数詞としての
+    // PA_seq 読みは li 内で現れる
+    let s = parse_ok("renono");
+    assert!(s.contains("BRIVLA_core \"renono\""), "{s}");
+    let s = parse_ok("li renono");
+    assert!(s.contains("PA_seq \"renono\""), "{s}");
+    let s = parse_ok("de'i li renono mi klama");
+    assert!(s.contains("renono"), "{s}");
+    // 無空白連結+ROI(既存ピンの再確認)
+    let s = parse_ok("reso'i roi klama");
+    assert!(s.contains("PA_seq \"reso'i\""), "{s}");
+    assert!(s.contains("ROI_core \"roi\""), "{s}");
+    // PA_word に ROI/TAhE 語は含まれないため無空白結合形は
+    // 音韻上の brivla(fuhivla)のまま(v0.92 から不変)
+    let s = parse_ok("so'uroi klama");
+    assert!(s.contains("BRIVLA_core \"so'uroi\""), "{s}");
+    let s = parse_ok("zahurehu");
+    assert!(s.contains("BRIVLA_core \"zahurehu\""), "{s}");
+    // VUhU 演算子(pa'i / su'i)は PA 収録の影響を受けない
+    // (operator 分割の既存木を維持)
+    let s = parse_ok("li re su'i ci");
+    assert!(s.contains("VUhU_core \"su'i\""), "{s}");
+    assert!(
+        s.contains("PA_core \"re\"") && s.contains("PA_core \"ci\""),
+        "{s}"
+    );
+    let s = parse_ok("li re pa'i ci");
+    assert!(s.contains("VUhU_core \"pa'i\""), "{s}");
+    // li re fi'u ci は z0 同様に PA 連続の数詞に統一される
+    // (fi'u の演算子分割読みは z0 に存在しない。mex_fihu_と_前置単項 参照)
+    let s = parse_ok("li re fi'u ci");
+    assert!(s.contains("PA_core \"fi'u\""), "{s}");
+    assert!(!s.contains("FIhU_core"), "{s}");
+}
+
+#[test]
+fn ni_は数詞に収録せず抽象の木を維持() {
+    // ni は NU(抽象詞)と同形。z0/z1 の PA 形態論に ni は存在せず、
+    // z0 は「ni prenu cu klama」を拒否する(NU 抽象の項+cu 文の読みは
+    // 本実装の既存 OVER 差分)。z0 の「ni broda」「lo ni broda」は
+    // NU 抽象を tanru_unit に取る読みで、本実装の nu_form /
+    // abstraction 経路と同型のため PA 収録は行わない。
+    // 以下は v0.112 前後で木が不変であることの exact-tree ピン
+    // (1) 描述内の抽象: sumti_tail の mex 枝に先取りされない
+    let s = parse_ok("lo ni broda");
+    assert!(
+        s.contains(
+            "(desc (LE_clause (LE_core \"lo\") (selbri (tanru (tanru_unit (nu_form \
+                   (NU_clause (NU_core \"ni\")"
+        ) || (s.contains("desc") && s.contains("nu_form") && s.contains("NU_core \"ni\"")),
+        "{s}"
+    );
+    assert!(!s.contains("PA_core \"ni\""), "{s}");
+    // (2) selbri 単独文の抽象(nu_form)
+    let s = parse_ok("ni broda");
+    assert!(s.contains("nu_form"), "{s}");
+    assert!(!s.contains("quant_selbri"), "{s}");
+    // (3) 抽象の項 + cu 文(nisu'o prenu cu klama 型の素の形)
+    let s = parse_ok("ni prenu cu klama");
+    assert!(s.contains("abstraction"), "{s}");
+    assert!(s.contains("CU_core \"cu\""), "{s}");
+    assert!(!s.contains("quant_selbri"), "{s}");
+    // (4) 抽象の項 + cu 文 + 別 selbri
+    let s = parse_ok("ni broda cu brode");
+    assert!(s.contains("abstraction"), "{s}");
+    assert!(!s.contains("quant_selbri"), "{s}");
+    // (5) PA_seq に連結形が入り込まない(nisu'o は数詞でない)
+    let s = parse_ok("de'i li renono mi klama");
+    assert!(!s.contains("PA_seq \"nisu'o\""), "{s}");
+    // (6) NU としての既存語彙は影響を受けない
+    for w in ["nu", "ka", "ni"] {
+        let s = parse_ok(&format!("mi djica lo {w} do klama"));
+        assert!(s.contains(&format!("NU_core \"{w}\"")), "{w}: {s}");
+    }
 }
