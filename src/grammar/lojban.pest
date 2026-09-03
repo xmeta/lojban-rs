@@ -363,13 +363,15 @@ bridi_tail = { selbri ~ tail_terms ~ (sp1 ~ gihek_link ~ sp1 ~ gihek_free ~ brid
 // 過剰受容。「gi'e ju'i dohu cadzu」の DOhU 明示閉鎖形は z0/z1/maf 受理)。
 // GIhA 枝だけでなく v0.109 で追加する JOI/BIhI 枝(mi broda joi ju'i brode
 // は z0/z1/maf とも拒否)にも同じ制限が要るため連結部で一括して定義する
+// 【v0.110 で解消。下記は v0.109 時点の記録】
 // 残差(記録のみ。z0/z1/maf ok / ours err): 呼格+sumti 引数の DOhU 省略形
 // 「mi klama gi'e ju'i do cadzu」「farlu ju'i do cnita」は z0 では vocative
 // が sumti を引数に取るため「ju'i do」全体が vocative 系 free となり受理
 // される。本実装の vocative_arg は CMEVLA/desc のみで KOhA を取れず、
 // vocative_closed は DOhU 必須のため届かない。なお連結後の cmevla 引数形
 // 「mi klama gi'e ju'i la alen. cadzu」は z0/z1/maf とも拒否(参照一致)で、
-// 残差は KOhA 引数の DOhU 省略形に限られる(次バッチ候補)
+// 残差は KOhA 引数の DOhU 省略形に限られる(v0.110 で vocative_arg に
+// KOhA_clause を追加し、gihek_free_unit に vocative_koha を実装して解消)
 gihek_free = _{ (gihek_free_unit ~ (sp1 ~ gihek_free_unit)*)? }
 // gihek 直後の free 単位。語彙は free_unit と単一ソース(COI で始まる
 // free_unit は vocative のみのため !COI_clause ガードで除外し、
@@ -561,23 +563,34 @@ tanru_unit = { (BAhE_clause ~ sp1)? ~ (
    // 本実装は無ポーズ隣接を一般にサポートしないため、融合語トークンを
    // tanru_unit の選択肢として受理する(木形状差異 = 既知クラス。
    // z0 は lerfu 項+selbri の2要素、本実装は tanru_unit 1要素)。
-   // 受理スコープ(z0 交叉・実測): 子音レタル17語(by/cy/dy/fy/gy/jy/ky/ly/
-   // my/ny/py/ry/sy/ty/vy/xy/zy)+ 直後に無ポーズで続く有効な brivla。
+   // 受理スコープ(z0/z1/maf 交叉・実測): 子音レタル17語(by/cy/dy/fy/gy/jy/ky/ly/
+   // my/ny/py/ry/sy/ty/vy/xy/zy)+ 直後に無ポーズで続く有効な brivla
+   // (5字以上の正規形)。
    // 「lo byklesi ku」「mi byklesi」「lo byklama ku」「lo dyjamynai ku」
-   // (jamynai は CVCy_lujvo)等。母音レタル(abu/ebu 等)は前置しない
+   // (jamynai は CVCy_lujvo)「lo bynunkapi ku」「lo bykukybu'e ku」等。
+   // 母音レタル(abu/ebu 等)は前置しない
    // (「lo abu ku」は z0 も拒否。v0.106 の BY_core ガードと整合)。
    // 「cybu'u」は bu'u が cmavo のため brivla が始まらず z0 も拒否。
    // 既存 lujvo の受理は不変: BRIVLA 枝を先に試すため、融合語トークンが
    // 有効な brivla である場合は既存経路が優先される(C+y で始まる有効な
    // brivla は存在しないことを全レタル×主要語形で実測)。
-   // !(NAKU_joint) ガード: BRIVLA_core が「naku」(cmavo NA+KU)を lujvo 形
-   // (CVCV)に誤マッチする実装上の性質があるため、naku 誤読
-   // (「lo bynaku ku」が desc selbri になる。z0 実測 err = 新規 OVER)を防止。
-   // 「mi bynaku klama」(z0 は by 項+naku 項+klama の読みで受理)は本実装
-   // でも拒否になる(z0 実測 ok = GAP 残差として次バッチ候補に記録。
-   // naku を brivla 誤読のままで受容するより誠実な拒否が正。v0.106 の
-   // lo abu ku 処置と同型の判断)
-   | BY_prefix ~ !(NAKU_joint) ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
+   // !(cvcv_short_tail) ガード: BRIVLA_core が CVCV 4字/CVCVV 5字の
+   // stress なし短形を fuhivla(lujvo)に誤マッチする実装上の性質があるため、
+   // 短形残部の融合語(naku / kuku / nunu / zozo / papa / dada / kukai /
+   // kUku 型。レタル接頭×残部語形マトリクス 52 行で z0/z1/maf 交叉実測、
+   // 全形が参照 3 種とも拒否)を fuhivla 誤読の新規 OVER として受容しない。
+   // 「lo bykuku ku」「lo bynaku ku」等は z0 整合の拒否(誤読受容より
+   // 誠実な拒否が正。v0.106 の lo abu ku 処置と同型の判断)。
+   // NAKU_joint は CVCV 短形に包含されるため単独の排除は統合。
+   // 注意: 接頭なしの短形残部(「lo kuku ku」「lo kukai ku」「mi kuku」)は
+   // BRIVLA_core の既存 fuhivla 誤マッチ経路で受理される pre-existing OVER
+   // 差分(v0.109 時点から存在。本枝と無関係。z0/z1/maf は拒否の実測)。
+   // 「mi bynaku klama」等(短形残部の後に selbri が続く形)も本実装では
+   // 拒否(z0 は by 項+短形項+selbri の読みで受理 = GAP 残差として
+   // 次バッチ候補に記録)。なお「lo bysukai ku」型の z0 の ok は融合語読み
+   // ではなく su 消去読み(lo/by が su で消去、残部は kai タグ項の
+   // フラグメント)のため、融合語スコープ外のこのガードでも受理を失わない
+   | BY_prefix ~ !(cvcv_short_tail) ~ BRIVLA_clause ~ (sp1 ~ linked_args)?
    // 注: 「i+字母」で始まる語(.ije / .ijanai 等の文連結結合形)は tanru の先頭に来ないため除外。
    // 母音始まりの語そのもの(.a'onai 等)は述語のみの文として正当なので許容する
    | GOhA_clause ~ (sp1 ~ linked_args)?
@@ -729,6 +742,7 @@ gihek_link   = _{ (NA_clause ~ sp1)? ~ (SE_clause ~ sp1)?
 //   別読みするが受理集合は一致(木形状は既知の読み差異クラス)
 // BO 後置: 「mi broda joi bo brode」z0/z1/maf 実測 ok(z0 は selbri_5 の
 //   joik tag? BO? 経路)。既存 GIhA 枝と同型の短スコープ結合
+// 【v0.110 で解消。下記は v0.109 時点の記録】
 // 残差(記録のみ。次バッチ課題): gihek の (NA? SE?) 前置スロット。
 //   zantufa の gihek は NA? SE? GIhA、joik は GAhO? NA? SE? JOI GAhO? で
 //   前置を取るため「mi broda na joi brode」「mi broda na se joi brode」
@@ -736,7 +750,9 @@ gihek_link   = _{ (NA_clause ~ sp1)? ~ (SE_clause ~ sp1)?
 //   na gi'a brode」「mi broda se gi'a brode」は z0/z1/maf とも受理。
 //   本実装は gihek_link の GIhA 枝に前置スロットがなく、gihek_joik の
 //   SE 前置は JOI/BIhI 枝のみで GIhA 枝との非対称(「se joi」は受理だが
-//   「se gi'e」は拒否)。NA 前置も全体未実装
+//   「se gi'e」は拒否)。NA 前置も全体未実装。
+//   v0.110 で gihek_link の GIhA 枝と gihek_joik の両枝に
+//   (NA_clause ~ sp1)? ~ (SE_clause ~ sp1)? 前置スロットを実装して解消
 gihek_joik   = _{ (NA_clause ~ sp1)? ~ (SE_clause ~ sp1)? ~ JOI_clause
                    ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ BO_clause)?
                  | (GAhO_clause ~ sp1)? ~ (NA_clause ~ sp1)? ~ (SE_clause ~ sp1)?
@@ -1088,6 +1104,20 @@ BY_core   = @{ (^"by" | ^"cy" | ^"dy" | ^"fy" | ^"gy" | ^"jy" | ^"ky" | ^"ly"
 BY_prefix = @{ (^"by" | ^"cy" | ^"dy" | ^"fy" | ^"gy" | ^"jy" | ^"ky" | ^"ly"
               | ^"my" | ^"ny" | ^"py" | ^"ry" | ^"sy" | ^"ty" | ^"vy" | ^"xy"
               | ^"zy") }
+// レタル接頭融合語の残部として不許可な CVCV 4字 / CVCVV 5字の
+// stress なし短形(BY_prefix 枝の否定先読みで使用)。
+// BRIVLA_core がこの短形を fuhivla(lujvo)に誤マッチする実装上の性質の
+// 防波。zantufa(z0)の形態論ではこの短形は brivla として解析されず
+// (cmavo 系の解釈か無効)、融合語の残部としても不受理(参照 3 種
+// z0/z1/maf とも拒否の実測: naku / kuku / nunu / zozo / papa / dada /
+// kule / kula / kubu / kuka / vovu / kukai / kUku / kUkai 型)。
+// word_boundary で終端するため 5 字以上の有効 brivla(kukula /
+// kukybu'e / nunkapi 等)には一致しない。なお大文字ストレス表記
+// (「kUku」型)は本ガードの母音(vowel/diphthong は小文字限定)には
+// 一致しないが、BRIVLA_core の形態論も小文字限定のため融合語として
+// 一致せず拒否になる(z0/z1/maf も拒否の実測)
+cvcv_short_tail = _{ consonant ~ vowel ~ consonant ~ (vowel | diphthong)
+                     ~ &word_boundary }
 BU_core   = @{ ( ^"bu") ~ &word_boundary }
 GUhA_core = @{ ( ^"gu'a" | ^"gu'e" | ^"gu'o" | ^"gu'u") ~ &word_boundary }
 SI_core   = @{ ( ^"si") ~ &word_boundary }

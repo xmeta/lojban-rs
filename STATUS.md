@@ -2,7 +2,7 @@
 
 ## 現在の状態: v0.110 完成(gap_tracker 全 12 テスト緑・全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語203 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) = 単体266 + doc 11 = 計277テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語203 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 3(+ignore 2) / gap_tracker 12 = 単体278 + doc 11 = 計289テスト + example 内 unit test 5 全パス
 - tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件、
   v0.109 でバッチ2(接続詞・前置系)の 4 件、v0.110 でバッチ3(形態論・共有・前処理系)の 4 件を
   解消し全 12 テストが緑(下記「既知GAP」参照)
@@ -89,27 +89,43 @@ coverage.md に変更なし。BY_prefix は既存 BY_core の語境界なし前�
   + selbri(klesi) として解析される(形態論的な単一 brivla ではない)。
   本実装は無ポーズ隣接を一般にサポートしないため融合語トークンを
   tanru_unit として受理(木形状差異 = 既知クラス)。
-  受理スコープ(z0 交叉・実測): 子音レタル17語+ 直後に無ポーズで続く
-  有効な brivla。母音レタルは前置しない(「lo abu ku」z0 も拒否)。
+  受理スコープ(z0/z1/maf 交叉・実測): 子音レタル17語+ 直後に無ポーズで
+  続く有効な brivla。母音レタルは前置しない(「lo abu ku」参照 3 種とも拒否)。
   形態論ストレステスト(レタル×各種後続 80 行を z0/z1/maf 交叉実測):
-  - 過剰受理チェック: 「lo abu ku」「lo ebu ku」「lo cybu'u ku」
-    「lo byku ku」は拒否維持(z0 一致)。「lo bynaku ku」は z0 err の
-    新規 OVER として検出し、BRIVLA_core が CVCV 形「naku」を lujvo 誤
-    マッチする性質に対し !(NAKU_joint) ガードで拒否に修正(z0 整合。
-    v0.106 の lo abu ku 処置と同型)
+  - 過剰受理チェック(レタル接頭×残部語形マトリクス 52 行+拡張 15 行を
+    z0/z1/maf 交叉実測): 「lo abu ku」「lo ebu ku」「lo cybu'u ku」
+    「lo byku ku」は拒否維持(z0 一致)。CVCV 4字/CVCVV 5字の stress なし
+    短形残部(bynaku / bykuku / bynunu / byzozo / bypapa / bydada /
+    cykuku / zykuku / bykukai 型)は BRIVLA_core が fuhivla/lujvo に誤
+    マッチする実装上の性質のため新規 OVER になったが、
+    !(cvcv_short_tail) ガードで参照 3 種整合の拒否に修正(v0.106 の
+    lo abu ku 処置と同型。parent 81a54c2 で全形 err の確認済み=
+    退行なしの縮小。NAKU_joint の点排除は CVCV 短形の一般排除に統合)
+  - ガードの範囲(過剰縮小の回避。実測ピン): word_boundary 付き短形の
+    み排除するため 5 字以上の有効 brivla 残部は受理維持
+    (「lo bykukla ku」CVCCV gismu 形 / 「lo bynunkapi ku」正規 lujvo /
+    「lo bynaselci ku」/「lo byduduki ku」/「lo bykukybu'e ku」
+    CVCy lujvo 等)。6 字以上の無記名 CVCVCV 連鎖
+    (「lo bykukula ku」型)の一括排除は z0 が受理する 6 字形
+    (byduduki 型)を壊すため行わず残存(z0 err の残存 OVER。
+    形態論レベルの stress 判定が次バッチ課題。接頭なし
+    「lo kuku ku」型は pre-existing OVER)
   - 受理一致で読みが異なる形: 「mi suta byklesi」は z0 では su(消去)+
     ta(KOhA 項)への形態論分割読み(su_clause が intro に現れる)、
     本実装は tanru(suta, by+klesi)。受理一致の既知読み差異クラス
-  - 受容優先の既知クラス(z0 は拒否・本実装は受理): brivla+レタル接頭
+  - 受容優先の既知クラス(参照 3 種とも拒否・本実装は受理): brivla+レタル接頭
     融合語の無ポーズ隣接(「mi klama byklesi」「mi klesi byklesi」
     「mi klama gi'e byklesi」。tanru 2単位目・gihek 後・selbri 直後。
     非正規字形で実害なし。v0.95 タグ+BO / v0.107 mi pu bo ge と同型)
-  - 残差(z0 ok / 本実装 err。次バッチ候補として記録): 多レタル接頭
+  - 残差(参照 3 種 ok / 本実装 err。次バッチ候補として記録): 多レタル接頭
     (lo byfyklesi ku。z0 は lerfu_string 連鎖)、関係節が続く形
     (lo byklesi noi broda ku。z0 は埋め込み lerfu 項+selbri+relative)、
     レタル+タグ cmavo 隣接(mi byta'e klama / mi byca klama。z0 は
-    by 項+BAI/PU タグ+selbri)、naku 項隣接(mi bynaku klama。z0 は
-    by 項+naku 項+klama)は項分離読みの実装が要るため未対応
+    by 項+BAI/PU タグ+selbri)、項分離読みの各形(mi bynaku klama。
+    z0 は by 項+naku 項+klama。lo bydudu ku / mi bydudu /
+    lo bydudu klama。z0 は dudu を GOhA cmavo の無ポーズ隣接の
+    tanru 読み。lo bysukai ku。z0 は lo/by を su で消去+残部 kai タグ項の
+    フラグメント読み)は項分離読みの実装が要るため未対応
 - 文法②(VUhO 後の関係節共有): sumti に
   (sp1 ~ VUhO_clause ~ sp1 ~ relative_clauses)? の第2スロットを追加。
   GAP_VUhO後の関係節共有 解消。z0 実測: sumti = sumti_1
@@ -125,7 +141,7 @@ coverage.md に変更なし。BY_prefix は既存 BY_core の語境界なし前�
   比較前に両端から除去する(zantufa 形態論では区切り語は lojban_word で
   前後のポーズは spaces 側が消費。「gy.」/「.gy」/「.gy.」はいずれも
   「gy」に対応)。開き/閉じの片方だけポーズ付き・本文空・引用後継続も
-  z0 実測 ok で受理。ポーズ記号のみの区切り語(「zoi . abc .」)は
+  z0/z1/maf 実測 ok で受理。ポーズ記号のみの区切り語(「zoi . abc .」)は
   語形不正としてエラー。lib.rs 内の zoi 引用ユニットテストを拡充
 - 文法④(項レベル ke グループ): term に KE_clause ~ sp1 ~ term ~
   (sp1 ~ term)* ~ (sp1 ~ KEhE_clause)? 枝を追加。
@@ -166,9 +182,15 @@ coverage.md に変更なし。BY_prefix は既存 BY_core の語境界なし前�
 - テスト: 統語 198→203(レタル接頭融合語/VUhO 関係節共有/項レベル ke/
   gihek 前置/呼格+sumti の回帰+既存不変ピン)。gap_tracker は残り 4 件
   緑化(全 12 件緑)
-- レビュー対応(naku 誤読防止): 形態論ストレステストで検出した
-  「lo bynaku ku」の新規 OVER(BRIVLA_core の CVCV lujvo 誤マッチ)を
-  !(NAKU_joint) ガードで解消(z0 整合の拒否)
+- レビュー対応(naku 誤読防止の汎化): 形態論ストレステストで検出した
+  CVCV/CVCVV 短形残部の新規 OVER(bynaku / bykuku / bynunu / byzozo /
+  bypapa / bydada / cykuku / zykuku / bykukai 型。parent 81a54c2 では
+  全形拒否=本変更で新規導入)を !(cvcv_short_tail) 汎化ガードで
+  参照 3 種整合の拒否に修正(NAKU_joint の点排除を一般排除に統合。
+  詳細は上記「過剰受理チェック」「ガードの範囲」参照)。
+  ストレステストの実測プローブ 52 行は
+  tests/data/generate_gap_probes.py の構造プローブに取り込み
+  (プローブ 1,492→1,544 行)で再現性を確保
 - ベンチ: --quick で方向性劣化なし。WASM ビルド ok
 
 ## v0.109 で追加(バッチ2 GAP 解消: 接続詞・前置系の再配線)

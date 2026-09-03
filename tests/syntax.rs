@@ -4322,14 +4322,63 @@ fn レタル接頭融合語_v0_110() {
     // (サブセット。残差記録)
     assert!(LojbanParser::parse(Rule::text, "lo byfyklesi ku").is_err());
     assert!(LojbanParser::parse(Rule::text, "lo bycyklesi ku").is_err());
-    // - naku は BRIVLA_core が CVCV 形を lujvo に誤マッチする実装上の性質を
-    //   持つため !(NAKU_joint) ガードで誤読を防止:
-    //   「lo bynaku ku」は z0 実測 err(ガードなしの旧実装は desc selbri 誤読の
-    //   新規 OVER)で z0 整合の拒否。「mi bynaku klama」は z0 が by 項+naku
-    //   (NA KU)項+klama の読みで受理するが、本実装は項分離読み未対応のため
-    //   拒否(残差記録。誤読受容より誠実な拒否が正。v0.106 の lo abu ku 処置と同型)
-    assert!(LojbanParser::parse(Rule::text, "lo bynaku ku").is_err());
-    assert!(LojbanParser::parse(Rule::text, "mi bynaku klama").is_err());
+    // - CVCV 4字/CVCVV 5字の stress なし短形残部は !(cvcv_short_tail) ガードで
+    //   排除(BRIVLA_core がこの短形を fuhivla/lujvo に誤マッチする実装上の
+    //   性質の防波。レタル接頭×残部語形マトリクス 52 行+拡張 15 行で
+    //   z0/z1/maf 交叉実測、短形残部は全形が参照 3 種とも拒否):
+    //   「lo bynaku ku」「lo bykuku ku」「lo bynunu ku」「lo byzozo ku」
+    //   「lo bypapa ku」「lo bydada ku」「lo cykuku ku」「lo zykuku ku」
+    //   「mi bykuku」「lo bykukai ku」等は z0 実測 err(ガードなしの旧実装は
+    //   fuhivla 誤読の新規 OVER)で z0 整合の拒否(誤読受容より誠実な拒否が正。
+    //   v0.106 の lo abu ku 処置と同型の判断。parent 81a54c2 で全形 err の
+    //   確認済み=本変更で新規に導入した受理を取り消す退行なしの縮小)
+    for s in [
+        "lo bynaku ku",
+        "lo bykuku ku",
+        "lo bynunu ku",
+        "lo byzozo ku",
+        "lo bypapa ku",
+        "lo bydada ku",
+        "lo cykuku ku",
+        "lo zykuku ku",
+        "mi bykuku",
+        "lo bykukai ku",
+        "lo bykule ku",
+        "lo bykula ku",
+        "lo bykubu ku",
+        "lo byvovu ku",
+        "lo bykuku broda",
+        "mi bykuku broda",
+    ] {
+        assert!(LojbanParser::parse(Rule::text, s).is_err(), "{s}");
+    }
+    //   ガードは 5 字以上の有効 brivla を壊さない(word_boundary 付き短形の
+    //   み排除。実測ピン):
+    //   - gismu 残部(klesi 5字 CVCCV 等は1子音開始のため短形に不一致)
+    //   - 「kukla」(CVCCV gismu 形)「kuklama」以外の正規 lujvo 残部
+    //     (nunkapi / kulesi… は z0 実測で kukla は受理、kulesi は拒否。
+    //     現行ガードは両方とも不干渉=現状維持)
+    //   - CVCy lujvo(kukybu'e / jamynai)
+    parse_ok("lo bykukla ku");
+    parse_ok("lo bynunkapi ku");
+    parse_ok("lo bykukybu'e ku");
+    parse_ok("lo bynaselci ku");
+    parse_ok("lo byduduki ku");
+    //   残差(記録。次バッチ候補):
+    //   - 6字以上の無記名 CVCVCV 連鎖残部(「lo bykukula ku」「lo bykatane ku」
+    //     型)は z0 が拒否するが本実装は fuhivla 誤マッチで受理(既存の
+    //     BRIVLA_core 緩さの残存。接頭なし「lo kukula ku」は pre-existing
+    //     OVER。一括排除は z0 が受理する 6 字形(byduduki 型)を壊すため
+    //     形態論レベルの stress 判定が要る)
+    parse_ok("lo bykukula ku");
+    //   - z0 ok / 本実装 err の項分離読み残差: 「lo bydudu ku」「mi bydudu」
+    //     「lo bydudu klama」は z0 では dudu が GOhA cmavo(du)の無ポーズ
+    //     隣接の項分離読み(融合語読みではない)で受理される。本実装は
+    //     項分離読み未対応のため拒否(短形 CVCV の融合語読みを取らない
+    //     z0 と同じ拒否対象。読み経路の追加が次バッチ課題)
+    assert!(LojbanParser::parse(Rule::text, "lo bydudu ku").is_err());
+    assert!(LojbanParser::parse(Rule::text, "mi bydudu").is_err());
+    assert!(LojbanParser::parse(Rule::text, "lo bydudu klama").is_err());
     // - 形態論ストレステスト(z0 交叉・実測)で確認した既知クラス:
     //   brivla+レタル接頭融合語の無ポーズ隣接(tanru 2単位目・gihek 後・
     //   selbri 直後)は z0 が拒否するが本実装は受容(受容優先の既知クラス。

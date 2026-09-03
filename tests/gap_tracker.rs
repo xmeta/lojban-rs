@@ -24,6 +24,9 @@
 
 #[test]
 fn GAP_レタル接頭lujvo_byklesi() {
+    // ✅ v0.110 で解消(tanru_unit にレタル接頭融合語枝
+    //   (BY_prefix ~ !(cvcv_short_tail) ~ BRIVLA_clause)を追加。
+    //   下記の対象文は緑化済みで回帰テストとして残す)
     // 対象文: 「lo byklesi ku」「mi byklesi」「lo cyklesi ku」
     //   (by/cy 等のレタル語 + brivla の無空白融合 lujvo)
     // 実測: z0=ok / z1=ok / maftufa=ok、本パーサー=err(全 4 形)
@@ -176,6 +179,8 @@ fn GAP_JOIによるselbri接続() {
 
 #[test]
 fn GAP_VUhO後の関係節共有() {
+    // ✅ v0.110 で解消(sumti に (VUhO_clause ~ relative_clauses)? の
+    //   第2スロットを追加。下記の対象文は緑化済みで回帰テストとして残す)
     // 対象文: 「mi viska lo broda vu'o noi mi klama」
     //   (vu'o で sumti を連結した上で関係節を共有する形)
     // 実測: z0=ok / z1=ok / maftufa=ok、本パーサー=err(h 変体 vuho も同様)
@@ -210,6 +215,9 @@ fn GAP_時制タグの_nai() {
 
 #[test]
 fn GAP_zoi区切り語のピリオド正規化() {
+    // ✅ v0.110 で解消(lib.rs の normalize_zoi を修正し、区切り語の一致を
+    //   ポーズ記号除去形で行うように変更。下記の対象文は緑化済みで
+    //   回帰テストとして残す)
     // 対象文: 「mi cusku zoi gy. broda .gy」「zoi gy. broda .gy」
     //   (区切り語の前後にポーズのピリオドを置く標準的な書記形)
     // 実測: z0=ok / z1=ok / maftufa=ok、本パーサー=err。
@@ -252,6 +260,8 @@ fn GAP_jai_se変換タグ() {
 
 #[test]
 fn GAP_ke_group内の項() {
+    // ✅ v0.110 で解消(term に項レベル ke グループ(KE term+ KEhE?)の
+    //   枝を追加。下記の対象文は緑化済みで回帰テストとして残す)
     // 対象文: 「mi klama ke lo zdani broda ke'e」
     //   (ke … ke'e グループ内に sumti + selbri を含む bridi_tail グループ)
     // 実測: z0=ok / z1=ok / maftufa=ok、本パーサー=err

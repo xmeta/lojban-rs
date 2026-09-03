@@ -194,11 +194,83 @@ TEMPLATES = {
 # 構造プローブ(語彙でなく構造の差分)。
 # 上段: 既知 GAP 候補 / 下段: OVER 既知差分(ours ok / z0 err)の記録用。
 STRUCTURAL_PROBES = [
-    # レタル接頭 lujvo(v0.106 既知 GAP)
+    # レタル接頭融合語(v0.110 解消+同時実施の形態論ストレステスト)。
+    # 受理系: 残部が 5 字以上の有効 brivla(gismu 形 CVCCV / 正規 lujvo /
+    # CVCy lujvo)。拒否系: CVCV 4字/CVCVV 5字の stress なし短形残部
+    # (z0/z1/maf 3 種とも拒否の実測。本実装は !(cvcv_short_tail) ガードで
+    # fuhivla 誤読を排除)。
     "lo byklesi ku",
     "lo cyklesi ku",
     "mi byklesi",
     "mi klama lo byklesi ku",
+    "lo byklama ku",
+    "lo bykukla ku",
+    "lo bynunkapi ku",
+    "lo bynaselci ku",
+    "lo byduduki ku",
+    "lo bykukybu'e ku",
+    "lo dyjamynai ku",
+    "lo byklaniku ku",
+    "lo BYklesi ku",
+    # 初子音結合(CCVCV)gismu 残部の受理系(bybroda / bycmalu / byzdani 型。
+    # レタル接頭×残部語形マトリクスの裏取り。z0/z1/maf 実測 ok)
+    "lo bybroda ku",
+    "lo bycmalu ku",
+    "lo byzdani ku",
+    "lo cybroda ku",
+    "mi bybroda",
+    "lo bydjudi ku",
+    "lo bysligu ku",
+    # 短形残部の排除(z0 整合の拒否。parent 81a54c2 で全形 err の確認済み)
+    "lo bynaku ku",
+    "lo bykuku ku",
+    "lo bynunu ku",
+    "lo byzozo ku",
+    "lo bypapa ku",
+    "lo bydada ku",
+    "lo cykuku ku",
+    "lo zykuku ku",
+    "mi bykuku",
+    "lo bykukai ku",
+    "lo bykule ku",
+    "lo bykubu ku",
+    "lo byvovu ku",
+    "lo bykuku broda",
+    "lo abu ku",
+    "lo ebu ku",
+    "lo cybu'u ku",
+    "lo byku ku",
+    # v0.110 残差(6字以上の無記名 CVCVCV 連鎖残部。z0 は拒否するが
+    # BRIVLA_core の既存 fuhivla 緩さで受理が残る。一括排除は z0 が受理する
+    # 6 字形(byduduki 型)を壊すため形態論レベルの stress 判定が要る。
+    # 接頭なし 3 行は pre-existing OVER)
+    "lo bykukula ku",
+    "lo kuku ku",
+    "lo kukai ku",
+    "mi kuku",
+    # v0.110 残差(項分離読み。z0 は cmavo 無ポーズ隣接の項読みで受理するが
+    # 本実装は未対応)
+    "mi bynaku klama",
+    "lo bydudu ku",
+    "mi bydudu",
+    "lo bydudu klama",
+    "lo bysukai ku",
+    # v0.110 残差(多レタル接頭。z0 は lerfu_string 連鎖で受理)
+    "lo byfyklesi ku",
+    "lo bycyklesi ku",
+    # v0.110 残差(関係節が続くレタル接頭。z0 は埋め込み lerfu 項+selbri+
+    # relative の読み)
+    "lo byklesi noi broda ku",
+    # v0.110 残差(レタル+タグ cmavo の隣接。z0 は by 項+タグ+selbri の読み)
+    "mi byta'e klama",
+    "mi byca klama",
+    # v0.110: brivla+レタル接頭融合語の無ポーズ隣接(z0 は拒否するが本実装は
+    # 受容優先の既知クラスとして受理。tanru 2単位目・gihek 後)
+    "mi klama byklesi",
+    "mi klesi byklesi",
+    "mi klama gi'e byklesi",
+    # v0.110: 受理一致で読みが異なる形(z0 は su 消去+ta 項の読み)
+    "mi suta byklesi",
     # FA + NAI(v0.105 既知 GAP)
     "fa nai mi klama",
     "mi klama fa nai",
@@ -295,6 +367,7 @@ STRUCTURAL_PROBES = [
     "mi broda joi brode co brodi",
     "mi broda joi brode .ui brodi",
     "mi broda joi ju'i dohu brode",
+    # 【v0.110 で解消。下記は v0.109 時点の記録】
     # v0.109 残差: 呼格+sumti 引数の継続形(z0/z1/maf は受理するが ours err)。
     # z0 実測では vocative は sumti を引数に取れるため「ju'i do」全体が
     # vocative 系 free として連結詞の直後に置ける。本実装の vocative_arg は
@@ -304,6 +377,7 @@ STRUCTURAL_PROBES = [
     # z0/z1/maf とも拒否(参照一致)で、残差は KOhA 引数の DOhU 省略形に限られる
     "mi klama gi'e ju'i do cadzu",
     "farlu ju'i do cnita",
+    # 【v0.110 で解消。下記は v0.109 時点の記録】
     # v0.109 残差(GAP 候補): gihek の (NA? SE?) 前置。zantufa の gihek は
     # NA? SE? GIhA、joik は GAhO? NA? SE? JOI GAhO? で前置スロットを持つため
     # 参照 3 種は受理するが、本実装は gihek_link に前置スロットがない

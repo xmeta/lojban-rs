@@ -148,8 +148,8 @@ println!("{}", tree::to_json(pairs));
 ## 開発
 
 ```console
-$ cargo test      # 全テスト(254件=単体243+doc 11、実文418文を含む。
-                  # gap_tracker 12件は既知GAP追跡用に意図的に失敗。STATUS.md 参照)
+$ cargo test      # 全テスト(289件=単体278+doc 11、実文418文を含む。
+                  # gap_tracker 12件を含む全テストがグリーン。STATUS.md 参照)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 $ cargo bench    # 性能ベンチマーク(criterion)
