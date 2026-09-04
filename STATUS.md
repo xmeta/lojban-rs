@@ -1,13 +1,13 @@
 # 開発ステータス
 
-## 現在の状態: v0.115 完成(UI+NAI 無空白結合形と旧 UI 語 h 変体の補完・全テストグリーン)
+## 現在の状態: v0.116 完成(NA 直後 CAI の UI 読み・全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語224 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体305 + doc 11 = 計316テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語225 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体306 + doc 11 = 計317テスト + example 内 unit test 5 全パス
 - tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件、
   v0.109 でバッチ2(接続詞・前置系)の 4 件、v0.110 でバッチ3(形態論・共有・前処理系)の 4 件を
   解消し全 12 テストが緑(下記「既知GAP」参照)
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.115.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.116.0)
 
 ### 帳簿整理(v0.114 版数のまま。文法・受理挙動の変更なし)
 
@@ -29,6 +29,49 @@
   語長上限 50 による rafsi 指数と stack overflow の封じ込み)。
   tests/fuzz.rs に lu ネスト最悪深度の境界テストを 1 本追加
   (fuzz の内訳 8→9。単体 298→299)
+
+## v0.116 で追加(NA 直後 CAI の UI 読みと s_marks 直後 free スロット)
+
+### 報告文の修正(gi'e 接続第2枝の na sai ka'e muvdu)
+
+報告文「.i lo se kecti cu sligau lo rebla tai lo nu tolgei kei gi'e na sai
+ka'e muvdu」が ours 拒否・z0 受理。切り分けると原因は `na sai`(NA+CAI)。
+z0 の木の実構造は NA + post_clause の free(sai を UI 読み)+ tag(ka'e)+
+selbri であり、NA と CAI の結合単位ではない(zantufa は CAI スケール語を
+UI 語彙に包含し、NA の直後に post_clause の free を取る)。
+
+### 実測(NA 6 種×CAI 5 種×CAhA 有無の全 60 形+裸 CAI 3 位置+融合形)
+
+- `mi {na,na'e,to'e,no'e,je'a,ja'a} {sai,cai,ru'e,cu'i,sa'e} [ka'e] muvdu`
+  の全 60 形を z0/z1/maf 実測: na/ja'a 系は参照 3 種全受理。
+  na'e/to'e/no'e/je'a + CAI + ka'e のみ z1 が拒否の参照分裂
+  (z0=1/z1=0/maf=1)。裸 CAI(`mi sai muvdu`/`sai mi klama`/
+  `mi klama cu'i`等)・CAI+CAI(`mi sai cai muvdu`)・UI+NAI 空白形
+  (`mi na sai nai muvdu`)・融合形(`sainai/cu'inai/cuhinai` 両位置)は
+  参照 3 種全受理
+- z0 の木: 「mi na sai ka'e muvdu」= NA(na)+free(UI sai)+tag(ka'e)+
+  selbri。「mi na'e ba'e mutce」= NAhE(na'e)+tanru 前置 BAhE(ba'e)+
+  selbri(free ではない)
+
+### 実装(UI_core 3 形+UINAI_joint 3 形+s_marks 直後スロット)
+
+- UI_core に `sai` `cu'i` `cuhi` を収録(cai/ru'e/sa'e/ruhe は収録済みの
+  ため残り。cai/ru'e と同様の二重収録)。ui_free の UI+CAI/NAI 後置と
+  frees_mid 経由の CAI+CAI 連続も自動で有効化
+- UINAI_joint に `sainai` `cu'inai` `cuhinai` を収録(参照 3 種全受理実測)
+- selbri に s_marks 直後の `(sp1 ~ !BAhE_clause ~ frees_mid)?` スロットを
+  追加(従来 sp1? が空白を先食いして届かなかった)。BAhE は z0 が後続
+  tanru_unit の前置に束ねるため除外。frees_mid は silent のため既存入力の
+  木は不変(ただし na'e+ba'e 形は free 奪取にならないことを回帰ピンで固定)
+
+### 掃引結果(v0.116。プローブ 2,228 行=2,201 行+新規 27 行)
+
+- ours ok 2,123 / z0 ok 1,986 / z1 ok 1,986 / maftufa ok 1,955。
+  GAP 候補 32 件、OVER 候補 145 件(ともに不変)
+- ok→err ゼロ、既存行の err→ok ゼロ、参照列の変化ゼロ。新規 27 行は
+  24 行が全緑+3 行が z1 分裂の正確な記録(ours=z0=maf ok・z1 err)
+- tests/syntax.rs に 1 テスト追加(報告文ピン+NA×CAI マトリクス+裸 CAI
+  3 位置+融合形+BAhE 除外ピン)。cargo test 317 全パス
 
 ## v0.115 で追加(UI+NAI 無空白結合形と旧 UI 語 h 変体の補完)
 

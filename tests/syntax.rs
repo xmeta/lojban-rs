@@ -5187,11 +5187,18 @@ fn 融合感情否定_cai後置と既存空白形の不変_v0_115() {
     let s = parse_ok("dainai cai mi klama");
     assert!(s.contains("UINAI_joint \"dainai\""), "{s}");
     assert!(s.contains("UI_core \"cai\""), "{s}");
-    // sai/cu'i は zantufa が UI 語彙に包含するため参照 3 種受理だが、
-    // 本実装は CAI_core のみの既知差分クラス(次バッチ課題)。融合形でも同様
-    assert!(lojban::parse("dainai sai mi klama").is_err());
-    assert!(lojban::parse("dainai cu'i mi klama").is_err());
-    assert!(lojban::parse("dai nai sai mi klama").is_err());
+    // sai/cu'i は zantufa が UI 語彙に包含するため参照 3 種受理。
+    // v0.116 で UI_core に収録したため融合形+空白 CAI 形も受理に
+    // (UINAI 1 トークン+ free(UI sai/cu'i)の 2 単位。z0 の 3 free 連続と受理一致)
+    for t in ["dainai sai mi klama", "dainai cu'i mi klama"] {
+        let s = parse_ok(t);
+        assert!(s.contains("UINAI_joint"), "{t}: {s}");
+    }
+    // スペースあり形は UI+NAI free と UI free の 2 単位(z0 の 3 free 連続と受理一致)
+    let s = parse_ok("dai nai sai mi klama");
+    assert!(s.contains("(NAI_clause (NAI_core \"nai\"))"), "{s}");
+    assert!(s.contains("(UI_core \"sai\")"), "{s}");
+    assert!(!s.contains("UINAI_joint"), "{s}");
     // 既存不変ピン: UI+CAI 空白形(CAI スロットの木。ruhe は v0.115 で UI_core
     // にも収録したが CAI スロットの読みは不変)
     let s = parse_ok("mi u'i ruhe broda");
@@ -5281,4 +5288,51 @@ fn 描述と_selbri時制後の_freeスロット_v0_115() {
     // OVER 解消ピン: 裸融合形の描述内 selbri は参照 3 種とも拒否(z0 整合の縮小)
     assert!(lojban::parse("lo dainai ku").is_err());
     assert!(lojban::parse("mi viska lo dainai ku").is_err());
+}
+
+#[test]
+fn na直後のcaiはui読みfree_v0_116() {
+    // 報告文: gi'e 接続第2枝の na sai ka'e muvdu(z0 は NA + post_clause free
+    // (sai の UI 読み)+ tag(ka'e)+ selbri)。従来は s_marks 直後に free が
+    // 届かず拒否していた
+    let s =
+        parse_ok(".i lo se kecti cu sligau lo rebla tai lo nu tolgei kei gi'e na sai ka'e muvdu");
+    assert!(s.contains("GIhA_core \"gi'e\""), "{s}");
+    assert!(s.contains("NA_core \"na\""), "{s}");
+    assert!(s.contains("UI_core \"sai\""), "{s}");
+    assert!(s.contains("CAhA_core \"ka'e\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"muvdu\""), "{s}");
+    // 最小再現: NA/NAhE/JAhA + CAI(+CAhA)のマトリクス(全形 z0/z1/maf 受理実測)
+    for na in ["na", "na'e", "to'e", "no'e", "je'a", "ja'a"] {
+        for cai in ["sai", "cai", "ru'e", "cu'i", "sa'e"] {
+            parse_ok(&format!("mi {na} {cai} muvdu"));
+            parse_ok(&format!("mi {na} {cai} ka'e muvdu"));
+        }
+    }
+    // CAI+CAI 連続・NAI 後置(参照 3 種全受理)
+    parse_ok("mi sai cai muvdu");
+    parse_ok("mi na sai nai muvdu");
+    parse_ok("mi klama gi'e na sai ka'e muvdu");
+    // 裸 CAI の 3 位置(sai/cu'i/cuhi の UI 読み。ruhe/cai/ru'e/sa'e は既収録)
+    for w in ["sai", "cu'i", "cuhi"] {
+        parse_ok(&format!("{w} mi klama"));
+        parse_ok(&format!("mi klama {w}"));
+        parse_ok(&format!("mi na {w} muvdu"));
+    }
+    // 融合形 sainai/cu'inai/cuhinai(参照 3 種全受理)
+    for w in ["sainai", "cu'inai", "cuhinai"] {
+        let s = parse_ok(&format!("{w} mi klama"));
+        assert!(s.contains("UINAI_joint"), "{w}: {s}");
+        parse_ok(&format!("mi klama {w}"));
+    }
+    // BAhE は新スロットに吸われず tanru 前置に束ねる(z0 の木と同型)
+    let s = parse_ok("mi na'e ba'e mutce");
+    assert!(
+        s.contains("tanru_unit (BAhE_clause (BAhE_core \"ba'e\")"),
+        "{s}"
+    );
+    // 既存不変: NA 単独・UI+CAI 空白 CAI スロット
+    parse_ok("mi na ka'e muvdu");
+    let s = parse_ok("mi u'i sai broda");
+    assert!(s.contains("(CAI_clause (CAI_core \"sai\"))"), "{s}");
 }

@@ -88,7 +88,10 @@ UINAI_joint = @{ (^"ta'onai" | ^"ja'onai" | ^"ku'inai" | ^"po'onai"
                   | ^"zohonai" | ^"ahunai" | ^"ohonai" | ^"uhanai"
                   | ^"uhenai" | ^"ihenai" | ^"behenai" | ^"behunai"
                   | ^"dihainai" | ^"fauhunai" | ^"gehenai" | ^"lihanai"
-                  | ^"nihaunai" | ^"suhanai") ~ &word_boundary }
+                  | ^"nihaunai" | ^"suhanai"
+                // v0.116: CAI スケール語の UI 読み(sai/cu'i/cuhi)に伴う融合形。
+                // z0/z1/maf 全形受理の実測。UI_core 追加分と対応
+                | ^"sainai" | ^"cu'inai" | ^"cuhinai") ~ &word_boundary }
 // 注: sentence を prenex_sentence より先に試す(v0.100)。prenex 項に sumti を
 // 許可すると、非 prenex 入力(sumti で始まる普通の文)で prenex_sentence が
 // 描述を解析し切ってから ZOhU で失敗・全巻き戻しとなり、sentence 経路が
@@ -461,7 +464,15 @@ tail_terms = { (sp1 ~ free)* ~ (sp1 ~ terms_items)? ~ (sp1 ~ free)* ~ (sp1 ~ VAU
 // 既存入力は (sp1 ~ frees_mid)? が空で失敗した後 sp1? を付け直すだけのため
 // 木・受理集合ともに不変。tagged の tense_tags 枝(ta'i ba'e ma … 等)には
 // frees_mid スロットが既存であり、selbri 内の時制との非対称を解消する
-selbri  = { s_marks? ~ sp1? ~ tense_marks? ~ (sp1 ~ frees_mid)? ~ sp1? ~ s_marks? ~ sp1? ~ tanru ~ co_tail?
+// v0.116: s_marks 直後の自由修飾語スロット(mi na sai ka'e muvdu)。
+// zantufa は NA の直後に post_clause の free(sai を UI 読み)を取るため
+// 参照 3 種は NA/NAhE/JAhA + CAI の並びを受理する。従来は sp1? が空白を
+// 先食いして (sp1 ~ frees_mid)? に届かず拒否していた。frees_mid は
+// silent のため既存入力の木・受理集合は不変(空マッチ時は sp1? が従来
+// どおり空白を吸う)
+// ただし BAhE は除外: z0 は na'e 直後の ba'e を free ではなく後続 tanru_unit
+// の前置に束ねる実測(「mi na'e ba'e mutce」の木)。!BAhE_clause で譲る
+selbri  = { s_marks? ~ (sp1 ~ !BAhE_clause ~ frees_mid)? ~ sp1? ~ tense_marks? ~ (sp1 ~ frees_mid)? ~ sp1? ~ s_marks? ~ sp1? ~ tanru ~ co_tail?
           | (NAhE_clause ~ sp1)? ~ guhek_selbri }
 // 述語の先接続(gu'e X gi Y 等。camxes の selbri_6 相当)
 guhek_selbri = { GUhA_clause ~ (sp1 ~ NAI_clause)? ~ sp1 ~ selbri ~ sp1 ~ gi_joint
@@ -1370,7 +1381,14 @@ UI_core = @{ (^"u'i" | ^"u'u" | ^"ru'e" | ^"ju'o" | ^"pe'i" | ^"sa'e" | ^"ta'o"
                   | ^"zoho" | ^"ahu" | ^"oho" | ^"uha"
                   | ^"uhe" | ^"ihe" | ^"behe" | ^"behu"
                   | ^"dihai" | ^"fauhu" | ^"gehe" | ^"liha"
-                  | ^"nihau" | ^"suha") ~ &word_boundary }
+                  | ^"nihau" | ^"suha"
+               // v0.116: CAI スケール語の UI 読み。zantufa は CAI スケール
+               // (sai/cu'i 等)を UI 語彙に包含し裸形の自由修飾語として受理する
+               // 実測(「mi sai muvdu」「na sai mi klama」等は参照 3 種全 ok)。
+               // cai/ru'e/sa'e/ruhe は収録済みのため残り 3 形を追加
+               // (cai/ru'e と同様の二重収録。ui_free の UI+CAI/NAI 後置と
+               // UINAI_joint の融合形も自動で有効化)
+                | ^"sai" | ^"cu'i" | ^"cuhi") ~ &word_boundary }
 VAU_core = @{ ( ^"vau") ~ &word_boundary }
 VUhO_core = @{ ( ^"vu'o" | ^"vuho") ~ &word_boundary }
 Y_core = @{ ( ("y" | "Y")+) ~ &word_boundary }

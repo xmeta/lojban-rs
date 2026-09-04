@@ -1223,6 +1223,9 @@ gehe mi klama
 liha mi klama
 nihau mi klama
 suha mi klama
+sai mi klama
+cu'i mi klama
+cuhi mi klama
 mi klama u'i
 mi klama u'u
 mi klama ru'e
@@ -1375,6 +1378,9 @@ mi klama gehe
 mi klama liha
 mi klama nihau
 mi klama suha
+mi klama sai
+mi klama cu'i
+mi klama cuhi
 mi klama u'inai
 mi klama u'unai
 mi klama ru'enai
@@ -1527,6 +1533,9 @@ mi klama gehenai
 mi klama lihanai
 mi klama nihaunai
 mi klama suhanai
+mi klama sainai
+mi klama cu'inai
+mi klama cuhinai
 u'inai mi klama
 u'unai mi klama
 ru'enai mi klama
@@ -1679,6 +1688,9 @@ gehenai mi klama
 lihanai mi klama
 nihaunai mi klama
 suhanai mi klama
+sainai mi klama
+cu'inai mi klama
+cuhinai mi klama
 mi klama vau
 mi viska lo broda vu'o noi mi klama
 mi viska lo broda vuho noi mi klama
@@ -2199,3 +2211,18 @@ farlu ju'i tu'a do cnita
 mi klama gi'e ju'i tu'a do cadzu
 li la'e pa su'i re lohO
 li tu'a pa su'i re lohO
+mi na sai muvdu
+mi na sai ka'e muvdu
+mi na'e sai muvdu
+mi na'e sai ka'e muvdu
+mi to'e cu'i ka'e muvdu
+mi no'e cai muvdu
+mi je'a ru'e ka'e muvdu
+mi ja'a sa'e muvdu
+mi sai cai muvdu
+mi cu'i sai muvdu
+mi na sai nai muvdu
+mi klama gi'e na sai ka'e muvdu
+sai nai mi klama
+mi na'e ba'e mutce
+.i lo se kecti cu sligau lo rebla tai lo nu tolgei kei gi'e na sai ka'e muvdu

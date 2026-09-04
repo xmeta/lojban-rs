@@ -521,6 +521,33 @@ STRUCTURAL_PROBES = [
     # 同様の既存 GAP。tu'a 移設後に lahe_sumti 経路の補完候補として記録)
     "li la'e pa su'i re lohO",
     "li tu'a pa su'i re lohO",
+    # v0.116: NA/NAhE/JAhA 直後の CAI は UI 読みの free(z0 は NA の直後に
+    # post_clause の free を取り、sai/cu'i 等の CAI スケールを UI 語彙に包含)。
+    # UI_core に sai/cu'i/cuhi を収録+UINAI_joint に sainai/cu'inai/cuhinai を
+    # 収録+s_marks 直後に (sp1 ~ !BAhE_clause ~ frees_mid)? スロットを追加。
+    # BAhE は z0 が後続 tanru_unit の前置に束ねるためスロットから除外。
+    # NA 6 種×CAI 5 種×CAhA 有無の全 60 形は z0/z1/maf 実測で受理を確認
+    # (na'e/to'e/no'e/je'a + CAI + ka'e のみ z1 が拒否の参照分裂)。
+    # 下段は報告文(gi'e 接続第2枝の na sai ka'e muvdu)
+    "mi na sai muvdu",
+    "mi na sai ka'e muvdu",
+    "mi na'e sai muvdu",
+    "mi na'e sai ka'e muvdu",
+    "mi to'e cu'i ka'e muvdu",
+    "mi no'e cai muvdu",
+    "mi je'a ru'e ka'e muvdu",
+    "mi ja'a sa'e muvdu",
+    "mi sai cai muvdu",
+    "mi cu'i sai muvdu",
+    "mi na sai nai muvdu",
+    "mi klama gi'e na sai ka'e muvdu",
+    "sainai mi klama",
+    "mi klama sainai",
+    "cu'inai mi klama",
+    "mi klama cuhinai",
+    "sai nai mi klama",
+    "mi na'e ba'e mutce",
+    ".i lo se kecti cu sligau lo rebla tai lo nu tolgei kei gi'e na sai ka'e muvdu",
 ]
 
 
