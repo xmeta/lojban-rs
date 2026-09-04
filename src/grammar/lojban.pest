@@ -225,7 +225,18 @@ terms_atom  = _{ free | term
                | PEhE_clause ~ sp1 ~ pehe_conn ~ sp1 ~ term }
 // pe'e 後の接続詞(論理 je / 非論理 joi / 間隔 bi'o 等。camxes joik_jek 準拠)
 pehe_conn = _{ JA_clause | ek_joik }
-term  = { tagged | na_ku | termset
+// v0.117: 裸 NA/JAhA の項(mi na lo broda cu blanu 型)。zantufa term_2 の
+// NA_clause !bridi_tail KU_elidible に対応(z0 の NA は ja'a を含むため
+// JAhA も対象)。!bridi_tail が無いと「mi na klama」が terms(mi,na)+
+// selbri(klama)に誤読されるため必須ガード。深さ注意: bridi_tail 経由で
+// na_term に戻る経路は必ず NA 語を消費するため入力長で停止する
+// (na 連続のストレステストで確認)
+na_term = { (NA_clause | JAhA_clause) ~ !(sp1 ~ bridi_tail) }
+// v0.117: 項レベルの BO 短スコープ結合(mi bo do / na bo do 型)。
+// zantufa term_1 = term_2 (joik_ek? BO_clause term_2)* に対応。
+// BO が無い既存入力は継続が空で木は不変。SE/ME+BO(se bo / be bo 型)は
+// 参照 3 種とも拒否の実測のため頭項が無い形では届かず拒否維持
+term  = { (tagged | na_ku | na_term | termset
         // v0.110: 項レベルの ke グループ(ke … ke'e 内に項を括る)。
         // GAP_ke_group内の項。z0 実測(zantufa-0.9999.js):
         // term_2 = KE_clause term+ KEhE_elidible の項グループで、
@@ -240,7 +251,7 @@ term  = { tagged | na_ku | termset
         // 本実装も拒否のまま。既存の tanru_unit 側 ke_group(KE selbri KEhE?)
         // は「ke broda ke'e」型の selbri グループを先に処理するため木は不変
         | KE_clause ~ sp1 ~ term ~ (sp1 ~ term)* ~ (sp1 ~ KEhE_clause)?
-        | sumti }
+        | sumti) ~ (sp1 ~ BO_clause ~ sp1 ~ term)? }
 // 項set(nu'i X Y [nu'u]): 複数項を 1 対象として接続・タグ付けできる
 termset = { NUhI_clause ~ sp1 ~ terms ~ (sp1 ~ NUhU_clause)? }
 // 注: FA 枝も NAI 後置を取る(v0.108。fa nai / fai nai 等。FA の否定スロット。
@@ -319,7 +330,7 @@ sumti      = { sumti_core ~ (sp1 ~ relative_clauses)?
 // 注: 裸の数詞項は直後が MOI 述語(re moi 等)なら項としない。
 //     PEG の繰り返しは成功で確定するため、ここで拒否しないと
 //     bridi_tail 側の「数詞+MOI」述語が届かない
-sumti_core = _{ bu_lerfu | KOhA_clause | lahe_sumti | desc | BY_clause | quant_desc | quant_selbri | quant_sumti | bare_number | abstraction
+sumti_core = _{ nahe_bo_sumti | nahe_sumti | bu_lerfu | KOhA_clause | lahe_sumti | desc | BY_clause | quant_desc | quant_selbri | quant_sumti | bare_number | abstraction
                | lu_quote | zo_quote | gek_sumti | li_mex | zoi_quote }
 // 注: 直後が ROI/TAhE/ZAhO の場合は数詞単独の項としない。
 //     「so'i re'u」「za'u ro re'u」等の数詞+間隔プロパティは複合タグ
@@ -354,6 +365,15 @@ quant_sumti = { mex ~ sp1 ~ sumti_core }
 // tu'a を KOhA から移設)。lu'u による明示閉鎖も許容
 // (LAhE の終端は LUhU。ge'u は GOI 関係節の終端)
 // 後続 sumti は必須(z0 の sumti_5 = LAhE sumti LUhU_elidible と同形。
+// v0.117: NAhE 前置の項(fa ro me na'e bo lo rebyrespa 型)。
+// zantufa sumti_5 の (LAhE_clause / NAhE_clause BO_clause)
+// relative_clauses? sumti LUhU_elidible と NAhE_clause sumti_3 に対応。
+// 裸形の内項は full sumti(GOhA は sumti_core に無いため z0 どおり
+// 「na'e go'i」は届かず拒否維持)。BO 形は LUhU 明示閉鎖も許容
+// (lahe_sumti と同型)。描述内容(lo na'e bo broda ku 型)は参照 3 種とも
+// 拒否の実測のため sumti_tail の selbri 要求で従来どおり拒否される
+nahe_bo_sumti = { NAhE_clause ~ sp1 ~ BO_clause ~ sp1 ~ sumti ~ (sp1 ~ LUhU_clause)? }
+nahe_sumti = { NAhE_clause ~ sp1 ~ sumti }
 // 裸 LAhE 語は sumti として成立しない)
 lahe_sumti = { LAHEDI_joint | LAhE_clause ~ sp1 ~ sumti ~ (sp1 ~ LUhU_clause)? }
 

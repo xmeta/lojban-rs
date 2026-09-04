@@ -1,13 +1,13 @@
 # 開発ステータス
 
-## 現在の状態: v0.116 完成(NA 直後 CAI の UI 読み・全テストグリーン)
+## 現在の状態: v0.117 完成(NAhE 前置項と項レベル BO 結合・全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語225 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体306 + doc 11 = 計317テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語226 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体307 + doc 11 = 計318テスト + example 内 unit test 5 全パス
 - tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件、
   v0.109 でバッチ2(接続詞・前置系)の 4 件、v0.110 でバッチ3(形態論・共有・前処理系)の 4 件を
   解消し全 12 テストが緑(下記「既知GAP」参照)
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.116.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.117.0)
 
 ### 帳簿整理(v0.114 版数のまま。文法・受理挙動の変更なし)
 
@@ -29,6 +29,51 @@
   語長上限 50 による rafsi 指数と stack overflow の封じ込み)。
   tests/fuzz.rs に lu ネスト最悪深度の境界テストを 1 本追加
   (fuzz の内訳 8→9。単体 298→299)
+
+## v0.117 で追加(NAhE 前置の項と項レベル BO 結合)
+
+### 報告文の修正(ME 項内の na'e bo lo rebyrespa)
+
+報告文「.i go'i fa ro me na'e bo lo rebyrespa noi simlu ...」が ours 拒否・
+z0 受理。切り分けると原因は `na'e bo`(NAhE+BO)。z0 の木は ME 項内に
+{NAhE:na'e BO:bo SUMTI} を取る。zantufa-0.9999.js.peg の原文法で裏取り:
+sumti_5 = ... / (LAhE_clause / NAhE_clause BO_clause) relative_clauses?
+sumti LUhU_elidible / ... / NAhE_clause sumti_3、
+term_1 = term_2 (joik_ek? BO_clause term_2)*、
+term_2 = ... / !tag sumti / NA_clause !bridi_tail KU_elidible / ...
+
+### 実測(全形 z0/z1/maf。全て事前に参照受理を確認してから収録)
+
+- NAhE 4 種×BO 有無×内項(desc/KOhA/lahe/mex/引用): 参照 3 種全受理
+- 裸 NA/JAhA 項(`mi na lo broda cu blanu`/`mi ja'a lo broda cu blanu`/
+  `na le gerku cu batci`): 参照 3 種全受理(z0 の木は NA+KU 省略項)
+- 項 BO 結合(`mi bo do`/`mi lo broda bo lo brode`/`mi bo do bo di'u`):
+  参照 3 種全受理。`na bo`/`fa bo` は z0/z1 受理・maftufa 拒否の参照分裂
+- 拒否維持(参照 3 種とも拒否): GOhA 後続(`na'e go'i`)・描述内容
+  (`lo na'e lo broda ku`/`lo na'e bo broda ku`)・SE/ME+BO(`se bo`/`be bo`)
+
+### 実装(nahe 2 規則+na_term+term BO 継続)
+
+- `nahe_sumti`(NAhE+sumti)、`nahe_bo_sumti`(NAhE+BO+sumti+LUhU?)
+  を sumti_core に追加。GOhA は sumti_core に無いため z0 どおり届かない
+- `na_term`(NA/JAhA + !(sp1 bridi_tail))を term に追加(na_ku の後)。
+  ガードが無いと「mi na klama」が terms(mi,na)+selbri に誤読される。
+  再帰の深さは NA 語消費で入力長に比例(na 連続ストレステストで確認)
+- term に `(sp1 ~ BO_clause ~ sp1 ~ term)?` 継続を追加(z0 term_1 同型)。
+  BO が無い既存入力の木は不変。`fa bo do` も z0 同型の木で受理
+- 旧ピン 2 件を z0 整合に更新:「素のnaは項になれない」→NA 単独項の受理ピン
+  (`na le gerku cu batci` は参照 3 種受理)、gihek NA 前置ピン→tail na 項の
+  z0 同型読み(旧 gihek_link 前置読みの既知差分は解消)
+- 見送り・記録のみ: 描述内容 BO(`lo broda bo lo brode ku`。
+  sumti_tail の selbri 要求を超える機構のため別課題として記録)
+
+### 掃引結果(v0.117。プローブ 2,250 行=2,228 行+新規 22 行)
+
+- ours ok 2,139 / z0 ok 2,002 / z1 ok 2,002 / maftufa ok 1,969。
+  GAP 候補 32 件、OVER 候補 145 件(ともに不変)
+- ok→err ゼロ、既存行の err→ok ゼロ、参照列の変化ゼロ。新規 22 行は
+  14 行が全緑+6 行が拒否ピン+2 行が maftufa 分裂の正確な記録
+- tests/syntax.rs に 1 テスト追加+2 更新。cargo test 318 全パス
 
 ## v0.116 で追加(NA 直後 CAI の UI 読みと s_marks 直後 free スロット)
 

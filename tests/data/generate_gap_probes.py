@@ -548,6 +548,34 @@ STRUCTURAL_PROBES = [
     "sai nai mi klama",
     "mi na'e ba'e mutce",
     ".i lo se kecti cu sligau lo rebla tai lo nu tolgei kei gi'e na sai ka'e muvdu",
+    # v0.117: NAhE 前置の項と項レベル BO 結合。zantufa sumti_5 の
+    # (LAhE/NAhE BO) sumti LUhU_elidible・NAhE sumti_3 と term_1 の
+    # term_2 (BO term_2)*・term_2 の NA !bridi_tail KU_elidible に対応。
+    # 上段は受理ピン(na bo / fa bo は z0/z1 受理・maftufa 拒否の参照分裂)。
+    # 下段は拒否ピン(GOhA 後続・描述内容・SE/ME+BO は参照 3 種とも拒否)
+    "mi na'e lo broda cu blanu",
+    "mi to'e bo lo broda cu blanu",
+    "mi no'e lo broda cu blanu",
+    "mi je'a bo lo broda cu blanu",
+    "mi na lo broda cu blanu",
+    "mi ja'a lo broda cu blanu",
+    "na le gerku cu batci",
+    "mi me na'e bo lo broda",
+    "mi viska na'e bo lo broda",
+    "mi broda na gi'e brode",
+    "mi bo do cu blanu",
+    "mi lo broda bo lo brode cu blanu",
+    "mi bo do bo di'u cu blanu",
+    "mi na bo do cu blanu",
+    "fa bo do cu blanu",
+    "lo broda bo lo brode ku",
+    ".i go'i fa ro me na'e bo lo rebyrespa noi simlu lo ka dukse lo ka se sfasa kei lo nu zukte lo drata be lo nu kalri moklu zutse gi'e gapru catlu lo drudi be lo kumfa ",
+    "mi na'e go'i cu blanu",
+    "mi na go'i cu blanu",
+    "lo na'e lo broda ku",
+    "lo na'e bo broda ku",
+    "mi se bo do cu blanu",
+    "mi tavla bo do",
 ]
 
 

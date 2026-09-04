@@ -645,8 +645,18 @@ fn naku_項否定() {
 }
 
 #[test]
-fn 素のnaは項になれない() {
-    assert!(lojban::parse("na le gerku cu batci").is_err());
+fn 素のnaはku省略の項_v0_117() {
+    // v0.117: z0 term_2 の NA !bridi_tail KU_elidible に対応。
+    // 旧ピンは z0 逆行のため更新(na le gerku cu batci は z0/z1/maf 全受理)
+    let s = parse_ok("na le gerku cu batci");
+    assert!(s.contains("NA_core \"na\""), "{s}");
+    assert!(s.contains("LE_core \"le\""), "{s}");
+    // bridi_tail が後続する形は selbri 読みを維持(mi na klama の木は不変)
+    let s = parse_ok("mi na klama");
+    assert!(
+        s.contains("(selbri (s_mark (NA_clause (NA_core \"na\")))"),
+        "{s}"
+    );
 }
 
 #[test]
@@ -4610,15 +4620,17 @@ fn gihekの_na_se前置_v0_110() {
     // GAP(gihek の (NA? SE?) 前置。v0.110 解消)。
     // z0 実測(zantufa-0.9999.js): gihek = NA? SE? GIhA、joik = GAhO? NA? SE?
     // JOI GAhO? で前置スロットを持つ。GIhA 形の z0 の木は「na」を前の
-    // bridi_tail の tail_terms の裸 NA 項(na ku の KU 省略形)として取るが、
-    // 本実装は gihek_link の前置スロットで受ける(木形状差異 = 既知クラス。
-    // 受理・読みは同一)。JOI/BIhI 形は z0 も selbri_4 の joik(NA? SE? JOI)
-    // で前置を取る
+    // bridi_tail の tail_terms の裸 NA 項(na ku の KU 省略形)として取る。
+    // v0.117 で本実装も na_term で同型に読むため差分は解消(旧 gihek_link
+    // 前置スロット読みの記録は本ピンに更新)。JOI/BIhI 形は z0 も selbri_4
+    // の joik(NA? SE? JOI) で前置を取る
+    // v0.117: z0 は na を前 bridi_tail の tail_terms の裸 NA 項
+    // (NA !bridi_tail KU_elidible)として取る実測のため、本実装も na_term の
+    // 同型読みに更新(旧 gihek_link 前置スロット読みの既知差分は解消)。
+    // SE 形は gihek 前置スロットのまま
     let s = parse_ok("mi broda na gi'e brode");
-    assert!(
-        s.contains("(NA_clause (NA_core \"na\")) (GIhA_clause (GIhA_core \"gi'e\"))"),
-        "{s}"
-    );
+    assert!(s.contains("(na_term (NA_clause (NA_core \"na\")))"), "{s}");
+    assert!(s.contains("GIhA_core \"gi'e\""), "{s}");
     parse_ok("mi broda se gi'e brode");
     parse_ok("mi broda na se gi'e brode");
     parse_ok("mi broda na gi'a brode");
@@ -5335,4 +5347,37 @@ fn na直後のcaiはui読みfree_v0_116() {
     parse_ok("mi na ka'e muvdu");
     let s = parse_ok("mi u'i sai broda");
     assert!(s.contains("(CAI_clause (CAI_core \"sai\"))"), "{s}");
+}
+
+#[test]
+fn nahe前置項と項レベルbo_v0_117() {
+    // 報告文: ME 項内の na'e bo lo rebyrespa(z0 sumti_5 の NAhE BO sumti)
+    let s = parse_ok(".i go'i fa ro me na'e bo lo rebyrespa noi simlu lo ka dukse lo ka se sfasa kei lo nu zukte lo drata be lo nu kalri moklu zutse gi'e gapru catlu lo drudi be lo kumfa ");
+    assert!(s.contains("NAhE_core \"na'e\""), "{s}");
+    assert!(s.contains("BO_core \"bo\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"rebyrespa\""), "{s}");
+    // NAhE 4 種×BO 有無(z0/z1/maf 実測。na'e 系 BO 形は参照 3 種全受理)
+    for na in ["na'e", "to'e", "no'e", "je'a"] {
+        parse_ok(&format!("mi {na} lo broda cu blanu"));
+        parse_ok(&format!("mi {na} bo lo broda cu blanu"));
+    }
+    // 裸 NA/JAhA 項(z0 term_2 の NA !bridi_tail KU_elidible)
+    parse_ok("mi na lo broda cu blanu");
+    parse_ok("mi ja'a lo broda cu blanu");
+    parse_ok("na le gerku cu batci");
+    // ME 項内・尾項位置
+    parse_ok("mi me na'e bo lo broda");
+    parse_ok("mi viska na'e bo lo broda");
+    // 項レベル BO 結合(参照 3 種全受理。na bo は z0/z1 受理・maf 拒否)
+    parse_ok("mi bo do cu blanu");
+    parse_ok("mi lo broda bo lo brode cu blanu");
+    parse_ok("mi bo do bo di'u cu blanu");
+    parse_ok("mi na bo do cu blanu");
+    // 拒否維持ピン(GOhA 後続・描述内容・SE/ME+BO は参照 3 種とも拒否)
+    assert!(lojban::parse("mi na'e go'i cu blanu").is_err());
+    assert!(lojban::parse("mi na go'i cu blanu").is_err());
+    assert!(lojban::parse("lo na'e lo broda ku").is_err());
+    assert!(lojban::parse("lo na'e bo broda ku").is_err());
+    assert!(lojban::parse("mi se bo do cu blanu").is_err());
+    assert!(lojban::parse("mi tavla bo do").is_err());
 }
