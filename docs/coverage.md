@@ -7,18 +7,18 @@
 | selma'o | 語彙 | 統語接続 |
 |---|---|---|
 | A |  | ✅ |
-| BAI | `bau` `bai` `cau` `cu'u` `mu'i` `mu'u` `ni'i` `ri'a` `ta'i` `ki'u` `kai` `pa'u` `se'o` `si'u` `va'o` `zu'e` `ja'e` `ra'i` `ri'i` `de'i` `du'o` `fau` `ka'a` `gau` `cihu` `ci'u` `pu'a` `jihe` `ji'e` `jihu` `ji'u` `jiho` `ji'o` `raha` `ra'a` | ✅ |
+| BAI | `bau` `bai` `cau` `cu'u` `mu'i` `mu'u` `ni'i` `ri'a` `ta'i` `tai` `ki'u` `kai` `pa'u` `se'o` `si'u` `va'o` `zu'e` `ja'e` `ra'i` `ri'i` `de'i` `du'o` `fau` `ka'a` `gau` `piho` `pi'o` `cihu` `ci'u` `pu'a` `jihe` `ji'e` `jihu` `ji'u` `jiho` `ji'o` `raha` `ra'a` `ba'i` `ci'o` `rai` `bahi` `cuhu` `duho` `muhi` `nihi` `riha` `seho` `vaho` `rahi` `tahi` `ciho` `di'o` `du'i` `ga'a` `te'i` `muhu` `kihu` `sihu` `rihu` `dehi` `diho` `duhi` `gaha` `tehi` `ca'i` `cahi` `jahe` `pahu` `kahe` `puha` `zuhe` `va'u` `vahu` `pu'i` `xa'o` `dei'a` `co'i` `co'u` | ✅ |
 | BE | `be` | ✅ |
 | BEI | `bei` | ✅ |
 | BEhO | `be'o` `beho` | ✅ |
 | BO | `bo` | ✅ |
 | BOI | `boi` | ✅ |
 | CO | `co` | ✅ |
-| COI | `coi` `co'o` `je'e` `ju'i` `re'i` `nu'e` `fi'i` `fe'o` `mu'o` `mi'e` `ta'a` `pe'u` `ki'e` `viho` `vi'o` `keho` `ke'o` `doi` | ✅ |
+| COI | `coi` `co'o` `je'e` `ju'i` `re'i` `nu'e` `fi'i` `fe'o` `mu'o` `mi'e` `ta'a` `pe'u` `ki'e` `viho` `vi'o` `keho` `ke'o` `doi` `ki'ai` `di'ai` | ✅ |
 | CU | `cu` | ✅ |
 | DOhU | `do'u` `dohu` | ✅ |
-| FA | `fi'a` `fa` `fe` `fi` `fo` `fu` | ✅ |
-| FAhA | `ca'u` `cahu` `ti'a` `tiha` `zu'a` `zuha` `ga'u` `gahu` `ni'a` `niha` `ru'u` `ruhu` `ne'i` `pa'o` `paho` `te'e` `ne'a` `re'o` | ✅ |
+| FA | `fi'a` `fai` `fa` `fe` `fi` `fo` `fu` | ✅ |
+| FAhA | `ca'u` `cahu` `ti'a` `tiha` `zu'a` `zuha` `ga'u` `gahu` `ni'a` `niha` `ru'u` `ruhu` `ne'i` `pa'o` `paho` `te'e` `ne'a` `re'o` `bu'u` `buhu` `du'a` `duha` `vu'a` `vuha` `ze'o` `zeho` `zo'i` `zohi` `fa'a` `faha` | ✅ |
 | MOhI | `mo'i` `mohi` | ✅ |
 | FAhO | `fa'o` `faho` | ✅ |
 | FEhU | `fe'u` `fehu` | ✅ |
@@ -30,7 +30,7 @@
 | GIhA | `gi'a` `gi'e` `gi'i` `gi'o` `gi'u` | ✅ |
 | GIhI | `gihi` | — |
 | GOI | `po'e` `po'u` `no'u` `goi` `pe` `po` `ne` | ✅ |
-| GOhA | `go'i` `go'o` `nei` `ra'o` `du` `mo` | ✅ |
+| GOhA | `go'i` `go'o` `nei` `ra'o` `du` `mo` `bu'a` `bu'e` `bu'i` `cei'i` `co'e` `gai'o` `go'a` `go'e` `go'u` `no'a` `xe'u` | ✅ |
 | I | `i` | ✅ |
 | BIhI | `bi'o` `bi'i` `mi'i` | ✅ |
 | VUhU | `su'i` `vu'u` `pi'i` `fe'i` `gei` `de'o` `te'o` `re'a` `va'a` `pa'i` `si'i` `fu'u` | ✅ |
@@ -52,40 +52,40 @@
 | SI | `si` | ✅ |
 | SU | `su` | ✅ |
 | JA | `ja` `je` `jo` `ju` | ✅ |
-| JOI | `jo'e` `joi` `fa'u` `ku'a` `johu` `jo'u` | ✅ |
+| JOI | `jo'e` `joi` `fa'u` `ku'a` `johu` `jo'u` `ja` `je` `jo` `ju` `ji` | ✅ |
 | KE | `ke` | ✅ |
 | KEhE | `ke'e` `kehe` | ✅ |
 | KEI | `kei` | ✅ |
-| KOhA | `zo'e` `zu'i` `ke'a` `mi'o` `ko'a` `ko'e` `ko'i` `ko'o` `ko'u` `fo'a` `fo'e` `fo'i` `fo'o` `fo'u` `vo'a` `vo'e` `vo'i` `vo'o` `vo'u` `mi'ai` `miahi` `mi'a` `ma'a` `do'o` `tu'a` `dei` `di'u` `dihu` `de'u` `dehu` `da'u` `dahu` `mi` `do` `ti` `ta` `tu` `ri` `ra` `ru` `ko` `ma` `da` `de` `di` | ✅ |
+| KOhA | `zo'e` `zu'i` `ke'a` `mi'o` `ko'a` `ko'e` `ko'i` `ko'o` `ko'u` `fo'a` `fo'e` `fo'i` `fo'o` `fo'u` `vo'a` `vo'e` `vo'i` `vo'o` `vo'u` `mi'ai` `miahi` `mi'a` `ma'a` `do'o` `dei` `di'u` `dihu` `de'u` `dehu` `da'u` `dahu` `mi` `do` `ti` `ta` `tu` `ri` `ra` `ru` `ko` `ma` `da` `de` `di` `ce'u` `cehu` `zi'o` `ziho` | ✅ |
 | KU | `ku` | ✅ |
 | KUhO | `ku'o` `kuho` | ✅ |
-| LAhE | `la'e` `lu'e` | ✅ |
+| LAhE | `tu'a` `tuha` `la'e` `lu'e` | ✅ |
 | LE | `le'i` `lo'i` `la'i` `lei` `loi` `lai` `lo'e` `lehe` `le'e` `le` `lo` `la` | ✅ |
 | LEhU | `le'u` `lehu` | ✅ |
 | LI | `li` | ✅ |
-| LIhU | `li'u` `lihu` | — |
+| LIhU | `li'u` `lihu` | ✅ |
 | LOhU | `lo'u` `lohu` | ✅ |
 | LU | `lu` | ✅ |
-| LUhU | `li'u` `lihu` | ✅ |
+| LUhU | `lu'u` `luhu` | ✅ |
 | NA | `na` | ✅ |
 | JAhA | `ja'a` `jaha` | ✅ |
 | NAhE | `na'e` `to'e` `no'e` `je'a` | ✅ |
 | NIhO | `ni'o` `niho` | ✅ |
 | NOI | `poi` `noi` `voi` | ✅ |
-| NU | `je'i` `mu'e` `pu'u` `zu'o` `li'i` `su'u` `du'u` `nu` `ka` `ni` | ✅ |
-| PA |  | ✅ |
-| ROI | `roi` | ✅ |
+| NU | `je'i` `mu'e` `pu'u` `zu'o` `li'i` `su'u` `si'o` `du'u` `nu` `ka` `ni` | ✅ |
+| PA | `dau` `fei` `rei` `vai` `so'a` `so'e` `so'i` `so'u` `so'o` `soho` `za'u` `su'o` `suho` `suhe` `su'e` `daha` `da'a` `ji'i` `jihi` `xo` `pi` `rau` `du'e` `duhe` `mo'a` `moha` `te'o` `teho` `ka'o` `kaho` `tu'o` `pai` `pa` `re` `ci'i` `ci` `vo` `mu` `xa` `ze` `bi` `so` `no` `ro` `ki'o` `ma'u` `ni'u` `ce'i` `cehi` `fi'u` `fihu` | ✅ |
+| ROI | `roi` `re'u` `rehu` | ✅ |
 | SE | `se` `te` `ve` `xe` | ✅ |
 | SEI | `sei` | ✅ |
 | SEhU | `se'u` `sehu` | ✅ |
 | TO | `to` | ✅ |
 | TOI | `toi` | ✅ |
-| UI | `u'i` `u'u` `ru'e` `ju'o` `pe'i` `sa'e` `ta'o` `e'o` `e'e` `ehu` `e'u` `ohu` `o'u` `a'e` `i'a` `buho` `bu'o` `kuhi` `ku'i` `ja'o` `po'o` `dahi` `da'i` `jehu` `je'u` `laha` `la'a` `zaha` `za'a` `gahi` `ga'i` `uho` `u'o` `ihi` `i'i` `oha` `o'a` `ehi` `e'i` `kahu` `ka'u` `ruha` `ru'a` `jiha` `ji'a` `zuhu` `zu'u` `baha` `ba'a` `ai` `au` `kiaha` `ki'a` `zo'o` `a'u` `o'o` `u'a` `u'e` `cai` `ui` `oi` `ie` `ii` `uu` `ua` `ue` `uo` `ia` `iu` `ei` `xu` `i'e` `be'e` `be'u` `di'ai` `fau'u` `ge'e` `li'a` `ni'au` `pei` `o'i` `su'a` | ✅ |
+| UI | `u'i` `u'u` `ru'e` `ju'o` `pe'i` `sa'e` `ta'o` `e'o` `e'e` `ehu` `e'u` `ohu` `o'u` `a'e` `i'a` `buho` `bu'o` `kuhi` `ku'i` `ja'o` `po'o` `dahi` `da'i` `jehu` `je'u` `laha` `la'a` `zaha` `za'a` `gahi` `ga'i` `uho` `u'o` `ihi` `i'i` `oha` `o'a` `ehi` `e'i` `kahu` `ka'u` `kau` `ruha` `ru'a` `jiha` `ji'a` `zuhu` `zu'u` `baha` `ba'a` `ai` `au` `kiaha` `ki'a` `zo'o` `a'u` `o'o` `u'a` `u'e` `cai` `ui` `oi` `ie` `ii` `uu` `ua` `ue` `uo` `ia` `iu` `ei` `xu` `i'e` `be'e` `be'u` `di'ai` `fau'u` `ge'e` `li'a` `ni'au` `pei` `o'i` `su'a` `a'i` `ahi` `a'o` `aho` `ca'e` `cahe` `dai` `e'a` `eha` `io` `ju'a` `juha` `ke'u` `kehu` `le'o` `leho` `li'o` `liho` `o'e` `ohe` `pau` `pa'e` `pahe` `ra'u` `rahu` `ro'a` `roha` `ro'o` `roho` `se'a` `seha` `si'a` `siha` `ta'u` `tahu` `ti'e` `tihe` `to'u` `tohu` `va'i` `vahi` `vu'e` `vuhe` `sahe` `ohi` `taho` `pehi` `juho` `uhi` `uhu` `ruhe` `eho` `ehe` `ahe` `iha` `zoho` `ahu` `oho` `uha` `uhe` `ihe` `behe` `behu` `dihai` `fauhu` `gehe` `liha` `nihau` `suha` `sai` `cu'i` `cuhi` | ✅ |
 | VAU | `vau` | ✅ |
 | VUhO | `vu'o` `vuho` | ✅ |
 | Y |  | ✅ |
 | NAI | `nai` | ✅ |
-| MAI | `pamai` `remai` `cimai` `vomai` `mumai` `xamai` `zemai` `bimai` `somai` `nomai` | ✅ |
+| MAI | `pamai` `remai` `cimai` `vomai` `mumai` `xamai` `zemai` `bimai` `somai` `nomai` `mai` `mo'o` `moho` | ✅ |
 | CAI | `cai` `sai` `ru'e` `ruhe` `cu'i` `cuhi` | ✅ |
 | PU | `pu` `ca` `ba` | ✅ |
 | KI | `ki` | ✅ |
@@ -108,7 +108,7 @@
 | XI | `xi` | ✅ |
 | CEhE | `cehe` `ce'e` | ✅ |
 | PEhE | `pehe` `pe'e` | ✅ |
-| BAhE | `bahe` `ba'e` | ✅ |
+| BAhE | `bahe` `ba'e` `za'e` | ✅ |
 | DAhO | `daho` `da'o` | ✅ |
 | NUhI | `nuhi` `nu'i` | ✅ |
 | NUhU | `nuhu` `nu'u` | ✅ |
@@ -120,6 +120,9 @@
 | CMEVLA |  | ✅ |
 | BRIVLA |  | ✅ |
 
-計 113 クラス定義 / 111 クラスが統語に接続。
-未接続の LIhU は LUhU と同語形のための予備定義(設計上未使用)。
+計 113 クラス定義 / 112 クラスが統語に接続。
+未接続の GIhI は対応する統語(文連結 gihi)が未実装のための予備定義。
 結合表記(joint)は次セクション。
+注: UI の `ca'e` は CLL 分類では CAhE(独立 selma'o)だが、参照 3 種(zantufa
+z0/z1・maftufa)が UI と同一挙動(自由修飾語位置・tanru 単位位置とも受理)で
+あるため UI_core に収録している(v0.111)。

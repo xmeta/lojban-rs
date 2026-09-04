@@ -90,6 +90,9 @@ pub fn friendly_error(e: &Error<Rule>) -> String {
 /// `unknown` のいずれか。先頭のポーズ文字(`. , ! ?`)は呼び出し側で
 /// 除去しておくことを推奨。
 ///
+/// [`MAX_TOKEN_CHARS`] を超える語は形態論解析(再帰が語長に比例して深く
+/// なりスタックオーバーフローし得る)を行わず `unknown` を返す。
+///
 /// # Examples
 ///
 /// ```
@@ -102,6 +105,9 @@ pub fn friendly_error(e: &Error<Rule>) -> String {
 pub fn classify_word(word: &str) -> &'static str {
     use grammar::{LojbanParser, Rule};
     use pest::Parser;
+    if word.chars().count() > MAX_TOKEN_CHARS {
+        return "unknown";
+    }
     [
         (Rule::jbocme, "cmevla"),
         (Rule::zifcme, "cmevla"),
@@ -199,6 +205,9 @@ pub fn parse(text: &str) -> Result<Pairs<'_, Rule>, Error<Rule>> {
     }
     let normalized = normalize_zoi(text).map_err(err)?;
     let erased = apply_erasure(normalized.as_ref()).map_err(err)?;
+    // 語長ガードは ZOI 正規化・消去の後に適用する(zoi 本文内の長い語は
+    // zo'e へ置換済み、「長い語 si」は消去後に語が残らないため受理)
+    check_token_lengths(erased.as_ref()).map_err(err)?;
     match erased {
         Cow::Borrowed(_) => match normalized {
             Cow::Borrowed(s) => LojbanParser::parse(Rule::text, s),
@@ -211,6 +220,42 @@ pub fn parse(text: &str) -> Result<Pairs<'_, Rule>, Error<Rule>> {
 /// 入れ子深度の上限。PEG のバックトラックが引用・括弧の深い入れ子で
 /// 指数時間になるため、リソース保護として受理を打ち切る。
 const MAX_NEST: i32 = 8;
+
+/// 1語(空白・ポーズ区切りのトークン)の最大文字数。
+///
+/// pest は packrat 型でないため、rafsi 分割のバックトラックが語長に対して
+/// 指数時間になる(kaprenmit 型 CVC 連鎖の実測: 9文字あたり約2.1倍。
+/// 54文字で2.1秒・72文字で9.2秒)。また語に比例した規則の相互再帰が
+/// 深くなり、10万字級のトークンではスタックオーバーフローで異常終了する
+/// (参照実装 zantufa-0.9999 も JS のスタック上限で約1万字超は
+/// RangeError 破綻となり、受理上限は環境依存で文法上の保証がない)。
+///
+/// 上限 50 は実測データに基づく: 正当な語の実用最長はコーパス・参照実装
+/// テストデータ全体で 29 文字(oicairo'aro'ero'iro'oro'ure'e)に対し
+/// 十分なマージンがあり、上限ちょうどの最悪トークンでも約1.5秒で
+/// 解析が完了する。超過トークンは解析前にクリーンエラーとする。
+pub(crate) const MAX_TOKEN_CHARS: usize = 50;
+
+/// 1語あたりの文字数が上限([`MAX_TOKEN_CHARS`])を超えていないか検査する。
+///
+/// 超過トークンは pest の rafsi 分割バックトラックで指数時間になり、
+/// さらに長いものは再帰深度のスタックオーバーフローで異常終了するため、
+/// 解析前にクリーンエラーへ切り替える(リソース保護)。
+///
+/// トークンの分割は空白とポーズ記号(`.` `,` `!` `?`)。これは文法の
+/// `space_char` と一致し、実トークンより長めに括る保守的な分割になる
+/// (語を短く分割しすぎてガードをすり抜けることはない)。
+fn check_token_lengths(text: &str) -> Result<(), String> {
+    for tok in text.split(|c: char| c.is_ascii_whitespace() || matches!(c, '.' | ',' | '!' | '?')) {
+        if tok.chars().count() > MAX_TOKEN_CHARS {
+            let head: String = tok.chars().take(12).collect();
+            return Err(format!(
+                "語が長すぎます(上限 {MAX_TOKEN_CHARS} 文字): 「{head}…」で始まる語"
+            ));
+        }
+    }
+    Ok(())
+}
 
 /// 引用(lu / lohu)と数式括弧(vei)の入れ子深度を検査する。
 ///
@@ -355,6 +400,12 @@ fn apply_erasure(text: &str) -> Result<Cow<'_, str>, String> {
 /// ZOI がなければ元テキストをそのまま返す([`Cow::Borrowed`])。
 /// 未閉鎖の場合はエラーメッセージを返す。直前の語が `zo`(単語引用)の
 /// 場合は ZOI として扱わない。
+///
+/// 区切り語の一致規則(v0.110): 区切り語トークンの前後のポーズ記号
+/// (`.` `,` `!` `?`)は語の一部ではないため、比較前に両端から除去する。
+/// zantufa(z0)の形態論では区切り語は lojban_word で、前後のポーズは
+/// spaces 側が消費する(「zoi gy. broda .gy」の開き区切り語は `gy`、
+/// 閉じは `gy`。`gy.` / `.gy` / `.gy.` はいずれも受理)。
 fn normalize_zoi(text: &str) -> Result<Cow<'_, str>, String> {
     let b = text.as_bytes();
 
@@ -375,6 +426,11 @@ fn normalize_zoi(text: &str) -> Result<Cow<'_, str>, String> {
         spans.push((start, i));
     }
 
+    // トークン両端のポーズ記号を除去した語形(区切り語の一致に使う)
+    fn bare_delim(tok: &str) -> &str {
+        tok.trim_matches(['.', ',', '!', '?'])
+    }
+
     let mut out: Option<String> = None;
     let mut copied = 0usize; // ここまで text からコピー済み
     let mut k = 0usize;
@@ -386,19 +442,25 @@ fn normalize_zoi(text: &str) -> Result<Cow<'_, str>, String> {
             k += 1;
             continue;
         }
-        // 区切り語
+        // 区切り語(ポーズ記号を除いた語形で対応を取る)
         let (ds, de) = spans[k + 1];
         let delim = &text[ds..de];
-        // 同一トークンの再出現を探す
+        let delim_bare = bare_delim(delim);
+        if delim_bare.is_empty() {
+            return Err(format!(
+                "zoi 引用の区切り語 {delim:?} が語形として不正です(ポーズ記号のみ)"
+            ));
+        }
+        // ポーズ記号を除いた語形が一致するトークンの再出現を探す
         let close = spans[k + 2..]
             .iter()
-            .position(|&(a, c)| &text[a..c] == delim)
+            .position(|&(a, c)| bare_delim(&text[a..c]).eq_ignore_ascii_case(delim_bare))
             .map(|off| spans[k + 2 + off]);
         let (cs, ce) = match close {
             Some(p) => p,
             None => {
                 return Err(format!(
-                    "未閉鎖の zoi 引用です(区切り語 {delim:?} が再出現しません)"
+                    "未閉鎖の zoi 引用です(区切り語 {delim_bare:?} が再出現しません)"
                 ))
             }
         };
@@ -495,10 +557,27 @@ mod tests {
     fn zoi_引用() {
         assert!(parse("mi cusku zoi .ky. hello world .ky.").is_ok());
         assert!(parse("zoi gy English text gy").is_ok());
+        // v0.110: 区切り語の前後のポーズ記号は語の一部ではないため、
+        // 両端を除去した語形で対応を取る(z0 形態論整合)。
+        // 「zoi gy. broda .gy」型の標準的な書記形(GAP_ zoi区切り語の
+        // ピリオド正規化。z0/z1/maf 実測 ok)
+        assert!(parse("zoi gy. broda .gy").is_ok());
+        assert!(parse("mi cusku zoi gy. broda .gy").is_ok());
+        // 開き/閉じのどちらか片方だけポーズ付きの形も受理(z0 実測 ok)
+        assert!(parse("zoi gy. broda gy").is_ok());
+        assert!(parse("zoi gy broda .gy").is_ok());
+        assert!(parse("zoi gy. broda .gy.").is_ok());
+        assert!(parse("zoi .gy. broda .gy.").is_ok());
+        // 本文が空の形(z0 実測 ok)
+        assert!(parse("zoi gy. .gy").is_ok());
+        // 引用後に本文が続く形(z0 実測 ok)
+        assert!(parse("zoi gy. broda .gy brode").is_ok());
         // 未閉鎖
         assert!(parse("mi cusku zoi .ky. abc").is_err());
         // 区切り語不一致
         assert!(parse("zoi .ky. abc .bz.").is_err());
+        // ポーズ記号のみの区切り語は語形として不正
+        assert!(parse("zoi . abc .").is_err());
         // zo 単語引用の対象としての zoi は影響なし
         assert!(parse("zo zoi cu cmavo").is_ok());
     }

@@ -1,0 +1,64 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches:
+      - site/github-pages
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Install wasm target
+        run: rustup target add wasm32-unknown-unknown
+
+      - name: Resolve wasm-bindgen version
+        id: bindgen
+        shell: bash
+        run: |
+          version=$(awk '/name = "wasm-bindgen"/{found=1; next} found && /^version = /{gsub(/[" ]/, "", $3); print $3; exit}' site/wasm/Cargo.lock)
+          test -n "$version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Install wasm-bindgen CLI
+        shell: bash
+        run: |
+          version="${{ steps.bindgen.outputs.version }}"
+          archive="wasm-bindgen-${version}-x86_64-unknown-linux-musl.tar.gz"
+          base="https://github.com/wasm-bindgen/wasm-bindgen/releases/download/${version}"
+          curl -fsSLO "${base}/${archive}"
+          curl -fsSLO "${base}/${archive}.sha256sum"
+          expected=$(cut -d' ' -f1 "${archive}.sha256sum")
+          printf '%s  %s\n' "$expected" "$archive" | sha256sum -c -
+          tar -xzf "${archive}"
+          sudo install -m 0755 "wasm-bindgen-${version}-x86_64-unknown-linux-musl/wasm-bindgen" /usr/local/bin/wasm-bindgen
+
+      - name: Build Pages site
+        run: ./site/build-pages.sh
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site/dist
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
