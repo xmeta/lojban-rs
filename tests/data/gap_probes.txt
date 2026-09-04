@@ -72,6 +72,11 @@ mi puha klama
 mi zuhe klama
 mi va'u klama
 mi vahu klama
+mi pu'i klama
+mi xa'o klama
+mi dei'a klama
+mi co'i klama
+mi co'u klama
 mi bau lo zdani klama
 mi bai lo zdani klama
 mi cau lo zdani klama
@@ -146,6 +151,11 @@ mi puha lo zdani klama
 mi zuhe lo zdani klama
 mi va'u lo zdani klama
 mi vahu lo zdani klama
+mi pu'i lo zdani klama
+mi xa'o lo zdani klama
+mi dei'a lo zdani klama
+mi co'i lo zdani klama
+mi co'u lo zdani klama
 bau lo zdani klama
 bai lo zdani klama
 cau lo zdani klama
@@ -220,6 +230,11 @@ puha lo zdani klama
 zuhe lo zdani klama
 va'u lo zdani klama
 vahu lo zdani klama
+pu'i lo zdani klama
+xa'o lo zdani klama
+dei'a lo zdani klama
+co'i lo zdani klama
+co'u lo zdani klama
 mi klama bau lo zdani
 mi klama bai lo zdani
 mi klama cau lo zdani
@@ -294,6 +309,11 @@ mi klama puha lo zdani
 mi klama zuhe lo zdani
 mi klama va'u lo zdani
 mi klama vahu lo zdani
+mi klama pu'i lo zdani
+mi klama xa'o lo zdani
+mi klama dei'a lo zdani
+mi klama co'i lo zdani
+mi klama co'u lo zdani
 mi viska lo klama be lo zdani ku
 mi viska lo klama be lo zdani bei lo zarci be'o ku
 mi viska lo klama be lo zdani be'o ku
@@ -320,6 +340,8 @@ vi'o la .alis. mi klama
 keho la .alis. mi klama
 ke'o la .alis. mi klama
 doi la .alis. mi klama
+ki'ai la .alis. mi klama
+di'ai la .alis. mi klama
 coi do broda
 co'o do broda
 je'e do broda
@@ -338,6 +360,8 @@ vi'o do broda
 keho do broda
 ke'o do broda
 doi do broda
+ki'ai do broda
+di'ai do broda
 doi la .alis. do'u mi klama
 doi la .alis. dohu mi klama
 fi'a mi klama lo zdani
@@ -519,12 +543,34 @@ mi nei
 mi ra'o
 mi du
 mi mo
+mi bu'a
+mi bu'e
+mi bu'i
+mi cei'i
+mi co'e
+mi gai'o
+mi go'a
+mi go'e
+mi go'u
+mi no'a
+mi xe'u
 ti go'i lo zdani
 ti go'o lo zdani
 ti nei lo zdani
 ti ra'o lo zdani
 ti du lo zdani
 ti mo lo zdani
+ti bu'a lo zdani
+ti bu'e lo zdani
+ti bu'i lo zdani
+ti cei'i lo zdani
+ti co'e lo zdani
+ti gai'o lo zdani
+ti go'a lo zdani
+ti go'e lo zdani
+ti go'u lo zdani
+ti no'a lo zdani
+ti xe'u lo zdani
 mi klama i do klama
 li pa bi'o re du vo
 li pa bi'i re du vo
@@ -1759,7 +1805,6 @@ mi pu'o klama
 mi co'a klama
 mi za'o klama
 mi ca'o klama
-mi co'u klama
 mi mo'u klama
 mi ba'o klama
 mi de'a klama
@@ -1768,7 +1813,6 @@ mi pu'o lo zdani klama
 mi co'a lo zdani klama
 mi za'o lo zdani klama
 mi ca'o lo zdani klama
-mi co'u lo zdani klama
 mi mo'u lo zdani klama
 mi ba'o lo zdani klama
 mi de'a lo zdani klama
@@ -1777,7 +1821,6 @@ pu'o lo zdani klama
 co'a lo zdani klama
 za'o lo zdani klama
 ca'o lo zdani klama
-co'u lo zdani klama
 mo'u lo zdani klama
 ba'o lo zdani klama
 de'a lo zdani klama
@@ -1786,7 +1829,6 @@ mi klama pu'o lo zdani
 mi klama co'a lo zdani
 mi klama za'o lo zdani
 mi klama ca'o lo zdani
-mi klama co'u lo zdani
 mi klama mo'u lo zdani
 mi klama ba'o lo zdani
 mi klama de'a lo zdani
@@ -2248,3 +2290,22 @@ lo na'e lo broda ku
 lo na'e bo broda ku
 mi se bo do cu blanu
 mi tavla bo do
+mi klama pu
+mi klama ba
+mi ca'o
+mi klama za'o
+mi klama vi
+mi'o vi
+critu ca
+mi klama pu ba
+mi klama ba zi
+mi klama mo'i ni'a
+.a'u do
+pe'i do
+.a'u do vau
+coi .ui do
+coi .ui
+ju'i .ui do
+mi klama bi'o
+mi klama bi'i
+mi klama mi'i

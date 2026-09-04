@@ -7,14 +7,14 @@
 | selma'o | 語彙 | 統語接続 |
 |---|---|---|
 | A |  | ✅ |
-| BAI | `bau` `bai` `cau` `cu'u` `mu'i` `mu'u` `ni'i` `ri'a` `ta'i` `tai` `ki'u` `kai` `pa'u` `se'o` `si'u` `va'o` `zu'e` `ja'e` `ra'i` `ri'i` `de'i` `du'o` `fau` `ka'a` `gau` `piho` `pi'o` `cihu` `ci'u` `pu'a` `jihe` `ji'e` `jihu` `ji'u` `jiho` `ji'o` `raha` `ra'a` `ba'i` `ci'o` `rai` `bahi` `cuhu` `duho` `muhi` `nihi` `riha` `seho` `vaho` `rahi` `tahi` `ciho` `di'o` `du'i` `ga'a` `te'i` `muhu` `kihu` `sihu` `rihu` `dehi` `diho` `duhi` `gaha` `tehi` `ca'i` `cahi` `jahe` `pahu` `kahe` `puha` `zuhe` `va'u` `vahu` | ✅ |
+| BAI | `bau` `bai` `cau` `cu'u` `mu'i` `mu'u` `ni'i` `ri'a` `ta'i` `tai` `ki'u` `kai` `pa'u` `se'o` `si'u` `va'o` `zu'e` `ja'e` `ra'i` `ri'i` `de'i` `du'o` `fau` `ka'a` `gau` `piho` `pi'o` `cihu` `ci'u` `pu'a` `jihe` `ji'e` `jihu` `ji'u` `jiho` `ji'o` `raha` `ra'a` `ba'i` `ci'o` `rai` `bahi` `cuhu` `duho` `muhi` `nihi` `riha` `seho` `vaho` `rahi` `tahi` `ciho` `di'o` `du'i` `ga'a` `te'i` `muhu` `kihu` `sihu` `rihu` `dehi` `diho` `duhi` `gaha` `tehi` `ca'i` `cahi` `jahe` `pahu` `kahe` `puha` `zuhe` `va'u` `vahu` `pu'i` `xa'o` `dei'a` `co'i` `co'u` | ✅ |
 | BE | `be` | ✅ |
 | BEI | `bei` | ✅ |
 | BEhO | `be'o` `beho` | ✅ |
 | BO | `bo` | ✅ |
 | BOI | `boi` | ✅ |
 | CO | `co` | ✅ |
-| COI | `coi` `co'o` `je'e` `ju'i` `re'i` `nu'e` `fi'i` `fe'o` `mu'o` `mi'e` `ta'a` `pe'u` `ki'e` `viho` `vi'o` `keho` `ke'o` `doi` | ✅ |
+| COI | `coi` `co'o` `je'e` `ju'i` `re'i` `nu'e` `fi'i` `fe'o` `mu'o` `mi'e` `ta'a` `pe'u` `ki'e` `viho` `vi'o` `keho` `ke'o` `doi` `ki'ai` `di'ai` | ✅ |
 | CU | `cu` | ✅ |
 | DOhU | `do'u` `dohu` | ✅ |
 | FA | `fi'a` `fai` `fa` `fe` `fi` `fo` `fu` | ✅ |
@@ -30,7 +30,7 @@
 | GIhA | `gi'a` `gi'e` `gi'i` `gi'o` `gi'u` | ✅ |
 | GIhI | `gihi` | — |
 | GOI | `po'e` `po'u` `no'u` `goi` `pe` `po` `ne` | ✅ |
-| GOhA | `go'i` `go'o` `nei` `ra'o` `du` `mo` | ✅ |
+| GOhA | `go'i` `go'o` `nei` `ra'o` `du` `mo` `bu'a` `bu'e` `bu'i` `cei'i` `co'e` `gai'o` `go'a` `go'e` `go'u` `no'a` `xe'u` | ✅ |
 | I | `i` | ✅ |
 | BIhI | `bi'o` `bi'i` `mi'i` | ✅ |
 | VUhU | `su'i` `vu'u` `pi'i` `fe'i` `gei` `de'o` `te'o` `re'a` `va'a` `pa'i` `si'i` `fu'u` | ✅ |

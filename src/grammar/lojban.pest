@@ -116,7 +116,11 @@ UINAI_joint = @{ (^"ta'onai" | ^"ja'onai" | ^"ku'inai" | ^"po'onai"
 // zei_compound 側へのガード追加は単独「zo'u zei broda」の既存受理を
 // 損なうため行わない。現実の入力では頂層 zo'u の直後に zei が続く形は
 // 事実上なく、実用上は不変
-item    = { gek_sentence | sentence | prenex_sentence | free | Y_clause
+// v0.118: free 単独項は後続に terms が続く場合は確定しない(PEG の成功確定
+// により「.a'u do」が free 項+.a'u で部分確定し fragment(frees+terms) に
+// 届かなくなるため。区切りなしの項連続は非文のため、free 項が terms を
+// 伴う形は fragment 側で受ける。単独 free 末尾では先読みが空で木は不変)
+item    = { gek_sentence | sentence | prenex_sentence | free ~ !(sp1 ~ terms) | Y_clause
           | fragment | tense_item }
 // 前置スコープ(su'o da zo'u … / ro da zo'u …)。論理の量化を文に前置する。
 // 項は「量化詞+代名詞」の単純形に制限(完全な terms を使うと
@@ -138,7 +142,9 @@ prenex_term     = _{ PA_seq | PA_clause | KOhA_clause | sumti }
 // 末尾の否定先読み: 項解析が na_ku だけで部分確定する入力(naku pu /
 // na ku ba 等)を tense_item に譲る。受理済み入力では item の直後は
 // 区切りか終端のみのため、既存の解析木は不変
-fragment  = { terms ~ (sp1 ~ VAU_clause)? ~ (sp1 ~ free)? ~ !(sp1 ~ tense_mark) }
+// v0.118: 断片先頭の自由修飾語(.a'u do 型)。zantufa は free+terms+VAU の
+// 断片を受理する実測。frees_s は silent のため既存入力の木は不変
+fragment  = { (frees_s ~ sp1)? ~ terms ~ (sp1 ~ VAU_clause)? ~ (sp1 ~ free)? ~ !(sp1 ~ tense_mark) }
 // 裸時制の発話フラグメント。連鎖(mo'i ni'a mo'i ni'a 等)を1項として
 // 受理するため単一の tense_mark ではなく連鎖規則の tense_marks を使う。
 // VAU 後置(mo'i ni'a vau 等)は zantufa の fragment(terms ~ VAU_elidible)相当
@@ -305,7 +311,26 @@ tagged = { FA_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ (sumti | KU_clause))?
          //     PEG は選択成功で確定するため文頭の時制連鎖を削ると直後の裸 ku が
          //     項を開始できず(本枝は tense_tags 前置が必須)、かえって
          //     受理不能になる(実測)
-         | tense_tags ~ sp1 ~ KU_clause }
+         | tense_tags ~ sp1 ~ KU_clause
+         // v0.118: 裸時制タグ項(mi klama pu / mi ca'o 型)。zantufa の
+         // tag_term(tag … KU_elidible)相当で、z0/z1/maf の尾部裸タグ
+         // (PU/VA/ZAhO 等。maf 正準読み。z0/z1 の BAI 汚染読みは不採用)を
+         // 受理する。v0.108 の FA/BAI 裸項と同型のガードで
+         // 「mi pu klama」の時制読みを保全。除外対象は BO/selbri 直続に
+         // 加え、時制連鎖(単語列挙で MOhI+FAhA 対・NA+KU・間隔接続を
+         // 含めず「pu ba」は tense_item の連鎖読みに譲る。ZEhA/VEhA/PA 間隔
+         // の裸形は参照 3 種とも拒否の実測)と free 継続(「mi pu dainai
+         // klama」が selbri 内時制+free+tanru の正規読みを保つため。free
+         // 先導の selbri は単独不成立のため frees_mid 越しの先読みが必要)。
+         // sumti/KU 付き既存枝・na_ku が先のため既存入力の木は不変。 NAI 直続も除外し「mi pu nai klama」の selbri 読みと
+         // 「mi klama pu nai」(参照 3 種受理)の tail 連鎖読みを保全する。
+         // ROI/ROROI の裸形は z1 のみ受理の参照分裂(記録。OVER 条件の
+         // 全参照拒否には当たらない)
+         | (PU_clause | CAhA_clause | ZAhO_clause | ZI_clause | VA_clause
+             | TAhE_clause | ROI_clause | KI_clause | CUhE_clause | FAhA_clause
+             | ROROI_joint)
+           ~ !(sp1 ~ (BO_clause | selbri | tense_mark
+             | frees_mid ~ sp1 ~ (selbri | tense_mark) | NAI_clause)) }
 // 注: FIhO の fe'u は省略可(selbri は tail_terms を含まないため、
 //     直後の sumti との境界が自明)
 // 時制マーク連鎖をタグとして使う(pu le cabdei / vi ne'i le zdani 等)。
@@ -465,16 +490,35 @@ gihek_free_unit = _{ !COI_clause ~ free_unit | vocative_closed
                    // 取り込むため、後続の bridi_tail が尽きる)。cmevla 引数形
                    // 「gi'e ju'i la alen. cadzu」は z0/z1/maf とも拒否のため
                    // KOhA 引数のみ(既存の拒否と整合)
-                   | vocative_koha }
+                   | vocative_koha
+                   // v0.118: 呼格+LAhE 引数(「mi klama gi'e ju'i tu'a do cadzu」。
+                   // z0 は gihek の post_clause の free(vocative+LAhE 項)で受理。
+                   // 引数必須のため裸 vocative の拒否は維持)
+                   | vocative_lahe }
 // 呼格+KOhA 引数(引数必須・DOhU 省略可)。裸 vocative と区別するため
 // 引数を必須にする
-vocative_koha   = _{ COI_clause ~ (sp1 ~ NAI_clause)? ~ sp1 ~ KOhA_clause
+// v0.118: 呼格内の自由修飾語(coi .i'u 型)。zantufa の vocative は COI の
+// 後に free を取る実測。frees_mid は silent のため既存入力の木は不変
+vocative_koha   = _{ COI_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ frees_mid)? ~ sp1 ~ KOhA_clause
                      ~ (sp1 ~ DOhU_clause)? }
-vocative_closed = _{ COI_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ vocative_arg)?
+// v0.118: 呼格+LAhE 引数(引数必須・DOhU 省略可)。連結部の LAhE 形は
+// z0/z1/maf 実測受理(「gi'e ju'i tu'a do cadzu」)。裸 vocative の拒否は維持
+vocative_lahe   = _{ COI_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ frees_mid)? ~ sp1 ~ lahe_sumti
+                     ~ (sp1 ~ DOhU_clause)? }
+vocative_closed = _{ COI_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ frees_mid)? ~ (sp1 ~ vocative_arg)?
                      ~ sp1 ~ DOhU_clause }
 // 述語と項の間・項間の自由修飾語を許容(mi cusku .ui do / cusku sei … do)。
 // 項リスト本体は terms と共通(CEhE/PEhE 含む)
-tail_terms = { (sp1 ~ free)* ~ (sp1 ~ terms_items)? ~ (sp1 ~ free)* ~ (sp1 ~ VAU_clause)? }
+tail_terms = { (sp1 ~ free)* ~ (sp1 ~ terms_items)? ~ (sp1 ~ free)* ~ (sp1 ~ VAU_clause)?
+           // v0.118: 尾部裸時制連鎖(mi klama pu ba / mi klama mo'i ni'a 型)。
+           // z0/z1/maf 実測受理。単語 bare は terms_items 側の tagged 裸枝が
+           // 先に受けるため本枝は連鎖のみに届く(木は不変)。NAI/BO 後置は
+           // tense_marks の意図的拡張と同型で許容(記録)。間隔接続の裸形は
+           // 参照 3 種とも拒否のため除外(数詞付き間隔は v0.117 経路のまま)。
+           // KU 付きは tagged の
+           // tense+KU 枝が先(「pu ba ku」の木は不変)
+           ~ (sp1 ~ !(interval_property | time_interval | space_interval)
+             ~ tense_marks ~ !(sp1 ~ selbri))? }
 
 // v0.115: 時制連鎖と tanru の間の自由修飾語スロット(mi pu .ui klama /
 // mi pu dainai klama)。zantufa は全語の直後に post_clause の free を取るため
@@ -893,7 +937,7 @@ ui_free  = { UINAI_joint | UI_clause ~ (sp1 ~ CAI_clause)? ~ (sp1 ~ NAI_clause)?
 sei_free = { SEI_clause ~ sp1 ~ inner_sentence ~ (sp1 ~ SEhU_clause)? }
 to_quote = { TO_clause ~ (sp0 ~ (word ~ (sp1 ~ word)*)?)? ~ (sp1 ~ TOI_clause)? }
 
-vocative     = { COI_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ vocative_arg)?
+vocative     = { COI_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ frees_mid)? ~ (sp1 ~ vocative_arg)?
                ~ (sp1 ~ DOhU_clause)? }
 // v0.110: 呼格の sumti 引数に KOhA を許容(呼格+sumti 継続の DOhU 省略形)。
 // GAP(呼格+sumti 継続)。z0 実測(zantufa-0.9999.js): free の第3枝は
@@ -904,7 +948,11 @@ vocative     = { COI_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ vocative_arg)?
 // 「gi'e ju'i la alen. cadzu」は z0/z1/maf とも拒否(前処理の制約)のため、
 // 連結部では KOhA 引数のみ許容(gihek_free_unit の vocative_koha 参照)。
 // tanru 継続位置(farlu ju'i do cnita)では本規則経由で受理
-vocative_arg = _{ CMEVLA_clause | desc | KOhA_clause }
+vocative_arg = _{ CMEVLA_clause | desc | KOhA_clause
+               // v0.118: LAhE 形(la'e/lu'e/tu'a)の引数。「ju'i tu'a do」型は
+               // z0 が vocative(COI+LAhE 項+DOhU)の1単位で読む実測。
+               // F1 断片経路でも受理するが、呼格位置では本枝が先に同型で受ける
+               | lahe_sumti }
 
 // 語ラッパー(後続ポーズを自己消費)
 word = { CMEVLA_clause | CMAVO_clause | BRIVLA_clause }
@@ -1111,7 +1159,13 @@ BAI_core = @{ (^"bau" | ^"bai" | ^"cau" | ^"cu'u" | ^"mu'i" | ^"mu'u" | ^"ni'i"
                // v0.108: va'u(原因タグ「〜のおかげで」。結合形 seva'u の単独 2 語形。
                // z0/z1/maftufa とも「va'u mi klama」等を受理する実測で、
                // v0.102 の BAI 語彙完全化時の漏れだった既知 GAP)。h 変体 vahu も併記
-               | ^"va'u" | ^"vahu") ~ &word_boundary }
+               | ^"va'u" | ^"vahu"
+               // v0.118: z1 BAI に存在する 5 語(z0/z1/maf 実測受理)。
+               // pu'i は z0 BAI / z1 NA / maf CAhE の3way 分裂だが 2/3 が
+               // 時制位置読みのため BAI 収録で受理最大化(記録)。
+               // co'u は ZAhO と二重収録(tense_mark 内は ZAhO が先のため
+               // 「mi co'u klama」の ZAhO 読みは不変)
+               | ^"pu'i" | ^"xa'o" | ^"dei'a" | ^"co'i" | ^"co'u") ~ &word_boundary }
 BE_core = @{ ( ^"be") ~ &word_boundary }
 BEI_core = @{ ( ^"bei") ~ &word_boundary }
 BEhO_core = @{ ( ^"be'o" | ^"beho") ~ &word_boundary }
@@ -1120,7 +1174,10 @@ BOI_core = @{ ( ^"boi") ~ &word_boundary }
 CO_core = @{ ( ^"co") ~ &word_boundary }
 COI_core = @{ (^"coi" | ^"co'o" | ^"je'e" | ^"ju'i" | ^"re'i" | ^"nu'e" | ^"fi'i"
                | ^"fe'o" | ^"mu'o" | ^"mi'e" | ^"ta'a" | ^"pe'u" | ^"ki'e"
-               | ^"viho" | ^"vi'o" | ^"keho" | ^"ke'o" | ^"doi") ~ &word_boundary }
+               | ^"viho" | ^"vi'o" | ^"keho" | ^"ke'o" | ^"doi"
+              // v0.118: z0 COI に存在する ki'ai(Tatoeba 実文)/di'ai。
+              // di'ai は UI_core との二重収録(z0 は COI としても受理)
+              | ^"ki'ai" | ^"di'ai") ~ &word_boundary }
 CU_core = @{ ( ^"cu") ~ &word_boundary }
 DOhU_core = @{ ( ^"do'u" | ^"dohu") ~ &word_boundary }
 // fai は公式 FA(不定格。CLL 9.6・任意スロット用)。fi'a の後ろに追加。
@@ -1156,7 +1213,11 @@ GI_core = @{ ( ^"gi") ~ &word_boundary }
 GIhA_core = @{ ( ^"gi'a" | ^"gi'e" | ^"gi'i" | ^"gi'o" | ^"gi'u") ~ &word_boundary }
 GIhI_core = @{ ( ^"gihi") ~ &word_boundary }
 GOI_core = @{ ( ^"po'e" | ^"po'u" | ^"no'u" | ^"goi" | ^"pe" | ^"po" | ^"ne") ~ &word_boundary }
-GOhA_core = @{ ( ^"go'i" | ^"go'o" | ^"nei" | ^"ra'o" | ^"du" | ^"mo") ~ &word_boundary }
+GOhA_core = @{ ( ^"go'i" | ^"go'o" | ^"nei" | ^"ra'o" | ^"du" | ^"mo"
+              // v0.118: z0 GOhA に存在する 11 語(Tatoeba「ta co'e」等)。
+              // bu'a は lerfu 語形と同形だが z0 は GOhA として読む実測
+              | ^"bu'a" | ^"bu'e" | ^"bu'i" | ^"cei'i" | ^"co'e" | ^"gai'o"
+              | ^"go'a" | ^"go'e" | ^"go'u" | ^"no'a" | ^"xe'u") ~ &word_boundary }
 I_core = @{ ( ^"i") ~ &word_boundary }
 BIhI_core = @{ ( ^"bi'o" | ^"bi'i" | ^"mi'i") ~ &word_boundary }
 VUhU_core = @{ ( ^"su'i" | ^"vu'u" | ^"pi'i" | ^"fe'i" | ^"gei" | ^"de'o" | ^"te'o"

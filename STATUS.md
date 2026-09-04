@@ -1,13 +1,13 @@
 # 開発ステータス
 
-## 現在の状態: v0.117 完成(NAhE 前置項と項レベル BO 結合・全テストグリーン)
+## 現在の状態: v0.118 完成(P1 残存バグ掃引・全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語226 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体307 + doc 11 = 計318テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語227 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体308 + doc 11 = 計319テスト + example 内 unit test 5 全パス
 - tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件、
   v0.109 でバッチ2(接続詞・前置系)の 4 件、v0.110 でバッチ3(形態論・共有・前処理系)の 4 件を
   解消し全 12 テストが緑(下記「既知GAP」参照)
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.117.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.118.0)
 
 ### 帳簿整理(v0.114 版数のまま。文法・受理挙動の変更なし)
 
@@ -29,6 +29,46 @@
   語長上限 50 による rafsi 指数と stack overflow の封じ込み)。
   tests/fuzz.rs に lu ネスト最悪深度の境界テストを 1 本追加
   (fuzz の内訳 8→9。単体 298→299)
+
+## v0.118 で追加(P1 残存バグ掃引: 尾部裸時制・先頭 free 断片・呼格内 free・語彙)
+
+### 調査(Tatoeba 実文 1000 件の差分)
+
+- Tatoeba のロジバン文 1000 件を全取得し ours/z0 を交叉: ours 拒否 25 件中
+  z0 受理の真のバグ 20 件(全て z1/maf も受理)、両方拒否 5 件(英語・非標準)、
+  逆方向(ours 受理・z0 拒否)は `xa'emi'o tolsti` の 1 件のみ
+- 20 件は 6 クラス+既知 111 実験 UI 6 件に分類。本版で P1(6 クラスの一部と
+  語彙スポット)を解消。残りは P2(形態論 sb 対)・P3(記録済み語彙バッチ)
+
+### F2 尾部裸時制タグ(maf 正準読み)
+
+- z0/z1 の BAI 肥大化(ba/pu/vi 等を BAI に含む fork 由来)を不採用と確定
+  (z1/maf の原文法には存在しない)。maf の PU/VA/ZAhO 読みを正準とする
+- tagged に裸時制枝を追加(単語列挙 PU/CAhA/ZAhO/ZI/VA/TAhE/ROI/KI/CUhE/
+  FAhA/ROROI + 拡張ガード)。tail に連鎖代替を追加(PU 連鎖・MOhI 対)
+- ガード設計(PEG 成功確定との闘い): BO/selbri/時制/free 継続/NAI を除外し
+  「mi pu klama」の時制読み・tense_item 連鎖・selbri 内 free・pu-nai 読みを
+  保全。naku 連鎖ピンは z0 同型の2項断片読みに更新。BIhI 裸形は参照拒否
+- BAI 5 語(pu'i/xa'o/dei'a/co'i/co'u。z1 BAI に存在。pu'i は z0 BAI/z1 NA/
+  maf CAhE の3way 分裂で受理最大化)、GOhA 11 語、COI ki'ai/di'ai を収録。
+  co'u は ZAhO と二重収録(ZAhO 先のため既存木不変)。bu'a は z0 GOhA 読み
+
+### F1 先頭 free 断片と呼格内 free と呼格+LAhE 引数
+
+- fragment に先頭 frees 枝を追加。free 単独項には !(sp1 terms) ガードを付け
+  PEG 成功確定の先食いを回避(単独 free の木は不変)
+- 呼格 3 規則に free スロットを追加(z0 は COI+free+DOhU の単一 unit。
+  「klama ju'i .ui」の旧2-free 読みの既知差分は解消)
+- vocative_arg に lahe_sumti、gihek 用に vocative_lahe を追加。
+  v0.114 記録の呼格+LAhE 3 行を z0 同型で解消(裸呼格の拒否は維持)
+
+### 掃引結果(v0.118。プローブ 2,311 行=2,250 行+新規 61 行)
+
+- ours ok 2,200 / z0 ok 2,060 / z1 ok 2,060 / maftufa ok 2,027。
+  GAP 候補 29 件、OVER 候補 145 件(不変)
+- ok→err ゼロ、err→ok 3 行(呼格+LAhE 記録行の解消)、参照列の変化ゼロ。
+  新規 61 行は 58 行が全緑+3 行が拒否ピン(BIhI 裸形)
+- tests/syntax.rs に 1 テスト追加+3 更新。cargo test 319 全パス
 
 ## v0.117 で追加(NAhE 前置の項と項レベル BO 結合)
 

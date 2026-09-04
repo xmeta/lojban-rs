@@ -576,6 +576,38 @@ STRUCTURAL_PROBES = [
     "lo na'e bo broda ku",
     "mi se bo do cu blanu",
     "mi tavla bo do",
+    # v0.118: P1 調査(Tatoeba 1000 文差分で検出)。
+    # F2 尾部裸時制タグ(z0/z1/maf は tag+KU 省略。maf 正準の PU/VA/ZAhO 読み。
+    # z0/z1 の BAI 汚染読みは不採用)。BAI/GOhA/COI の語彙補完分は語彙
+    # テンプレートで自動追加されるため構造形のみ記録。
+    # 下段は拒否ピン(BIhI 裸形・SE/ME+BO・BO の頭なし形は参照 3 種とも拒否)
+    "mi klama pu",
+    "mi klama ba",
+    "mi ca'o",
+    "mi klama za'o",
+    "mi klama vi",
+    "mi'o vi",
+    "critu ca",
+    "mi pu'i klama",
+    "mi klama pu ba",
+    "mi klama ba zi",
+    "mi klama mo'i ni'a",
+    "mi klama ba lo zdani",
+    # F1 先頭 free+項の断片(z0 は free+terms+VAU)と呼格内 free
+    # (z0 は COI+free+DOhU の単一 unit。i'u は 111 実験 UI のため別記録)
+    ".a'u do",
+    "pe'i do",
+    ".a'u do vau",
+    "coi .ui do",
+    "coi .ui",
+    "ju'i .ui do",
+    "mi klama bi'o",
+    "mi klama bi'i",
+    "mi klama mi'i",
+    # v0.118 構造追加(呼格+LAhE 引数。v0.114 記録の本格解消)
+    "ju'i tu'a do",
+    "farlu ju'i tu'a do cnita",
+    "mi klama gi'e ju'i tu'a do cadzu",
 ]
 
 

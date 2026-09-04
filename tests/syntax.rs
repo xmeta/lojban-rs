@@ -2027,13 +2027,12 @@ fn 裸時制連鎖のフラグメント() {
     assert!(s.contains("tense_item"), "{s}");
     assert!(s.contains("VAU_core \"vau\""), "{s}");
     // naku 混在連鎖(zantufa は brigahi + tag_term の2項として受理するため
-    // 受容。fragment の na_ku 部分確定を否定先読みで tense_item に譲る)
+    // 受容。v0.118 の裸時制枝により本実装も2項断片で読む(z0 同型。
+    // 旧 tense_item 読みのピンは更新。PU は maf 正準読みで BAI 汚染は不採用)
     let s = parse_ok("naku pu");
-    assert!(s.contains("tense_item"), "{s}");
     assert!(s.contains("NAKU_joint \"naku\""), "{s}");
     assert!(s.contains("PU_core \"pu\""), "{s}");
     let s = parse_ok("na ku ba");
-    assert!(s.contains("tense_item"), "{s}");
     assert!(
         s.contains("NA_core \"na\"") && s.contains("KU_core \"ku\""),
         "{s}"
@@ -2762,9 +2761,9 @@ fn tanru間の自由修飾語_既存木不変と_z0差分ピン() {
         "{s}"
     );
 
-    // 複数 free のフォールバック(z0 実測 ok。z0 は free を post_clause 内に
-    // 保持するが、本実装では tanru_post の frees_m が2個の free を消費した後
-    // 継続グループが失敗し、文末の frees_m が2個の free を tail_terms 側に取る)
+    // 複数 free のフォールバック(z0 実測 ok。v0.118 の呼格内 free 対応により
+    // 本実装も z0 同型の単一 unit(vocative 内に UI を内包)で読む。
+    // 旧2-free 分離読みの既知差分は解消)
     let s = parse_ok("klama ju'i .ui");
     assert!(
         s.contains("(tanru (tanru_unit (BRIVLA_clause (BRIVLA_core \"klama\"))))"),
@@ -2772,8 +2771,8 @@ fn tanru間の自由修飾語_既存木不変と_z0差分ピン() {
     );
     assert!(
         s.contains(
-            "tail_terms (free (free_unit (vocative (COI_clause (COI_core \"ju'i\")))) \
-             (free_unit (ui_free (UI_clause (UI_core \"ui\")))))"
+            "(vocative (COI_clause (COI_core \"ju'i\")) \
+             (free (free_unit (ui_free (UI_clause (UI_core \"ui\"))))))"
         ),
         "{s}"
     );
@@ -5380,4 +5379,72 @@ fn nahe前置項と項レベルbo_v0_117() {
     assert!(lojban::parse("lo na'e bo broda ku").is_err());
     assert!(lojban::parse("mi se bo do cu blanu").is_err());
     assert!(lojban::parse("mi tavla bo do").is_err());
+}
+
+#[test]
+fn 尾部裸時制と先頭free断片と呼格内free_v0_118() {
+    // F2: 尾部裸時制タグ(z0/z1/maf は tag+KU 省略。maf 正準の PU/VA/ZAhO 読み)
+    for t in [
+        "mi klama pu",
+        "mi klama ba",
+        "mi ca'o",
+        "mi klama za'o",
+        "mi klama vi",
+        "mi'o vi",
+        "critu ca",
+        "mi pu",
+        "mi ba",
+    ] {
+        parse_ok(t);
+    }
+    // F2: 尾部裸時制連鎖(参照 3 種受理。KU 付きは tense+KU 枝の木のまま)
+    for t in ["mi klama pu ba", "mi klama ba zi", "mi klama mo'i ni'a"] {
+        parse_ok(t);
+    }
+    let s = parse_ok("mi klama pu ba ku");
+    assert!(s.contains("KU_core \"ku\""), "{s}");
+    // F2: BAI/GOhA/COI の語彙補完分(位置確認)
+    let s = parse_ok("mi pu'i klama");
+    assert!(s.contains("BAI_core \"pu'i\""), "{s}");
+    parse_ok("mi xa'o klama");
+    parse_ok("mi dei'a klama");
+    parse_ok("mi co'i klama");
+    parse_ok("ki'ai do");
+    let s = parse_ok("ta co'e");
+    assert!(s.contains("GOhA_core \"co'e\""), "{s}");
+    // F1: 先頭 free+項の断片(z0 は free+terms+VAU)
+    for t in [".a'u do", "pe'i do", ".a'u do vau"] {
+        parse_ok(t);
+    }
+    // 呼格内 free(z0 は COI+free+DOhU の単一 unit)
+    let s = parse_ok("coi .ui do");
+    assert!(s.contains("COI_clause"), "{s}");
+    assert!(s.contains("UI_core \"ui\""), "{s}");
+    // 拒否維持ピン(参照 3 種とも拒否)
+    for t in [
+        "mi klama bi'o",
+        "mi klama bi'i",
+        "mi klama mi'i",
+        "mi se bo do cu blanu",
+        "mi tavla bo do",
+    ] {
+        assert!(lojban::parse(t).is_err(), "{t}");
+    }
+    // 呼格+LAhE 引数(z0 は COI+LAhE 項+DOhU の1単位。v0.114 記録の解消)
+    let s = parse_ok("ju'i tu'a do");
+    assert!(s.contains("LAhE_core \"tu'a\""), "{s}");
+    parse_ok("farlu ju'i tu'a do cnita");
+    parse_ok("mi klama gi'e ju'i tu'a do cadzu");
+    // 既存不変ピン: 時制読み・連鎖読み・KU 枝の木
+    let s = parse_ok("mi pu klama");
+    assert!(
+        s.contains("(selbri (PU_clause (PU_core \"pu\")) (tanru"),
+        "{s}"
+    );
+    let s = parse_ok(".i pu ba .i");
+    assert!(s.contains("tense_item"), "{s}");
+    let s = parse_ok("mi pu nai klama");
+    assert!(s.contains("NAI_core \"nai\""), "{s}");
+    let s = parse_ok("mi co'u klama");
+    assert!(s.contains("ZAhO_core \"co'u\""), "{s}");
 }

@@ -73,2179 +73,2240 @@ line_no,input,ours,z0,z1,maftufa
 72,mi zuhe klama,1,1,1,1
 73,mi va'u klama,1,1,1,1
 74,mi vahu klama,1,1,1,1
-75,mi bau lo zdani klama,1,1,1,1
-76,mi bai lo zdani klama,1,1,1,1
-77,mi cau lo zdani klama,1,1,1,1
-78,mi cu'u lo zdani klama,1,1,1,1
-79,mi mu'i lo zdani klama,1,1,1,1
-80,mi mu'u lo zdani klama,1,1,1,1
-81,mi ni'i lo zdani klama,1,1,1,1
-82,mi ri'a lo zdani klama,1,1,1,1
-83,mi ta'i lo zdani klama,1,1,1,1
-84,mi tai lo zdani klama,1,1,1,1
-85,mi ki'u lo zdani klama,1,1,1,1
-86,mi kai lo zdani klama,1,1,1,1
-87,mi pa'u lo zdani klama,1,1,1,1
-88,mi se'o lo zdani klama,1,1,1,1
-89,mi si'u lo zdani klama,1,1,1,1
-90,mi va'o lo zdani klama,1,1,1,1
-91,mi zu'e lo zdani klama,1,1,1,1
-92,mi ja'e lo zdani klama,1,1,1,1
-93,mi ra'i lo zdani klama,1,1,1,1
-94,mi ri'i lo zdani klama,1,1,1,1
-95,mi de'i lo zdani klama,1,1,1,1
-96,mi du'o lo zdani klama,1,1,1,1
-97,mi fau lo zdani klama,1,1,1,1
-98,mi ka'a lo zdani klama,1,1,1,1
-99,mi gau lo zdani klama,1,1,1,1
-100,mi piho lo zdani klama,1,1,1,1
-101,mi pi'o lo zdani klama,1,1,1,1
-102,mi cihu lo zdani klama,1,1,1,1
-103,mi ci'u lo zdani klama,1,1,1,1
-104,mi pu'a lo zdani klama,1,1,1,1
-105,mi jihe lo zdani klama,1,1,1,1
-106,mi ji'e lo zdani klama,1,1,1,1
-107,mi jihu lo zdani klama,1,1,1,1
-108,mi ji'u lo zdani klama,1,1,1,1
-109,mi jiho lo zdani klama,1,1,1,1
-110,mi ji'o lo zdani klama,1,1,1,1
-111,mi raha lo zdani klama,1,1,1,1
-112,mi ra'a lo zdani klama,1,1,1,1
-113,mi ba'i lo zdani klama,1,1,1,1
-114,mi ci'o lo zdani klama,1,1,1,1
-115,mi rai lo zdani klama,1,1,1,1
-116,mi bahi lo zdani klama,1,1,1,1
-117,mi cuhu lo zdani klama,1,1,1,1
-118,mi duho lo zdani klama,1,1,1,1
-119,mi muhi lo zdani klama,1,1,1,1
-120,mi nihi lo zdani klama,1,1,1,1
-121,mi riha lo zdani klama,1,1,1,1
-122,mi seho lo zdani klama,1,1,1,1
-123,mi vaho lo zdani klama,1,1,1,1
-124,mi rahi lo zdani klama,1,1,1,1
-125,mi tahi lo zdani klama,1,1,1,1
-126,mi ciho lo zdani klama,1,1,1,1
-127,mi di'o lo zdani klama,1,1,1,1
-128,mi du'i lo zdani klama,1,1,1,1
-129,mi ga'a lo zdani klama,1,1,1,1
-130,mi te'i lo zdani klama,1,1,1,1
-131,mi muhu lo zdani klama,1,1,1,1
-132,mi kihu lo zdani klama,1,1,1,1
-133,mi sihu lo zdani klama,1,1,1,1
-134,mi rihu lo zdani klama,1,1,1,1
-135,mi dehi lo zdani klama,1,1,1,1
-136,mi diho lo zdani klama,1,1,1,1
-137,mi duhi lo zdani klama,1,1,1,1
-138,mi gaha lo zdani klama,1,1,1,1
-139,mi tehi lo zdani klama,1,1,1,1
-140,mi ca'i lo zdani klama,1,1,1,1
-141,mi cahi lo zdani klama,1,1,1,1
-142,mi jahe lo zdani klama,1,1,1,1
-143,mi pahu lo zdani klama,1,1,1,1
-144,mi kahe lo zdani klama,1,1,1,1
-145,mi puha lo zdani klama,1,1,1,1
-146,mi zuhe lo zdani klama,1,1,1,1
-147,mi va'u lo zdani klama,1,1,1,1
-148,mi vahu lo zdani klama,1,1,1,1
-149,bau lo zdani klama,1,1,1,1
-150,bai lo zdani klama,1,1,1,1
-151,cau lo zdani klama,1,1,1,1
-152,cu'u lo zdani klama,1,1,1,1
-153,mu'i lo zdani klama,1,1,1,1
-154,mu'u lo zdani klama,1,1,1,1
-155,ni'i lo zdani klama,1,1,1,1
-156,ri'a lo zdani klama,1,1,1,1
-157,ta'i lo zdani klama,1,1,1,1
-158,tai lo zdani klama,1,1,1,1
-159,ki'u lo zdani klama,1,1,1,1
-160,kai lo zdani klama,1,1,1,1
-161,pa'u lo zdani klama,1,1,1,1
-162,se'o lo zdani klama,1,1,1,1
-163,si'u lo zdani klama,1,1,1,1
-164,va'o lo zdani klama,1,1,1,1
-165,zu'e lo zdani klama,1,1,1,1
-166,ja'e lo zdani klama,1,1,1,1
-167,ra'i lo zdani klama,1,1,1,1
-168,ri'i lo zdani klama,1,1,1,1
-169,de'i lo zdani klama,1,1,1,1
-170,du'o lo zdani klama,1,1,1,1
-171,fau lo zdani klama,1,1,1,1
-172,ka'a lo zdani klama,1,1,1,1
-173,gau lo zdani klama,1,1,1,1
-174,piho lo zdani klama,1,1,1,1
-175,pi'o lo zdani klama,1,1,1,1
-176,cihu lo zdani klama,1,1,1,1
-177,ci'u lo zdani klama,1,1,1,1
-178,pu'a lo zdani klama,1,1,1,1
-179,jihe lo zdani klama,1,1,1,1
-180,ji'e lo zdani klama,1,1,1,1
-181,jihu lo zdani klama,1,1,1,1
-182,ji'u lo zdani klama,1,1,1,1
-183,jiho lo zdani klama,1,1,1,1
-184,ji'o lo zdani klama,1,1,1,1
-185,raha lo zdani klama,1,1,1,1
-186,ra'a lo zdani klama,1,1,1,1
-187,ba'i lo zdani klama,1,1,1,1
-188,ci'o lo zdani klama,1,1,1,1
-189,rai lo zdani klama,1,1,1,1
-190,bahi lo zdani klama,1,1,1,1
-191,cuhu lo zdani klama,1,1,1,1
-192,duho lo zdani klama,1,1,1,1
-193,muhi lo zdani klama,1,1,1,1
-194,nihi lo zdani klama,1,1,1,1
-195,riha lo zdani klama,1,1,1,1
-196,seho lo zdani klama,1,1,1,1
-197,vaho lo zdani klama,1,1,1,1
-198,rahi lo zdani klama,1,1,1,1
-199,tahi lo zdani klama,1,1,1,1
-200,ciho lo zdani klama,1,1,1,1
-201,di'o lo zdani klama,1,1,1,1
-202,du'i lo zdani klama,1,1,1,1
-203,ga'a lo zdani klama,1,1,1,1
-204,te'i lo zdani klama,1,1,1,1
-205,muhu lo zdani klama,1,1,1,1
-206,kihu lo zdani klama,1,1,1,1
-207,sihu lo zdani klama,1,1,1,1
-208,rihu lo zdani klama,1,1,1,1
-209,dehi lo zdani klama,1,1,1,1
-210,diho lo zdani klama,1,1,1,1
-211,duhi lo zdani klama,1,1,1,1
-212,gaha lo zdani klama,1,1,1,1
-213,tehi lo zdani klama,1,1,1,1
-214,ca'i lo zdani klama,1,1,1,1
-215,cahi lo zdani klama,1,1,1,1
-216,jahe lo zdani klama,1,1,1,1
-217,pahu lo zdani klama,1,1,1,1
-218,kahe lo zdani klama,1,1,1,1
-219,puha lo zdani klama,1,1,1,1
-220,zuhe lo zdani klama,1,1,1,1
-221,va'u lo zdani klama,1,1,1,1
-222,vahu lo zdani klama,1,1,1,1
-223,mi klama bau lo zdani,1,1,1,1
-224,mi klama bai lo zdani,1,1,1,1
-225,mi klama cau lo zdani,1,1,1,1
-226,mi klama cu'u lo zdani,1,1,1,1
-227,mi klama mu'i lo zdani,1,1,1,1
-228,mi klama mu'u lo zdani,1,1,1,1
-229,mi klama ni'i lo zdani,1,1,1,1
-230,mi klama ri'a lo zdani,1,1,1,1
-231,mi klama ta'i lo zdani,1,1,1,1
-232,mi klama tai lo zdani,1,1,1,1
-233,mi klama ki'u lo zdani,1,1,1,1
-234,mi klama kai lo zdani,1,1,1,1
-235,mi klama pa'u lo zdani,1,1,1,1
-236,mi klama se'o lo zdani,1,1,1,1
-237,mi klama si'u lo zdani,1,1,1,1
-238,mi klama va'o lo zdani,1,1,1,1
-239,mi klama zu'e lo zdani,1,1,1,1
-240,mi klama ja'e lo zdani,1,1,1,1
-241,mi klama ra'i lo zdani,1,1,1,1
-242,mi klama ri'i lo zdani,1,1,1,1
-243,mi klama de'i lo zdani,1,1,1,1
-244,mi klama du'o lo zdani,1,1,1,1
-245,mi klama fau lo zdani,1,1,1,1
-246,mi klama ka'a lo zdani,1,1,1,1
-247,mi klama gau lo zdani,1,1,1,1
-248,mi klama piho lo zdani,1,1,1,1
-249,mi klama pi'o lo zdani,1,1,1,1
-250,mi klama cihu lo zdani,1,1,1,1
-251,mi klama ci'u lo zdani,1,1,1,1
-252,mi klama pu'a lo zdani,1,1,1,1
-253,mi klama jihe lo zdani,1,1,1,1
-254,mi klama ji'e lo zdani,1,1,1,1
-255,mi klama jihu lo zdani,1,1,1,1
-256,mi klama ji'u lo zdani,1,1,1,1
-257,mi klama jiho lo zdani,1,1,1,1
-258,mi klama ji'o lo zdani,1,1,1,1
-259,mi klama raha lo zdani,1,1,1,1
-260,mi klama ra'a lo zdani,1,1,1,1
-261,mi klama ba'i lo zdani,1,1,1,1
-262,mi klama ci'o lo zdani,1,1,1,1
-263,mi klama rai lo zdani,1,1,1,1
-264,mi klama bahi lo zdani,1,1,1,1
-265,mi klama cuhu lo zdani,1,1,1,1
-266,mi klama duho lo zdani,1,1,1,1
-267,mi klama muhi lo zdani,1,1,1,1
-268,mi klama nihi lo zdani,1,1,1,1
-269,mi klama riha lo zdani,1,1,1,1
-270,mi klama seho lo zdani,1,1,1,1
-271,mi klama vaho lo zdani,1,1,1,1
-272,mi klama rahi lo zdani,1,1,1,1
-273,mi klama tahi lo zdani,1,1,1,1
-274,mi klama ciho lo zdani,1,1,1,1
-275,mi klama di'o lo zdani,1,1,1,1
-276,mi klama du'i lo zdani,1,1,1,1
-277,mi klama ga'a lo zdani,1,1,1,1
-278,mi klama te'i lo zdani,1,1,1,1
-279,mi klama muhu lo zdani,1,1,1,1
-280,mi klama kihu lo zdani,1,1,1,1
-281,mi klama sihu lo zdani,1,1,1,1
-282,mi klama rihu lo zdani,1,1,1,1
-283,mi klama dehi lo zdani,1,1,1,1
-284,mi klama diho lo zdani,1,1,1,1
-285,mi klama duhi lo zdani,1,1,1,1
-286,mi klama gaha lo zdani,1,1,1,1
-287,mi klama tehi lo zdani,1,1,1,1
-288,mi klama ca'i lo zdani,1,1,1,1
-289,mi klama cahi lo zdani,1,1,1,1
-290,mi klama jahe lo zdani,1,1,1,1
-291,mi klama pahu lo zdani,1,1,1,1
-292,mi klama kahe lo zdani,1,1,1,1
-293,mi klama puha lo zdani,1,1,1,1
-294,mi klama zuhe lo zdani,1,1,1,1
-295,mi klama va'u lo zdani,1,1,1,1
-296,mi klama vahu lo zdani,1,1,1,1
-297,mi viska lo klama be lo zdani ku,1,1,1,1
-298,mi viska lo klama be lo zdani bei lo zarci be'o ku,1,1,1,1
-299,mi viska lo klama be lo zdani be'o ku,1,1,1,1
-300,mi viska lo klama be lo zdani beho ku,1,1,1,1
-301,mi klama bo cadzu,1,1,1,1
-302,mi pu bo klama,1,0,0,0
-303,li re boi su'i ci du xa,1,0,0,0
-304,mi klama lo zdani co broda,1,1,1,1
-305,coi la .alis. mi klama,1,1,1,1
-306,co'o la .alis. mi klama,1,1,1,1
-307,je'e la .alis. mi klama,1,1,1,1
-308,ju'i la .alis. mi klama,1,1,1,1
-309,re'i la .alis. mi klama,1,1,1,1
-310,nu'e la .alis. mi klama,1,1,1,1
-311,fi'i la .alis. mi klama,1,1,1,1
-312,fe'o la .alis. mi klama,1,1,1,1
-313,mu'o la .alis. mi klama,1,1,1,1
-314,mi'e la .alis. mi klama,1,1,1,1
-315,ta'a la .alis. mi klama,1,1,1,1
-316,pe'u la .alis. mi klama,1,1,1,1
-317,ki'e la .alis. mi klama,1,1,1,1
-318,viho la .alis. mi klama,1,1,1,1
-319,vi'o la .alis. mi klama,1,1,1,1
-320,keho la .alis. mi klama,1,1,1,1
-321,ke'o la .alis. mi klama,1,1,1,1
-322,doi la .alis. mi klama,1,1,1,1
-323,coi do broda,1,1,1,1
-324,co'o do broda,1,1,1,1
-325,je'e do broda,1,1,1,1
-326,ju'i do broda,1,1,1,1
-327,re'i do broda,1,1,1,1
-328,nu'e do broda,1,1,1,1
-329,fi'i do broda,1,1,1,1
-330,fe'o do broda,1,1,1,1
-331,mu'o do broda,1,1,1,1
-332,mi'e do broda,1,1,1,1
-333,ta'a do broda,1,1,1,1
-334,pe'u do broda,1,1,1,1
-335,ki'e do broda,1,1,1,1
-336,viho do broda,1,1,1,1
-337,vi'o do broda,1,1,1,1
-338,keho do broda,1,1,1,1
-339,ke'o do broda,1,1,1,1
-340,doi do broda,1,1,1,1
-341,doi la .alis. do'u mi klama,1,1,1,1
-342,doi la .alis. dohu mi klama,1,1,1,1
-343,fi'a mi klama lo zdani,1,1,1,1
-344,fai mi klama lo zdani,1,1,1,1
-345,fa mi klama lo zdani,1,1,1,1
-346,fe mi klama lo zdani,1,1,1,1
-347,fi mi klama lo zdani,1,1,1,1
-348,fo mi klama lo zdani,1,1,1,1
-349,fu mi klama lo zdani,1,1,1,1
-350,mi klama fi'a lo zarci,1,1,1,1
-351,mi klama fai lo zarci,1,1,1,1
-352,mi klama fa lo zarci,1,1,1,1
-353,mi klama fe lo zarci,1,1,1,1
-354,mi klama fi lo zarci,1,1,1,1
-355,mi klama fo lo zarci,1,1,1,1
-356,mi klama fu lo zarci,1,1,1,1
-357,mi ca'u klama,1,1,1,1
-358,mi cahu klama,1,1,1,1
-359,mi ti'a klama,1,1,1,1
-360,mi tiha klama,1,1,1,1
-361,mi zu'a klama,1,1,1,1
-362,mi zuha klama,1,1,1,1
-363,mi ga'u klama,1,1,1,1
-364,mi gahu klama,1,1,1,1
-365,mi ni'a klama,1,1,1,1
-366,mi niha klama,1,1,1,1
-367,mi ru'u klama,1,1,1,1
-368,mi ruhu klama,1,1,1,1
-369,mi ne'i klama,1,1,1,1
-370,mi pa'o klama,1,1,1,1
-371,mi paho klama,1,1,1,1
-372,mi te'e klama,1,1,1,1
-373,mi ne'a klama,1,1,1,1
-374,mi re'o klama,1,1,1,1
-375,mi bu'u klama,1,1,1,1
-376,mi buhu klama,1,1,1,1
-377,mi du'a klama,1,1,1,1
-378,mi duha klama,1,1,1,1
-379,mi vu'a klama,1,1,1,1
-380,mi vuha klama,1,1,1,1
-381,mi ze'o klama,1,1,1,1
-382,mi zeho klama,1,1,1,1
-383,mi zo'i klama,1,1,1,1
-384,mi zohi klama,1,1,1,1
-385,mi fa'a klama,1,1,1,1
-386,mi faha klama,1,1,1,1
-387,mi ca'u lo zdani klama,1,1,1,1
-388,mi cahu lo zdani klama,1,1,1,1
-389,mi ti'a lo zdani klama,1,1,1,1
-390,mi tiha lo zdani klama,1,1,1,1
-391,mi zu'a lo zdani klama,1,1,1,1
-392,mi zuha lo zdani klama,1,1,1,1
-393,mi ga'u lo zdani klama,1,1,1,1
-394,mi gahu lo zdani klama,1,1,1,1
-395,mi ni'a lo zdani klama,1,1,1,1
-396,mi niha lo zdani klama,1,1,1,1
-397,mi ru'u lo zdani klama,1,1,1,1
-398,mi ruhu lo zdani klama,1,1,1,1
-399,mi ne'i lo zdani klama,1,1,1,1
-400,mi pa'o lo zdani klama,1,1,1,1
-401,mi paho lo zdani klama,1,1,1,1
-402,mi te'e lo zdani klama,1,1,1,1
-403,mi ne'a lo zdani klama,1,1,1,1
-404,mi re'o lo zdani klama,1,1,1,1
-405,mi bu'u lo zdani klama,1,1,1,1
-406,mi buhu lo zdani klama,1,1,1,1
-407,mi du'a lo zdani klama,1,1,1,1
-408,mi duha lo zdani klama,1,1,1,1
-409,mi vu'a lo zdani klama,1,1,1,1
-410,mi vuha lo zdani klama,1,1,1,1
-411,mi ze'o lo zdani klama,1,1,1,1
-412,mi zeho lo zdani klama,1,1,1,1
-413,mi zo'i lo zdani klama,1,1,1,1
-414,mi zohi lo zdani klama,1,1,1,1
-415,mi fa'a lo zdani klama,1,1,1,1
-416,mi faha lo zdani klama,1,1,1,1
-417,ca'u lo zdani klama,1,1,1,1
-418,cahu lo zdani klama,1,1,1,1
-419,ti'a lo zdani klama,1,1,1,1
-420,tiha lo zdani klama,1,1,1,1
-421,zu'a lo zdani klama,1,1,1,1
-422,zuha lo zdani klama,1,1,1,1
-423,ga'u lo zdani klama,1,1,1,1
-424,gahu lo zdani klama,1,1,1,1
-425,ni'a lo zdani klama,1,1,1,1
-426,niha lo zdani klama,1,1,1,1
-427,ru'u lo zdani klama,1,1,1,1
-428,ruhu lo zdani klama,1,1,1,1
-429,ne'i lo zdani klama,1,1,1,1
-430,pa'o lo zdani klama,1,1,1,1
-431,paho lo zdani klama,1,1,1,1
-432,te'e lo zdani klama,1,1,1,1
-433,ne'a lo zdani klama,1,1,1,1
-434,re'o lo zdani klama,1,1,1,1
-435,bu'u lo zdani klama,1,1,1,1
-436,buhu lo zdani klama,1,1,1,1
-437,du'a lo zdani klama,1,1,1,1
-438,duha lo zdani klama,1,1,1,1
-439,vu'a lo zdani klama,1,1,1,1
-440,vuha lo zdani klama,1,1,1,1
-441,ze'o lo zdani klama,1,1,1,1
-442,zeho lo zdani klama,1,1,1,1
-443,zo'i lo zdani klama,1,1,1,1
-444,zohi lo zdani klama,1,1,1,1
-445,fa'a lo zdani klama,1,1,1,1
-446,faha lo zdani klama,1,1,1,1
-447,mi klama ca'u lo zdani,1,1,1,1
-448,mi klama cahu lo zdani,1,1,1,1
-449,mi klama ti'a lo zdani,1,1,1,1
-450,mi klama tiha lo zdani,1,1,1,1
-451,mi klama zu'a lo zdani,1,1,1,1
-452,mi klama zuha lo zdani,1,1,1,1
-453,mi klama ga'u lo zdani,1,1,1,1
-454,mi klama gahu lo zdani,1,1,1,1
-455,mi klama ni'a lo zdani,1,1,1,1
-456,mi klama niha lo zdani,1,1,1,1
-457,mi klama ru'u lo zdani,1,1,1,1
-458,mi klama ruhu lo zdani,1,1,1,1
-459,mi klama ne'i lo zdani,1,1,1,1
-460,mi klama pa'o lo zdani,1,1,1,1
-461,mi klama paho lo zdani,1,1,1,1
-462,mi klama te'e lo zdani,1,1,1,1
-463,mi klama ne'a lo zdani,1,1,1,1
-464,mi klama re'o lo zdani,1,1,1,1
-465,mi klama bu'u lo zdani,1,1,1,1
-466,mi klama buhu lo zdani,1,1,1,1
-467,mi klama du'a lo zdani,1,1,1,1
-468,mi klama duha lo zdani,1,1,1,1
-469,mi klama vu'a lo zdani,1,1,1,1
-470,mi klama vuha lo zdani,1,1,1,1
-471,mi klama ze'o lo zdani,1,1,1,1
-472,mi klama zeho lo zdani,1,1,1,1
-473,mi klama zo'i lo zdani,1,1,1,1
-474,mi klama zohi lo zdani,1,1,1,1
-475,mi klama fa'a lo zdani,1,1,1,1
-476,mi klama faha lo zdani,1,1,1,1
-477,mi mo'i klama,0,1,1,0
-478,mi mohi klama,0,1,1,0
-479,mi mo'i lo zdani klama,0,1,1,0
-480,mi mohi lo zdani klama,0,1,1,0
-481,mo'i lo zdani klama,0,1,1,0
-482,mohi lo zdani klama,0,1,1,0
-483,mi klama mo'i lo zdani,0,1,1,0
-484,mi klama mohi lo zdani,0,1,1,0
-485,mi klama fa'o,1,1,1,1
-486,mi klama faho,1,1,1,1
-487,ga mi klama gi do broda,1,1,1,0
-488,ge mi klama gi do broda,1,1,1,0
-489,go mi klama gi do broda,1,1,1,0
-490,gu mi klama gi do broda,1,1,1,0
-491,ga broda gi brode,1,1,1,0
-492,ge broda gi brode,1,1,1,0
-493,go broda gi brode,1,1,1,0
-494,gu broda gi brode,1,1,1,0
-495,mi viska la'e lo broda ge'u ku,0,0,0,0
-496,mi viska la'e lo broda gehu ku,0,0,0,0
-497,mi broda gi'a brode,1,1,1,1
-498,mi broda gi'e brode,1,1,1,1
-499,mi broda gi'i brode,1,0,0,1
-500,mi broda gi'o brode,1,1,1,1
-501,mi broda gi'u brode,1,1,1,1
-502,lo broda po'e mi cu barda,1,1,1,1
-503,lo broda po'u mi cu barda,1,1,1,1
-504,lo broda no'u mi cu barda,1,1,1,1
-505,lo broda goi mi cu barda,1,1,1,1
-506,lo broda pe mi cu barda,1,1,1,1
-507,lo broda po mi cu barda,1,1,1,1
-508,lo broda ne mi cu barda,1,1,1,1
-509,mi po'e ko'a klama,1,1,1,1
-510,mi po'u ko'a klama,1,1,1,1
-511,mi no'u ko'a klama,1,1,1,1
-512,mi goi ko'a klama,1,1,1,1
-513,mi pe ko'a klama,1,1,1,1
-514,mi po ko'a klama,1,1,1,1
-515,mi ne ko'a klama,1,1,1,1
-516,mi go'i,1,1,1,1
-517,mi go'o,1,1,1,1
-518,mi nei,1,1,1,1
-519,mi ra'o,1,1,1,0
-520,mi du,1,1,1,1
-521,mi mo,1,1,1,1
-522,ti go'i lo zdani,1,1,1,1
-523,ti go'o lo zdani,1,1,1,1
-524,ti nei lo zdani,1,1,1,1
-525,ti ra'o lo zdani,1,1,1,0
-526,ti du lo zdani,1,1,1,1
-527,ti mo lo zdani,1,1,1,1
-528,mi klama i do klama,1,1,1,1
-529,li pa bi'o re du vo,1,0,0,0
-530,li pa bi'i re du vo,1,0,0,0
-531,li pa mi'i re du vo,1,0,0,0
-532,li pa su'i ci du xa,1,0,0,0
-533,li pa vu'u ci du xa,1,0,0,0
-534,li pa pi'i ci du xa,1,0,0,0
-535,li pa fe'i ci du xa,1,0,0,0
-536,li pa gei ci du xa,1,0,0,0
-537,li pa de'o ci du xa,1,0,0,0
-538,li pa te'o ci du xa,1,0,0,0
-539,li pa re'a ci du xa,1,0,0,0
-540,li pa va'a ci du xa,1,0,0,0
-541,li pa pa'i ci du xa,1,0,0,0
-542,li pa si'i ci du xa,1,0,0,0
-543,li pa fu'u ci du xa,1,0,0,0
-544,li su'i pa du re,1,0,0,0
-545,li vu'u pa du re,1,0,0,0
-546,li pi'i pa du re,1,0,0,0
-547,li fe'i pa du re,1,0,0,0
-548,li gei pa du re,1,0,0,0
-549,li de'o pa du re,1,0,0,0
-550,li te'o pa du re,1,0,0,0
-551,li re'a pa du re,1,0,0,0
-552,li va'a pa du re,1,0,0,0
-553,li pa'i pa du re,1,0,0,0
-554,li si'i pa du re,1,0,0,0
-555,li fu'u pa du re,1,0,0,0
-556,li na'u su'i pa du re,0,0,0,0
-557,li nahu su'i pa du re,0,0,0,0
-558,li pa fihu re du pamu,1,0,0,0
-559,li pa fi'u re du pamu,1,0,0,0
-560,li re su'i pa bihe pi'i ci du xa,1,0,0,0
-561,li re su'i pa bi'e pi'i ci du xa,1,0,0,0
-562,mi ze'i fehe roi klama,1,0,1,0
-563,mi ze'i fe'e roi klama,1,0,1,0
-564,mi fehe klama,0,1,1,0
-565,mi fe'e klama,0,1,1,0
-566,li peho su'i pa ku'e re du re,0,0,0,0
-567,li pe'o su'i pa ku'e re du re,0,0,0,0
-568,li maho su'i du re,0,0,0,0
-569,li ma'o su'i du re,0,0,0,0
-570,li pe'o su'i pa kuhe re du re,0,0,0,0
-571,mi me lo broda tehu klama,0,0,0,0
-572,mi me lo broda te'u klama,0,0,0,0
-573,li mo'e pa su'i re du ci,1,0,0,0
-574,li mohe pa su'i re du ci,1,0,0,0
-575,li vei pa su'i re ve'o su'i ci du xa,1,0,0,0
-576,li vei pa su'i re veho su'i ci du xa,1,0,0,0
-577,by klama,1,1,1,1
-578,cy klama,1,1,1,1
-579,dy klama,1,1,1,1
-580,fy klama,1,1,1,1
-581,gy klama,1,1,1,1
-582,jy klama,1,1,1,1
-583,ky klama,1,1,1,1
-584,ly klama,1,1,1,1
-585,my klama,1,1,1,1
-586,ny klama,1,1,1,1
-587,py klama,1,1,1,1
-588,ry klama,1,1,1,1
-589,sy klama,1,1,1,1
-590,ty klama,1,1,1,1
-591,vy klama,1,1,1,1
-592,xy klama,1,1,1,1
-593,zy klama,1,1,1,1
-594,abu klama,1,1,1,1
-595,ebu klama,1,1,1,1
-596,ibu klama,1,1,1,1
-597,obu klama,1,1,1,1
-598,ubu klama,1,1,1,1
-599,ybu klama,1,1,1,1
-600,mi viska by,1,1,1,1
-601,mi viska cy,1,1,1,1
-602,mi viska dy,1,1,1,1
-603,mi viska fy,1,1,1,1
-604,mi viska gy,1,1,1,1
-605,mi viska jy,1,1,1,1
-606,mi viska ky,1,1,1,1
-607,mi viska ly,1,1,1,1
-608,mi viska my,1,1,1,1
-609,mi viska ny,1,1,1,1
-610,mi viska py,1,1,1,1
-611,mi viska ry,1,1,1,1
-612,mi viska sy,1,1,1,1
-613,mi viska ty,1,1,1,1
-614,mi viska vy,1,1,1,1
-615,mi viska xy,1,1,1,1
-616,mi viska zy,1,1,1,1
-617,mi viska abu,1,1,1,1
-618,mi viska ebu,1,1,1,1
-619,mi viska ibu,1,1,1,1
-620,mi viska obu,1,1,1,1
-621,mi viska ubu,1,1,1,1
-622,mi viska ybu,1,1,1,1
-623,mi cusku zo bu,1,1,1,1
-624,gu'a broda gi brode,1,1,1,0
-625,gu'e broda gi brode,1,1,1,0
-626,gu'o broda gi brode,1,1,1,0
-627,gu'u broda gi brode,1,1,1,0
-628,mi si klama,1,1,1,1
-629,mi klama lo zdani su,1,1,1,1
-630,mi broda ja brode,1,1,1,1
-631,mi broda je brode,1,1,1,1
-632,mi broda jo brode,1,1,1,1
-633,mi broda ju brode,1,1,1,1
-634,mi jo'e do klama,1,1,1,1
-635,mi joi do klama,1,1,1,1
-636,mi fa'u do klama,1,1,1,1
-637,mi ku'a do klama,1,1,1,1
-638,mi johu do klama,1,1,1,1
-639,mi jo'u do klama,1,1,1,1
-640,mi ja do klama,1,1,1,1
-641,mi je do klama,1,1,1,1
-642,mi jo do klama,1,1,1,1
-643,mi ju do klama,1,1,1,1
-644,mi ji do klama,1,1,1,1
-645,mi broda jo'e brode,1,1,1,1
-646,mi broda joi brode,1,1,1,1
-647,mi broda fa'u brode,1,1,1,1
-648,mi broda ku'a brode,1,1,1,1
-649,mi broda johu brode,1,1,1,1
-650,mi broda jo'u brode,1,1,1,1
-651,mi broda ji brode,1,1,1,1
-652,li pa jo'e re du vo,1,0,0,0
-653,li pa joi re du vo,1,0,0,0
-654,li pa fa'u re du vo,1,0,0,0
-655,li pa ku'a re du vo,1,0,0,0
-656,li pa johu re du vo,1,0,0,0
-657,li pa jo'u re du vo,1,0,0,0
-658,li pa ja re du vo,1,0,0,0
-659,li pa je re du vo,1,0,0,0
-660,li pa jo re du vo,1,0,0,0
-661,li pa ju re du vo,1,0,0,0
-662,li pa ji re du vo,1,0,0,0
-663,mi klama ke broda je brode,1,1,1,1
-664,mi klama ke broda je brode ke'e,1,1,1,1
-665,mi klama ke broda je brode kehe,1,1,1,1
-666,mi troci lo nu broda kei,1,1,1,1
-667,zo'e klama,1,1,1,1
-668,zu'i klama,1,1,1,1
-669,ke'a klama,1,1,1,1
-670,mi'o klama,1,1,1,1
-671,ko'a klama,1,1,1,1
-672,ko'e klama,1,1,1,1
-673,ko'i klama,1,1,1,1
-674,ko'o klama,1,1,1,1
-675,ko'u klama,1,1,1,1
-676,fo'a klama,1,1,1,1
-677,fo'e klama,1,1,1,1
-678,fo'i klama,1,1,1,1
-679,fo'o klama,1,1,1,1
-680,fo'u klama,1,1,1,1
-681,vo'a klama,1,1,1,1
-682,vo'e klama,1,1,1,1
-683,vo'i klama,1,1,1,1
-684,vo'o klama,1,1,1,1
-685,vo'u klama,1,1,1,1
-686,mi'ai klama,1,1,1,1
-687,miahi klama,1,0,0,0
-688,mi'a klama,1,1,1,1
-689,ma'a klama,1,1,1,1
-690,do'o klama,1,1,1,1
-691,dei klama,1,1,1,1
-692,di'u klama,1,1,1,1
-693,dihu klama,1,1,1,1
-694,de'u klama,1,1,1,1
-695,dehu klama,1,1,1,1
-696,da'u klama,1,1,1,1
-697,dahu klama,1,1,1,1
-698,mi klama,1,1,1,1
-699,do klama,1,1,1,1
-700,ti klama,1,1,1,1
-701,ta klama,1,1,1,1
-702,tu klama,1,1,1,1
-703,ri klama,1,1,1,1
-704,ra klama,1,1,1,1
-705,ru klama,1,1,1,1
-706,ko klama,1,1,1,1
-707,ma klama,1,1,1,1
-708,da klama,1,1,1,1
-709,de klama,1,1,1,1
-710,di klama,1,1,1,1
-711,ce'u klama,1,1,1,1
-712,cehu klama,1,1,1,1
-713,zi'o klama,1,1,1,1
-714,ziho klama,1,1,1,1
-715,mi zo'e klama,1,1,1,1
-716,mi zu'i klama,1,1,1,1
-717,mi ke'a klama,1,1,1,1
-718,mi mi'o klama,1,1,1,1
-719,mi ko'a klama,1,1,1,1
-720,mi ko'e klama,1,1,1,1
-721,mi ko'i klama,1,1,1,1
-722,mi ko'o klama,1,1,1,1
-723,mi ko'u klama,1,1,1,1
-724,mi fo'a klama,1,1,1,1
-725,mi fo'e klama,1,1,1,1
-726,mi fo'i klama,1,1,1,1
-727,mi fo'o klama,1,1,1,1
-728,mi fo'u klama,1,1,1,1
-729,mi vo'a klama,1,1,1,1
-730,mi vo'e klama,1,1,1,1
-731,mi vo'i klama,1,1,1,1
-732,mi vo'o klama,1,1,1,1
-733,mi vo'u klama,1,1,1,1
-734,mi mi'ai klama,1,1,1,1
-735,mi miahi klama,1,0,0,0
-736,mi mi'a klama,1,1,1,1
-737,mi ma'a klama,1,1,1,1
-738,mi do'o klama,1,1,1,1
-739,mi dei klama,1,1,1,1
-740,mi di'u klama,1,1,1,1
-741,mi dihu klama,1,1,1,1
-742,mi de'u klama,1,1,1,1
-743,mi dehu klama,1,1,1,1
-744,mi da'u klama,1,1,1,1
-745,mi dahu klama,1,1,1,1
-746,mi mi klama,1,1,1,1
-747,mi do klama,1,1,1,1
-748,mi ti klama,1,1,1,1
-749,mi ta klama,1,1,1,1
-750,mi tu klama,1,1,1,1
-751,mi ri klama,1,1,1,1
-752,mi ra klama,1,1,1,1
-753,mi ru klama,1,1,1,1
-754,mi ko klama,1,1,1,1
-755,mi ma klama,1,1,1,1
-756,mi da klama,1,1,1,1
-757,mi de klama,1,1,1,1
-758,mi di klama,1,1,1,1
-759,mi ce'u klama,1,1,1,1
-760,mi cehu klama,1,1,1,1
-761,mi zi'o klama,1,1,1,1
-762,mi ziho klama,1,1,1,1
-763,mi viska zo'e,1,1,1,1
-764,mi viska zu'i,1,1,1,1
-765,mi viska ke'a,1,1,1,1
-766,mi viska mi'o,1,1,1,1
-767,mi viska ko'a,1,1,1,1
-768,mi viska ko'e,1,1,1,1
-769,mi viska ko'i,1,1,1,1
-770,mi viska ko'o,1,1,1,1
-771,mi viska ko'u,1,1,1,1
-772,mi viska fo'a,1,1,1,1
-773,mi viska fo'e,1,1,1,1
-774,mi viska fo'i,1,1,1,1
-775,mi viska fo'o,1,1,1,1
-776,mi viska fo'u,1,1,1,1
-777,mi viska vo'a,1,1,1,1
-778,mi viska vo'e,1,1,1,1
-779,mi viska vo'i,1,1,1,1
-780,mi viska vo'o,1,1,1,1
-781,mi viska vo'u,1,1,1,1
-782,mi viska mi'ai,1,1,1,1
-783,mi viska miahi,1,0,0,0
-784,mi viska mi'a,1,1,1,1
-785,mi viska ma'a,1,1,1,1
-786,mi viska do'o,1,1,1,1
-787,mi viska dei,1,1,1,1
-788,mi viska di'u,1,1,1,1
-789,mi viska dihu,1,1,1,1
-790,mi viska de'u,1,1,1,1
-791,mi viska dehu,1,1,1,1
-792,mi viska da'u,1,1,1,1
-793,mi viska dahu,1,1,1,1
-794,mi viska mi,1,1,1,1
-795,mi viska do,1,1,1,1
-796,mi viska ti,1,1,1,1
-797,mi viska ta,1,1,1,1
-798,mi viska tu,1,1,1,1
-799,mi viska ri,1,1,1,1
-800,mi viska ra,1,1,1,1
-801,mi viska ru,1,1,1,1
-802,mi viska ko,1,1,1,1
-803,mi viska ma,1,1,1,1
-804,mi viska da,1,1,1,1
-805,mi viska de,1,1,1,1
-806,mi viska di,1,1,1,1
-807,mi viska ce'u,1,1,1,1
-808,mi viska cehu,1,1,1,1
-809,mi viska zi'o,1,1,1,1
-810,mi viska ziho,1,1,1,1
-811,lo broda ku klama,1,1,1,1
-812,lo broda poi mi viska ke'a ku'o barda,1,1,1,1
-813,lo broda poi mi viska ke'a kuho barda,1,1,1,1
-814,mi viska tu'a di'u,1,1,1,1
-815,mi viska tuha di'u,1,1,1,1
-816,mi viska la'e di'u,1,1,1,1
-817,mi viska lu'e di'u,1,1,1,1
-818,mi viska tu'a lo broda ku,1,1,1,1
-819,mi viska tuha lo broda ku,1,1,1,1
-820,mi viska la'e lo broda ku,1,1,1,1
-821,mi viska lu'e lo broda ku,1,1,1,1
-822,mi viska le'i broda ku,1,1,1,1
-823,mi viska lo'i broda ku,1,1,1,1
-824,mi viska la'i broda ku,1,1,1,1
-825,mi viska lei broda ku,1,1,1,1
-826,mi viska loi broda ku,1,1,1,1
-827,mi viska lai broda ku,1,1,1,1
-828,mi viska lo'e broda ku,1,1,1,1
-829,mi viska lehe broda ku,1,1,1,1
-830,mi viska le'e broda ku,1,1,1,1
-831,mi viska le broda ku,1,1,1,1
-832,mi viska lo broda ku,1,1,1,1
-833,mi viska la broda ku,1,1,1,1
-834,le'i broda cu barda,1,1,1,1
-835,lo'i broda cu barda,1,1,1,1
-836,la'i broda cu barda,1,1,1,1
-837,lei broda cu barda,1,1,1,1
-838,loi broda cu barda,1,1,1,1
-839,lai broda cu barda,1,1,1,1
-840,lo'e broda cu barda,1,1,1,1
-841,lehe broda cu barda,1,1,1,1
-842,le'e broda cu barda,1,1,1,1
-843,le broda cu barda,1,1,1,1
-844,lo broda cu barda,1,1,1,1
-845,la broda cu barda,1,1,1,1
-846,mi cusku zo broda le'u,0,0,0,0
-847,mi cusku zo broda lehu,0,0,0,0
-848,li pa du li re,1,1,1,1
-849,mi cusku lu broda li'u,1,1,1,1
-850,mi cusku lu broda lihu,1,1,1,1
-851,mi cusku lo'u broda li'u,0,0,0,0
-852,mi cusku lohu broda li'u,0,0,0,0
-853,mi viska la'e lo broda lu'u,1,1,1,1
-854,mi viska la'e lo broda luhu,1,1,1,1
-855,mi na klama,1,1,1,1
-856,mi ja'a klama,1,1,1,1
-857,mi jaha klama,1,1,1,1
-858,mi na'e klama,1,1,1,1
-859,mi to'e klama,1,1,1,1
-860,mi no'e klama,1,1,1,1
-861,mi je'a klama,1,1,1,1
-862,lo na'e broda cu barda,1,1,1,1
-863,lo to'e broda cu barda,1,1,1,1
-864,lo no'e broda cu barda,1,1,1,1
-865,lo je'a broda cu barda,1,1,1,1
-866,mi klama ni'o do klama,1,1,1,1
-867,mi klama niho do klama,1,1,1,1
-868,lo broda poi broda cu barda,1,1,1,1
-869,lo broda noi broda cu barda,1,1,1,1
-870,lo broda voi broda cu barda,1,1,1,1
-871,lo broda noi mi viska ke'a ku'o barda,1,1,1,1
-872,lo broda voi mi viska ke'a ku'o barda,1,1,1,1
-873,mi troci lo je'i klama ku,1,0,0,0
-874,mi troci lo mu'e klama ku,1,1,1,1
-875,mi troci lo pu'u klama ku,1,1,1,1
-876,mi troci lo zu'o klama ku,1,1,1,1
-877,mi troci lo li'i klama ku,1,1,1,1
-878,mi troci lo su'u klama ku,1,1,1,1
-879,mi troci lo si'o klama ku,1,1,1,1
-880,mi troci lo du'u klama ku,1,1,1,1
-881,mi troci lo nu klama ku,1,1,1,1
-882,mi troci lo ka klama ku,1,1,1,1
-883,mi troci lo ni klama ku,1,1,1,1
-884,lo je'i broda cu nandu,1,0,0,0
-885,lo mu'e broda cu nandu,1,1,1,1
-886,lo pu'u broda cu nandu,1,1,1,1
-887,lo zu'o broda cu nandu,1,1,1,1
-888,lo li'i broda cu nandu,1,1,1,1
-889,lo su'u broda cu nandu,1,1,1,1
-890,lo si'o broda cu nandu,1,1,1,1
-891,lo du'u broda cu nandu,1,1,1,1
-892,lo nu broda cu nandu,1,1,1,1
-893,lo ka broda cu nandu,1,1,1,1
-894,lo ni broda cu nandu,1,1,1,1
-895,dau klama,1,1,1,1
-896,fei klama,1,1,1,1
-897,rei klama,1,1,1,1
-898,vai klama,1,1,1,1
-899,so'a klama,1,1,1,1
-900,so'e klama,1,1,1,1
-901,so'i klama,1,1,1,1
-902,so'u klama,1,1,1,1
-903,so'o klama,1,1,1,1
-904,soho klama,1,1,1,1
-905,za'u klama,1,1,0,1
-906,su'o klama,1,1,1,1
-907,suho klama,1,1,1,1
-908,suhe klama,1,1,1,1
-909,su'e klama,1,1,1,1
-910,daha klama,1,1,1,1
-911,da'a klama,1,1,1,1
-912,ji'i klama,1,1,1,1
-913,jihi klama,1,1,1,1
-914,xo klama,1,1,1,1
-915,pi klama,1,1,1,1
-916,rau klama,1,1,1,1
-917,du'e klama,1,1,1,1
-918,duhe klama,1,1,1,1
-919,mo'a klama,1,1,1,1
-920,moha klama,1,1,1,1
-921,te'o klama,1,1,1,1
-922,teho klama,1,1,1,1
-923,ka'o klama,1,1,1,1
-924,kaho klama,1,1,1,1
-925,tu'o klama,1,1,1,1
-926,pai klama,1,1,1,1
-927,pa klama,1,1,1,1
-928,re klama,1,1,1,1
-929,ci'i klama,1,1,1,1
-930,ci klama,1,1,1,1
-931,vo klama,1,1,1,1
-932,mu klama,1,1,1,1
-933,xa klama,1,1,1,1
-934,ze klama,1,1,1,1
-935,bi klama,1,1,1,1
-936,so klama,1,1,1,1
-937,no klama,1,1,1,1
-938,ro klama,1,1,1,1
-939,ki'o klama,1,1,1,1
-940,ma'u klama,1,1,0,1
-941,ni'u klama,1,1,0,1
-942,ce'i klama,1,1,0,1
-943,cehi klama,1,1,0,1
-944,fi'u klama,1,1,0,1
-945,fihu klama,1,1,0,1
-946,mi dau klama,1,1,1,1
-947,mi fei klama,1,1,1,1
-948,mi rei klama,1,1,1,1
-949,mi vai klama,1,1,1,1
-950,mi so'a klama,1,1,1,1
-951,mi so'e klama,1,1,1,1
-952,mi so'i klama,1,1,1,1
-953,mi so'u klama,1,1,1,1
-954,mi so'o klama,1,1,1,1
-955,mi soho klama,1,1,1,1
-956,mi za'u klama,1,1,0,1
-957,mi su'o klama,1,1,1,1
-958,mi suho klama,1,1,1,1
-959,mi suhe klama,1,1,1,1
-960,mi su'e klama,1,1,1,1
-961,mi daha klama,1,1,1,1
-962,mi da'a klama,1,1,1,1
-963,mi ji'i klama,1,1,1,1
-964,mi jihi klama,1,1,1,1
-965,mi xo klama,1,1,1,1
-966,mi pi klama,1,1,1,1
-967,mi rau klama,1,1,1,1
-968,mi du'e klama,1,1,1,1
-969,mi duhe klama,1,1,1,1
-970,mi mo'a klama,1,1,1,1
-971,mi moha klama,1,1,1,1
-972,mi te'o klama,1,1,1,1
-973,mi teho klama,1,1,1,1
-974,mi ka'o klama,1,1,1,1
-975,mi kaho klama,1,1,1,1
-976,mi tu'o klama,1,1,1,1
-977,mi pai klama,1,1,1,1
-978,mi pa klama,1,1,1,1
-979,mi re klama,1,1,1,1
-980,mi ci'i klama,1,1,1,1
-981,mi ci klama,1,1,1,1
-982,mi vo klama,1,1,1,1
-983,mi mu klama,1,1,1,1
-984,mi xa klama,1,1,1,1
-985,mi ze klama,1,1,1,1
-986,mi bi klama,1,1,1,1
-987,mi so klama,1,1,1,1
-988,mi no klama,1,1,1,1
-989,mi ro klama,1,1,1,1
-990,mi ki'o klama,1,1,1,1
-991,mi ma'u klama,1,1,0,1
-992,mi ni'u klama,1,1,0,1
-993,mi ce'i klama,1,1,0,1
-994,mi cehi klama,1,1,0,1
-995,mi fi'u klama,1,1,0,1
-996,mi fihu klama,1,1,0,1
-997,mi viska dau,1,0,0,0
-998,mi viska fei,1,0,0,0
-999,mi viska rei,1,0,0,0
-1000,mi viska vai,1,0,0,0
-1001,mi viska so'a,1,0,0,0
-1002,mi viska so'e,1,0,0,0
-1003,mi viska so'i,1,0,0,0
-1004,mi viska so'u,1,0,0,0
-1005,mi viska so'o,1,0,0,0
-1006,mi viska soho,1,0,0,0
-1007,mi viska za'u,1,0,0,0
-1008,mi viska su'o,1,0,0,0
-1009,mi viska suho,1,0,0,0
-1010,mi viska suhe,1,0,0,0
-1011,mi viska su'e,1,0,0,0
-1012,mi viska daha,1,0,0,0
-1013,mi viska da'a,1,0,0,0
-1014,mi viska ji'i,1,0,0,0
-1015,mi viska jihi,1,0,0,0
-1016,mi viska xo,1,0,0,0
-1017,mi viska pi,1,0,0,0
-1018,mi viska rau,1,0,0,0
-1019,mi viska du'e,1,0,0,0
-1020,mi viska duhe,1,0,0,0
-1021,mi viska mo'a,1,0,0,0
-1022,mi viska moha,1,0,0,0
-1023,mi viska te'o,1,0,0,0
-1024,mi viska teho,1,0,0,0
-1025,mi viska ka'o,1,0,0,0
-1026,mi viska kaho,1,0,0,0
-1027,mi viska tu'o,1,0,0,0
-1028,mi viska pai,1,0,0,0
-1029,mi viska pa,1,0,0,0
-1030,mi viska re,1,0,0,0
-1031,mi viska ci'i,1,0,0,0
-1032,mi viska ci,1,0,0,0
-1033,mi viska vo,1,0,0,0
-1034,mi viska mu,1,0,0,0
-1035,mi viska xa,1,0,0,0
-1036,mi viska ze,1,0,0,0
-1037,mi viska bi,1,0,0,0
-1038,mi viska so,1,0,0,0
-1039,mi viska no,1,0,0,0
-1040,mi viska ro,1,0,0,0
-1041,mi viska ki'o,1,0,0,0
-1042,mi viska ma'u,1,0,0,0
-1043,mi viska ni'u,1,0,0,0
-1044,mi viska ce'i,1,0,0,0
-1045,mi viska cehi,1,0,0,0
-1046,mi viska fi'u,1,0,0,0
-1047,mi viska fihu,1,0,0,0
-1048,mi roi klama,1,0,1,0
-1049,mi re'u klama,1,0,1,0
-1050,mi rehu klama,1,0,1,0
-1051,mi roi lo zdani klama,1,0,1,0
-1052,mi re'u lo zdani klama,1,0,1,0
-1053,mi rehu lo zdani klama,1,0,1,0
-1054,roi lo zdani klama,1,0,1,0
-1055,re'u lo zdani klama,1,0,1,0
-1056,rehu lo zdani klama,1,0,1,0
-1057,mi klama roi lo zdani,1,0,1,0
-1058,mi klama re'u lo zdani,1,0,1,0
-1059,mi klama rehu lo zdani,1,0,1,0
-1060,mi se klama lo zdani,1,1,1,1
-1061,mi te klama lo zdani,1,1,1,1
-1062,mi ve klama lo zdani,1,1,1,1
-1063,mi xe klama lo zdani,1,1,1,1
-1064,mi se broda,1,1,1,1
-1065,mi te broda,1,1,1,1
-1066,mi ve broda,1,1,1,1
-1067,mi xe broda,1,1,1,1
-1068,mi klama sei do zvati lo zdani,1,1,1,1
-1069,sei mi klama,1,1,1,1
-1070,mi klama lo zdani soi vo'a vo'e se'u,1,0,0,0
-1071,mi klama lo zdani soi vo'a vo'e sehu,1,0,0,0
-1072,to mi klama to,1,1,1,1
-1073,to mi klama toi,1,1,1,1
-1074,u'i mi klama,1,1,1,1
-1075,u'u mi klama,1,1,1,1
-1076,ru'e mi klama,1,1,1,1
-1077,ju'o mi klama,1,1,1,1
-1078,pe'i mi klama,1,1,1,1
-1079,sa'e mi klama,1,1,1,1
-1080,ta'o mi klama,1,1,1,1
-1081,e'o mi klama,1,1,1,1
-1082,e'e mi klama,1,1,1,1
-1083,ehu mi klama,1,1,1,1
-1084,e'u mi klama,1,1,1,1
-1085,ohu mi klama,1,1,1,1
-1086,o'u mi klama,1,1,1,1
-1087,a'e mi klama,1,1,1,1
-1088,i'a mi klama,1,1,1,1
-1089,buho mi klama,1,1,1,1
-1090,bu'o mi klama,1,1,1,1
-1091,kuhi mi klama,1,1,1,1
-1092,ku'i mi klama,1,1,1,1
-1093,ja'o mi klama,1,1,1,1
-1094,po'o mi klama,1,1,1,1
-1095,dahi mi klama,1,1,1,1
-1096,da'i mi klama,1,1,1,1
-1097,jehu mi klama,1,1,1,1
-1098,je'u mi klama,1,1,1,1
-1099,laha mi klama,1,1,1,1
-1100,la'a mi klama,1,1,1,1
-1101,zaha mi klama,1,1,1,1
-1102,za'a mi klama,1,1,1,1
-1103,gahi mi klama,1,1,1,1
-1104,ga'i mi klama,1,1,1,1
-1105,uho mi klama,1,1,1,1
-1106,u'o mi klama,1,1,1,1
-1107,ihi mi klama,1,1,1,1
-1108,i'i mi klama,1,1,1,1
-1109,oha mi klama,1,1,1,1
-1110,o'a mi klama,1,1,1,1
-1111,ehi mi klama,1,1,1,1
-1112,e'i mi klama,1,1,1,1
-1113,kahu mi klama,1,1,1,1
-1114,ka'u mi klama,1,1,1,1
-1115,kau mi klama,1,1,1,1
-1116,ruha mi klama,1,1,1,1
-1117,ru'a mi klama,1,1,1,1
-1118,jiha mi klama,1,1,1,1
-1119,ji'a mi klama,1,1,1,1
-1120,zuhu mi klama,1,1,1,1
-1121,zu'u mi klama,1,1,1,1
-1122,baha mi klama,1,1,1,1
-1123,ba'a mi klama,1,1,1,1
-1124,ai mi klama,1,1,1,1
-1125,au mi klama,1,1,1,1
-1126,kiaha mi klama,1,0,0,0
-1127,ki'a mi klama,1,1,1,1
-1128,zo'o mi klama,1,1,1,1
-1129,a'u mi klama,1,1,1,1
-1130,o'o mi klama,1,1,1,1
-1131,u'a mi klama,1,1,1,1
-1132,u'e mi klama,1,1,1,1
-1133,cai mi klama,1,1,1,1
-1134,ui mi klama,1,1,1,1
-1135,oi mi klama,1,1,1,1
-1136,ie mi klama,1,1,1,1
-1137,ii mi klama,1,1,1,1
-1138,uu mi klama,1,1,1,1
-1139,ua mi klama,1,1,1,1
-1140,ue mi klama,1,1,1,1
-1141,uo mi klama,1,1,1,1
-1142,ia mi klama,1,1,1,1
-1143,iu mi klama,1,1,1,1
-1144,ei mi klama,1,1,1,1
-1145,xu mi klama,1,1,1,1
-1146,i'e mi klama,1,1,1,1
-1147,be'e mi klama,1,1,1,1
-1148,be'u mi klama,1,1,1,1
-1149,di'ai mi klama,1,1,1,1
-1150,fau'u mi klama,1,1,1,1
-1151,ge'e mi klama,1,1,1,1
-1152,li'a mi klama,1,1,1,1
-1153,ni'au mi klama,1,1,1,1
-1154,pei mi klama,1,1,1,1
-1155,o'i mi klama,1,1,1,1
-1156,su'a mi klama,1,1,1,1
-1157,a'i mi klama,1,1,1,1
-1158,ahi mi klama,1,1,1,1
-1159,a'o mi klama,1,1,1,1
-1160,aho mi klama,1,1,1,1
-1161,ca'e mi klama,1,1,1,1
-1162,cahe mi klama,1,1,1,1
-1163,dai mi klama,1,1,1,1
-1164,e'a mi klama,1,1,1,1
-1165,eha mi klama,1,1,1,1
-1166,io mi klama,1,1,1,1
-1167,ju'a mi klama,1,1,1,1
-1168,juha mi klama,1,1,1,1
-1169,ke'u mi klama,1,1,1,1
-1170,kehu mi klama,1,1,1,1
-1171,le'o mi klama,1,1,1,1
-1172,leho mi klama,1,1,1,1
-1173,li'o mi klama,1,1,1,1
-1174,liho mi klama,1,1,1,1
-1175,o'e mi klama,1,1,1,1
-1176,ohe mi klama,1,1,1,1
-1177,pau mi klama,1,1,1,1
-1178,pa'e mi klama,1,1,1,1
-1179,pahe mi klama,1,1,1,1
-1180,ra'u mi klama,1,1,1,1
-1181,rahu mi klama,1,1,1,1
-1182,ro'a mi klama,1,1,1,1
-1183,roha mi klama,1,1,1,1
-1184,ro'o mi klama,1,1,1,1
-1185,roho mi klama,1,1,1,1
-1186,se'a mi klama,1,1,1,1
-1187,seha mi klama,1,1,1,1
-1188,si'a mi klama,1,1,1,1
-1189,siha mi klama,1,1,1,1
-1190,ta'u mi klama,1,1,1,1
-1191,tahu mi klama,1,1,1,1
-1192,ti'e mi klama,1,1,1,1
-1193,tihe mi klama,1,1,1,1
-1194,to'u mi klama,1,1,1,1
-1195,tohu mi klama,1,1,1,1
-1196,va'i mi klama,1,1,1,1
-1197,vahi mi klama,1,1,1,1
-1198,vu'e mi klama,1,1,1,1
-1199,vuhe mi klama,1,1,1,1
-1200,sahe mi klama,1,1,1,1
-1201,ohi mi klama,1,1,1,1
-1202,taho mi klama,1,1,1,1
-1203,pehi mi klama,1,1,1,1
-1204,juho mi klama,1,1,1,1
-1205,uhi mi klama,1,1,1,1
-1206,uhu mi klama,1,1,1,1
-1207,ruhe mi klama,1,1,1,1
-1208,eho mi klama,1,1,1,1
-1209,ehe mi klama,1,1,1,1
-1210,ahe mi klama,1,1,1,1
-1211,iha mi klama,1,1,1,1
-1212,zoho mi klama,1,1,1,1
-1213,ahu mi klama,1,1,1,1
-1214,oho mi klama,1,1,1,1
-1215,uha mi klama,1,1,1,1
-1216,uhe mi klama,1,1,1,1
-1217,ihe mi klama,1,1,1,1
-1218,behe mi klama,1,1,1,1
-1219,behu mi klama,1,1,1,1
-1220,dihai mi klama,1,1,1,1
-1221,fauhu mi klama,1,1,1,1
-1222,gehe mi klama,1,1,1,1
-1223,liha mi klama,1,1,1,1
-1224,nihau mi klama,1,1,1,1
-1225,suha mi klama,1,1,1,1
-1226,sai mi klama,1,1,1,1
-1227,cu'i mi klama,1,1,1,1
-1228,cuhi mi klama,1,1,1,1
-1229,mi klama u'i,1,1,1,1
-1230,mi klama u'u,1,1,1,1
-1231,mi klama ru'e,1,1,1,1
-1232,mi klama ju'o,1,1,1,1
-1233,mi klama pe'i,1,1,1,1
-1234,mi klama sa'e,1,1,1,1
-1235,mi klama ta'o,1,1,1,1
-1236,mi klama e'o,1,1,1,1
-1237,mi klama e'e,1,1,1,1
-1238,mi klama ehu,1,1,1,1
-1239,mi klama e'u,1,1,1,1
-1240,mi klama ohu,1,1,1,1
-1241,mi klama o'u,1,1,1,1
-1242,mi klama a'e,1,1,1,1
-1243,mi klama i'a,1,1,1,1
-1244,mi klama buho,1,1,1,1
-1245,mi klama bu'o,1,1,1,1
-1246,mi klama kuhi,1,1,1,1
-1247,mi klama ku'i,1,1,1,1
-1248,mi klama ja'o,1,1,1,1
-1249,mi klama po'o,1,1,1,1
-1250,mi klama dahi,1,1,1,1
-1251,mi klama da'i,1,1,1,1
-1252,mi klama jehu,1,1,1,1
-1253,mi klama je'u,1,1,1,1
-1254,mi klama laha,1,1,1,1
-1255,mi klama la'a,1,1,1,1
-1256,mi klama zaha,1,1,1,1
-1257,mi klama za'a,1,1,1,1
-1258,mi klama gahi,1,1,1,1
-1259,mi klama ga'i,1,1,1,1
-1260,mi klama uho,1,1,1,1
-1261,mi klama u'o,1,1,1,1
-1262,mi klama ihi,1,1,1,1
-1263,mi klama i'i,1,1,1,1
-1264,mi klama oha,1,1,1,1
-1265,mi klama o'a,1,1,1,1
-1266,mi klama ehi,1,1,1,1
-1267,mi klama e'i,1,1,1,1
-1268,mi klama kahu,1,1,1,1
-1269,mi klama ka'u,1,1,1,1
-1270,mi klama kau,1,1,1,1
-1271,mi klama ruha,1,1,1,1
-1272,mi klama ru'a,1,1,1,1
-1273,mi klama jiha,1,1,1,1
-1274,mi klama ji'a,1,1,1,1
-1275,mi klama zuhu,1,1,1,1
-1276,mi klama zu'u,1,1,1,1
-1277,mi klama baha,1,1,1,1
-1278,mi klama ba'a,1,1,1,1
-1279,mi klama ai,1,1,1,1
-1280,mi klama au,1,1,1,1
-1281,mi klama kiaha,1,0,0,0
-1282,mi klama ki'a,1,1,1,1
-1283,mi klama zo'o,1,1,1,1
-1284,mi klama a'u,1,1,1,1
-1285,mi klama o'o,1,1,1,1
-1286,mi klama u'a,1,1,1,1
-1287,mi klama u'e,1,1,1,1
-1288,mi klama cai,1,1,1,1
-1289,mi klama ui,1,1,1,1
-1290,mi klama oi,1,1,1,1
-1291,mi klama ie,1,1,1,1
-1292,mi klama ii,1,1,1,1
-1293,mi klama uu,1,1,1,1
-1294,mi klama ua,1,1,1,1
-1295,mi klama ue,1,1,1,1
-1296,mi klama uo,1,1,1,1
-1297,mi klama ia,1,1,1,1
-1298,mi klama iu,1,1,1,1
-1299,mi klama ei,1,1,1,1
-1300,mi klama xu,1,1,1,1
-1301,mi klama i'e,1,1,1,1
-1302,mi klama be'e,1,1,1,1
-1303,mi klama be'u,1,1,1,1
-1304,mi klama di'ai,1,1,1,1
-1305,mi klama fau'u,1,1,1,1
-1306,mi klama ge'e,1,1,1,1
-1307,mi klama li'a,1,1,1,1
-1308,mi klama ni'au,1,1,1,1
-1309,mi klama pei,1,1,1,1
-1310,mi klama o'i,1,1,1,1
-1311,mi klama su'a,1,1,1,1
-1312,mi klama a'i,1,1,1,1
-1313,mi klama ahi,1,1,1,1
-1314,mi klama a'o,1,1,1,1
-1315,mi klama aho,1,1,1,1
-1316,mi klama ca'e,1,1,1,1
-1317,mi klama cahe,1,1,1,1
-1318,mi klama dai,1,1,1,1
-1319,mi klama e'a,1,1,1,1
-1320,mi klama eha,1,1,1,1
-1321,mi klama io,1,1,1,1
-1322,mi klama ju'a,1,1,1,1
-1323,mi klama juha,1,1,1,1
-1324,mi klama ke'u,1,1,1,1
-1325,mi klama kehu,1,1,1,1
-1326,mi klama le'o,1,1,1,1
-1327,mi klama leho,1,1,1,1
-1328,mi klama li'o,1,1,1,1
-1329,mi klama liho,1,1,1,1
-1330,mi klama o'e,1,1,1,1
-1331,mi klama ohe,1,1,1,1
-1332,mi klama pau,1,1,1,1
-1333,mi klama pa'e,1,1,1,1
-1334,mi klama pahe,1,1,1,1
-1335,mi klama ra'u,1,1,1,1
-1336,mi klama rahu,1,1,1,1
-1337,mi klama ro'a,1,1,1,1
-1338,mi klama roha,1,1,1,1
-1339,mi klama ro'o,1,1,1,1
-1340,mi klama roho,1,1,1,1
-1341,mi klama se'a,1,1,1,1
-1342,mi klama seha,1,1,1,1
-1343,mi klama si'a,1,1,1,1
-1344,mi klama siha,1,1,1,1
-1345,mi klama ta'u,1,1,1,1
-1346,mi klama tahu,1,1,1,1
-1347,mi klama ti'e,1,1,1,1
-1348,mi klama tihe,1,1,1,1
-1349,mi klama to'u,1,1,1,1
-1350,mi klama tohu,1,1,1,1
-1351,mi klama va'i,1,1,1,1
-1352,mi klama vahi,1,1,1,1
-1353,mi klama vu'e,1,1,1,1
-1354,mi klama vuhe,1,1,1,1
-1355,mi klama sahe,1,1,1,1
-1356,mi klama ohi,1,1,1,1
-1357,mi klama taho,1,1,1,1
-1358,mi klama pehi,1,1,1,1
-1359,mi klama juho,1,1,1,1
-1360,mi klama uhi,1,1,1,1
-1361,mi klama uhu,1,1,1,1
-1362,mi klama ruhe,1,1,1,1
-1363,mi klama eho,1,1,1,1
-1364,mi klama ehe,1,1,1,1
-1365,mi klama ahe,1,1,1,1
-1366,mi klama iha,1,1,1,1
-1367,mi klama zoho,1,1,1,1
-1368,mi klama ahu,1,1,1,1
-1369,mi klama oho,1,1,1,1
-1370,mi klama uha,1,1,1,1
-1371,mi klama uhe,1,1,1,1
-1372,mi klama ihe,1,1,1,1
-1373,mi klama behe,1,1,1,1
-1374,mi klama behu,1,1,1,1
-1375,mi klama dihai,1,1,1,1
-1376,mi klama fauhu,1,1,1,1
-1377,mi klama gehe,1,1,1,1
-1378,mi klama liha,1,1,1,1
-1379,mi klama nihau,1,1,1,1
-1380,mi klama suha,1,1,1,1
-1381,mi klama sai,1,1,1,1
-1382,mi klama cu'i,1,1,1,1
-1383,mi klama cuhi,1,1,1,1
-1384,mi klama u'inai,1,1,1,1
-1385,mi klama u'unai,1,1,1,1
-1386,mi klama ru'enai,1,1,1,1
-1387,mi klama ju'onai,1,1,1,1
-1388,mi klama pe'inai,1,1,1,1
-1389,mi klama sa'enai,1,1,1,1
-1390,mi klama ta'onai,1,1,1,1
-1391,mi klama e'onai,1,1,1,1
-1392,mi klama e'enai,1,1,1,1
-1393,mi klama ehunai,1,1,1,1
-1394,mi klama e'unai,1,1,1,1
-1395,mi klama ohunai,1,1,1,1
-1396,mi klama o'unai,1,1,1,1
-1397,mi klama a'enai,1,1,1,1
-1398,mi klama i'anai,1,1,1,1
-1399,mi klama buhonai,1,1,1,1
-1400,mi klama bu'onai,1,1,1,1
-1401,mi klama kuhinai,1,1,1,1
-1402,mi klama ku'inai,1,1,1,1
-1403,mi klama ja'onai,1,1,1,1
-1404,mi klama po'onai,1,1,1,1
-1405,mi klama dahinai,1,1,1,1
-1406,mi klama da'inai,1,1,1,1
-1407,mi klama jehunai,1,1,1,1
-1408,mi klama je'unai,1,1,1,1
-1409,mi klama lahanai,1,1,1,1
-1410,mi klama la'anai,1,1,1,1
-1411,mi klama zahanai,1,1,1,1
-1412,mi klama za'anai,1,1,1,1
-1413,mi klama gahinai,1,1,1,1
-1414,mi klama ga'inai,1,1,1,1
-1415,mi klama uhonai,1,1,1,1
-1416,mi klama u'onai,1,1,1,1
-1417,mi klama ihinai,1,1,1,1
-1418,mi klama i'inai,1,1,1,1
-1419,mi klama ohanai,1,1,1,1
-1420,mi klama o'anai,1,1,1,1
-1421,mi klama ehinai,1,1,1,1
-1422,mi klama e'inai,1,1,1,1
-1423,mi klama kahunai,1,1,1,1
-1424,mi klama ka'unai,1,1,1,1
-1425,mi klama kaunai,1,1,1,1
-1426,mi klama ruhanai,1,1,1,1
-1427,mi klama ru'anai,1,1,1,1
-1428,mi klama jihanai,1,1,1,1
-1429,mi klama ji'anai,1,1,1,1
-1430,mi klama zuhunai,1,1,1,1
-1431,mi klama zu'unai,1,1,1,1
-1432,mi klama bahanai,1,1,1,1
-1433,mi klama ba'anai,1,1,1,1
-1434,mi klama ainai,1,1,1,1
-1435,mi klama aunai,1,1,1,1
-1436,mi klama kiahanai,0,0,0,0
-1437,mi klama ki'anai,1,1,1,1
-1438,mi klama zo'onai,1,1,1,1
-1439,mi klama a'unai,1,1,1,1
-1440,mi klama o'onai,1,1,1,1
-1441,mi klama u'anai,1,1,1,1
-1442,mi klama u'enai,1,1,1,1
-1443,mi klama cainai,1,1,1,1
-1444,mi klama uinai,1,1,1,1
-1445,mi klama oinai,1,1,1,1
-1446,mi klama ienai,1,1,1,1
-1447,mi klama iinai,1,1,1,1
-1448,mi klama uunai,1,1,1,1
-1449,mi klama uanai,1,1,1,1
-1450,mi klama uenai,1,1,1,1
-1451,mi klama uonai,1,1,1,1
-1452,mi klama ianai,1,1,1,1
-1453,mi klama iunai,1,1,1,1
-1454,mi klama einai,1,1,1,1
-1455,mi klama xunai,1,1,1,1
-1456,mi klama i'enai,1,1,1,1
-1457,mi klama be'enai,1,1,1,1
-1458,mi klama be'unai,1,1,1,1
-1459,mi klama di'ainai,1,1,1,1
-1460,mi klama fau'unai,1,1,1,1
-1461,mi klama ge'enai,1,1,1,1
-1462,mi klama li'anai,1,1,1,1
-1463,mi klama ni'aunai,1,1,1,1
-1464,mi klama peinai,1,1,1,1
-1465,mi klama o'inai,1,1,1,1
-1466,mi klama su'anai,1,1,1,1
-1467,mi klama a'inai,1,1,1,1
-1468,mi klama ahinai,1,1,1,1
-1469,mi klama a'onai,1,1,1,1
-1470,mi klama ahonai,1,1,1,1
-1471,mi klama ca'enai,1,1,1,1
-1472,mi klama cahenai,1,1,1,1
-1473,mi klama dainai,1,1,1,1
-1474,mi klama e'anai,1,1,1,1
-1475,mi klama ehanai,1,1,1,1
-1476,mi klama ionai,1,1,1,1
-1477,mi klama ju'anai,1,1,1,1
-1478,mi klama juhanai,1,1,1,1
-1479,mi klama ke'unai,1,1,1,1
-1480,mi klama kehunai,1,1,1,1
-1481,mi klama le'onai,1,1,1,1
-1482,mi klama lehonai,1,1,1,1
-1483,mi klama li'onai,1,1,1,1
-1484,mi klama lihonai,1,1,1,1
-1485,mi klama o'enai,1,1,1,1
-1486,mi klama ohenai,1,1,1,1
-1487,mi klama paunai,1,1,1,1
-1488,mi klama pa'enai,1,1,1,1
-1489,mi klama pahenai,1,1,1,1
-1490,mi klama ra'unai,1,1,1,1
-1491,mi klama rahunai,1,1,1,1
-1492,mi klama ro'anai,1,1,1,1
-1493,mi klama rohanai,1,1,1,1
-1494,mi klama ro'onai,1,1,1,1
-1495,mi klama rohonai,1,1,1,1
-1496,mi klama se'anai,1,1,1,1
-1497,mi klama sehanai,1,1,1,1
-1498,mi klama si'anai,1,1,1,1
-1499,mi klama sihanai,1,1,1,1
-1500,mi klama ta'unai,1,1,1,1
-1501,mi klama tahunai,1,1,1,1
-1502,mi klama ti'enai,1,1,1,1
-1503,mi klama tihenai,1,1,1,1
-1504,mi klama to'unai,1,1,1,1
-1505,mi klama tohunai,1,1,1,1
-1506,mi klama va'inai,1,1,1,1
-1507,mi klama vahinai,1,1,1,1
-1508,mi klama vu'enai,1,1,1,1
-1509,mi klama vuhenai,1,1,1,1
-1510,mi klama sahenai,1,1,1,1
-1511,mi klama ohinai,1,1,1,1
-1512,mi klama tahonai,1,1,1,1
-1513,mi klama pehinai,1,1,1,1
-1514,mi klama juhonai,1,1,1,1
-1515,mi klama uhinai,1,1,1,1
-1516,mi klama uhunai,1,1,1,1
-1517,mi klama ruhenai,1,1,1,1
-1518,mi klama ehonai,1,1,1,1
-1519,mi klama ehenai,1,1,1,1
-1520,mi klama ahenai,1,1,1,1
-1521,mi klama ihanai,1,1,1,1
-1522,mi klama zohonai,1,1,1,1
-1523,mi klama ahunai,1,1,1,1
-1524,mi klama ohonai,1,1,1,1
-1525,mi klama uhanai,1,1,1,1
-1526,mi klama uhenai,1,1,1,1
-1527,mi klama ihenai,1,1,1,1
-1528,mi klama behenai,1,1,1,1
-1529,mi klama behunai,1,1,1,1
-1530,mi klama dihainai,1,1,1,1
-1531,mi klama fauhunai,1,1,1,1
-1532,mi klama gehenai,1,1,1,1
-1533,mi klama lihanai,1,1,1,1
-1534,mi klama nihaunai,1,1,1,1
-1535,mi klama suhanai,1,1,1,1
-1536,mi klama sainai,1,1,1,1
-1537,mi klama cu'inai,1,1,1,1
-1538,mi klama cuhinai,1,1,1,1
-1539,u'inai mi klama,1,1,1,1
-1540,u'unai mi klama,1,1,1,1
-1541,ru'enai mi klama,1,1,1,1
-1542,ju'onai mi klama,1,1,1,1
-1543,pe'inai mi klama,1,1,1,1
-1544,sa'enai mi klama,1,1,1,1
-1545,ta'onai mi klama,1,1,1,1
-1546,e'onai mi klama,1,1,1,1
-1547,e'enai mi klama,1,1,1,1
-1548,ehunai mi klama,1,1,1,1
-1549,e'unai mi klama,1,1,1,1
-1550,ohunai mi klama,1,1,1,1
-1551,o'unai mi klama,1,1,1,1
-1552,a'enai mi klama,1,1,1,1
-1553,i'anai mi klama,1,1,1,1
-1554,buhonai mi klama,1,1,1,1
-1555,bu'onai mi klama,1,1,1,1
-1556,kuhinai mi klama,1,1,1,1
-1557,ku'inai mi klama,1,1,1,1
-1558,ja'onai mi klama,1,1,1,1
-1559,po'onai mi klama,1,1,1,1
-1560,dahinai mi klama,1,1,1,1
-1561,da'inai mi klama,1,1,1,1
-1562,jehunai mi klama,1,1,1,1
-1563,je'unai mi klama,1,1,1,1
-1564,lahanai mi klama,1,1,1,1
-1565,la'anai mi klama,1,1,1,1
-1566,zahanai mi klama,1,1,1,1
-1567,za'anai mi klama,1,1,1,1
-1568,gahinai mi klama,1,1,1,1
-1569,ga'inai mi klama,1,1,1,1
-1570,uhonai mi klama,1,1,1,1
-1571,u'onai mi klama,1,1,1,1
-1572,ihinai mi klama,1,1,1,1
-1573,i'inai mi klama,1,1,1,1
-1574,ohanai mi klama,1,1,1,1
-1575,o'anai mi klama,1,1,1,1
-1576,ehinai mi klama,1,1,1,1
-1577,e'inai mi klama,1,1,1,1
-1578,kahunai mi klama,1,1,1,1
-1579,ka'unai mi klama,1,1,1,1
-1580,kaunai mi klama,1,1,1,1
-1581,ruhanai mi klama,1,1,1,1
-1582,ru'anai mi klama,1,1,1,1
-1583,jihanai mi klama,1,1,1,1
-1584,ji'anai mi klama,1,1,1,1
-1585,zuhunai mi klama,1,1,1,1
-1586,zu'unai mi klama,1,1,1,1
-1587,bahanai mi klama,1,1,1,1
-1588,ba'anai mi klama,1,1,1,1
-1589,ainai mi klama,1,1,1,1
-1590,aunai mi klama,1,1,1,1
-1591,kiahanai mi klama,0,0,0,0
-1592,ki'anai mi klama,1,1,1,1
-1593,zo'onai mi klama,1,1,1,1
-1594,a'unai mi klama,1,1,1,1
-1595,o'onai mi klama,1,1,1,1
-1596,u'anai mi klama,1,1,1,1
-1597,u'enai mi klama,1,1,1,1
-1598,cainai mi klama,1,1,1,1
-1599,uinai mi klama,1,1,1,1
-1600,oinai mi klama,1,1,1,1
-1601,ienai mi klama,1,1,1,1
-1602,iinai mi klama,1,1,1,1
-1603,uunai mi klama,1,1,1,1
-1604,uanai mi klama,1,1,1,1
-1605,uenai mi klama,1,1,1,1
-1606,uonai mi klama,1,1,1,1
-1607,ianai mi klama,1,1,1,1
-1608,iunai mi klama,1,1,1,1
-1609,einai mi klama,1,1,1,1
-1610,xunai mi klama,1,1,1,1
-1611,i'enai mi klama,1,1,1,1
-1612,be'enai mi klama,1,1,1,1
-1613,be'unai mi klama,1,1,1,1
-1614,di'ainai mi klama,1,1,1,1
-1615,fau'unai mi klama,1,1,1,1
-1616,ge'enai mi klama,1,1,1,1
-1617,li'anai mi klama,1,1,1,1
-1618,ni'aunai mi klama,1,1,1,1
-1619,peinai mi klama,1,1,1,1
-1620,o'inai mi klama,1,1,1,1
-1621,su'anai mi klama,1,1,1,1
-1622,a'inai mi klama,1,1,1,1
-1623,ahinai mi klama,1,1,1,1
-1624,a'onai mi klama,1,1,1,1
-1625,ahonai mi klama,1,1,1,1
-1626,ca'enai mi klama,1,1,1,1
-1627,cahenai mi klama,1,1,1,1
-1628,dainai mi klama,1,1,1,1
-1629,e'anai mi klama,1,1,1,1
-1630,ehanai mi klama,1,1,1,1
-1631,ionai mi klama,1,1,1,1
-1632,ju'anai mi klama,1,1,1,1
-1633,juhanai mi klama,1,1,1,1
-1634,ke'unai mi klama,1,1,1,1
-1635,kehunai mi klama,1,1,1,1
-1636,le'onai mi klama,1,1,1,1
-1637,lehonai mi klama,1,1,1,1
-1638,li'onai mi klama,1,1,1,1
-1639,lihonai mi klama,1,1,1,1
-1640,o'enai mi klama,1,1,1,1
-1641,ohenai mi klama,1,1,1,1
-1642,paunai mi klama,1,1,1,1
-1643,pa'enai mi klama,1,1,1,1
-1644,pahenai mi klama,1,1,1,1
-1645,ra'unai mi klama,1,1,1,1
-1646,rahunai mi klama,1,1,1,1
-1647,ro'anai mi klama,1,1,1,1
-1648,rohanai mi klama,1,1,1,1
-1649,ro'onai mi klama,1,1,1,1
-1650,rohonai mi klama,1,1,1,1
-1651,se'anai mi klama,1,1,1,1
-1652,sehanai mi klama,1,1,1,1
-1653,si'anai mi klama,1,1,1,1
-1654,sihanai mi klama,1,1,1,1
-1655,ta'unai mi klama,1,1,1,1
-1656,tahunai mi klama,1,1,1,1
-1657,ti'enai mi klama,1,1,1,1
-1658,tihenai mi klama,1,1,1,1
-1659,to'unai mi klama,1,1,1,1
-1660,tohunai mi klama,1,1,1,1
-1661,va'inai mi klama,1,1,1,1
-1662,vahinai mi klama,1,1,1,1
-1663,vu'enai mi klama,1,1,1,1
-1664,vuhenai mi klama,1,1,1,1
-1665,sahenai mi klama,1,1,1,1
-1666,ohinai mi klama,1,1,1,1
-1667,tahonai mi klama,1,1,1,1
-1668,pehinai mi klama,1,1,1,1
-1669,juhonai mi klama,1,1,1,1
-1670,uhinai mi klama,1,1,1,1
-1671,uhunai mi klama,1,1,1,1
-1672,ruhenai mi klama,1,1,1,1
-1673,ehonai mi klama,1,1,1,1
-1674,ehenai mi klama,1,1,1,1
-1675,ahenai mi klama,1,1,1,1
-1676,ihanai mi klama,1,1,1,1
-1677,zohonai mi klama,1,1,1,1
-1678,ahunai mi klama,1,1,1,1
-1679,ohonai mi klama,1,1,1,1
-1680,uhanai mi klama,1,1,1,1
-1681,uhenai mi klama,1,1,1,1
-1682,ihenai mi klama,1,1,1,1
-1683,behenai mi klama,1,1,1,1
-1684,behunai mi klama,1,1,1,1
-1685,dihainai mi klama,1,1,1,1
-1686,fauhunai mi klama,1,1,1,1
-1687,gehenai mi klama,1,1,1,1
-1688,lihanai mi klama,1,1,1,1
-1689,nihaunai mi klama,1,1,1,1
-1690,suhanai mi klama,1,1,1,1
-1691,sainai mi klama,1,1,1,1
-1692,cu'inai mi klama,1,1,1,1
-1693,cuhinai mi klama,1,1,1,1
-1694,mi klama vau,1,1,1,1
-1695,mi viska lo broda vu'o noi mi klama,1,1,1,1
-1696,mi viska lo broda vuho noi mi klama,1,1,1,1
-1697,mi pu nai klama,1,1,1,1
-1698,mi broda ja nai brode,1,1,1,1
-1699,mi broda pa pamai,1,1,1,1
-1700,mi broda pa remai,1,1,1,1
-1701,mi broda pa cimai,1,1,1,1
-1702,mi broda pa vomai,1,1,1,1
-1703,mi broda pa mumai,1,1,1,1
-1704,mi broda pa xamai,1,1,1,1
-1705,mi broda pa zemai,1,1,1,1
-1706,mi broda pa bimai,1,1,1,1
-1707,mi broda pa somai,1,1,1,1
-1708,mi broda pa nomai,1,1,1,1
-1709,mi broda pa mai,1,1,1,1
-1710,mi broda pa mo'o,1,1,1,1
-1711,mi broda pa moho,1,1,1,1
-1712,mi u'i cai broda,1,1,1,1
-1713,mi u'i sai broda,1,1,1,1
-1714,mi u'i ru'e broda,1,1,1,1
-1715,mi u'i ruhe broda,1,1,1,1
-1716,mi u'i cu'i broda,1,1,1,1
-1717,mi u'i cuhi broda,1,1,1,1
-1718,mi pu klama,1,1,1,1
-1719,mi ca klama,1,1,1,1
-1720,mi ba klama,1,1,1,1
-1721,mi pu lo zdani klama,1,1,1,1
-1722,mi ca lo zdani klama,1,1,1,1
-1723,mi ba lo zdani klama,1,1,1,1
-1724,pu lo zdani klama,1,1,1,1
-1725,ca lo zdani klama,1,1,1,1
-1726,ba lo zdani klama,1,1,1,1
-1727,mi klama pu lo zdani,1,1,1,1
-1728,mi klama ca lo zdani,1,1,1,1
-1729,mi klama ba lo zdani,1,1,1,1
-1730,mi ki klama,1,1,1,1
-1731,mi ki lo zdani klama,1,1,1,1
-1732,ki lo zdani klama,1,1,1,1
-1733,mi klama ki lo zdani,1,1,1,1
-1734,mi ka'e klama,1,1,1,1
-1735,mi ca'a klama,1,1,1,1
-1736,mi nu'a klama,1,0,0,0
-1737,mi ja'ai klama,1,1,1,0
-1738,mi ka'e lo zdani klama,1,1,1,1
-1739,mi ca'a lo zdani klama,1,1,1,1
-1740,mi nu'a lo zdani klama,1,1,1,1
-1741,mi ja'ai lo zdani klama,1,1,1,0
-1742,ka'e lo zdani klama,1,1,1,1
-1743,ca'a lo zdani klama,1,1,1,1
-1744,nu'a lo zdani klama,1,1,1,1
-1745,ja'ai lo zdani klama,1,1,1,1
-1746,mi klama ka'e lo zdani,1,1,1,1
-1747,mi klama ca'a lo zdani,1,1,1,1
-1748,mi klama nu'a lo zdani,1,1,1,1
-1749,mi klama ja'ai lo zdani,1,1,1,0
-1750,mi cu'e klama,1,1,1,1
-1751,mi cuhe klama,1,1,1,1
-1752,mi cu'e lo zdani klama,1,1,1,1
-1753,mi cuhe lo zdani klama,1,1,1,1
-1754,cu'e lo zdani klama,1,1,1,1
-1755,cuhe lo zdani klama,1,1,1,1
-1756,mi klama cu'e lo zdani,1,1,1,1
-1757,mi klama cuhe lo zdani,1,1,1,1
-1758,mi pu'o klama,1,1,1,1
-1759,mi co'a klama,1,1,1,1
-1760,mi za'o klama,1,1,1,1
-1761,mi ca'o klama,1,1,1,1
-1762,mi co'u klama,1,1,1,1
-1763,mi mo'u klama,1,1,1,1
-1764,mi ba'o klama,1,1,1,1
-1765,mi de'a klama,1,1,1,1
-1766,mi di'a klama,1,1,1,1
-1767,mi pu'o lo zdani klama,1,1,1,1
-1768,mi co'a lo zdani klama,1,1,1,1
-1769,mi za'o lo zdani klama,1,1,1,1
-1770,mi ca'o lo zdani klama,1,1,1,1
-1771,mi co'u lo zdani klama,1,1,1,1
-1772,mi mo'u lo zdani klama,1,1,1,1
-1773,mi ba'o lo zdani klama,1,1,1,1
-1774,mi de'a lo zdani klama,1,1,1,1
-1775,mi di'a lo zdani klama,1,1,1,1
-1776,pu'o lo zdani klama,1,1,1,1
-1777,co'a lo zdani klama,1,1,1,1
-1778,za'o lo zdani klama,1,1,1,1
-1779,ca'o lo zdani klama,1,1,1,1
-1780,co'u lo zdani klama,1,1,1,1
-1781,mo'u lo zdani klama,1,1,1,1
-1782,ba'o lo zdani klama,1,1,1,1
-1783,de'a lo zdani klama,1,1,1,1
-1784,di'a lo zdani klama,1,1,1,1
-1785,mi klama pu'o lo zdani,1,1,1,1
-1786,mi klama co'a lo zdani,1,1,1,1
-1787,mi klama za'o lo zdani,1,1,1,1
-1788,mi klama ca'o lo zdani,1,1,1,1
-1789,mi klama co'u lo zdani,1,1,1,1
-1790,mi klama mo'u lo zdani,1,1,1,1
-1791,mi klama ba'o lo zdani,1,1,1,1
-1792,mi klama de'a lo zdani,1,1,1,1
-1793,mi klama di'a lo zdani,1,1,1,1
-1794,mi ze'i klama,1,1,1,1
-1795,mi zehi klama,1,1,1,1
-1796,mi ze'a klama,1,1,1,1
-1797,mi zeha klama,1,1,1,1
-1798,mi ze'u klama,1,1,1,1
-1799,mi zehu klama,1,1,1,1
-1800,mi zi klama,1,1,1,1
-1801,mi za klama,1,1,1,1
-1802,mi zu klama,1,1,1,1
-1803,mi ze'i lo zdani klama,1,1,1,1
-1804,mi zehi lo zdani klama,1,1,1,1
-1805,mi ze'a lo zdani klama,1,1,1,1
-1806,mi zeha lo zdani klama,1,1,1,1
-1807,mi ze'u lo zdani klama,1,1,1,1
-1808,mi zehu lo zdani klama,1,1,1,1
-1809,mi zi lo zdani klama,1,1,1,1
-1810,mi za lo zdani klama,1,1,1,1
-1811,mi zu lo zdani klama,1,1,1,1
-1812,ze'i lo zdani klama,1,1,1,1
-1813,zehi lo zdani klama,1,1,1,1
-1814,ze'a lo zdani klama,1,1,1,1
-1815,zeha lo zdani klama,1,1,1,1
-1816,ze'u lo zdani klama,1,1,1,1
-1817,zehu lo zdani klama,1,1,1,1
-1818,zi lo zdani klama,1,1,1,1
-1819,za lo zdani klama,1,1,1,1
-1820,zu lo zdani klama,1,1,1,1
-1821,mi klama ze'i lo zdani,1,1,1,1
-1822,mi klama zehi lo zdani,1,1,1,1
-1823,mi klama ze'a lo zdani,1,1,1,1
-1824,mi klama zeha lo zdani,1,1,1,1
-1825,mi klama ze'u lo zdani,1,1,1,1
-1826,mi klama zehu lo zdani,1,1,1,1
-1827,mi klama zi lo zdani,1,1,1,1
-1828,mi klama za lo zdani,1,1,1,1
-1829,mi klama zu lo zdani,1,1,1,1
-1830,mi zi'i klama,1,0,0,0
-1831,mi zihi klama,1,0,0,0
-1832,mi bi'o klama,1,0,0,0
-1833,mi biho klama,1,0,0,0
-1834,mi bi'i klama,1,0,0,0
-1835,mi bihi klama,1,0,0,0
-1836,mi mi'i klama,1,0,0,0
-1837,mi mihi klama,1,0,0,0
-1838,mi zi'i lo zdani klama,1,0,0,0
-1839,mi zihi lo zdani klama,1,0,0,0
-1840,mi bi'o lo zdani klama,1,1,1,1
-1841,mi biho lo zdani klama,1,1,1,1
-1842,mi bi'i lo zdani klama,1,1,1,1
-1843,mi bihi lo zdani klama,1,1,1,1
-1844,mi mi'i lo zdani klama,1,1,1,1
-1845,mi mihi lo zdani klama,1,1,1,1
-1846,zi'i lo zdani klama,1,0,0,0
-1847,zihi lo zdani klama,1,0,0,0
-1848,bi'o lo zdani klama,1,0,0,1
-1849,biho lo zdani klama,1,0,0,1
-1850,bi'i lo zdani klama,1,0,0,1
-1851,bihi lo zdani klama,1,0,0,1
-1852,mi'i lo zdani klama,1,0,0,1
-1853,mihi lo zdani klama,1,0,0,1
-1854,mi klama zi'i lo zdani,1,0,0,0
-1855,mi klama zihi lo zdani,1,0,0,0
-1856,mi klama bi'o lo zdani,1,0,0,0
-1857,mi klama biho lo zdani,1,0,0,0
-1858,mi klama bi'i lo zdani,1,0,0,0
-1859,mi klama bihi lo zdani,1,0,0,0
-1860,mi klama mi'i lo zdani,1,0,0,0
-1861,mi klama mihi lo zdani,1,0,0,0
-1862,mi ve'i klama,1,1,1,1
-1863,mi vehi klama,1,1,1,1
-1864,mi ve'a klama,1,1,1,1
-1865,mi veha klama,1,1,1,1
-1866,mi ve'e klama,1,1,1,1
-1867,mi vehe klama,1,1,1,1
-1868,mi ve'u klama,1,1,1,1
-1869,mi vehu klama,1,1,1,1
-1870,mi ve'i lo zdani klama,1,1,1,1
-1871,mi vehi lo zdani klama,1,1,1,1
-1872,mi ve'a lo zdani klama,1,1,1,1
-1873,mi veha lo zdani klama,1,1,1,1
-1874,mi ve'e lo zdani klama,1,1,1,1
-1875,mi vehe lo zdani klama,1,1,1,1
-1876,mi ve'u lo zdani klama,1,1,1,1
-1877,mi vehu lo zdani klama,1,1,1,1
-1878,ve'i lo zdani klama,1,1,1,1
-1879,vehi lo zdani klama,1,1,1,1
-1880,ve'a lo zdani klama,1,1,1,1
-1881,veha lo zdani klama,1,1,1,1
-1882,ve'e lo zdani klama,1,1,1,1
-1883,vehe lo zdani klama,1,1,1,1
-1884,ve'u lo zdani klama,1,1,1,1
-1885,vehu lo zdani klama,1,1,1,1
-1886,mi klama ve'i lo zdani,1,1,1,1
-1887,mi klama vehi lo zdani,1,1,1,1
-1888,mi klama ve'a lo zdani,1,1,1,1
-1889,mi klama veha lo zdani,1,1,1,1
-1890,mi klama ve'e lo zdani,1,1,1,1
-1891,mi klama vehe lo zdani,1,1,1,1
-1892,mi klama ve'u lo zdani,1,1,1,1
-1893,mi klama vehu lo zdani,1,1,1,1
-1894,mi vi'i klama,1,1,1,1
-1895,mi vihi klama,1,1,1,1
-1896,mi vi'a klama,1,1,1,1
-1897,mi viha klama,1,1,1,1
-1898,mi vi'u klama,1,1,1,1
-1899,mi vihu klama,1,1,1,1
-1900,mi vi'e klama,1,1,1,1
-1901,mi vihe klama,1,1,1,1
-1902,mi vi'i lo zdani klama,1,1,1,1
-1903,mi vihi lo zdani klama,1,1,1,1
-1904,mi vi'a lo zdani klama,1,1,1,1
-1905,mi viha lo zdani klama,1,1,1,1
-1906,mi vi'u lo zdani klama,1,1,1,1
-1907,mi vihu lo zdani klama,1,1,1,1
-1908,mi vi'e lo zdani klama,1,1,1,1
-1909,mi vihe lo zdani klama,1,1,1,1
-1910,vi'i lo zdani klama,1,1,1,1
-1911,vihi lo zdani klama,1,1,1,1
-1912,vi'a lo zdani klama,1,1,1,1
-1913,viha lo zdani klama,1,1,1,1
-1914,vi'u lo zdani klama,1,1,1,1
-1915,vihu lo zdani klama,1,1,1,1
-1916,vi'e lo zdani klama,1,1,1,1
-1917,vihe lo zdani klama,1,1,1,1
-1918,mi klama vi'i lo zdani,1,1,1,1
-1919,mi klama vihi lo zdani,1,1,1,1
-1920,mi klama vi'a lo zdani,1,1,1,1
-1921,mi klama viha lo zdani,1,1,1,1
-1922,mi klama vi'u lo zdani,1,1,1,1
-1923,mi klama vihu lo zdani,1,1,1,1
-1924,mi klama vi'e lo zdani,1,1,1,1
-1925,mi klama vihe lo zdani,1,1,1,1
-1926,mi vi klama,1,1,1,1
-1927,mi va klama,1,1,1,1
-1928,mi vu klama,1,1,1,1
-1929,mi vi lo zdani klama,1,1,1,1
-1930,mi va lo zdani klama,1,1,1,1
-1931,mi vu lo zdani klama,1,1,1,1
-1932,vi lo zdani klama,1,1,1,1
-1933,va lo zdani klama,1,1,1,1
-1934,vu lo zdani klama,1,1,1,1
-1935,mi klama vi lo zdani,1,1,1,1
-1936,mi klama va lo zdani,1,1,1,1
-1937,mi klama vu lo zdani,1,1,1,1
-1938,mi ta'e klama,1,1,1,1
-1939,mi di'i klama,1,1,1,1
-1940,mi na'o klama,1,1,1,1
-1941,mi ru'i klama,1,1,1,1
-1942,mi ta'e lo zdani klama,1,1,1,1
-1943,mi di'i lo zdani klama,1,1,1,1
-1944,mi na'o lo zdani klama,1,1,1,1
-1945,mi ru'i lo zdani klama,1,1,1,1
-1946,ta'e lo zdani klama,1,1,1,1
-1947,di'i lo zdani klama,1,1,1,1
-1948,na'o lo zdani klama,1,1,1,1
-1949,ru'i lo zdani klama,1,1,1,1
-1950,mi klama ta'e lo zdani,1,1,1,1
-1951,mi klama di'i lo zdani,1,1,1,1
-1952,mi klama na'o lo zdani,1,1,1,1
-1953,mi klama ru'i lo zdani,1,1,1,1
-1954,ti me do broda,1,1,1,1
-1955,mi me lo ci gerku klama,1,1,1,1
-1956,mi jai gau broda,1,1,1,1
-1957,mi jai broda,1,1,1,1
-1958,mi re mei,1,1,1,1
-1959,mi re moi,1,1,1,1
-1960,mi re sihe,1,1,1,1
-1961,mi re si'e,1,1,1,1
-1962,mi re cuho,1,1,1,1
-1963,mi re cu'o,1,1,1,1
-1964,mi re vahe,1,1,1,1
-1965,mi re va'e,1,1,1,1
-1966,lo broda cu mei re,0,0,0,0
-1967,lo broda cu moi re,0,0,0,0
-1968,lo broda cu sihe re,0,0,0,0
-1969,lo broda cu si'e re,0,0,0,0
-1970,lo broda cu cuho re,0,0,0,0
-1971,lo broda cu cu'o re,0,0,0,0
-1972,lo broda cu vahe re,0,0,0,0
-1973,lo broda cu va'e re,0,0,0,0
-1974,mi klama soi vo'a vo'e,1,0,0,0
-1975,mi viska lo broda xi re,1,1,1,1
-1976,li pa xi re du re,1,0,0,0
-1977,mi klama cehe do,1,0,0,0
-1978,mi klama ce'e do,1,0,0,0
-1979,mi pehe je do klama,1,1,1,1
-1980,mi pe'e je do klama,1,1,1,1
-1981,mi bahe klama,1,1,1,1
-1982,mi ba'e klama,1,1,1,1
-1983,mi za'e klama,1,1,1,1
-1984,mi klama daho,1,1,1,1
-1985,mi klama da'o,1,1,1,1
-1986,mi dukse nuhi lo broda lo brode,1,1,1,1
-1987,mi dukse nu'i lo broda lo brode,1,1,1,1
-1988,mi dukse nu'i lo broda lo brode nuhu,1,1,1,1
-1989,mi dukse nu'i lo broda lo brode nu'u,1,1,1,1
-1990,fuhe mi klama,1,1,1,0
-1991,fu'e mi klama,1,1,1,0
-1992,mi klama fuhe,1,1,1,0
-1993,mi klama fu'e,1,1,1,0
-1994,fuho mi klama,1,1,1,1
-1995,fu'o mi klama,1,1,1,1
-1996,mi klama fuho,1,1,1,1
-1997,mi klama fu'o,1,1,1,1
-1998,mi cusku zo broda,1,1,1,1
-1999,mi cusku zoi gy. broda .gy,1,1,1,1
-2000,lo byklesi ku,1,1,1,1
-2001,lo cyklesi ku,1,1,1,1
-2002,mi byklesi,1,1,1,1
-2003,mi klama lo byklesi ku,1,1,1,1
-2004,lo byklama ku,1,1,1,1
-2005,lo bykukla ku,1,1,1,1
-2006,lo bynunkapi ku,1,1,1,1
-2007,lo bynaselci ku,1,1,1,1
-2008,lo byduduki ku,1,1,1,1
-2009,lo bykukybu'e ku,1,1,1,1
-2010,lo dyjamynai ku,1,1,1,1
-2011,lo byklaniku ku,1,1,1,1
-2012,lo BYklesi ku,1,1,1,1
-2013,lo bybroda ku,1,1,1,1
-2014,lo bycmalu ku,1,1,1,1
-2015,lo byzdani ku,1,1,1,1
-2016,lo cybroda ku,1,1,1,1
-2017,mi bybroda,1,1,1,1
-2018,lo bydjudi ku,1,1,1,1
-2019,lo bysligu ku,1,1,1,1
-2020,lo bynaku ku,0,0,0,0
-2021,lo bykuku ku,0,0,0,0
-2022,lo bynunu ku,0,0,0,0
-2023,lo byzozo ku,0,0,0,0
-2024,lo bypapa ku,0,0,0,0
-2025,lo bydada ku,0,0,0,0
-2026,lo cykuku ku,0,0,0,0
-2027,lo zykuku ku,0,0,0,0
-2028,mi bykuku,0,0,0,0
-2029,lo bykukai ku,0,0,0,0
-2030,lo bykule ku,0,0,0,0
-2031,lo bykubu ku,0,0,0,0
-2032,lo byvovu ku,0,0,0,0
-2033,lo bykuku broda,0,0,0,0
-2034,lo abu ku,0,0,0,0
-2035,lo ebu ku,0,0,0,0
-2036,lo cybu'u ku,0,0,0,0
-2037,lo byku ku,0,0,0,0
-2038,lo bykukula ku,1,0,0,0
-2039,lo kuku ku,1,0,0,0
-2040,lo kukai ku,1,0,0,0
-2041,mi kuku,1,0,0,0
-2042,mi bynaku klama,0,1,1,1
-2043,lo bydudu ku,0,1,1,1
-2044,mi bydudu,0,1,1,1
-2045,lo bydudu klama,0,1,1,1
-2046,lo bysukai ku,0,1,1,1
-2047,lo byfyklesi ku,0,1,1,1
-2048,lo bycyklesi ku,0,1,1,1
-2049,lo byklesi noi broda ku,0,1,1,1
-2050,mi byta'e klama,0,1,1,1
-2051,mi byca klama,0,1,1,1
-2052,mi klama byklesi,1,0,0,0
-2053,mi klesi byklesi,1,0,0,0
-2054,mi klama gi'e byklesi,1,0,0,0
-2055,mi suta byklesi,1,1,1,1
-2056,fa nai mi klama,1,1,1,0
-2057,mi klama fa nai,1,1,1,0
-2058,fai nai mi klama,1,1,1,0
-2059,mi klama fai nai,1,1,1,0
-2060,fe nai mi klama,1,1,1,0
-2061,mi ji do klama lo zdani,1,1,1,1
-2062,do ji mi broda,1,1,1,1
-2063,li pa ji nai re,1,1,1,1
-2064,va'u mi klama,1,1,1,1
-2065,se va'u mi klama,1,1,1,1
-2066,mi klama se va'u lo nu broda,1,1,1,1
-2067,mi klama fa ku,1,1,1,1
-2068,fa ku,1,1,1,1
-2069,mi klama fa ku do,1,1,1,1
-2070,mi klama fa nai ku,1,1,1,0
-2071,mi klama fa fi'a ku,1,1,1,1
-2072,mi klama va'u,1,1,1,1
-2073,mi klama se va'u ku,1,1,1,1
-2074,se va'u ku mi klama,1,1,1,1
-2075,mi fa klama,1,1,1,1
-2076,fa broda,1,1,1,1
-2077,mi klama va'u do,1,1,1,1
-2078,mi klama bai do,1,1,1,1
-2079,mi klama fa mi ku,0,0,0,0
-2080,mi klama va'u mi ku,0,0,0,0
-2081,farlu ju'i co cnita,1,1,1,1
-2082,.oi ta ca'o farlu ju'i co cnita,1,1,1,1
-2083,mi farlu ju'i co cnita,1,1,1,1
-2084,farlu ju'i co se cnita,1,1,1,1
-2085,farlu ju'i co na'e cnita,1,1,1,1
-2086,farlu ju'i co nu broda kei,1,1,1,1
-2087,farlu ju'i co cnita co brodi,1,1,1,1
-2088,farlu ju'i co cnita gi'e brodi,1,1,1,1
-2089,mi klama .ui co broda,1,1,1,1
-2090,farlu ju'i co ja'a cnita,0,0,0,0
-2091,farlu ju'i co na cnita,0,0,0,0
-2092,farlu ju'i co cnita dohu,0,0,0,0
-2093,farlu ju'i co cnita ku,0,0,0,0
-2094,farlu ju'i co broda gi broda,0,0,0,0
-2095,mi klama bo cadzu bo bajra,1,1,1,1
-2096,mi broda bo brode,1,1,1,1
-2097,mi viska lo broda bo brode ku,1,1,1,1
-2098,mi broda gi'e brode bo brodi,1,1,1,1
-2099,mi klama co cadzu bo bajra,1,1,1,1
-2100,mi na'e bo broda,0,0,0,0
-2101,na'e bo broda,0,0,0,0
-2102,to'e bo broda,0,0,0,0
-2103,jai se gau,0,0,1,1
-2104,mi jai se gau broda,1,1,1,1
-2105,mi jai se gau klama lo zdani,1,1,1,1
-2106,mi jai se ta'i broda,1,1,1,1
-2107,mi jai na'e gau broda,1,1,1,1
-2108,mi jai se na'e gau broda,1,1,1,0
-2109,mi jai na'e se gau broda,1,1,1,1
-2110,mi jai se pu broda,1,1,1,0
-2111,mi jai se gau broda co brodi,1,1,1,1
-2112,mi jai na gau broda,0,0,1,1
-2113,mi jai ja'a gau broda,0,0,1,1
-2114,mi jai se ja'a gau broda,0,0,0,0
-2115,mi jai se go broda,0,0,0,0
-2116,mi broda joi nai brode,1,1,1,1
-2117,mi broda joi bo brode,1,1,1,1
-2118,mi broda se joi brode,1,1,1,1
-2119,mi broda bi'i brode,1,1,1,1
-2120,mi broda ga'o bi'i ke'i brode,1,1,1,1
-2121,mi broda bi'i nai brode,1,1,1,1
-2122,mi broda se bi'i brode,1,1,1,1
-2123,mi broda joi brode gi'e brodi,1,1,1,1
-2124,mi broda joi brode joi brodi,1,1,1,1
-2125,mi broda joi brode co brodi,1,1,1,1
-2126,mi broda joi brode .ui brodi,1,1,1,1
-2127,mi broda joi ju'i dohu brode,1,1,1,1
-2128,mi klama gi'e ju'i do cadzu,1,1,1,1
-2129,farlu ju'i do cnita,1,1,1,1
-2130,mi broda na joi brode,1,1,1,1
-2131,mi broda na se joi brode,1,1,1,1
-2132,mi broda na gi'e brode,1,1,1,1
-2133,mi broda se gi'e brode,1,1,1,1
-2134,mi broda na gi'a brode,1,1,1,1
-2135,mi broda se gi'a brode,1,1,1,1
-2136,mi broda e brode,0,0,0,0
-2137,mi broda a brode,0,0,0,0
-2138,mi broda joi ju'i brode,0,0,0,0
-2139,mi broda je ju'i brode,0,0,0,0
-2140,mi klama gi'e ju'i cadzu,0,0,0,0
-2141,mi broda joi brode gi brodi,0,0,0,0
-2142,mi broda je brode ku brodi,0,0,0,0
-2143,mi viska lo broda joi brode ku,0,1,1,1
-2144,mi viska lo broda bi'i brode ku,0,1,1,1
-2145,mi broda vei ny su'i pa mai,0,0,0,0
-2146,mi broda li pa mai,1,0,0,0
-2147,mi klama ri,1,1,1,1
-2148,mi klama ra,1,1,1,1
-2149,mi klama ru,1,1,1,1
-2150,mi viska lo broda .i mi viska ri,1,1,1,1
-2151,mi klama lo ni broda ku,1,1,1,1
-2152,lo pa mi gerku ku barda,0,0,0,0
-2153,lo pa le gerku ku barda,0,1,1,1
-2154,mi pu bo ge broda gi broda,1,0,0,0
-2155,mi caku klama,1,1,1,1
-2156,caku mi klama,0,1,1,1
-2157,li pa du re,1,0,0,0
-2158,lo aburobu ku,1,0,0,0
-2159,mi klama lo broda be'o,0,0,0,0
-2160,mi klama ke lo zdani broda ke'e,1,1,1,1
-2161,ganai mi broda gi mi klama,1,1,1,0
-2162,mi ge broda gi brode,1,1,1,0
-2163,xu do klama,1,1,1,1
-2164,li vei ny su'i pa ve'o du re,1,0,0,0
-2165,.i sy mintu lo purdykurji lo ka ma kau tarmi ce'u .i clani kurfa gi'e plita gi'e se kojna lo xance jo'u lo jamfu,1,1,1,1
-2166,sy mintu lo purdykurji lo ka ma kau tarmi ce'u,1,1,1,1
-2167,lo ka ma kau tarmi ce'u cu se nelci mi,1,1,1,1
-2168,mi djica lo ka ma kau tarmi ce'u,1,1,1,1
-2169,mi klama ce'u,1,1,1,1
-2170,mi klama zi'o,1,1,1,1
-2171,mi klama ce'u zi'o,1,1,1,1
-2172,ma klama ce'u,1,1,1,1
-2173,mi klama cehu,1,1,1,1
-2174,xu dai do klama,1,1,1,1
-2175,mi nelci do .u'u dai,1,1,1,1
-2176,mi klama ca'e broda,1,1,1,1
-2177,mi broda dai brode,1,1,1,1
-2178,mi pau broda,1,1,1,1
-2179,mi klama dai ru'e,1,1,1,1
-2180,tu'a klama,0,0,0,0
-2181,mi tu'a klama,0,0,0,0
-2182,mi viska tu'a,0,0,0,0
-2183,mi djica tu'a,0,0,0,0
-2184,tai tu'a,0,0,0,0
-2185,tu'a zo'u broda,0,0,0,0
-2186,mi cu tu'a lo since,0,0,0,0
-2187,tuha klama,0,0,0,0
-2188,tai tu'a lo since,1,1,1,1
-2189,mi djica tu'a do,1,1,1,1
-2190,mi djica tu'a do lu'u,1,1,1,1
-2191,tu'a do,1,1,1,1
-2192,tu'a lo broda cu brode,1,1,1,1
-2193,tu'a mi klama,1,1,1,1
-2194,mi klama tu'a lo zdani,1,1,1,1
-2195,mi klama tu'a lo zdani broda,1,1,1,1
-2196,lu'e tu'a lo si'o broda,1,1,1,1
-2197,tu'a do zo'u broda,1,1,1,1
-2198,tuha do,1,1,1,1
-2199,mi djica tuha do,1,1,1,1
-2200,mi to klama .i do broda,1,1,1,1
-2201,mi to klama toi do broda,1,1,1,1
-2202,mi to klama,1,1,1,1
-2203,mi to klama toi,1,1,1,1
-2204,to broda,1,1,1,1
-2205,to broda toi,1,1,1,1
-2206,mi viska do to do klama toi,1,1,1,1
-2207,mi to klama toi broda,1,1,1,1
-2208,mi to klama .i do broda toi,1,1,1,1
-2209,ju'i tu'a do,0,1,1,1
-2210,farlu ju'i tu'a do cnita,0,1,1,1
-2211,mi klama gi'e ju'i tu'a do cadzu,0,1,1,1
-2212,li la'e pa su'i re lohO,0,1,1,1
-2213,li tu'a pa su'i re lohO,0,1,1,1
-2214,mi na sai muvdu,1,1,1,1
-2215,mi na sai ka'e muvdu,1,1,1,1
-2216,mi na'e sai muvdu,1,1,1,1
-2217,mi na'e sai ka'e muvdu,1,1,0,1
-2218,mi to'e cu'i ka'e muvdu,1,1,0,1
-2219,mi no'e cai muvdu,1,1,1,1
-2220,mi je'a ru'e ka'e muvdu,1,1,0,1
-2221,mi ja'a sa'e muvdu,1,1,1,1
-2222,mi sai cai muvdu,1,1,1,1
-2223,mi cu'i sai muvdu,1,1,1,1
-2224,mi na sai nai muvdu,1,1,1,1
-2225,mi klama gi'e na sai ka'e muvdu,1,1,1,1
-2226,sai nai mi klama,1,1,1,1
-2227,mi na'e ba'e mutce,1,1,1,1
-2228,.i lo se kecti cu sligau lo rebla tai lo nu tolgei kei gi'e na sai ka'e muvdu,1,1,1,1
-2229,mi na'e lo broda cu blanu,1,1,1,1
-2230,mi to'e bo lo broda cu blanu,1,1,1,1
-2231,mi no'e lo broda cu blanu,1,1,1,1
-2232,mi je'a bo lo broda cu blanu,1,1,1,1
-2233,mi na lo broda cu blanu,1,1,1,1
-2234,mi ja'a lo broda cu blanu,1,1,1,1
-2235,na le gerku cu batci,1,1,1,1
-2236,mi me na'e bo lo broda,1,1,1,1
-2237,mi viska na'e bo lo broda,1,1,1,1
-2238,mi bo do cu blanu,1,1,1,1
-2239,mi lo broda bo lo brode cu blanu,1,1,1,1
-2240,mi bo do bo di'u cu blanu,1,1,1,1
-2241,mi na bo do cu blanu,1,1,1,0
-2242,fa bo do cu blanu,1,1,1,0
-2243,lo broda bo lo brode ku,1,1,1,1
-2244,.i go'i fa ro me na'e bo lo rebyrespa noi simlu lo ka dukse lo ka se sfasa kei lo nu zukte lo drata be lo nu kalri moklu zutse gi'e gapru catlu lo drudi be lo kumfa ,1,1,1,1
-2245,mi na'e go'i cu blanu,0,0,0,0
-2246,mi na go'i cu blanu,0,0,0,0
-2247,lo na'e lo broda ku,0,0,0,0
-2248,lo na'e bo broda ku,0,0,0,0
-2249,mi se bo do cu blanu,0,0,0,0
-2250,mi tavla bo do,0,0,0,0
+75,mi pu'i klama,1,1,1,1
+76,mi xa'o klama,1,1,1,1
+77,mi dei'a klama,1,1,1,1
+78,mi co'i klama,1,1,1,1
+79,mi co'u klama,1,1,1,1
+80,mi bau lo zdani klama,1,1,1,1
+81,mi bai lo zdani klama,1,1,1,1
+82,mi cau lo zdani klama,1,1,1,1
+83,mi cu'u lo zdani klama,1,1,1,1
+84,mi mu'i lo zdani klama,1,1,1,1
+85,mi mu'u lo zdani klama,1,1,1,1
+86,mi ni'i lo zdani klama,1,1,1,1
+87,mi ri'a lo zdani klama,1,1,1,1
+88,mi ta'i lo zdani klama,1,1,1,1
+89,mi tai lo zdani klama,1,1,1,1
+90,mi ki'u lo zdani klama,1,1,1,1
+91,mi kai lo zdani klama,1,1,1,1
+92,mi pa'u lo zdani klama,1,1,1,1
+93,mi se'o lo zdani klama,1,1,1,1
+94,mi si'u lo zdani klama,1,1,1,1
+95,mi va'o lo zdani klama,1,1,1,1
+96,mi zu'e lo zdani klama,1,1,1,1
+97,mi ja'e lo zdani klama,1,1,1,1
+98,mi ra'i lo zdani klama,1,1,1,1
+99,mi ri'i lo zdani klama,1,1,1,1
+100,mi de'i lo zdani klama,1,1,1,1
+101,mi du'o lo zdani klama,1,1,1,1
+102,mi fau lo zdani klama,1,1,1,1
+103,mi ka'a lo zdani klama,1,1,1,1
+104,mi gau lo zdani klama,1,1,1,1
+105,mi piho lo zdani klama,1,1,1,1
+106,mi pi'o lo zdani klama,1,1,1,1
+107,mi cihu lo zdani klama,1,1,1,1
+108,mi ci'u lo zdani klama,1,1,1,1
+109,mi pu'a lo zdani klama,1,1,1,1
+110,mi jihe lo zdani klama,1,1,1,1
+111,mi ji'e lo zdani klama,1,1,1,1
+112,mi jihu lo zdani klama,1,1,1,1
+113,mi ji'u lo zdani klama,1,1,1,1
+114,mi jiho lo zdani klama,1,1,1,1
+115,mi ji'o lo zdani klama,1,1,1,1
+116,mi raha lo zdani klama,1,1,1,1
+117,mi ra'a lo zdani klama,1,1,1,1
+118,mi ba'i lo zdani klama,1,1,1,1
+119,mi ci'o lo zdani klama,1,1,1,1
+120,mi rai lo zdani klama,1,1,1,1
+121,mi bahi lo zdani klama,1,1,1,1
+122,mi cuhu lo zdani klama,1,1,1,1
+123,mi duho lo zdani klama,1,1,1,1
+124,mi muhi lo zdani klama,1,1,1,1
+125,mi nihi lo zdani klama,1,1,1,1
+126,mi riha lo zdani klama,1,1,1,1
+127,mi seho lo zdani klama,1,1,1,1
+128,mi vaho lo zdani klama,1,1,1,1
+129,mi rahi lo zdani klama,1,1,1,1
+130,mi tahi lo zdani klama,1,1,1,1
+131,mi ciho lo zdani klama,1,1,1,1
+132,mi di'o lo zdani klama,1,1,1,1
+133,mi du'i lo zdani klama,1,1,1,1
+134,mi ga'a lo zdani klama,1,1,1,1
+135,mi te'i lo zdani klama,1,1,1,1
+136,mi muhu lo zdani klama,1,1,1,1
+137,mi kihu lo zdani klama,1,1,1,1
+138,mi sihu lo zdani klama,1,1,1,1
+139,mi rihu lo zdani klama,1,1,1,1
+140,mi dehi lo zdani klama,1,1,1,1
+141,mi diho lo zdani klama,1,1,1,1
+142,mi duhi lo zdani klama,1,1,1,1
+143,mi gaha lo zdani klama,1,1,1,1
+144,mi tehi lo zdani klama,1,1,1,1
+145,mi ca'i lo zdani klama,1,1,1,1
+146,mi cahi lo zdani klama,1,1,1,1
+147,mi jahe lo zdani klama,1,1,1,1
+148,mi pahu lo zdani klama,1,1,1,1
+149,mi kahe lo zdani klama,1,1,1,1
+150,mi puha lo zdani klama,1,1,1,1
+151,mi zuhe lo zdani klama,1,1,1,1
+152,mi va'u lo zdani klama,1,1,1,1
+153,mi vahu lo zdani klama,1,1,1,1
+154,mi pu'i lo zdani klama,1,1,1,1
+155,mi xa'o lo zdani klama,1,1,1,1
+156,mi dei'a lo zdani klama,1,1,1,1
+157,mi co'i lo zdani klama,1,1,1,1
+158,mi co'u lo zdani klama,1,1,1,1
+159,bau lo zdani klama,1,1,1,1
+160,bai lo zdani klama,1,1,1,1
+161,cau lo zdani klama,1,1,1,1
+162,cu'u lo zdani klama,1,1,1,1
+163,mu'i lo zdani klama,1,1,1,1
+164,mu'u lo zdani klama,1,1,1,1
+165,ni'i lo zdani klama,1,1,1,1
+166,ri'a lo zdani klama,1,1,1,1
+167,ta'i lo zdani klama,1,1,1,1
+168,tai lo zdani klama,1,1,1,1
+169,ki'u lo zdani klama,1,1,1,1
+170,kai lo zdani klama,1,1,1,1
+171,pa'u lo zdani klama,1,1,1,1
+172,se'o lo zdani klama,1,1,1,1
+173,si'u lo zdani klama,1,1,1,1
+174,va'o lo zdani klama,1,1,1,1
+175,zu'e lo zdani klama,1,1,1,1
+176,ja'e lo zdani klama,1,1,1,1
+177,ra'i lo zdani klama,1,1,1,1
+178,ri'i lo zdani klama,1,1,1,1
+179,de'i lo zdani klama,1,1,1,1
+180,du'o lo zdani klama,1,1,1,1
+181,fau lo zdani klama,1,1,1,1
+182,ka'a lo zdani klama,1,1,1,1
+183,gau lo zdani klama,1,1,1,1
+184,piho lo zdani klama,1,1,1,1
+185,pi'o lo zdani klama,1,1,1,1
+186,cihu lo zdani klama,1,1,1,1
+187,ci'u lo zdani klama,1,1,1,1
+188,pu'a lo zdani klama,1,1,1,1
+189,jihe lo zdani klama,1,1,1,1
+190,ji'e lo zdani klama,1,1,1,1
+191,jihu lo zdani klama,1,1,1,1
+192,ji'u lo zdani klama,1,1,1,1
+193,jiho lo zdani klama,1,1,1,1
+194,ji'o lo zdani klama,1,1,1,1
+195,raha lo zdani klama,1,1,1,1
+196,ra'a lo zdani klama,1,1,1,1
+197,ba'i lo zdani klama,1,1,1,1
+198,ci'o lo zdani klama,1,1,1,1
+199,rai lo zdani klama,1,1,1,1
+200,bahi lo zdani klama,1,1,1,1
+201,cuhu lo zdani klama,1,1,1,1
+202,duho lo zdani klama,1,1,1,1
+203,muhi lo zdani klama,1,1,1,1
+204,nihi lo zdani klama,1,1,1,1
+205,riha lo zdani klama,1,1,1,1
+206,seho lo zdani klama,1,1,1,1
+207,vaho lo zdani klama,1,1,1,1
+208,rahi lo zdani klama,1,1,1,1
+209,tahi lo zdani klama,1,1,1,1
+210,ciho lo zdani klama,1,1,1,1
+211,di'o lo zdani klama,1,1,1,1
+212,du'i lo zdani klama,1,1,1,1
+213,ga'a lo zdani klama,1,1,1,1
+214,te'i lo zdani klama,1,1,1,1
+215,muhu lo zdani klama,1,1,1,1
+216,kihu lo zdani klama,1,1,1,1
+217,sihu lo zdani klama,1,1,1,1
+218,rihu lo zdani klama,1,1,1,1
+219,dehi lo zdani klama,1,1,1,1
+220,diho lo zdani klama,1,1,1,1
+221,duhi lo zdani klama,1,1,1,1
+222,gaha lo zdani klama,1,1,1,1
+223,tehi lo zdani klama,1,1,1,1
+224,ca'i lo zdani klama,1,1,1,1
+225,cahi lo zdani klama,1,1,1,1
+226,jahe lo zdani klama,1,1,1,1
+227,pahu lo zdani klama,1,1,1,1
+228,kahe lo zdani klama,1,1,1,1
+229,puha lo zdani klama,1,1,1,1
+230,zuhe lo zdani klama,1,1,1,1
+231,va'u lo zdani klama,1,1,1,1
+232,vahu lo zdani klama,1,1,1,1
+233,pu'i lo zdani klama,1,1,1,1
+234,xa'o lo zdani klama,1,1,1,1
+235,dei'a lo zdani klama,1,1,1,1
+236,co'i lo zdani klama,1,1,1,1
+237,co'u lo zdani klama,1,1,1,1
+238,mi klama bau lo zdani,1,1,1,1
+239,mi klama bai lo zdani,1,1,1,1
+240,mi klama cau lo zdani,1,1,1,1
+241,mi klama cu'u lo zdani,1,1,1,1
+242,mi klama mu'i lo zdani,1,1,1,1
+243,mi klama mu'u lo zdani,1,1,1,1
+244,mi klama ni'i lo zdani,1,1,1,1
+245,mi klama ri'a lo zdani,1,1,1,1
+246,mi klama ta'i lo zdani,1,1,1,1
+247,mi klama tai lo zdani,1,1,1,1
+248,mi klama ki'u lo zdani,1,1,1,1
+249,mi klama kai lo zdani,1,1,1,1
+250,mi klama pa'u lo zdani,1,1,1,1
+251,mi klama se'o lo zdani,1,1,1,1
+252,mi klama si'u lo zdani,1,1,1,1
+253,mi klama va'o lo zdani,1,1,1,1
+254,mi klama zu'e lo zdani,1,1,1,1
+255,mi klama ja'e lo zdani,1,1,1,1
+256,mi klama ra'i lo zdani,1,1,1,1
+257,mi klama ri'i lo zdani,1,1,1,1
+258,mi klama de'i lo zdani,1,1,1,1
+259,mi klama du'o lo zdani,1,1,1,1
+260,mi klama fau lo zdani,1,1,1,1
+261,mi klama ka'a lo zdani,1,1,1,1
+262,mi klama gau lo zdani,1,1,1,1
+263,mi klama piho lo zdani,1,1,1,1
+264,mi klama pi'o lo zdani,1,1,1,1
+265,mi klama cihu lo zdani,1,1,1,1
+266,mi klama ci'u lo zdani,1,1,1,1
+267,mi klama pu'a lo zdani,1,1,1,1
+268,mi klama jihe lo zdani,1,1,1,1
+269,mi klama ji'e lo zdani,1,1,1,1
+270,mi klama jihu lo zdani,1,1,1,1
+271,mi klama ji'u lo zdani,1,1,1,1
+272,mi klama jiho lo zdani,1,1,1,1
+273,mi klama ji'o lo zdani,1,1,1,1
+274,mi klama raha lo zdani,1,1,1,1
+275,mi klama ra'a lo zdani,1,1,1,1
+276,mi klama ba'i lo zdani,1,1,1,1
+277,mi klama ci'o lo zdani,1,1,1,1
+278,mi klama rai lo zdani,1,1,1,1
+279,mi klama bahi lo zdani,1,1,1,1
+280,mi klama cuhu lo zdani,1,1,1,1
+281,mi klama duho lo zdani,1,1,1,1
+282,mi klama muhi lo zdani,1,1,1,1
+283,mi klama nihi lo zdani,1,1,1,1
+284,mi klama riha lo zdani,1,1,1,1
+285,mi klama seho lo zdani,1,1,1,1
+286,mi klama vaho lo zdani,1,1,1,1
+287,mi klama rahi lo zdani,1,1,1,1
+288,mi klama tahi lo zdani,1,1,1,1
+289,mi klama ciho lo zdani,1,1,1,1
+290,mi klama di'o lo zdani,1,1,1,1
+291,mi klama du'i lo zdani,1,1,1,1
+292,mi klama ga'a lo zdani,1,1,1,1
+293,mi klama te'i lo zdani,1,1,1,1
+294,mi klama muhu lo zdani,1,1,1,1
+295,mi klama kihu lo zdani,1,1,1,1
+296,mi klama sihu lo zdani,1,1,1,1
+297,mi klama rihu lo zdani,1,1,1,1
+298,mi klama dehi lo zdani,1,1,1,1
+299,mi klama diho lo zdani,1,1,1,1
+300,mi klama duhi lo zdani,1,1,1,1
+301,mi klama gaha lo zdani,1,1,1,1
+302,mi klama tehi lo zdani,1,1,1,1
+303,mi klama ca'i lo zdani,1,1,1,1
+304,mi klama cahi lo zdani,1,1,1,1
+305,mi klama jahe lo zdani,1,1,1,1
+306,mi klama pahu lo zdani,1,1,1,1
+307,mi klama kahe lo zdani,1,1,1,1
+308,mi klama puha lo zdani,1,1,1,1
+309,mi klama zuhe lo zdani,1,1,1,1
+310,mi klama va'u lo zdani,1,1,1,1
+311,mi klama vahu lo zdani,1,1,1,1
+312,mi klama pu'i lo zdani,1,1,1,1
+313,mi klama xa'o lo zdani,1,1,1,1
+314,mi klama dei'a lo zdani,1,1,1,1
+315,mi klama co'i lo zdani,1,1,1,1
+316,mi klama co'u lo zdani,1,1,1,1
+317,mi viska lo klama be lo zdani ku,1,1,1,1
+318,mi viska lo klama be lo zdani bei lo zarci be'o ku,1,1,1,1
+319,mi viska lo klama be lo zdani be'o ku,1,1,1,1
+320,mi viska lo klama be lo zdani beho ku,1,1,1,1
+321,mi klama bo cadzu,1,1,1,1
+322,mi pu bo klama,1,0,0,0
+323,li re boi su'i ci du xa,1,0,0,0
+324,mi klama lo zdani co broda,1,1,1,1
+325,coi la .alis. mi klama,1,1,1,1
+326,co'o la .alis. mi klama,1,1,1,1
+327,je'e la .alis. mi klama,1,1,1,1
+328,ju'i la .alis. mi klama,1,1,1,1
+329,re'i la .alis. mi klama,1,1,1,1
+330,nu'e la .alis. mi klama,1,1,1,1
+331,fi'i la .alis. mi klama,1,1,1,1
+332,fe'o la .alis. mi klama,1,1,1,1
+333,mu'o la .alis. mi klama,1,1,1,1
+334,mi'e la .alis. mi klama,1,1,1,1
+335,ta'a la .alis. mi klama,1,1,1,1
+336,pe'u la .alis. mi klama,1,1,1,1
+337,ki'e la .alis. mi klama,1,1,1,1
+338,viho la .alis. mi klama,1,1,1,1
+339,vi'o la .alis. mi klama,1,1,1,1
+340,keho la .alis. mi klama,1,1,1,1
+341,ke'o la .alis. mi klama,1,1,1,1
+342,doi la .alis. mi klama,1,1,1,1
+343,ki'ai la .alis. mi klama,1,1,1,1
+344,di'ai la .alis. mi klama,1,1,1,1
+345,coi do broda,1,1,1,1
+346,co'o do broda,1,1,1,1
+347,je'e do broda,1,1,1,1
+348,ju'i do broda,1,1,1,1
+349,re'i do broda,1,1,1,1
+350,nu'e do broda,1,1,1,1
+351,fi'i do broda,1,1,1,1
+352,fe'o do broda,1,1,1,1
+353,mu'o do broda,1,1,1,1
+354,mi'e do broda,1,1,1,1
+355,ta'a do broda,1,1,1,1
+356,pe'u do broda,1,1,1,1
+357,ki'e do broda,1,1,1,1
+358,viho do broda,1,1,1,1
+359,vi'o do broda,1,1,1,1
+360,keho do broda,1,1,1,1
+361,ke'o do broda,1,1,1,1
+362,doi do broda,1,1,1,1
+363,ki'ai do broda,1,1,1,1
+364,di'ai do broda,1,1,1,1
+365,doi la .alis. do'u mi klama,1,1,1,1
+366,doi la .alis. dohu mi klama,1,1,1,1
+367,fi'a mi klama lo zdani,1,1,1,1
+368,fai mi klama lo zdani,1,1,1,1
+369,fa mi klama lo zdani,1,1,1,1
+370,fe mi klama lo zdani,1,1,1,1
+371,fi mi klama lo zdani,1,1,1,1
+372,fo mi klama lo zdani,1,1,1,1
+373,fu mi klama lo zdani,1,1,1,1
+374,mi klama fi'a lo zarci,1,1,1,1
+375,mi klama fai lo zarci,1,1,1,1
+376,mi klama fa lo zarci,1,1,1,1
+377,mi klama fe lo zarci,1,1,1,1
+378,mi klama fi lo zarci,1,1,1,1
+379,mi klama fo lo zarci,1,1,1,1
+380,mi klama fu lo zarci,1,1,1,1
+381,mi ca'u klama,1,1,1,1
+382,mi cahu klama,1,1,1,1
+383,mi ti'a klama,1,1,1,1
+384,mi tiha klama,1,1,1,1
+385,mi zu'a klama,1,1,1,1
+386,mi zuha klama,1,1,1,1
+387,mi ga'u klama,1,1,1,1
+388,mi gahu klama,1,1,1,1
+389,mi ni'a klama,1,1,1,1
+390,mi niha klama,1,1,1,1
+391,mi ru'u klama,1,1,1,1
+392,mi ruhu klama,1,1,1,1
+393,mi ne'i klama,1,1,1,1
+394,mi pa'o klama,1,1,1,1
+395,mi paho klama,1,1,1,1
+396,mi te'e klama,1,1,1,1
+397,mi ne'a klama,1,1,1,1
+398,mi re'o klama,1,1,1,1
+399,mi bu'u klama,1,1,1,1
+400,mi buhu klama,1,1,1,1
+401,mi du'a klama,1,1,1,1
+402,mi duha klama,1,1,1,1
+403,mi vu'a klama,1,1,1,1
+404,mi vuha klama,1,1,1,1
+405,mi ze'o klama,1,1,1,1
+406,mi zeho klama,1,1,1,1
+407,mi zo'i klama,1,1,1,1
+408,mi zohi klama,1,1,1,1
+409,mi fa'a klama,1,1,1,1
+410,mi faha klama,1,1,1,1
+411,mi ca'u lo zdani klama,1,1,1,1
+412,mi cahu lo zdani klama,1,1,1,1
+413,mi ti'a lo zdani klama,1,1,1,1
+414,mi tiha lo zdani klama,1,1,1,1
+415,mi zu'a lo zdani klama,1,1,1,1
+416,mi zuha lo zdani klama,1,1,1,1
+417,mi ga'u lo zdani klama,1,1,1,1
+418,mi gahu lo zdani klama,1,1,1,1
+419,mi ni'a lo zdani klama,1,1,1,1
+420,mi niha lo zdani klama,1,1,1,1
+421,mi ru'u lo zdani klama,1,1,1,1
+422,mi ruhu lo zdani klama,1,1,1,1
+423,mi ne'i lo zdani klama,1,1,1,1
+424,mi pa'o lo zdani klama,1,1,1,1
+425,mi paho lo zdani klama,1,1,1,1
+426,mi te'e lo zdani klama,1,1,1,1
+427,mi ne'a lo zdani klama,1,1,1,1
+428,mi re'o lo zdani klama,1,1,1,1
+429,mi bu'u lo zdani klama,1,1,1,1
+430,mi buhu lo zdani klama,1,1,1,1
+431,mi du'a lo zdani klama,1,1,1,1
+432,mi duha lo zdani klama,1,1,1,1
+433,mi vu'a lo zdani klama,1,1,1,1
+434,mi vuha lo zdani klama,1,1,1,1
+435,mi ze'o lo zdani klama,1,1,1,1
+436,mi zeho lo zdani klama,1,1,1,1
+437,mi zo'i lo zdani klama,1,1,1,1
+438,mi zohi lo zdani klama,1,1,1,1
+439,mi fa'a lo zdani klama,1,1,1,1
+440,mi faha lo zdani klama,1,1,1,1
+441,ca'u lo zdani klama,1,1,1,1
+442,cahu lo zdani klama,1,1,1,1
+443,ti'a lo zdani klama,1,1,1,1
+444,tiha lo zdani klama,1,1,1,1
+445,zu'a lo zdani klama,1,1,1,1
+446,zuha lo zdani klama,1,1,1,1
+447,ga'u lo zdani klama,1,1,1,1
+448,gahu lo zdani klama,1,1,1,1
+449,ni'a lo zdani klama,1,1,1,1
+450,niha lo zdani klama,1,1,1,1
+451,ru'u lo zdani klama,1,1,1,1
+452,ruhu lo zdani klama,1,1,1,1
+453,ne'i lo zdani klama,1,1,1,1
+454,pa'o lo zdani klama,1,1,1,1
+455,paho lo zdani klama,1,1,1,1
+456,te'e lo zdani klama,1,1,1,1
+457,ne'a lo zdani klama,1,1,1,1
+458,re'o lo zdani klama,1,1,1,1
+459,bu'u lo zdani klama,1,1,1,1
+460,buhu lo zdani klama,1,1,1,1
+461,du'a lo zdani klama,1,1,1,1
+462,duha lo zdani klama,1,1,1,1
+463,vu'a lo zdani klama,1,1,1,1
+464,vuha lo zdani klama,1,1,1,1
+465,ze'o lo zdani klama,1,1,1,1
+466,zeho lo zdani klama,1,1,1,1
+467,zo'i lo zdani klama,1,1,1,1
+468,zohi lo zdani klama,1,1,1,1
+469,fa'a lo zdani klama,1,1,1,1
+470,faha lo zdani klama,1,1,1,1
+471,mi klama ca'u lo zdani,1,1,1,1
+472,mi klama cahu lo zdani,1,1,1,1
+473,mi klama ti'a lo zdani,1,1,1,1
+474,mi klama tiha lo zdani,1,1,1,1
+475,mi klama zu'a lo zdani,1,1,1,1
+476,mi klama zuha lo zdani,1,1,1,1
+477,mi klama ga'u lo zdani,1,1,1,1
+478,mi klama gahu lo zdani,1,1,1,1
+479,mi klama ni'a lo zdani,1,1,1,1
+480,mi klama niha lo zdani,1,1,1,1
+481,mi klama ru'u lo zdani,1,1,1,1
+482,mi klama ruhu lo zdani,1,1,1,1
+483,mi klama ne'i lo zdani,1,1,1,1
+484,mi klama pa'o lo zdani,1,1,1,1
+485,mi klama paho lo zdani,1,1,1,1
+486,mi klama te'e lo zdani,1,1,1,1
+487,mi klama ne'a lo zdani,1,1,1,1
+488,mi klama re'o lo zdani,1,1,1,1
+489,mi klama bu'u lo zdani,1,1,1,1
+490,mi klama buhu lo zdani,1,1,1,1
+491,mi klama du'a lo zdani,1,1,1,1
+492,mi klama duha lo zdani,1,1,1,1
+493,mi klama vu'a lo zdani,1,1,1,1
+494,mi klama vuha lo zdani,1,1,1,1
+495,mi klama ze'o lo zdani,1,1,1,1
+496,mi klama zeho lo zdani,1,1,1,1
+497,mi klama zo'i lo zdani,1,1,1,1
+498,mi klama zohi lo zdani,1,1,1,1
+499,mi klama fa'a lo zdani,1,1,1,1
+500,mi klama faha lo zdani,1,1,1,1
+501,mi mo'i klama,0,1,1,0
+502,mi mohi klama,0,1,1,0
+503,mi mo'i lo zdani klama,0,1,1,0
+504,mi mohi lo zdani klama,0,1,1,0
+505,mo'i lo zdani klama,0,1,1,0
+506,mohi lo zdani klama,0,1,1,0
+507,mi klama mo'i lo zdani,0,1,1,0
+508,mi klama mohi lo zdani,0,1,1,0
+509,mi klama fa'o,1,1,1,1
+510,mi klama faho,1,1,1,1
+511,ga mi klama gi do broda,1,1,1,0
+512,ge mi klama gi do broda,1,1,1,0
+513,go mi klama gi do broda,1,1,1,0
+514,gu mi klama gi do broda,1,1,1,0
+515,ga broda gi brode,1,1,1,0
+516,ge broda gi brode,1,1,1,0
+517,go broda gi brode,1,1,1,0
+518,gu broda gi brode,1,1,1,0
+519,mi viska la'e lo broda ge'u ku,0,0,0,0
+520,mi viska la'e lo broda gehu ku,0,0,0,0
+521,mi broda gi'a brode,1,1,1,1
+522,mi broda gi'e brode,1,1,1,1
+523,mi broda gi'i brode,1,0,0,1
+524,mi broda gi'o brode,1,1,1,1
+525,mi broda gi'u brode,1,1,1,1
+526,lo broda po'e mi cu barda,1,1,1,1
+527,lo broda po'u mi cu barda,1,1,1,1
+528,lo broda no'u mi cu barda,1,1,1,1
+529,lo broda goi mi cu barda,1,1,1,1
+530,lo broda pe mi cu barda,1,1,1,1
+531,lo broda po mi cu barda,1,1,1,1
+532,lo broda ne mi cu barda,1,1,1,1
+533,mi po'e ko'a klama,1,1,1,1
+534,mi po'u ko'a klama,1,1,1,1
+535,mi no'u ko'a klama,1,1,1,1
+536,mi goi ko'a klama,1,1,1,1
+537,mi pe ko'a klama,1,1,1,1
+538,mi po ko'a klama,1,1,1,1
+539,mi ne ko'a klama,1,1,1,1
+540,mi go'i,1,1,1,1
+541,mi go'o,1,1,1,1
+542,mi nei,1,1,1,1
+543,mi ra'o,1,1,1,0
+544,mi du,1,1,1,1
+545,mi mo,1,1,1,1
+546,mi bu'a,1,1,1,1
+547,mi bu'e,1,1,1,1
+548,mi bu'i,1,1,1,1
+549,mi cei'i,1,1,1,1
+550,mi co'e,1,1,1,1
+551,mi gai'o,1,1,1,1
+552,mi go'a,1,1,1,1
+553,mi go'e,1,1,1,1
+554,mi go'u,1,1,1,1
+555,mi no'a,1,1,1,1
+556,mi xe'u,1,1,1,1
+557,ti go'i lo zdani,1,1,1,1
+558,ti go'o lo zdani,1,1,1,1
+559,ti nei lo zdani,1,1,1,1
+560,ti ra'o lo zdani,1,1,1,0
+561,ti du lo zdani,1,1,1,1
+562,ti mo lo zdani,1,1,1,1
+563,ti bu'a lo zdani,1,1,1,1
+564,ti bu'e lo zdani,1,1,1,1
+565,ti bu'i lo zdani,1,1,1,1
+566,ti cei'i lo zdani,1,1,1,1
+567,ti co'e lo zdani,1,1,1,1
+568,ti gai'o lo zdani,1,1,1,1
+569,ti go'a lo zdani,1,1,1,1
+570,ti go'e lo zdani,1,1,1,1
+571,ti go'u lo zdani,1,1,1,1
+572,ti no'a lo zdani,1,1,1,1
+573,ti xe'u lo zdani,1,1,1,1
+574,mi klama i do klama,1,1,1,1
+575,li pa bi'o re du vo,1,0,0,0
+576,li pa bi'i re du vo,1,0,0,0
+577,li pa mi'i re du vo,1,0,0,0
+578,li pa su'i ci du xa,1,0,0,0
+579,li pa vu'u ci du xa,1,0,0,0
+580,li pa pi'i ci du xa,1,0,0,0
+581,li pa fe'i ci du xa,1,0,0,0
+582,li pa gei ci du xa,1,0,0,0
+583,li pa de'o ci du xa,1,0,0,0
+584,li pa te'o ci du xa,1,0,0,0
+585,li pa re'a ci du xa,1,0,0,0
+586,li pa va'a ci du xa,1,0,0,0
+587,li pa pa'i ci du xa,1,0,0,0
+588,li pa si'i ci du xa,1,0,0,0
+589,li pa fu'u ci du xa,1,0,0,0
+590,li su'i pa du re,1,0,0,0
+591,li vu'u pa du re,1,0,0,0
+592,li pi'i pa du re,1,0,0,0
+593,li fe'i pa du re,1,0,0,0
+594,li gei pa du re,1,0,0,0
+595,li de'o pa du re,1,0,0,0
+596,li te'o pa du re,1,0,0,0
+597,li re'a pa du re,1,0,0,0
+598,li va'a pa du re,1,0,0,0
+599,li pa'i pa du re,1,0,0,0
+600,li si'i pa du re,1,0,0,0
+601,li fu'u pa du re,1,0,0,0
+602,li na'u su'i pa du re,0,0,0,0
+603,li nahu su'i pa du re,0,0,0,0
+604,li pa fihu re du pamu,1,0,0,0
+605,li pa fi'u re du pamu,1,0,0,0
+606,li re su'i pa bihe pi'i ci du xa,1,0,0,0
+607,li re su'i pa bi'e pi'i ci du xa,1,0,0,0
+608,mi ze'i fehe roi klama,1,0,1,0
+609,mi ze'i fe'e roi klama,1,0,1,0
+610,mi fehe klama,0,1,1,0
+611,mi fe'e klama,0,1,1,0
+612,li peho su'i pa ku'e re du re,0,0,0,0
+613,li pe'o su'i pa ku'e re du re,0,0,0,0
+614,li maho su'i du re,0,0,0,0
+615,li ma'o su'i du re,0,0,0,0
+616,li pe'o su'i pa kuhe re du re,0,0,0,0
+617,mi me lo broda tehu klama,0,0,0,0
+618,mi me lo broda te'u klama,0,0,0,0
+619,li mo'e pa su'i re du ci,1,0,0,0
+620,li mohe pa su'i re du ci,1,0,0,0
+621,li vei pa su'i re ve'o su'i ci du xa,1,0,0,0
+622,li vei pa su'i re veho su'i ci du xa,1,0,0,0
+623,by klama,1,1,1,1
+624,cy klama,1,1,1,1
+625,dy klama,1,1,1,1
+626,fy klama,1,1,1,1
+627,gy klama,1,1,1,1
+628,jy klama,1,1,1,1
+629,ky klama,1,1,1,1
+630,ly klama,1,1,1,1
+631,my klama,1,1,1,1
+632,ny klama,1,1,1,1
+633,py klama,1,1,1,1
+634,ry klama,1,1,1,1
+635,sy klama,1,1,1,1
+636,ty klama,1,1,1,1
+637,vy klama,1,1,1,1
+638,xy klama,1,1,1,1
+639,zy klama,1,1,1,1
+640,abu klama,1,1,1,1
+641,ebu klama,1,1,1,1
+642,ibu klama,1,1,1,1
+643,obu klama,1,1,1,1
+644,ubu klama,1,1,1,1
+645,ybu klama,1,1,1,1
+646,mi viska by,1,1,1,1
+647,mi viska cy,1,1,1,1
+648,mi viska dy,1,1,1,1
+649,mi viska fy,1,1,1,1
+650,mi viska gy,1,1,1,1
+651,mi viska jy,1,1,1,1
+652,mi viska ky,1,1,1,1
+653,mi viska ly,1,1,1,1
+654,mi viska my,1,1,1,1
+655,mi viska ny,1,1,1,1
+656,mi viska py,1,1,1,1
+657,mi viska ry,1,1,1,1
+658,mi viska sy,1,1,1,1
+659,mi viska ty,1,1,1,1
+660,mi viska vy,1,1,1,1
+661,mi viska xy,1,1,1,1
+662,mi viska zy,1,1,1,1
+663,mi viska abu,1,1,1,1
+664,mi viska ebu,1,1,1,1
+665,mi viska ibu,1,1,1,1
+666,mi viska obu,1,1,1,1
+667,mi viska ubu,1,1,1,1
+668,mi viska ybu,1,1,1,1
+669,mi cusku zo bu,1,1,1,1
+670,gu'a broda gi brode,1,1,1,0
+671,gu'e broda gi brode,1,1,1,0
+672,gu'o broda gi brode,1,1,1,0
+673,gu'u broda gi brode,1,1,1,0
+674,mi si klama,1,1,1,1
+675,mi klama lo zdani su,1,1,1,1
+676,mi broda ja brode,1,1,1,1
+677,mi broda je brode,1,1,1,1
+678,mi broda jo brode,1,1,1,1
+679,mi broda ju brode,1,1,1,1
+680,mi jo'e do klama,1,1,1,1
+681,mi joi do klama,1,1,1,1
+682,mi fa'u do klama,1,1,1,1
+683,mi ku'a do klama,1,1,1,1
+684,mi johu do klama,1,1,1,1
+685,mi jo'u do klama,1,1,1,1
+686,mi ja do klama,1,1,1,1
+687,mi je do klama,1,1,1,1
+688,mi jo do klama,1,1,1,1
+689,mi ju do klama,1,1,1,1
+690,mi ji do klama,1,1,1,1
+691,mi broda jo'e brode,1,1,1,1
+692,mi broda joi brode,1,1,1,1
+693,mi broda fa'u brode,1,1,1,1
+694,mi broda ku'a brode,1,1,1,1
+695,mi broda johu brode,1,1,1,1
+696,mi broda jo'u brode,1,1,1,1
+697,mi broda ji brode,1,1,1,1
+698,li pa jo'e re du vo,1,0,0,0
+699,li pa joi re du vo,1,0,0,0
+700,li pa fa'u re du vo,1,0,0,0
+701,li pa ku'a re du vo,1,0,0,0
+702,li pa johu re du vo,1,0,0,0
+703,li pa jo'u re du vo,1,0,0,0
+704,li pa ja re du vo,1,0,0,0
+705,li pa je re du vo,1,0,0,0
+706,li pa jo re du vo,1,0,0,0
+707,li pa ju re du vo,1,0,0,0
+708,li pa ji re du vo,1,0,0,0
+709,mi klama ke broda je brode,1,1,1,1
+710,mi klama ke broda je brode ke'e,1,1,1,1
+711,mi klama ke broda je brode kehe,1,1,1,1
+712,mi troci lo nu broda kei,1,1,1,1
+713,zo'e klama,1,1,1,1
+714,zu'i klama,1,1,1,1
+715,ke'a klama,1,1,1,1
+716,mi'o klama,1,1,1,1
+717,ko'a klama,1,1,1,1
+718,ko'e klama,1,1,1,1
+719,ko'i klama,1,1,1,1
+720,ko'o klama,1,1,1,1
+721,ko'u klama,1,1,1,1
+722,fo'a klama,1,1,1,1
+723,fo'e klama,1,1,1,1
+724,fo'i klama,1,1,1,1
+725,fo'o klama,1,1,1,1
+726,fo'u klama,1,1,1,1
+727,vo'a klama,1,1,1,1
+728,vo'e klama,1,1,1,1
+729,vo'i klama,1,1,1,1
+730,vo'o klama,1,1,1,1
+731,vo'u klama,1,1,1,1
+732,mi'ai klama,1,1,1,1
+733,miahi klama,1,0,0,0
+734,mi'a klama,1,1,1,1
+735,ma'a klama,1,1,1,1
+736,do'o klama,1,1,1,1
+737,dei klama,1,1,1,1
+738,di'u klama,1,1,1,1
+739,dihu klama,1,1,1,1
+740,de'u klama,1,1,1,1
+741,dehu klama,1,1,1,1
+742,da'u klama,1,1,1,1
+743,dahu klama,1,1,1,1
+744,mi klama,1,1,1,1
+745,do klama,1,1,1,1
+746,ti klama,1,1,1,1
+747,ta klama,1,1,1,1
+748,tu klama,1,1,1,1
+749,ri klama,1,1,1,1
+750,ra klama,1,1,1,1
+751,ru klama,1,1,1,1
+752,ko klama,1,1,1,1
+753,ma klama,1,1,1,1
+754,da klama,1,1,1,1
+755,de klama,1,1,1,1
+756,di klama,1,1,1,1
+757,ce'u klama,1,1,1,1
+758,cehu klama,1,1,1,1
+759,zi'o klama,1,1,1,1
+760,ziho klama,1,1,1,1
+761,mi zo'e klama,1,1,1,1
+762,mi zu'i klama,1,1,1,1
+763,mi ke'a klama,1,1,1,1
+764,mi mi'o klama,1,1,1,1
+765,mi ko'a klama,1,1,1,1
+766,mi ko'e klama,1,1,1,1
+767,mi ko'i klama,1,1,1,1
+768,mi ko'o klama,1,1,1,1
+769,mi ko'u klama,1,1,1,1
+770,mi fo'a klama,1,1,1,1
+771,mi fo'e klama,1,1,1,1
+772,mi fo'i klama,1,1,1,1
+773,mi fo'o klama,1,1,1,1
+774,mi fo'u klama,1,1,1,1
+775,mi vo'a klama,1,1,1,1
+776,mi vo'e klama,1,1,1,1
+777,mi vo'i klama,1,1,1,1
+778,mi vo'o klama,1,1,1,1
+779,mi vo'u klama,1,1,1,1
+780,mi mi'ai klama,1,1,1,1
+781,mi miahi klama,1,0,0,0
+782,mi mi'a klama,1,1,1,1
+783,mi ma'a klama,1,1,1,1
+784,mi do'o klama,1,1,1,1
+785,mi dei klama,1,1,1,1
+786,mi di'u klama,1,1,1,1
+787,mi dihu klama,1,1,1,1
+788,mi de'u klama,1,1,1,1
+789,mi dehu klama,1,1,1,1
+790,mi da'u klama,1,1,1,1
+791,mi dahu klama,1,1,1,1
+792,mi mi klama,1,1,1,1
+793,mi do klama,1,1,1,1
+794,mi ti klama,1,1,1,1
+795,mi ta klama,1,1,1,1
+796,mi tu klama,1,1,1,1
+797,mi ri klama,1,1,1,1
+798,mi ra klama,1,1,1,1
+799,mi ru klama,1,1,1,1
+800,mi ko klama,1,1,1,1
+801,mi ma klama,1,1,1,1
+802,mi da klama,1,1,1,1
+803,mi de klama,1,1,1,1
+804,mi di klama,1,1,1,1
+805,mi ce'u klama,1,1,1,1
+806,mi cehu klama,1,1,1,1
+807,mi zi'o klama,1,1,1,1
+808,mi ziho klama,1,1,1,1
+809,mi viska zo'e,1,1,1,1
+810,mi viska zu'i,1,1,1,1
+811,mi viska ke'a,1,1,1,1
+812,mi viska mi'o,1,1,1,1
+813,mi viska ko'a,1,1,1,1
+814,mi viska ko'e,1,1,1,1
+815,mi viska ko'i,1,1,1,1
+816,mi viska ko'o,1,1,1,1
+817,mi viska ko'u,1,1,1,1
+818,mi viska fo'a,1,1,1,1
+819,mi viska fo'e,1,1,1,1
+820,mi viska fo'i,1,1,1,1
+821,mi viska fo'o,1,1,1,1
+822,mi viska fo'u,1,1,1,1
+823,mi viska vo'a,1,1,1,1
+824,mi viska vo'e,1,1,1,1
+825,mi viska vo'i,1,1,1,1
+826,mi viska vo'o,1,1,1,1
+827,mi viska vo'u,1,1,1,1
+828,mi viska mi'ai,1,1,1,1
+829,mi viska miahi,1,0,0,0
+830,mi viska mi'a,1,1,1,1
+831,mi viska ma'a,1,1,1,1
+832,mi viska do'o,1,1,1,1
+833,mi viska dei,1,1,1,1
+834,mi viska di'u,1,1,1,1
+835,mi viska dihu,1,1,1,1
+836,mi viska de'u,1,1,1,1
+837,mi viska dehu,1,1,1,1
+838,mi viska da'u,1,1,1,1
+839,mi viska dahu,1,1,1,1
+840,mi viska mi,1,1,1,1
+841,mi viska do,1,1,1,1
+842,mi viska ti,1,1,1,1
+843,mi viska ta,1,1,1,1
+844,mi viska tu,1,1,1,1
+845,mi viska ri,1,1,1,1
+846,mi viska ra,1,1,1,1
+847,mi viska ru,1,1,1,1
+848,mi viska ko,1,1,1,1
+849,mi viska ma,1,1,1,1
+850,mi viska da,1,1,1,1
+851,mi viska de,1,1,1,1
+852,mi viska di,1,1,1,1
+853,mi viska ce'u,1,1,1,1
+854,mi viska cehu,1,1,1,1
+855,mi viska zi'o,1,1,1,1
+856,mi viska ziho,1,1,1,1
+857,lo broda ku klama,1,1,1,1
+858,lo broda poi mi viska ke'a ku'o barda,1,1,1,1
+859,lo broda poi mi viska ke'a kuho barda,1,1,1,1
+860,mi viska tu'a di'u,1,1,1,1
+861,mi viska tuha di'u,1,1,1,1
+862,mi viska la'e di'u,1,1,1,1
+863,mi viska lu'e di'u,1,1,1,1
+864,mi viska tu'a lo broda ku,1,1,1,1
+865,mi viska tuha lo broda ku,1,1,1,1
+866,mi viska la'e lo broda ku,1,1,1,1
+867,mi viska lu'e lo broda ku,1,1,1,1
+868,mi viska le'i broda ku,1,1,1,1
+869,mi viska lo'i broda ku,1,1,1,1
+870,mi viska la'i broda ku,1,1,1,1
+871,mi viska lei broda ku,1,1,1,1
+872,mi viska loi broda ku,1,1,1,1
+873,mi viska lai broda ku,1,1,1,1
+874,mi viska lo'e broda ku,1,1,1,1
+875,mi viska lehe broda ku,1,1,1,1
+876,mi viska le'e broda ku,1,1,1,1
+877,mi viska le broda ku,1,1,1,1
+878,mi viska lo broda ku,1,1,1,1
+879,mi viska la broda ku,1,1,1,1
+880,le'i broda cu barda,1,1,1,1
+881,lo'i broda cu barda,1,1,1,1
+882,la'i broda cu barda,1,1,1,1
+883,lei broda cu barda,1,1,1,1
+884,loi broda cu barda,1,1,1,1
+885,lai broda cu barda,1,1,1,1
+886,lo'e broda cu barda,1,1,1,1
+887,lehe broda cu barda,1,1,1,1
+888,le'e broda cu barda,1,1,1,1
+889,le broda cu barda,1,1,1,1
+890,lo broda cu barda,1,1,1,1
+891,la broda cu barda,1,1,1,1
+892,mi cusku zo broda le'u,0,0,0,0
+893,mi cusku zo broda lehu,0,0,0,0
+894,li pa du li re,1,1,1,1
+895,mi cusku lu broda li'u,1,1,1,1
+896,mi cusku lu broda lihu,1,1,1,1
+897,mi cusku lo'u broda li'u,0,0,0,0
+898,mi cusku lohu broda li'u,0,0,0,0
+899,mi viska la'e lo broda lu'u,1,1,1,1
+900,mi viska la'e lo broda luhu,1,1,1,1
+901,mi na klama,1,1,1,1
+902,mi ja'a klama,1,1,1,1
+903,mi jaha klama,1,1,1,1
+904,mi na'e klama,1,1,1,1
+905,mi to'e klama,1,1,1,1
+906,mi no'e klama,1,1,1,1
+907,mi je'a klama,1,1,1,1
+908,lo na'e broda cu barda,1,1,1,1
+909,lo to'e broda cu barda,1,1,1,1
+910,lo no'e broda cu barda,1,1,1,1
+911,lo je'a broda cu barda,1,1,1,1
+912,mi klama ni'o do klama,1,1,1,1
+913,mi klama niho do klama,1,1,1,1
+914,lo broda poi broda cu barda,1,1,1,1
+915,lo broda noi broda cu barda,1,1,1,1
+916,lo broda voi broda cu barda,1,1,1,1
+917,lo broda noi mi viska ke'a ku'o barda,1,1,1,1
+918,lo broda voi mi viska ke'a ku'o barda,1,1,1,1
+919,mi troci lo je'i klama ku,1,0,0,0
+920,mi troci lo mu'e klama ku,1,1,1,1
+921,mi troci lo pu'u klama ku,1,1,1,1
+922,mi troci lo zu'o klama ku,1,1,1,1
+923,mi troci lo li'i klama ku,1,1,1,1
+924,mi troci lo su'u klama ku,1,1,1,1
+925,mi troci lo si'o klama ku,1,1,1,1
+926,mi troci lo du'u klama ku,1,1,1,1
+927,mi troci lo nu klama ku,1,1,1,1
+928,mi troci lo ka klama ku,1,1,1,1
+929,mi troci lo ni klama ku,1,1,1,1
+930,lo je'i broda cu nandu,1,0,0,0
+931,lo mu'e broda cu nandu,1,1,1,1
+932,lo pu'u broda cu nandu,1,1,1,1
+933,lo zu'o broda cu nandu,1,1,1,1
+934,lo li'i broda cu nandu,1,1,1,1
+935,lo su'u broda cu nandu,1,1,1,1
+936,lo si'o broda cu nandu,1,1,1,1
+937,lo du'u broda cu nandu,1,1,1,1
+938,lo nu broda cu nandu,1,1,1,1
+939,lo ka broda cu nandu,1,1,1,1
+940,lo ni broda cu nandu,1,1,1,1
+941,dau klama,1,1,1,1
+942,fei klama,1,1,1,1
+943,rei klama,1,1,1,1
+944,vai klama,1,1,1,1
+945,so'a klama,1,1,1,1
+946,so'e klama,1,1,1,1
+947,so'i klama,1,1,1,1
+948,so'u klama,1,1,1,1
+949,so'o klama,1,1,1,1
+950,soho klama,1,1,1,1
+951,za'u klama,1,1,0,1
+952,su'o klama,1,1,1,1
+953,suho klama,1,1,1,1
+954,suhe klama,1,1,1,1
+955,su'e klama,1,1,1,1
+956,daha klama,1,1,1,1
+957,da'a klama,1,1,1,1
+958,ji'i klama,1,1,1,1
+959,jihi klama,1,1,1,1
+960,xo klama,1,1,1,1
+961,pi klama,1,1,1,1
+962,rau klama,1,1,1,1
+963,du'e klama,1,1,1,1
+964,duhe klama,1,1,1,1
+965,mo'a klama,1,1,1,1
+966,moha klama,1,1,1,1
+967,te'o klama,1,1,1,1
+968,teho klama,1,1,1,1
+969,ka'o klama,1,1,1,1
+970,kaho klama,1,1,1,1
+971,tu'o klama,1,1,1,1
+972,pai klama,1,1,1,1
+973,pa klama,1,1,1,1
+974,re klama,1,1,1,1
+975,ci'i klama,1,1,1,1
+976,ci klama,1,1,1,1
+977,vo klama,1,1,1,1
+978,mu klama,1,1,1,1
+979,xa klama,1,1,1,1
+980,ze klama,1,1,1,1
+981,bi klama,1,1,1,1
+982,so klama,1,1,1,1
+983,no klama,1,1,1,1
+984,ro klama,1,1,1,1
+985,ki'o klama,1,1,1,1
+986,ma'u klama,1,1,0,1
+987,ni'u klama,1,1,0,1
+988,ce'i klama,1,1,0,1
+989,cehi klama,1,1,0,1
+990,fi'u klama,1,1,0,1
+991,fihu klama,1,1,0,1
+992,mi dau klama,1,1,1,1
+993,mi fei klama,1,1,1,1
+994,mi rei klama,1,1,1,1
+995,mi vai klama,1,1,1,1
+996,mi so'a klama,1,1,1,1
+997,mi so'e klama,1,1,1,1
+998,mi so'i klama,1,1,1,1
+999,mi so'u klama,1,1,1,1
+1000,mi so'o klama,1,1,1,1
+1001,mi soho klama,1,1,1,1
+1002,mi za'u klama,1,1,0,1
+1003,mi su'o klama,1,1,1,1
+1004,mi suho klama,1,1,1,1
+1005,mi suhe klama,1,1,1,1
+1006,mi su'e klama,1,1,1,1
+1007,mi daha klama,1,1,1,1
+1008,mi da'a klama,1,1,1,1
+1009,mi ji'i klama,1,1,1,1
+1010,mi jihi klama,1,1,1,1
+1011,mi xo klama,1,1,1,1
+1012,mi pi klama,1,1,1,1
+1013,mi rau klama,1,1,1,1
+1014,mi du'e klama,1,1,1,1
+1015,mi duhe klama,1,1,1,1
+1016,mi mo'a klama,1,1,1,1
+1017,mi moha klama,1,1,1,1
+1018,mi te'o klama,1,1,1,1
+1019,mi teho klama,1,1,1,1
+1020,mi ka'o klama,1,1,1,1
+1021,mi kaho klama,1,1,1,1
+1022,mi tu'o klama,1,1,1,1
+1023,mi pai klama,1,1,1,1
+1024,mi pa klama,1,1,1,1
+1025,mi re klama,1,1,1,1
+1026,mi ci'i klama,1,1,1,1
+1027,mi ci klama,1,1,1,1
+1028,mi vo klama,1,1,1,1
+1029,mi mu klama,1,1,1,1
+1030,mi xa klama,1,1,1,1
+1031,mi ze klama,1,1,1,1
+1032,mi bi klama,1,1,1,1
+1033,mi so klama,1,1,1,1
+1034,mi no klama,1,1,1,1
+1035,mi ro klama,1,1,1,1
+1036,mi ki'o klama,1,1,1,1
+1037,mi ma'u klama,1,1,0,1
+1038,mi ni'u klama,1,1,0,1
+1039,mi ce'i klama,1,1,0,1
+1040,mi cehi klama,1,1,0,1
+1041,mi fi'u klama,1,1,0,1
+1042,mi fihu klama,1,1,0,1
+1043,mi viska dau,1,0,0,0
+1044,mi viska fei,1,0,0,0
+1045,mi viska rei,1,0,0,0
+1046,mi viska vai,1,0,0,0
+1047,mi viska so'a,1,0,0,0
+1048,mi viska so'e,1,0,0,0
+1049,mi viska so'i,1,0,0,0
+1050,mi viska so'u,1,0,0,0
+1051,mi viska so'o,1,0,0,0
+1052,mi viska soho,1,0,0,0
+1053,mi viska za'u,1,0,0,0
+1054,mi viska su'o,1,0,0,0
+1055,mi viska suho,1,0,0,0
+1056,mi viska suhe,1,0,0,0
+1057,mi viska su'e,1,0,0,0
+1058,mi viska daha,1,0,0,0
+1059,mi viska da'a,1,0,0,0
+1060,mi viska ji'i,1,0,0,0
+1061,mi viska jihi,1,0,0,0
+1062,mi viska xo,1,0,0,0
+1063,mi viska pi,1,0,0,0
+1064,mi viska rau,1,0,0,0
+1065,mi viska du'e,1,0,0,0
+1066,mi viska duhe,1,0,0,0
+1067,mi viska mo'a,1,0,0,0
+1068,mi viska moha,1,0,0,0
+1069,mi viska te'o,1,0,0,0
+1070,mi viska teho,1,0,0,0
+1071,mi viska ka'o,1,0,0,0
+1072,mi viska kaho,1,0,0,0
+1073,mi viska tu'o,1,0,0,0
+1074,mi viska pai,1,0,0,0
+1075,mi viska pa,1,0,0,0
+1076,mi viska re,1,0,0,0
+1077,mi viska ci'i,1,0,0,0
+1078,mi viska ci,1,0,0,0
+1079,mi viska vo,1,0,0,0
+1080,mi viska mu,1,0,0,0
+1081,mi viska xa,1,0,0,0
+1082,mi viska ze,1,0,0,0
+1083,mi viska bi,1,0,0,0
+1084,mi viska so,1,0,0,0
+1085,mi viska no,1,0,0,0
+1086,mi viska ro,1,0,0,0
+1087,mi viska ki'o,1,0,0,0
+1088,mi viska ma'u,1,0,0,0
+1089,mi viska ni'u,1,0,0,0
+1090,mi viska ce'i,1,0,0,0
+1091,mi viska cehi,1,0,0,0
+1092,mi viska fi'u,1,0,0,0
+1093,mi viska fihu,1,0,0,0
+1094,mi roi klama,1,0,1,0
+1095,mi re'u klama,1,0,1,0
+1096,mi rehu klama,1,0,1,0
+1097,mi roi lo zdani klama,1,0,1,0
+1098,mi re'u lo zdani klama,1,0,1,0
+1099,mi rehu lo zdani klama,1,0,1,0
+1100,roi lo zdani klama,1,0,1,0
+1101,re'u lo zdani klama,1,0,1,0
+1102,rehu lo zdani klama,1,0,1,0
+1103,mi klama roi lo zdani,1,0,1,0
+1104,mi klama re'u lo zdani,1,0,1,0
+1105,mi klama rehu lo zdani,1,0,1,0
+1106,mi se klama lo zdani,1,1,1,1
+1107,mi te klama lo zdani,1,1,1,1
+1108,mi ve klama lo zdani,1,1,1,1
+1109,mi xe klama lo zdani,1,1,1,1
+1110,mi se broda,1,1,1,1
+1111,mi te broda,1,1,1,1
+1112,mi ve broda,1,1,1,1
+1113,mi xe broda,1,1,1,1
+1114,mi klama sei do zvati lo zdani,1,1,1,1
+1115,sei mi klama,1,1,1,1
+1116,mi klama lo zdani soi vo'a vo'e se'u,1,0,0,0
+1117,mi klama lo zdani soi vo'a vo'e sehu,1,0,0,0
+1118,to mi klama to,1,1,1,1
+1119,to mi klama toi,1,1,1,1
+1120,u'i mi klama,1,1,1,1
+1121,u'u mi klama,1,1,1,1
+1122,ru'e mi klama,1,1,1,1
+1123,ju'o mi klama,1,1,1,1
+1124,pe'i mi klama,1,1,1,1
+1125,sa'e mi klama,1,1,1,1
+1126,ta'o mi klama,1,1,1,1
+1127,e'o mi klama,1,1,1,1
+1128,e'e mi klama,1,1,1,1
+1129,ehu mi klama,1,1,1,1
+1130,e'u mi klama,1,1,1,1
+1131,ohu mi klama,1,1,1,1
+1132,o'u mi klama,1,1,1,1
+1133,a'e mi klama,1,1,1,1
+1134,i'a mi klama,1,1,1,1
+1135,buho mi klama,1,1,1,1
+1136,bu'o mi klama,1,1,1,1
+1137,kuhi mi klama,1,1,1,1
+1138,ku'i mi klama,1,1,1,1
+1139,ja'o mi klama,1,1,1,1
+1140,po'o mi klama,1,1,1,1
+1141,dahi mi klama,1,1,1,1
+1142,da'i mi klama,1,1,1,1
+1143,jehu mi klama,1,1,1,1
+1144,je'u mi klama,1,1,1,1
+1145,laha mi klama,1,1,1,1
+1146,la'a mi klama,1,1,1,1
+1147,zaha mi klama,1,1,1,1
+1148,za'a mi klama,1,1,1,1
+1149,gahi mi klama,1,1,1,1
+1150,ga'i mi klama,1,1,1,1
+1151,uho mi klama,1,1,1,1
+1152,u'o mi klama,1,1,1,1
+1153,ihi mi klama,1,1,1,1
+1154,i'i mi klama,1,1,1,1
+1155,oha mi klama,1,1,1,1
+1156,o'a mi klama,1,1,1,1
+1157,ehi mi klama,1,1,1,1
+1158,e'i mi klama,1,1,1,1
+1159,kahu mi klama,1,1,1,1
+1160,ka'u mi klama,1,1,1,1
+1161,kau mi klama,1,1,1,1
+1162,ruha mi klama,1,1,1,1
+1163,ru'a mi klama,1,1,1,1
+1164,jiha mi klama,1,1,1,1
+1165,ji'a mi klama,1,1,1,1
+1166,zuhu mi klama,1,1,1,1
+1167,zu'u mi klama,1,1,1,1
+1168,baha mi klama,1,1,1,1
+1169,ba'a mi klama,1,1,1,1
+1170,ai mi klama,1,1,1,1
+1171,au mi klama,1,1,1,1
+1172,kiaha mi klama,1,0,0,0
+1173,ki'a mi klama,1,1,1,1
+1174,zo'o mi klama,1,1,1,1
+1175,a'u mi klama,1,1,1,1
+1176,o'o mi klama,1,1,1,1
+1177,u'a mi klama,1,1,1,1
+1178,u'e mi klama,1,1,1,1
+1179,cai mi klama,1,1,1,1
+1180,ui mi klama,1,1,1,1
+1181,oi mi klama,1,1,1,1
+1182,ie mi klama,1,1,1,1
+1183,ii mi klama,1,1,1,1
+1184,uu mi klama,1,1,1,1
+1185,ua mi klama,1,1,1,1
+1186,ue mi klama,1,1,1,1
+1187,uo mi klama,1,1,1,1
+1188,ia mi klama,1,1,1,1
+1189,iu mi klama,1,1,1,1
+1190,ei mi klama,1,1,1,1
+1191,xu mi klama,1,1,1,1
+1192,i'e mi klama,1,1,1,1
+1193,be'e mi klama,1,1,1,1
+1194,be'u mi klama,1,1,1,1
+1195,di'ai mi klama,1,1,1,1
+1196,fau'u mi klama,1,1,1,1
+1197,ge'e mi klama,1,1,1,1
+1198,li'a mi klama,1,1,1,1
+1199,ni'au mi klama,1,1,1,1
+1200,pei mi klama,1,1,1,1
+1201,o'i mi klama,1,1,1,1
+1202,su'a mi klama,1,1,1,1
+1203,a'i mi klama,1,1,1,1
+1204,ahi mi klama,1,1,1,1
+1205,a'o mi klama,1,1,1,1
+1206,aho mi klama,1,1,1,1
+1207,ca'e mi klama,1,1,1,1
+1208,cahe mi klama,1,1,1,1
+1209,dai mi klama,1,1,1,1
+1210,e'a mi klama,1,1,1,1
+1211,eha mi klama,1,1,1,1
+1212,io mi klama,1,1,1,1
+1213,ju'a mi klama,1,1,1,1
+1214,juha mi klama,1,1,1,1
+1215,ke'u mi klama,1,1,1,1
+1216,kehu mi klama,1,1,1,1
+1217,le'o mi klama,1,1,1,1
+1218,leho mi klama,1,1,1,1
+1219,li'o mi klama,1,1,1,1
+1220,liho mi klama,1,1,1,1
+1221,o'e mi klama,1,1,1,1
+1222,ohe mi klama,1,1,1,1
+1223,pau mi klama,1,1,1,1
+1224,pa'e mi klama,1,1,1,1
+1225,pahe mi klama,1,1,1,1
+1226,ra'u mi klama,1,1,1,1
+1227,rahu mi klama,1,1,1,1
+1228,ro'a mi klama,1,1,1,1
+1229,roha mi klama,1,1,1,1
+1230,ro'o mi klama,1,1,1,1
+1231,roho mi klama,1,1,1,1
+1232,se'a mi klama,1,1,1,1
+1233,seha mi klama,1,1,1,1
+1234,si'a mi klama,1,1,1,1
+1235,siha mi klama,1,1,1,1
+1236,ta'u mi klama,1,1,1,1
+1237,tahu mi klama,1,1,1,1
+1238,ti'e mi klama,1,1,1,1
+1239,tihe mi klama,1,1,1,1
+1240,to'u mi klama,1,1,1,1
+1241,tohu mi klama,1,1,1,1
+1242,va'i mi klama,1,1,1,1
+1243,vahi mi klama,1,1,1,1
+1244,vu'e mi klama,1,1,1,1
+1245,vuhe mi klama,1,1,1,1
+1246,sahe mi klama,1,1,1,1
+1247,ohi mi klama,1,1,1,1
+1248,taho mi klama,1,1,1,1
+1249,pehi mi klama,1,1,1,1
+1250,juho mi klama,1,1,1,1
+1251,uhi mi klama,1,1,1,1
+1252,uhu mi klama,1,1,1,1
+1253,ruhe mi klama,1,1,1,1
+1254,eho mi klama,1,1,1,1
+1255,ehe mi klama,1,1,1,1
+1256,ahe mi klama,1,1,1,1
+1257,iha mi klama,1,1,1,1
+1258,zoho mi klama,1,1,1,1
+1259,ahu mi klama,1,1,1,1
+1260,oho mi klama,1,1,1,1
+1261,uha mi klama,1,1,1,1
+1262,uhe mi klama,1,1,1,1
+1263,ihe mi klama,1,1,1,1
+1264,behe mi klama,1,1,1,1
+1265,behu mi klama,1,1,1,1
+1266,dihai mi klama,1,1,1,1
+1267,fauhu mi klama,1,1,1,1
+1268,gehe mi klama,1,1,1,1
+1269,liha mi klama,1,1,1,1
+1270,nihau mi klama,1,1,1,1
+1271,suha mi klama,1,1,1,1
+1272,sai mi klama,1,1,1,1
+1273,cu'i mi klama,1,1,1,1
+1274,cuhi mi klama,1,1,1,1
+1275,mi klama u'i,1,1,1,1
+1276,mi klama u'u,1,1,1,1
+1277,mi klama ru'e,1,1,1,1
+1278,mi klama ju'o,1,1,1,1
+1279,mi klama pe'i,1,1,1,1
+1280,mi klama sa'e,1,1,1,1
+1281,mi klama ta'o,1,1,1,1
+1282,mi klama e'o,1,1,1,1
+1283,mi klama e'e,1,1,1,1
+1284,mi klama ehu,1,1,1,1
+1285,mi klama e'u,1,1,1,1
+1286,mi klama ohu,1,1,1,1
+1287,mi klama o'u,1,1,1,1
+1288,mi klama a'e,1,1,1,1
+1289,mi klama i'a,1,1,1,1
+1290,mi klama buho,1,1,1,1
+1291,mi klama bu'o,1,1,1,1
+1292,mi klama kuhi,1,1,1,1
+1293,mi klama ku'i,1,1,1,1
+1294,mi klama ja'o,1,1,1,1
+1295,mi klama po'o,1,1,1,1
+1296,mi klama dahi,1,1,1,1
+1297,mi klama da'i,1,1,1,1
+1298,mi klama jehu,1,1,1,1
+1299,mi klama je'u,1,1,1,1
+1300,mi klama laha,1,1,1,1
+1301,mi klama la'a,1,1,1,1
+1302,mi klama zaha,1,1,1,1
+1303,mi klama za'a,1,1,1,1
+1304,mi klama gahi,1,1,1,1
+1305,mi klama ga'i,1,1,1,1
+1306,mi klama uho,1,1,1,1
+1307,mi klama u'o,1,1,1,1
+1308,mi klama ihi,1,1,1,1
+1309,mi klama i'i,1,1,1,1
+1310,mi klama oha,1,1,1,1
+1311,mi klama o'a,1,1,1,1
+1312,mi klama ehi,1,1,1,1
+1313,mi klama e'i,1,1,1,1
+1314,mi klama kahu,1,1,1,1
+1315,mi klama ka'u,1,1,1,1
+1316,mi klama kau,1,1,1,1
+1317,mi klama ruha,1,1,1,1
+1318,mi klama ru'a,1,1,1,1
+1319,mi klama jiha,1,1,1,1
+1320,mi klama ji'a,1,1,1,1
+1321,mi klama zuhu,1,1,1,1
+1322,mi klama zu'u,1,1,1,1
+1323,mi klama baha,1,1,1,1
+1324,mi klama ba'a,1,1,1,1
+1325,mi klama ai,1,1,1,1
+1326,mi klama au,1,1,1,1
+1327,mi klama kiaha,1,0,0,0
+1328,mi klama ki'a,1,1,1,1
+1329,mi klama zo'o,1,1,1,1
+1330,mi klama a'u,1,1,1,1
+1331,mi klama o'o,1,1,1,1
+1332,mi klama u'a,1,1,1,1
+1333,mi klama u'e,1,1,1,1
+1334,mi klama cai,1,1,1,1
+1335,mi klama ui,1,1,1,1
+1336,mi klama oi,1,1,1,1
+1337,mi klama ie,1,1,1,1
+1338,mi klama ii,1,1,1,1
+1339,mi klama uu,1,1,1,1
+1340,mi klama ua,1,1,1,1
+1341,mi klama ue,1,1,1,1
+1342,mi klama uo,1,1,1,1
+1343,mi klama ia,1,1,1,1
+1344,mi klama iu,1,1,1,1
+1345,mi klama ei,1,1,1,1
+1346,mi klama xu,1,1,1,1
+1347,mi klama i'e,1,1,1,1
+1348,mi klama be'e,1,1,1,1
+1349,mi klama be'u,1,1,1,1
+1350,mi klama di'ai,1,1,1,1
+1351,mi klama fau'u,1,1,1,1
+1352,mi klama ge'e,1,1,1,1
+1353,mi klama li'a,1,1,1,1
+1354,mi klama ni'au,1,1,1,1
+1355,mi klama pei,1,1,1,1
+1356,mi klama o'i,1,1,1,1
+1357,mi klama su'a,1,1,1,1
+1358,mi klama a'i,1,1,1,1
+1359,mi klama ahi,1,1,1,1
+1360,mi klama a'o,1,1,1,1
+1361,mi klama aho,1,1,1,1
+1362,mi klama ca'e,1,1,1,1
+1363,mi klama cahe,1,1,1,1
+1364,mi klama dai,1,1,1,1
+1365,mi klama e'a,1,1,1,1
+1366,mi klama eha,1,1,1,1
+1367,mi klama io,1,1,1,1
+1368,mi klama ju'a,1,1,1,1
+1369,mi klama juha,1,1,1,1
+1370,mi klama ke'u,1,1,1,1
+1371,mi klama kehu,1,1,1,1
+1372,mi klama le'o,1,1,1,1
+1373,mi klama leho,1,1,1,1
+1374,mi klama li'o,1,1,1,1
+1375,mi klama liho,1,1,1,1
+1376,mi klama o'e,1,1,1,1
+1377,mi klama ohe,1,1,1,1
+1378,mi klama pau,1,1,1,1
+1379,mi klama pa'e,1,1,1,1
+1380,mi klama pahe,1,1,1,1
+1381,mi klama ra'u,1,1,1,1
+1382,mi klama rahu,1,1,1,1
+1383,mi klama ro'a,1,1,1,1
+1384,mi klama roha,1,1,1,1
+1385,mi klama ro'o,1,1,1,1
+1386,mi klama roho,1,1,1,1
+1387,mi klama se'a,1,1,1,1
+1388,mi klama seha,1,1,1,1
+1389,mi klama si'a,1,1,1,1
+1390,mi klama siha,1,1,1,1
+1391,mi klama ta'u,1,1,1,1
+1392,mi klama tahu,1,1,1,1
+1393,mi klama ti'e,1,1,1,1
+1394,mi klama tihe,1,1,1,1
+1395,mi klama to'u,1,1,1,1
+1396,mi klama tohu,1,1,1,1
+1397,mi klama va'i,1,1,1,1
+1398,mi klama vahi,1,1,1,1
+1399,mi klama vu'e,1,1,1,1
+1400,mi klama vuhe,1,1,1,1
+1401,mi klama sahe,1,1,1,1
+1402,mi klama ohi,1,1,1,1
+1403,mi klama taho,1,1,1,1
+1404,mi klama pehi,1,1,1,1
+1405,mi klama juho,1,1,1,1
+1406,mi klama uhi,1,1,1,1
+1407,mi klama uhu,1,1,1,1
+1408,mi klama ruhe,1,1,1,1
+1409,mi klama eho,1,1,1,1
+1410,mi klama ehe,1,1,1,1
+1411,mi klama ahe,1,1,1,1
+1412,mi klama iha,1,1,1,1
+1413,mi klama zoho,1,1,1,1
+1414,mi klama ahu,1,1,1,1
+1415,mi klama oho,1,1,1,1
+1416,mi klama uha,1,1,1,1
+1417,mi klama uhe,1,1,1,1
+1418,mi klama ihe,1,1,1,1
+1419,mi klama behe,1,1,1,1
+1420,mi klama behu,1,1,1,1
+1421,mi klama dihai,1,1,1,1
+1422,mi klama fauhu,1,1,1,1
+1423,mi klama gehe,1,1,1,1
+1424,mi klama liha,1,1,1,1
+1425,mi klama nihau,1,1,1,1
+1426,mi klama suha,1,1,1,1
+1427,mi klama sai,1,1,1,1
+1428,mi klama cu'i,1,1,1,1
+1429,mi klama cuhi,1,1,1,1
+1430,mi klama u'inai,1,1,1,1
+1431,mi klama u'unai,1,1,1,1
+1432,mi klama ru'enai,1,1,1,1
+1433,mi klama ju'onai,1,1,1,1
+1434,mi klama pe'inai,1,1,1,1
+1435,mi klama sa'enai,1,1,1,1
+1436,mi klama ta'onai,1,1,1,1
+1437,mi klama e'onai,1,1,1,1
+1438,mi klama e'enai,1,1,1,1
+1439,mi klama ehunai,1,1,1,1
+1440,mi klama e'unai,1,1,1,1
+1441,mi klama ohunai,1,1,1,1
+1442,mi klama o'unai,1,1,1,1
+1443,mi klama a'enai,1,1,1,1
+1444,mi klama i'anai,1,1,1,1
+1445,mi klama buhonai,1,1,1,1
+1446,mi klama bu'onai,1,1,1,1
+1447,mi klama kuhinai,1,1,1,1
+1448,mi klama ku'inai,1,1,1,1
+1449,mi klama ja'onai,1,1,1,1
+1450,mi klama po'onai,1,1,1,1
+1451,mi klama dahinai,1,1,1,1
+1452,mi klama da'inai,1,1,1,1
+1453,mi klama jehunai,1,1,1,1
+1454,mi klama je'unai,1,1,1,1
+1455,mi klama lahanai,1,1,1,1
+1456,mi klama la'anai,1,1,1,1
+1457,mi klama zahanai,1,1,1,1
+1458,mi klama za'anai,1,1,1,1
+1459,mi klama gahinai,1,1,1,1
+1460,mi klama ga'inai,1,1,1,1
+1461,mi klama uhonai,1,1,1,1
+1462,mi klama u'onai,1,1,1,1
+1463,mi klama ihinai,1,1,1,1
+1464,mi klama i'inai,1,1,1,1
+1465,mi klama ohanai,1,1,1,1
+1466,mi klama o'anai,1,1,1,1
+1467,mi klama ehinai,1,1,1,1
+1468,mi klama e'inai,1,1,1,1
+1469,mi klama kahunai,1,1,1,1
+1470,mi klama ka'unai,1,1,1,1
+1471,mi klama kaunai,1,1,1,1
+1472,mi klama ruhanai,1,1,1,1
+1473,mi klama ru'anai,1,1,1,1
+1474,mi klama jihanai,1,1,1,1
+1475,mi klama ji'anai,1,1,1,1
+1476,mi klama zuhunai,1,1,1,1
+1477,mi klama zu'unai,1,1,1,1
+1478,mi klama bahanai,1,1,1,1
+1479,mi klama ba'anai,1,1,1,1
+1480,mi klama ainai,1,1,1,1
+1481,mi klama aunai,1,1,1,1
+1482,mi klama kiahanai,0,0,0,0
+1483,mi klama ki'anai,1,1,1,1
+1484,mi klama zo'onai,1,1,1,1
+1485,mi klama a'unai,1,1,1,1
+1486,mi klama o'onai,1,1,1,1
+1487,mi klama u'anai,1,1,1,1
+1488,mi klama u'enai,1,1,1,1
+1489,mi klama cainai,1,1,1,1
+1490,mi klama uinai,1,1,1,1
+1491,mi klama oinai,1,1,1,1
+1492,mi klama ienai,1,1,1,1
+1493,mi klama iinai,1,1,1,1
+1494,mi klama uunai,1,1,1,1
+1495,mi klama uanai,1,1,1,1
+1496,mi klama uenai,1,1,1,1
+1497,mi klama uonai,1,1,1,1
+1498,mi klama ianai,1,1,1,1
+1499,mi klama iunai,1,1,1,1
+1500,mi klama einai,1,1,1,1
+1501,mi klama xunai,1,1,1,1
+1502,mi klama i'enai,1,1,1,1
+1503,mi klama be'enai,1,1,1,1
+1504,mi klama be'unai,1,1,1,1
+1505,mi klama di'ainai,1,1,1,1
+1506,mi klama fau'unai,1,1,1,1
+1507,mi klama ge'enai,1,1,1,1
+1508,mi klama li'anai,1,1,1,1
+1509,mi klama ni'aunai,1,1,1,1
+1510,mi klama peinai,1,1,1,1
+1511,mi klama o'inai,1,1,1,1
+1512,mi klama su'anai,1,1,1,1
+1513,mi klama a'inai,1,1,1,1
+1514,mi klama ahinai,1,1,1,1
+1515,mi klama a'onai,1,1,1,1
+1516,mi klama ahonai,1,1,1,1
+1517,mi klama ca'enai,1,1,1,1
+1518,mi klama cahenai,1,1,1,1
+1519,mi klama dainai,1,1,1,1
+1520,mi klama e'anai,1,1,1,1
+1521,mi klama ehanai,1,1,1,1
+1522,mi klama ionai,1,1,1,1
+1523,mi klama ju'anai,1,1,1,1
+1524,mi klama juhanai,1,1,1,1
+1525,mi klama ke'unai,1,1,1,1
+1526,mi klama kehunai,1,1,1,1
+1527,mi klama le'onai,1,1,1,1
+1528,mi klama lehonai,1,1,1,1
+1529,mi klama li'onai,1,1,1,1
+1530,mi klama lihonai,1,1,1,1
+1531,mi klama o'enai,1,1,1,1
+1532,mi klama ohenai,1,1,1,1
+1533,mi klama paunai,1,1,1,1
+1534,mi klama pa'enai,1,1,1,1
+1535,mi klama pahenai,1,1,1,1
+1536,mi klama ra'unai,1,1,1,1
+1537,mi klama rahunai,1,1,1,1
+1538,mi klama ro'anai,1,1,1,1
+1539,mi klama rohanai,1,1,1,1
+1540,mi klama ro'onai,1,1,1,1
+1541,mi klama rohonai,1,1,1,1
+1542,mi klama se'anai,1,1,1,1
+1543,mi klama sehanai,1,1,1,1
+1544,mi klama si'anai,1,1,1,1
+1545,mi klama sihanai,1,1,1,1
+1546,mi klama ta'unai,1,1,1,1
+1547,mi klama tahunai,1,1,1,1
+1548,mi klama ti'enai,1,1,1,1
+1549,mi klama tihenai,1,1,1,1
+1550,mi klama to'unai,1,1,1,1
+1551,mi klama tohunai,1,1,1,1
+1552,mi klama va'inai,1,1,1,1
+1553,mi klama vahinai,1,1,1,1
+1554,mi klama vu'enai,1,1,1,1
+1555,mi klama vuhenai,1,1,1,1
+1556,mi klama sahenai,1,1,1,1
+1557,mi klama ohinai,1,1,1,1
+1558,mi klama tahonai,1,1,1,1
+1559,mi klama pehinai,1,1,1,1
+1560,mi klama juhonai,1,1,1,1
+1561,mi klama uhinai,1,1,1,1
+1562,mi klama uhunai,1,1,1,1
+1563,mi klama ruhenai,1,1,1,1
+1564,mi klama ehonai,1,1,1,1
+1565,mi klama ehenai,1,1,1,1
+1566,mi klama ahenai,1,1,1,1
+1567,mi klama ihanai,1,1,1,1
+1568,mi klama zohonai,1,1,1,1
+1569,mi klama ahunai,1,1,1,1
+1570,mi klama ohonai,1,1,1,1
+1571,mi klama uhanai,1,1,1,1
+1572,mi klama uhenai,1,1,1,1
+1573,mi klama ihenai,1,1,1,1
+1574,mi klama behenai,1,1,1,1
+1575,mi klama behunai,1,1,1,1
+1576,mi klama dihainai,1,1,1,1
+1577,mi klama fauhunai,1,1,1,1
+1578,mi klama gehenai,1,1,1,1
+1579,mi klama lihanai,1,1,1,1
+1580,mi klama nihaunai,1,1,1,1
+1581,mi klama suhanai,1,1,1,1
+1582,mi klama sainai,1,1,1,1
+1583,mi klama cu'inai,1,1,1,1
+1584,mi klama cuhinai,1,1,1,1
+1585,u'inai mi klama,1,1,1,1
+1586,u'unai mi klama,1,1,1,1
+1587,ru'enai mi klama,1,1,1,1
+1588,ju'onai mi klama,1,1,1,1
+1589,pe'inai mi klama,1,1,1,1
+1590,sa'enai mi klama,1,1,1,1
+1591,ta'onai mi klama,1,1,1,1
+1592,e'onai mi klama,1,1,1,1
+1593,e'enai mi klama,1,1,1,1
+1594,ehunai mi klama,1,1,1,1
+1595,e'unai mi klama,1,1,1,1
+1596,ohunai mi klama,1,1,1,1
+1597,o'unai mi klama,1,1,1,1
+1598,a'enai mi klama,1,1,1,1
+1599,i'anai mi klama,1,1,1,1
+1600,buhonai mi klama,1,1,1,1
+1601,bu'onai mi klama,1,1,1,1
+1602,kuhinai mi klama,1,1,1,1
+1603,ku'inai mi klama,1,1,1,1
+1604,ja'onai mi klama,1,1,1,1
+1605,po'onai mi klama,1,1,1,1
+1606,dahinai mi klama,1,1,1,1
+1607,da'inai mi klama,1,1,1,1
+1608,jehunai mi klama,1,1,1,1
+1609,je'unai mi klama,1,1,1,1
+1610,lahanai mi klama,1,1,1,1
+1611,la'anai mi klama,1,1,1,1
+1612,zahanai mi klama,1,1,1,1
+1613,za'anai mi klama,1,1,1,1
+1614,gahinai mi klama,1,1,1,1
+1615,ga'inai mi klama,1,1,1,1
+1616,uhonai mi klama,1,1,1,1
+1617,u'onai mi klama,1,1,1,1
+1618,ihinai mi klama,1,1,1,1
+1619,i'inai mi klama,1,1,1,1
+1620,ohanai mi klama,1,1,1,1
+1621,o'anai mi klama,1,1,1,1
+1622,ehinai mi klama,1,1,1,1
+1623,e'inai mi klama,1,1,1,1
+1624,kahunai mi klama,1,1,1,1
+1625,ka'unai mi klama,1,1,1,1
+1626,kaunai mi klama,1,1,1,1
+1627,ruhanai mi klama,1,1,1,1
+1628,ru'anai mi klama,1,1,1,1
+1629,jihanai mi klama,1,1,1,1
+1630,ji'anai mi klama,1,1,1,1
+1631,zuhunai mi klama,1,1,1,1
+1632,zu'unai mi klama,1,1,1,1
+1633,bahanai mi klama,1,1,1,1
+1634,ba'anai mi klama,1,1,1,1
+1635,ainai mi klama,1,1,1,1
+1636,aunai mi klama,1,1,1,1
+1637,kiahanai mi klama,0,0,0,0
+1638,ki'anai mi klama,1,1,1,1
+1639,zo'onai mi klama,1,1,1,1
+1640,a'unai mi klama,1,1,1,1
+1641,o'onai mi klama,1,1,1,1
+1642,u'anai mi klama,1,1,1,1
+1643,u'enai mi klama,1,1,1,1
+1644,cainai mi klama,1,1,1,1
+1645,uinai mi klama,1,1,1,1
+1646,oinai mi klama,1,1,1,1
+1647,ienai mi klama,1,1,1,1
+1648,iinai mi klama,1,1,1,1
+1649,uunai mi klama,1,1,1,1
+1650,uanai mi klama,1,1,1,1
+1651,uenai mi klama,1,1,1,1
+1652,uonai mi klama,1,1,1,1
+1653,ianai mi klama,1,1,1,1
+1654,iunai mi klama,1,1,1,1
+1655,einai mi klama,1,1,1,1
+1656,xunai mi klama,1,1,1,1
+1657,i'enai mi klama,1,1,1,1
+1658,be'enai mi klama,1,1,1,1
+1659,be'unai mi klama,1,1,1,1
+1660,di'ainai mi klama,1,1,1,1
+1661,fau'unai mi klama,1,1,1,1
+1662,ge'enai mi klama,1,1,1,1
+1663,li'anai mi klama,1,1,1,1
+1664,ni'aunai mi klama,1,1,1,1
+1665,peinai mi klama,1,1,1,1
+1666,o'inai mi klama,1,1,1,1
+1667,su'anai mi klama,1,1,1,1
+1668,a'inai mi klama,1,1,1,1
+1669,ahinai mi klama,1,1,1,1
+1670,a'onai mi klama,1,1,1,1
+1671,ahonai mi klama,1,1,1,1
+1672,ca'enai mi klama,1,1,1,1
+1673,cahenai mi klama,1,1,1,1
+1674,dainai mi klama,1,1,1,1
+1675,e'anai mi klama,1,1,1,1
+1676,ehanai mi klama,1,1,1,1
+1677,ionai mi klama,1,1,1,1
+1678,ju'anai mi klama,1,1,1,1
+1679,juhanai mi klama,1,1,1,1
+1680,ke'unai mi klama,1,1,1,1
+1681,kehunai mi klama,1,1,1,1
+1682,le'onai mi klama,1,1,1,1
+1683,lehonai mi klama,1,1,1,1
+1684,li'onai mi klama,1,1,1,1
+1685,lihonai mi klama,1,1,1,1
+1686,o'enai mi klama,1,1,1,1
+1687,ohenai mi klama,1,1,1,1
+1688,paunai mi klama,1,1,1,1
+1689,pa'enai mi klama,1,1,1,1
+1690,pahenai mi klama,1,1,1,1
+1691,ra'unai mi klama,1,1,1,1
+1692,rahunai mi klama,1,1,1,1
+1693,ro'anai mi klama,1,1,1,1
+1694,rohanai mi klama,1,1,1,1
+1695,ro'onai mi klama,1,1,1,1
+1696,rohonai mi klama,1,1,1,1
+1697,se'anai mi klama,1,1,1,1
+1698,sehanai mi klama,1,1,1,1
+1699,si'anai mi klama,1,1,1,1
+1700,sihanai mi klama,1,1,1,1
+1701,ta'unai mi klama,1,1,1,1
+1702,tahunai mi klama,1,1,1,1
+1703,ti'enai mi klama,1,1,1,1
+1704,tihenai mi klama,1,1,1,1
+1705,to'unai mi klama,1,1,1,1
+1706,tohunai mi klama,1,1,1,1
+1707,va'inai mi klama,1,1,1,1
+1708,vahinai mi klama,1,1,1,1
+1709,vu'enai mi klama,1,1,1,1
+1710,vuhenai mi klama,1,1,1,1
+1711,sahenai mi klama,1,1,1,1
+1712,ohinai mi klama,1,1,1,1
+1713,tahonai mi klama,1,1,1,1
+1714,pehinai mi klama,1,1,1,1
+1715,juhonai mi klama,1,1,1,1
+1716,uhinai mi klama,1,1,1,1
+1717,uhunai mi klama,1,1,1,1
+1718,ruhenai mi klama,1,1,1,1
+1719,ehonai mi klama,1,1,1,1
+1720,ehenai mi klama,1,1,1,1
+1721,ahenai mi klama,1,1,1,1
+1722,ihanai mi klama,1,1,1,1
+1723,zohonai mi klama,1,1,1,1
+1724,ahunai mi klama,1,1,1,1
+1725,ohonai mi klama,1,1,1,1
+1726,uhanai mi klama,1,1,1,1
+1727,uhenai mi klama,1,1,1,1
+1728,ihenai mi klama,1,1,1,1
+1729,behenai mi klama,1,1,1,1
+1730,behunai mi klama,1,1,1,1
+1731,dihainai mi klama,1,1,1,1
+1732,fauhunai mi klama,1,1,1,1
+1733,gehenai mi klama,1,1,1,1
+1734,lihanai mi klama,1,1,1,1
+1735,nihaunai mi klama,1,1,1,1
+1736,suhanai mi klama,1,1,1,1
+1737,sainai mi klama,1,1,1,1
+1738,cu'inai mi klama,1,1,1,1
+1739,cuhinai mi klama,1,1,1,1
+1740,mi klama vau,1,1,1,1
+1741,mi viska lo broda vu'o noi mi klama,1,1,1,1
+1742,mi viska lo broda vuho noi mi klama,1,1,1,1
+1743,mi pu nai klama,1,1,1,1
+1744,mi broda ja nai brode,1,1,1,1
+1745,mi broda pa pamai,1,1,1,1
+1746,mi broda pa remai,1,1,1,1
+1747,mi broda pa cimai,1,1,1,1
+1748,mi broda pa vomai,1,1,1,1
+1749,mi broda pa mumai,1,1,1,1
+1750,mi broda pa xamai,1,1,1,1
+1751,mi broda pa zemai,1,1,1,1
+1752,mi broda pa bimai,1,1,1,1
+1753,mi broda pa somai,1,1,1,1
+1754,mi broda pa nomai,1,1,1,1
+1755,mi broda pa mai,1,1,1,1
+1756,mi broda pa mo'o,1,1,1,1
+1757,mi broda pa moho,1,1,1,1
+1758,mi u'i cai broda,1,1,1,1
+1759,mi u'i sai broda,1,1,1,1
+1760,mi u'i ru'e broda,1,1,1,1
+1761,mi u'i ruhe broda,1,1,1,1
+1762,mi u'i cu'i broda,1,1,1,1
+1763,mi u'i cuhi broda,1,1,1,1
+1764,mi pu klama,1,1,1,1
+1765,mi ca klama,1,1,1,1
+1766,mi ba klama,1,1,1,1
+1767,mi pu lo zdani klama,1,1,1,1
+1768,mi ca lo zdani klama,1,1,1,1
+1769,mi ba lo zdani klama,1,1,1,1
+1770,pu lo zdani klama,1,1,1,1
+1771,ca lo zdani klama,1,1,1,1
+1772,ba lo zdani klama,1,1,1,1
+1773,mi klama pu lo zdani,1,1,1,1
+1774,mi klama ca lo zdani,1,1,1,1
+1775,mi klama ba lo zdani,1,1,1,1
+1776,mi ki klama,1,1,1,1
+1777,mi ki lo zdani klama,1,1,1,1
+1778,ki lo zdani klama,1,1,1,1
+1779,mi klama ki lo zdani,1,1,1,1
+1780,mi ka'e klama,1,1,1,1
+1781,mi ca'a klama,1,1,1,1
+1782,mi nu'a klama,1,0,0,0
+1783,mi ja'ai klama,1,1,1,0
+1784,mi ka'e lo zdani klama,1,1,1,1
+1785,mi ca'a lo zdani klama,1,1,1,1
+1786,mi nu'a lo zdani klama,1,1,1,1
+1787,mi ja'ai lo zdani klama,1,1,1,0
+1788,ka'e lo zdani klama,1,1,1,1
+1789,ca'a lo zdani klama,1,1,1,1
+1790,nu'a lo zdani klama,1,1,1,1
+1791,ja'ai lo zdani klama,1,1,1,1
+1792,mi klama ka'e lo zdani,1,1,1,1
+1793,mi klama ca'a lo zdani,1,1,1,1
+1794,mi klama nu'a lo zdani,1,1,1,1
+1795,mi klama ja'ai lo zdani,1,1,1,0
+1796,mi cu'e klama,1,1,1,1
+1797,mi cuhe klama,1,1,1,1
+1798,mi cu'e lo zdani klama,1,1,1,1
+1799,mi cuhe lo zdani klama,1,1,1,1
+1800,cu'e lo zdani klama,1,1,1,1
+1801,cuhe lo zdani klama,1,1,1,1
+1802,mi klama cu'e lo zdani,1,1,1,1
+1803,mi klama cuhe lo zdani,1,1,1,1
+1804,mi pu'o klama,1,1,1,1
+1805,mi co'a klama,1,1,1,1
+1806,mi za'o klama,1,1,1,1
+1807,mi ca'o klama,1,1,1,1
+1808,mi mo'u klama,1,1,1,1
+1809,mi ba'o klama,1,1,1,1
+1810,mi de'a klama,1,1,1,1
+1811,mi di'a klama,1,1,1,1
+1812,mi pu'o lo zdani klama,1,1,1,1
+1813,mi co'a lo zdani klama,1,1,1,1
+1814,mi za'o lo zdani klama,1,1,1,1
+1815,mi ca'o lo zdani klama,1,1,1,1
+1816,mi mo'u lo zdani klama,1,1,1,1
+1817,mi ba'o lo zdani klama,1,1,1,1
+1818,mi de'a lo zdani klama,1,1,1,1
+1819,mi di'a lo zdani klama,1,1,1,1
+1820,pu'o lo zdani klama,1,1,1,1
+1821,co'a lo zdani klama,1,1,1,1
+1822,za'o lo zdani klama,1,1,1,1
+1823,ca'o lo zdani klama,1,1,1,1
+1824,mo'u lo zdani klama,1,1,1,1
+1825,ba'o lo zdani klama,1,1,1,1
+1826,de'a lo zdani klama,1,1,1,1
+1827,di'a lo zdani klama,1,1,1,1
+1828,mi klama pu'o lo zdani,1,1,1,1
+1829,mi klama co'a lo zdani,1,1,1,1
+1830,mi klama za'o lo zdani,1,1,1,1
+1831,mi klama ca'o lo zdani,1,1,1,1
+1832,mi klama mo'u lo zdani,1,1,1,1
+1833,mi klama ba'o lo zdani,1,1,1,1
+1834,mi klama de'a lo zdani,1,1,1,1
+1835,mi klama di'a lo zdani,1,1,1,1
+1836,mi ze'i klama,1,1,1,1
+1837,mi zehi klama,1,1,1,1
+1838,mi ze'a klama,1,1,1,1
+1839,mi zeha klama,1,1,1,1
+1840,mi ze'u klama,1,1,1,1
+1841,mi zehu klama,1,1,1,1
+1842,mi zi klama,1,1,1,1
+1843,mi za klama,1,1,1,1
+1844,mi zu klama,1,1,1,1
+1845,mi ze'i lo zdani klama,1,1,1,1
+1846,mi zehi lo zdani klama,1,1,1,1
+1847,mi ze'a lo zdani klama,1,1,1,1
+1848,mi zeha lo zdani klama,1,1,1,1
+1849,mi ze'u lo zdani klama,1,1,1,1
+1850,mi zehu lo zdani klama,1,1,1,1
+1851,mi zi lo zdani klama,1,1,1,1
+1852,mi za lo zdani klama,1,1,1,1
+1853,mi zu lo zdani klama,1,1,1,1
+1854,ze'i lo zdani klama,1,1,1,1
+1855,zehi lo zdani klama,1,1,1,1
+1856,ze'a lo zdani klama,1,1,1,1
+1857,zeha lo zdani klama,1,1,1,1
+1858,ze'u lo zdani klama,1,1,1,1
+1859,zehu lo zdani klama,1,1,1,1
+1860,zi lo zdani klama,1,1,1,1
+1861,za lo zdani klama,1,1,1,1
+1862,zu lo zdani klama,1,1,1,1
+1863,mi klama ze'i lo zdani,1,1,1,1
+1864,mi klama zehi lo zdani,1,1,1,1
+1865,mi klama ze'a lo zdani,1,1,1,1
+1866,mi klama zeha lo zdani,1,1,1,1
+1867,mi klama ze'u lo zdani,1,1,1,1
+1868,mi klama zehu lo zdani,1,1,1,1
+1869,mi klama zi lo zdani,1,1,1,1
+1870,mi klama za lo zdani,1,1,1,1
+1871,mi klama zu lo zdani,1,1,1,1
+1872,mi zi'i klama,1,0,0,0
+1873,mi zihi klama,1,0,0,0
+1874,mi bi'o klama,1,0,0,0
+1875,mi biho klama,1,0,0,0
+1876,mi bi'i klama,1,0,0,0
+1877,mi bihi klama,1,0,0,0
+1878,mi mi'i klama,1,0,0,0
+1879,mi mihi klama,1,0,0,0
+1880,mi zi'i lo zdani klama,1,0,0,0
+1881,mi zihi lo zdani klama,1,0,0,0
+1882,mi bi'o lo zdani klama,1,1,1,1
+1883,mi biho lo zdani klama,1,1,1,1
+1884,mi bi'i lo zdani klama,1,1,1,1
+1885,mi bihi lo zdani klama,1,1,1,1
+1886,mi mi'i lo zdani klama,1,1,1,1
+1887,mi mihi lo zdani klama,1,1,1,1
+1888,zi'i lo zdani klama,1,0,0,0
+1889,zihi lo zdani klama,1,0,0,0
+1890,bi'o lo zdani klama,1,0,0,1
+1891,biho lo zdani klama,1,0,0,1
+1892,bi'i lo zdani klama,1,0,0,1
+1893,bihi lo zdani klama,1,0,0,1
+1894,mi'i lo zdani klama,1,0,0,1
+1895,mihi lo zdani klama,1,0,0,1
+1896,mi klama zi'i lo zdani,1,0,0,0
+1897,mi klama zihi lo zdani,1,0,0,0
+1898,mi klama bi'o lo zdani,1,0,0,0
+1899,mi klama biho lo zdani,1,0,0,0
+1900,mi klama bi'i lo zdani,1,0,0,0
+1901,mi klama bihi lo zdani,1,0,0,0
+1902,mi klama mi'i lo zdani,1,0,0,0
+1903,mi klama mihi lo zdani,1,0,0,0
+1904,mi ve'i klama,1,1,1,1
+1905,mi vehi klama,1,1,1,1
+1906,mi ve'a klama,1,1,1,1
+1907,mi veha klama,1,1,1,1
+1908,mi ve'e klama,1,1,1,1
+1909,mi vehe klama,1,1,1,1
+1910,mi ve'u klama,1,1,1,1
+1911,mi vehu klama,1,1,1,1
+1912,mi ve'i lo zdani klama,1,1,1,1
+1913,mi vehi lo zdani klama,1,1,1,1
+1914,mi ve'a lo zdani klama,1,1,1,1
+1915,mi veha lo zdani klama,1,1,1,1
+1916,mi ve'e lo zdani klama,1,1,1,1
+1917,mi vehe lo zdani klama,1,1,1,1
+1918,mi ve'u lo zdani klama,1,1,1,1
+1919,mi vehu lo zdani klama,1,1,1,1
+1920,ve'i lo zdani klama,1,1,1,1
+1921,vehi lo zdani klama,1,1,1,1
+1922,ve'a lo zdani klama,1,1,1,1
+1923,veha lo zdani klama,1,1,1,1
+1924,ve'e lo zdani klama,1,1,1,1
+1925,vehe lo zdani klama,1,1,1,1
+1926,ve'u lo zdani klama,1,1,1,1
+1927,vehu lo zdani klama,1,1,1,1
+1928,mi klama ve'i lo zdani,1,1,1,1
+1929,mi klama vehi lo zdani,1,1,1,1
+1930,mi klama ve'a lo zdani,1,1,1,1
+1931,mi klama veha lo zdani,1,1,1,1
+1932,mi klama ve'e lo zdani,1,1,1,1
+1933,mi klama vehe lo zdani,1,1,1,1
+1934,mi klama ve'u lo zdani,1,1,1,1
+1935,mi klama vehu lo zdani,1,1,1,1
+1936,mi vi'i klama,1,1,1,1
+1937,mi vihi klama,1,1,1,1
+1938,mi vi'a klama,1,1,1,1
+1939,mi viha klama,1,1,1,1
+1940,mi vi'u klama,1,1,1,1
+1941,mi vihu klama,1,1,1,1
+1942,mi vi'e klama,1,1,1,1
+1943,mi vihe klama,1,1,1,1
+1944,mi vi'i lo zdani klama,1,1,1,1
+1945,mi vihi lo zdani klama,1,1,1,1
+1946,mi vi'a lo zdani klama,1,1,1,1
+1947,mi viha lo zdani klama,1,1,1,1
+1948,mi vi'u lo zdani klama,1,1,1,1
+1949,mi vihu lo zdani klama,1,1,1,1
+1950,mi vi'e lo zdani klama,1,1,1,1
+1951,mi vihe lo zdani klama,1,1,1,1
+1952,vi'i lo zdani klama,1,1,1,1
+1953,vihi lo zdani klama,1,1,1,1
+1954,vi'a lo zdani klama,1,1,1,1
+1955,viha lo zdani klama,1,1,1,1
+1956,vi'u lo zdani klama,1,1,1,1
+1957,vihu lo zdani klama,1,1,1,1
+1958,vi'e lo zdani klama,1,1,1,1
+1959,vihe lo zdani klama,1,1,1,1
+1960,mi klama vi'i lo zdani,1,1,1,1
+1961,mi klama vihi lo zdani,1,1,1,1
+1962,mi klama vi'a lo zdani,1,1,1,1
+1963,mi klama viha lo zdani,1,1,1,1
+1964,mi klama vi'u lo zdani,1,1,1,1
+1965,mi klama vihu lo zdani,1,1,1,1
+1966,mi klama vi'e lo zdani,1,1,1,1
+1967,mi klama vihe lo zdani,1,1,1,1
+1968,mi vi klama,1,1,1,1
+1969,mi va klama,1,1,1,1
+1970,mi vu klama,1,1,1,1
+1971,mi vi lo zdani klama,1,1,1,1
+1972,mi va lo zdani klama,1,1,1,1
+1973,mi vu lo zdani klama,1,1,1,1
+1974,vi lo zdani klama,1,1,1,1
+1975,va lo zdani klama,1,1,1,1
+1976,vu lo zdani klama,1,1,1,1
+1977,mi klama vi lo zdani,1,1,1,1
+1978,mi klama va lo zdani,1,1,1,1
+1979,mi klama vu lo zdani,1,1,1,1
+1980,mi ta'e klama,1,1,1,1
+1981,mi di'i klama,1,1,1,1
+1982,mi na'o klama,1,1,1,1
+1983,mi ru'i klama,1,1,1,1
+1984,mi ta'e lo zdani klama,1,1,1,1
+1985,mi di'i lo zdani klama,1,1,1,1
+1986,mi na'o lo zdani klama,1,1,1,1
+1987,mi ru'i lo zdani klama,1,1,1,1
+1988,ta'e lo zdani klama,1,1,1,1
+1989,di'i lo zdani klama,1,1,1,1
+1990,na'o lo zdani klama,1,1,1,1
+1991,ru'i lo zdani klama,1,1,1,1
+1992,mi klama ta'e lo zdani,1,1,1,1
+1993,mi klama di'i lo zdani,1,1,1,1
+1994,mi klama na'o lo zdani,1,1,1,1
+1995,mi klama ru'i lo zdani,1,1,1,1
+1996,ti me do broda,1,1,1,1
+1997,mi me lo ci gerku klama,1,1,1,1
+1998,mi jai gau broda,1,1,1,1
+1999,mi jai broda,1,1,1,1
+2000,mi re mei,1,1,1,1
+2001,mi re moi,1,1,1,1
+2002,mi re sihe,1,1,1,1
+2003,mi re si'e,1,1,1,1
+2004,mi re cuho,1,1,1,1
+2005,mi re cu'o,1,1,1,1
+2006,mi re vahe,1,1,1,1
+2007,mi re va'e,1,1,1,1
+2008,lo broda cu mei re,0,0,0,0
+2009,lo broda cu moi re,0,0,0,0
+2010,lo broda cu sihe re,0,0,0,0
+2011,lo broda cu si'e re,0,0,0,0
+2012,lo broda cu cuho re,0,0,0,0
+2013,lo broda cu cu'o re,0,0,0,0
+2014,lo broda cu vahe re,0,0,0,0
+2015,lo broda cu va'e re,0,0,0,0
+2016,mi klama soi vo'a vo'e,1,0,0,0
+2017,mi viska lo broda xi re,1,1,1,1
+2018,li pa xi re du re,1,0,0,0
+2019,mi klama cehe do,1,0,0,0
+2020,mi klama ce'e do,1,0,0,0
+2021,mi pehe je do klama,1,1,1,1
+2022,mi pe'e je do klama,1,1,1,1
+2023,mi bahe klama,1,1,1,1
+2024,mi ba'e klama,1,1,1,1
+2025,mi za'e klama,1,1,1,1
+2026,mi klama daho,1,1,1,1
+2027,mi klama da'o,1,1,1,1
+2028,mi dukse nuhi lo broda lo brode,1,1,1,1
+2029,mi dukse nu'i lo broda lo brode,1,1,1,1
+2030,mi dukse nu'i lo broda lo brode nuhu,1,1,1,1
+2031,mi dukse nu'i lo broda lo brode nu'u,1,1,1,1
+2032,fuhe mi klama,1,1,1,0
+2033,fu'e mi klama,1,1,1,0
+2034,mi klama fuhe,1,1,1,0
+2035,mi klama fu'e,1,1,1,0
+2036,fuho mi klama,1,1,1,1
+2037,fu'o mi klama,1,1,1,1
+2038,mi klama fuho,1,1,1,1
+2039,mi klama fu'o,1,1,1,1
+2040,mi cusku zo broda,1,1,1,1
+2041,mi cusku zoi gy. broda .gy,1,1,1,1
+2042,lo byklesi ku,1,1,1,1
+2043,lo cyklesi ku,1,1,1,1
+2044,mi byklesi,1,1,1,1
+2045,mi klama lo byklesi ku,1,1,1,1
+2046,lo byklama ku,1,1,1,1
+2047,lo bykukla ku,1,1,1,1
+2048,lo bynunkapi ku,1,1,1,1
+2049,lo bynaselci ku,1,1,1,1
+2050,lo byduduki ku,1,1,1,1
+2051,lo bykukybu'e ku,1,1,1,1
+2052,lo dyjamynai ku,1,1,1,1
+2053,lo byklaniku ku,1,1,1,1
+2054,lo BYklesi ku,1,1,1,1
+2055,lo bybroda ku,1,1,1,1
+2056,lo bycmalu ku,1,1,1,1
+2057,lo byzdani ku,1,1,1,1
+2058,lo cybroda ku,1,1,1,1
+2059,mi bybroda,1,1,1,1
+2060,lo bydjudi ku,1,1,1,1
+2061,lo bysligu ku,1,1,1,1
+2062,lo bynaku ku,0,0,0,0
+2063,lo bykuku ku,0,0,0,0
+2064,lo bynunu ku,0,0,0,0
+2065,lo byzozo ku,0,0,0,0
+2066,lo bypapa ku,0,0,0,0
+2067,lo bydada ku,0,0,0,0
+2068,lo cykuku ku,0,0,0,0
+2069,lo zykuku ku,0,0,0,0
+2070,mi bykuku,0,0,0,0
+2071,lo bykukai ku,0,0,0,0
+2072,lo bykule ku,0,0,0,0
+2073,lo bykubu ku,0,0,0,0
+2074,lo byvovu ku,0,0,0,0
+2075,lo bykuku broda,0,0,0,0
+2076,lo abu ku,0,0,0,0
+2077,lo ebu ku,0,0,0,0
+2078,lo cybu'u ku,0,0,0,0
+2079,lo byku ku,0,0,0,0
+2080,lo bykukula ku,1,0,0,0
+2081,lo kuku ku,1,0,0,0
+2082,lo kukai ku,1,0,0,0
+2083,mi kuku,1,0,0,0
+2084,mi bynaku klama,0,1,1,1
+2085,lo bydudu ku,0,1,1,1
+2086,mi bydudu,0,1,1,1
+2087,lo bydudu klama,0,1,1,1
+2088,lo bysukai ku,0,1,1,1
+2089,lo byfyklesi ku,0,1,1,1
+2090,lo bycyklesi ku,0,1,1,1
+2091,lo byklesi noi broda ku,0,1,1,1
+2092,mi byta'e klama,0,1,1,1
+2093,mi byca klama,0,1,1,1
+2094,mi klama byklesi,1,0,0,0
+2095,mi klesi byklesi,1,0,0,0
+2096,mi klama gi'e byklesi,1,0,0,0
+2097,mi suta byklesi,1,1,1,1
+2098,fa nai mi klama,1,1,1,0
+2099,mi klama fa nai,1,1,1,0
+2100,fai nai mi klama,1,1,1,0
+2101,mi klama fai nai,1,1,1,0
+2102,fe nai mi klama,1,1,1,0
+2103,mi ji do klama lo zdani,1,1,1,1
+2104,do ji mi broda,1,1,1,1
+2105,li pa ji nai re,1,1,1,1
+2106,va'u mi klama,1,1,1,1
+2107,se va'u mi klama,1,1,1,1
+2108,mi klama se va'u lo nu broda,1,1,1,1
+2109,mi klama fa ku,1,1,1,1
+2110,fa ku,1,1,1,1
+2111,mi klama fa ku do,1,1,1,1
+2112,mi klama fa nai ku,1,1,1,0
+2113,mi klama fa fi'a ku,1,1,1,1
+2114,mi klama va'u,1,1,1,1
+2115,mi klama se va'u ku,1,1,1,1
+2116,se va'u ku mi klama,1,1,1,1
+2117,mi fa klama,1,1,1,1
+2118,fa broda,1,1,1,1
+2119,mi klama va'u do,1,1,1,1
+2120,mi klama bai do,1,1,1,1
+2121,mi klama fa mi ku,0,0,0,0
+2122,mi klama va'u mi ku,0,0,0,0
+2123,farlu ju'i co cnita,1,1,1,1
+2124,.oi ta ca'o farlu ju'i co cnita,1,1,1,1
+2125,mi farlu ju'i co cnita,1,1,1,1
+2126,farlu ju'i co se cnita,1,1,1,1
+2127,farlu ju'i co na'e cnita,1,1,1,1
+2128,farlu ju'i co nu broda kei,1,1,1,1
+2129,farlu ju'i co cnita co brodi,1,1,1,1
+2130,farlu ju'i co cnita gi'e brodi,1,1,1,1
+2131,mi klama .ui co broda,1,1,1,1
+2132,farlu ju'i co ja'a cnita,0,0,0,0
+2133,farlu ju'i co na cnita,0,0,0,0
+2134,farlu ju'i co cnita dohu,0,0,0,0
+2135,farlu ju'i co cnita ku,0,0,0,0
+2136,farlu ju'i co broda gi broda,0,0,0,0
+2137,mi klama bo cadzu bo bajra,1,1,1,1
+2138,mi broda bo brode,1,1,1,1
+2139,mi viska lo broda bo brode ku,1,1,1,1
+2140,mi broda gi'e brode bo brodi,1,1,1,1
+2141,mi klama co cadzu bo bajra,1,1,1,1
+2142,mi na'e bo broda,0,0,0,0
+2143,na'e bo broda,0,0,0,0
+2144,to'e bo broda,0,0,0,0
+2145,jai se gau,0,0,1,1
+2146,mi jai se gau broda,1,1,1,1
+2147,mi jai se gau klama lo zdani,1,1,1,1
+2148,mi jai se ta'i broda,1,1,1,1
+2149,mi jai na'e gau broda,1,1,1,1
+2150,mi jai se na'e gau broda,1,1,1,0
+2151,mi jai na'e se gau broda,1,1,1,1
+2152,mi jai se pu broda,1,1,1,0
+2153,mi jai se gau broda co brodi,1,1,1,1
+2154,mi jai na gau broda,0,0,1,1
+2155,mi jai ja'a gau broda,0,0,1,1
+2156,mi jai se ja'a gau broda,0,0,0,0
+2157,mi jai se go broda,0,0,0,0
+2158,mi broda joi nai brode,1,1,1,1
+2159,mi broda joi bo brode,1,1,1,1
+2160,mi broda se joi brode,1,1,1,1
+2161,mi broda bi'i brode,1,1,1,1
+2162,mi broda ga'o bi'i ke'i brode,1,1,1,1
+2163,mi broda bi'i nai brode,1,1,1,1
+2164,mi broda se bi'i brode,1,1,1,1
+2165,mi broda joi brode gi'e brodi,1,1,1,1
+2166,mi broda joi brode joi brodi,1,1,1,1
+2167,mi broda joi brode co brodi,1,1,1,1
+2168,mi broda joi brode .ui brodi,1,1,1,1
+2169,mi broda joi ju'i dohu brode,1,1,1,1
+2170,mi klama gi'e ju'i do cadzu,1,1,1,1
+2171,farlu ju'i do cnita,1,1,1,1
+2172,mi broda na joi brode,1,1,1,1
+2173,mi broda na se joi brode,1,1,1,1
+2174,mi broda na gi'e brode,1,1,1,1
+2175,mi broda se gi'e brode,1,1,1,1
+2176,mi broda na gi'a brode,1,1,1,1
+2177,mi broda se gi'a brode,1,1,1,1
+2178,mi broda e brode,0,0,0,0
+2179,mi broda a brode,0,0,0,0
+2180,mi broda joi ju'i brode,0,0,0,0
+2181,mi broda je ju'i brode,0,0,0,0
+2182,mi klama gi'e ju'i cadzu,0,0,0,0
+2183,mi broda joi brode gi brodi,0,0,0,0
+2184,mi broda je brode ku brodi,0,0,0,0
+2185,mi viska lo broda joi brode ku,0,1,1,1
+2186,mi viska lo broda bi'i brode ku,0,1,1,1
+2187,mi broda vei ny su'i pa mai,0,0,0,0
+2188,mi broda li pa mai,1,0,0,0
+2189,mi klama ri,1,1,1,1
+2190,mi klama ra,1,1,1,1
+2191,mi klama ru,1,1,1,1
+2192,mi viska lo broda .i mi viska ri,1,1,1,1
+2193,mi klama lo ni broda ku,1,1,1,1
+2194,lo pa mi gerku ku barda,0,0,0,0
+2195,lo pa le gerku ku barda,0,1,1,1
+2196,mi pu bo ge broda gi broda,1,0,0,0
+2197,mi caku klama,1,1,1,1
+2198,caku mi klama,0,1,1,1
+2199,li pa du re,1,0,0,0
+2200,lo aburobu ku,1,0,0,0
+2201,mi klama lo broda be'o,0,0,0,0
+2202,mi klama ke lo zdani broda ke'e,1,1,1,1
+2203,ganai mi broda gi mi klama,1,1,1,0
+2204,mi ge broda gi brode,1,1,1,0
+2205,xu do klama,1,1,1,1
+2206,li vei ny su'i pa ve'o du re,1,0,0,0
+2207,.i sy mintu lo purdykurji lo ka ma kau tarmi ce'u .i clani kurfa gi'e plita gi'e se kojna lo xance jo'u lo jamfu,1,1,1,1
+2208,sy mintu lo purdykurji lo ka ma kau tarmi ce'u,1,1,1,1
+2209,lo ka ma kau tarmi ce'u cu se nelci mi,1,1,1,1
+2210,mi djica lo ka ma kau tarmi ce'u,1,1,1,1
+2211,mi klama ce'u,1,1,1,1
+2212,mi klama zi'o,1,1,1,1
+2213,mi klama ce'u zi'o,1,1,1,1
+2214,ma klama ce'u,1,1,1,1
+2215,mi klama cehu,1,1,1,1
+2216,xu dai do klama,1,1,1,1
+2217,mi nelci do .u'u dai,1,1,1,1
+2218,mi klama ca'e broda,1,1,1,1
+2219,mi broda dai brode,1,1,1,1
+2220,mi pau broda,1,1,1,1
+2221,mi klama dai ru'e,1,1,1,1
+2222,tu'a klama,0,0,0,0
+2223,mi tu'a klama,0,0,0,0
+2224,mi viska tu'a,0,0,0,0
+2225,mi djica tu'a,0,0,0,0
+2226,tai tu'a,0,0,0,0
+2227,tu'a zo'u broda,0,0,0,0
+2228,mi cu tu'a lo since,0,0,0,0
+2229,tuha klama,0,0,0,0
+2230,tai tu'a lo since,1,1,1,1
+2231,mi djica tu'a do,1,1,1,1
+2232,mi djica tu'a do lu'u,1,1,1,1
+2233,tu'a do,1,1,1,1
+2234,tu'a lo broda cu brode,1,1,1,1
+2235,tu'a mi klama,1,1,1,1
+2236,mi klama tu'a lo zdani,1,1,1,1
+2237,mi klama tu'a lo zdani broda,1,1,1,1
+2238,lu'e tu'a lo si'o broda,1,1,1,1
+2239,tu'a do zo'u broda,1,1,1,1
+2240,tuha do,1,1,1,1
+2241,mi djica tuha do,1,1,1,1
+2242,mi to klama .i do broda,1,1,1,1
+2243,mi to klama toi do broda,1,1,1,1
+2244,mi to klama,1,1,1,1
+2245,mi to klama toi,1,1,1,1
+2246,to broda,1,1,1,1
+2247,to broda toi,1,1,1,1
+2248,mi viska do to do klama toi,1,1,1,1
+2249,mi to klama toi broda,1,1,1,1
+2250,mi to klama .i do broda toi,1,1,1,1
+2251,ju'i tu'a do,1,1,1,1
+2252,farlu ju'i tu'a do cnita,1,1,1,1
+2253,mi klama gi'e ju'i tu'a do cadzu,1,1,1,1
+2254,li la'e pa su'i re lohO,0,1,1,1
+2255,li tu'a pa su'i re lohO,0,1,1,1
+2256,mi na sai muvdu,1,1,1,1
+2257,mi na sai ka'e muvdu,1,1,1,1
+2258,mi na'e sai muvdu,1,1,1,1
+2259,mi na'e sai ka'e muvdu,1,1,0,1
+2260,mi to'e cu'i ka'e muvdu,1,1,0,1
+2261,mi no'e cai muvdu,1,1,1,1
+2262,mi je'a ru'e ka'e muvdu,1,1,0,1
+2263,mi ja'a sa'e muvdu,1,1,1,1
+2264,mi sai cai muvdu,1,1,1,1
+2265,mi cu'i sai muvdu,1,1,1,1
+2266,mi na sai nai muvdu,1,1,1,1
+2267,mi klama gi'e na sai ka'e muvdu,1,1,1,1
+2268,sai nai mi klama,1,1,1,1
+2269,mi na'e ba'e mutce,1,1,1,1
+2270,.i lo se kecti cu sligau lo rebla tai lo nu tolgei kei gi'e na sai ka'e muvdu,1,1,1,1
+2271,mi na'e lo broda cu blanu,1,1,1,1
+2272,mi to'e bo lo broda cu blanu,1,1,1,1
+2273,mi no'e lo broda cu blanu,1,1,1,1
+2274,mi je'a bo lo broda cu blanu,1,1,1,1
+2275,mi na lo broda cu blanu,1,1,1,1
+2276,mi ja'a lo broda cu blanu,1,1,1,1
+2277,na le gerku cu batci,1,1,1,1
+2278,mi me na'e bo lo broda,1,1,1,1
+2279,mi viska na'e bo lo broda,1,1,1,1
+2280,mi bo do cu blanu,1,1,1,1
+2281,mi lo broda bo lo brode cu blanu,1,1,1,1
+2282,mi bo do bo di'u cu blanu,1,1,1,1
+2283,mi na bo do cu blanu,1,1,1,0
+2284,fa bo do cu blanu,1,1,1,0
+2285,lo broda bo lo brode ku,1,1,1,1
+2286,.i go'i fa ro me na'e bo lo rebyrespa noi simlu lo ka dukse lo ka se sfasa kei lo nu zukte lo drata be lo nu kalri moklu zutse gi'e gapru catlu lo drudi be lo kumfa ,1,1,1,1
+2287,mi na'e go'i cu blanu,0,0,0,0
+2288,mi na go'i cu blanu,0,0,0,0
+2289,lo na'e lo broda ku,0,0,0,0
+2290,lo na'e bo broda ku,0,0,0,0
+2291,mi se bo do cu blanu,0,0,0,0
+2292,mi tavla bo do,0,0,0,0
+2293,mi klama pu,1,1,1,1
+2294,mi klama ba,1,1,1,1
+2295,mi ca'o,1,1,1,1
+2296,mi klama za'o,1,1,1,1
+2297,mi klama vi,1,1,1,1
+2298,mi'o vi,1,1,1,1
+2299,critu ca,1,1,1,1
+2300,mi klama pu ba,1,1,1,1
+2301,mi klama ba zi,1,1,1,1
+2302,mi klama mo'i ni'a,1,1,1,1
+2303,.a'u do,1,1,1,1
+2304,pe'i do,1,1,1,1
+2305,.a'u do vau,1,1,1,1
+2306,coi .ui do,1,1,1,1
+2307,coi .ui,1,1,1,1
+2308,ju'i .ui do,1,1,1,1
+2309,mi klama bi'o,0,0,0,0
+2310,mi klama bi'i,0,0,0,0
+2311,mi klama mi'i,0,0,0,0
