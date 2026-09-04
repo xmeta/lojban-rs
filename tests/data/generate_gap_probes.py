@@ -608,6 +608,21 @@ STRUCTURAL_PROBES = [
     "ju'i tu'a do",
     "farlu ju'i tu'a do cnita",
     "mi klama gi'e ju'i tu'a do cadzu",
+    # v0.119: 語中有声混在(Tatoeba「ra dusbarda」型。z0/z1/maf 全数実測)。
+    # 上段は受理ピン、下段は禁止残差ピン(ss/sc/cs/cc/jj/zz/jz/zj/cx/xc/kx/xk)
+    "ra dusbarda",
+    "dusbarda",
+    "gasbarda",
+    "gacbarda",
+    "gajparda",
+    "gazxarda",
+    "gabsarda",
+    "gatbarda",
+    "kesdirgo",
+    "gassarda",
+    "gaccarda",
+    "gajzarda",
+    "gaxcbarda",
 ]
 
 

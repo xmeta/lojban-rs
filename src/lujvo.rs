@@ -191,12 +191,13 @@ fn is_initial_pair(a: u8, b: u8) -> bool {
     )
 }
 
-/// 語中の子音ペアの許容性(CLL 3.6)。
+/// 語中の子音ペアの許容性(v0.119: zantufa 実測に同期)。
 ///
-/// 1) 同一子音の連続は不可
-/// 2) 有声と無声の混在は不可(l m n r は中立で例外)
-/// 3) c j s z のうち2つの組合せは不可
-/// 4) cx kx xc xk mz は不可
+/// z0/z1/maf の全数マトリクス実測(sibilant×子音・有声先行・無声先行)では
+/// 有声/無声の混在は全て受理されるため、CLL 3.6 の混在禁止は適用しない。
+/// 禁止は同一子音の連続・{cx,xc,kx,xk,mz}(mz は z0 のみ拒否の参照分裂で
+/// 維持)・摩擦音対のうち {ss,sc,cs,cc,jj,zz,jz,zj} のみ
+/// (js/sj/zs/sz/cz/zc は参照 3 種が受理する実測)。
 fn is_permissible_medial(a: u8, b: u8) -> bool {
     let x = a.to_ascii_lowercase();
     let y = b.to_ascii_lowercase();
@@ -205,18 +206,20 @@ fn is_permissible_medial(a: u8, b: u8) -> bool {
     }
     if matches!(
         (x, y),
-        (b'c', b'x') | (b'x', b'c') | (b'k', b'x') | (b'x', b'k') | (b'm', b'z')
+        (b'c', b'x')
+            | (b'x', b'c')
+            | (b'k', b'x')
+            | (b'x', b'k')
+            | (b'm', b'z')
+            | (b's', b's')
+            | (b's', b'c')
+            | (b'c', b's')
+            | (b'c', b'c')
+            | (b'j', b'j')
+            | (b'z', b'z')
+            | (b'j', b'z')
+            | (b'z', b'j')
     ) {
-        return false;
-    }
-    let voiced = |c: u8| matches!(c, b'b' | b'd' | b'g' | b'j' | b'v' | b'z');
-    let unvoiced = |c: u8| matches!(c, b'c' | b'f' | b'k' | b'p' | b's' | b't' | b'x');
-    let neutral = |c: u8| matches!(c, b'l' | b'm' | b'n' | b'r');
-    if !neutral(x) && !neutral(y) && voiced(x) != voiced(y) && (voiced(x) || unvoiced(x)) {
-        return false;
-    }
-    let sibilant = |c: u8| matches!(c, b'c' | b'j' | b's' | b'z');
-    if sibilant(x) && sibilant(y) {
         return false;
     }
     true
@@ -600,9 +603,12 @@ mod tests {
         // ger + zda: 境界 rz は語中では合法なので y は不要
         let b = build(&["ger", "zda"]).unwrap();
         assert_eq!(b.word, "gerzda");
-        // 境界が不許容(例: sd は有声無声混在)の場合は y が入る
+        // v0.119: sd の有声無声混在は zantufa が受理する実測のため y なし
+        // (kesdirgo は z0/z1/maf 全受理)。y が入る例は ss 等の残存禁止対
         let b = build(&["kes", "dirgo"]).unwrap();
-        assert_eq!(b.word, "kesydirgo");
+        assert_eq!(b.word, "kesdirgo");
+        let b = build(&["bas", "sarji"]).unwrap();
+        assert_eq!(b.word, "basysarji");
     }
 
     #[test]

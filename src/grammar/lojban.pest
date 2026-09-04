@@ -980,20 +980,25 @@ l = _{ ("l" | "L") ~ !h ~ !glide ~ !("l" | "L") }
 m = _{ ("m" | "M") ~ !h ~ !glide ~ !("m" | "M") }
 n = _{ ("n" | "N") ~ !h ~ !glide ~ !("n" | "N") ~ !affricate }
 r = _{ ("r" | "R") ~ !h ~ !glide ~ !("r" | "R") }
-b = _{ ("b" | "B") ~ !h ~ !glide ~ !("b" | "B") ~ !unvoiced }
-d = _{ ("d" | "D") ~ !h ~ !glide ~ !("d" | "D") ~ !unvoiced }
-g = _{ ("g" | "G") ~ !h ~ !glide ~ !("g" | "G") ~ !unvoiced }
-v = _{ ("v" | "V") ~ !h ~ !glide ~ !("v" | "V") ~ !unvoiced }
-j = _{ ("j" | "J") ~ !h ~ !glide ~ !("j" | "J") ~ !("z" | "Z") ~ !unvoiced }
-z = _{ ("z" | "Z") ~ !h ~ !glide ~ !("z" | "Z") ~ !("j" | "J") ~ !unvoiced }
-s = _{ ("s" | "S") ~ !h ~ !glide ~ !("s" | "S") ~ !("c" | "C") ~ !voiced }
-c = _{ ("c" | "C") ~ !h ~ !glide ~ !("c" | "C") ~ !("s" | "S") ~ !("x" | "X") ~ !voiced }
-x = _{ ("x" | "X") ~ !h ~ !glide ~ !("x" | "X") ~ !("c" | "C") ~ !("k" | "K") ~ !voiced }
-k = _{ ("k" | "K") ~ !h ~ !glide ~ !("k" | "K") ~ !("x" | "X") ~ !voiced }
-f = _{ ("f" | "F") ~ !h ~ !glide ~ !("f" | "F") ~ !voiced }
-p = _{ ("p" | "P") ~ !h ~ !glide ~ !("p" | "P") ~ !voiced }
-t = _{ ("t" | "T") ~ !h ~ !glide ~ !("t" | "T") ~ !voiced }
+b = _{ ("b" | "B") ~ !h ~ !glide ~ !("b" | "B") }
+d = _{ ("d" | "D") ~ !h ~ !glide ~ !("d" | "D") }
+g = _{ ("g" | "G") ~ !h ~ !glide ~ !("g" | "G") }
+v = _{ ("v" | "V") ~ !h ~ !glide ~ !("v" | "V") }
+j = _{ ("j" | "J") ~ !h ~ !glide ~ !("j" | "J") ~ !("z" | "Z") }
+z = _{ ("z" | "Z") ~ !h ~ !glide ~ !("z" | "Z") ~ !("j" | "J") }
+s = _{ ("s" | "S") ~ !h ~ !glide ~ !("s" | "S") ~ !("c" | "C") }
+c = _{ ("c" | "C") ~ !h ~ !glide ~ !("c" | "C") ~ !("s" | "S") ~ !("x" | "X") }
+x = _{ ("x" | "X") ~ !h ~ !glide ~ !("x" | "X") ~ !("c" | "C") ~ !("k" | "K") }
+k = _{ ("k" | "K") ~ !h ~ !glide ~ !("k" | "K") ~ !("x" | "X") }
+f = _{ ("f" | "F") ~ !h ~ !glide ~ !("f" | "F") }
+p = _{ ("p" | "P") ~ !h ~ !glide ~ !("p" | "P") }
+t = _{ ("t" | "T") ~ !h ~ !glide ~ !("t" | "T") }
 
+// v0.119: 語中有声混在の許容(zantufa 実測)。CLL 3.6 の有声/無声混在
+// 禁止は zantufa の medial では適用されない実測(Tatoeba「dusbarda」型。
+// s/c/j/z/b/d/g/v/f/p/t/k/x の混在は全て受理)。禁止は同字連続・
+// {ss,sc,cs,cc,jj,zz,jz,zj}・{cx,xc,kx,xk,mz}(mz は z0 のみ拒否の参照分裂で
+// 維持)のみ。各文字規則の !voiced/!unvoiced を除去し、残差は明示列挙に集約
 consonant = _{ voiced | unvoiced | syllabic }
 syllabic  = _{ l | m | n | r }
 voiced    = _{ b | d | g | j | v | z }

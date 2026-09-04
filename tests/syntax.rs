@@ -5448,3 +5448,34 @@ fn 尾部裸時制と先頭free断片と呼格内free_v0_118() {
     let s = parse_ok("mi co'u klama");
     assert!(s.contains("ZAhO_core \"co'u\""), "{s}");
 }
+
+#[test]
+fn 語中有声混在と摩擦音対_v0_119() {
+    // Tatoeba「ra dusbarda」型。z0/z1/maf の全数マトリクス実測では
+    // 有声/無声の混在は全て受理される
+    for w in [
+        "dusbarda", "gasbarda", "gasdarda", "gasgarda", "gasvarda", "gasjarda", "gaszarda",
+        "gacbarda", "gaczarda", "gajparda", "gazxarda", "gabsarda", "gatbarda", "gafbarda",
+        "gapbarda", "gaxbarda", "gakbarda", "kesdirgo",
+    ] {
+        parse_ok(w);
+    }
+    // 禁止残差(参照 3 種とも拒否)
+    for w in [
+        "gassarda",
+        "gascarda",
+        "gaccarda",
+        "gajjarda",
+        "gazzarda",
+        "gajzarda",
+        "gazjarda",
+        "gaxcbarda",
+        "gaxkbarda",
+        "gakxbarda",
+    ] {
+        assert!(lojban::parse(w).is_err(), "{w}");
+    }
+    // mz は変更前から受理済み(z1/maf 受理・z0 のみ拒否の参照分裂)。
+    // 本版の変更対象外だが現状を固定する
+    parse_ok("gamzbarda");
+}

@@ -1,13 +1,13 @@
 # 開発ステータス
 
-## 現在の状態: v0.118 完成(P1 残存バグ掃引・全テストグリーン)
+## 現在の状態: v0.119 完成(語中有声混在・全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語227 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体308 + doc 11 = 計319テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語228 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体309 + doc 11 = 計320テスト + example 内 unit test 5 全パス
 - tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件、
   v0.109 でバッチ2(接続詞・前置系)の 4 件、v0.110 でバッチ3(形態論・共有・前処理系)の 4 件を
   解消し全 12 テストが緑(下記「既知GAP」参照)
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.118.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.119.0)
 
 ### 帳簿整理(v0.114 版数のまま。文法・受理挙動の変更なし)
 
@@ -29,6 +29,41 @@
   語長上限 50 による rafsi 指数と stack overflow の封じ込み)。
   tests/fuzz.rs に lu ネスト最悪深度の境界テストを 1 本追加
   (fuzz の内訳 8→9。単体 298→299)
+
+## v0.119 で追加(語中有声混在の許容と xa'emi'o 型 OVER の記録)
+
+### sb 対マトリクス実測(Tatoeba「ra dusbarda」型の解消)
+
+- s/c/j/z ×子音・有声先行・無声先行の全数マトリクス(z0/z1/maf)を実測:
+  有声/無声の混在は全て参照 3 種が受理。CLL 3.6 の混在禁止は zantufa の
+  medial では適用されていない
+- 禁止残差(参照 3 種とも拒否): 同字連続・{ss,sc,cs,cc,jj,zz,jz,zj}・
+  {cx,xc,kx,xk}。mz は z0 のみ拒否の参照分裂(z1/maf 受理・本実装は変更前
+  から受理のため現状維持を記録)
+- 実装: 文字規則(b/d/g/v/j/z/s/c/x/k/f/p/t)の !voiced/!unvoiced 除去と
+  lujvo.rs is_permissible_medial の同期(禁止集合の明示列挙化)。
+  lujvo 生成テスト kesydirgo→kesdirgo を更新(kesdirgo は参照 3 種受理)
+
+### xa'emi'o 型 OVER の記録(未修正・別課題)
+
+- Tatoeba 差分の唯一の OVER。13 形マトリクスで確定: xa'e/ce'a 始まりのみ
+  真の OVER(自実装が BRIVLA 丸呑み・z0 は拒否)。la'e/se'e/be'e/a'e 始まりは
+  受理一致・木のみ相違(z0 は LAhE+項/lerfu+項/COI+項/UI+KOhA に分割)
+- 機構(特定済み): z0 の cmavo は &post_word(pause / !nucleus lojban_word)で
+  終端するため「xa'e」+残部(語)に分割し、xa'e が無所属で全体拒否。
+  本実装の &word_boundary(硬境界)では分割できず !cmavo が素通りする
+- cmavo 境界の post_word 移植を試行したが、妥当な分割経路なしに valid 4 形
+  (la'emi'o 等)まで拒否するため revert。無空白 cmavo 分割は語彙規則全体の
+  間隔設計に関わるため別課題として記録(本版では受理集合を変更しない)
+
+### 掃引結果(v0.119。プローブ 2,324 行=2,311 行+新規 13 行)
+
+- ours ok 2,209 / z0 ok 2,069 / z1 ok 2,069 / maftufa ok 2,036。
+  GAP 候補 29 件、OVER 候補 145 件(ともに不変)
+- ok→err ゼロ、既存行の err→ok ゼロ、参照列の変化ゼロ。新規 13 行は
+  9 行が全緑+4 行が拒否ピン
+- tests/syntax.rs に 1 テスト追加、lujvo 単体テスト 1 更新。
+  cargo test 320 全パス
 
 ## v0.118 で追加(P1 残存バグ掃引: 尾部裸時制・先頭 free 断片・呼格内 free・語彙)
 
