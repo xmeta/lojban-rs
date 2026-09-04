@@ -5058,3 +5058,227 @@ fn ni_は数詞に収録せず抽象の木を維持() {
         assert!(s.contains(&format!("NU_core \"{w}\"")), "{w}: {s}");
     }
 }
+
+// =====================================================================
+// v0.115: UI+NAI 無空白融合形(UINAI_joint 拡張)と旧 UI 語 h 変体(UI_core 拡張)。
+//
+// zantufa(z0)は UI 語と nai の無ポーズ隣接を受理する(dainai = UI(dai) +
+// post_clause(free(UI nai)))が、本実装は無ポーズ隣接を一般にサポートしないため、
+// UI_core 全語形(126 形)× nai の融合形を z0/z1/maf 全数実測の上で語形列挙した
+// (実測: 125 形が参照 3 種受理・kiahanai のみ参照 3 種とも拒否)。
+// word_boundary の都合上、融合形は個別の @ トークンとして UINAI_joint に定義
+// (UI_core ~ NAI_core の連結は語境界で失敗する)。
+// また旧 UI 語の h 変体 26 形を UI_core に追加(全形 z0/z1/maf の自由修飾語
+// 2 位置+UI+NAI/UI+CAI 空白形で再実測)。
+//
+// ガードの副作用: tanru_unit の BRIVLA ガード(!(... | UINAI_joint | ...))により、
+// 融合形トークンが fuhivla 誤読の tanru 単位として吸収されなくなる
+// (「mi klama dainai」は tail free の正規 UI 読みに統一、「lo dainai ku」は
+// 参照 3 種整合の拒否に変更 — いずれも z0 整合)。救済のため desc/quant_desc の
+// LE 直後と selbri の時制連鎖後に自由修飾語スロットを追加
+// (「lo dainai broda ku」「mi pu dainai klama」。zantufa は全語の直後に
+// post_clause の free を取るため参照 3 種はこれらの位置の free を受理する)
+// =====================================================================
+
+#[test]
+fn 融合感情否定_文頭形_木ピン_v0_115() {
+    // UINAI_joint は 1 トークンとして item free 経由で受理される
+    // (z0 は UI+UI の無ポーズ隣接の 2 語読み。結合表記と同方針の既知木形状差異)
+    let s = parse_ok("dainai mi klama");
+    assert!(s.contains("UINAI_joint \"dainai\""), "{s}");
+    assert!(!s.contains("BRIVLA_core \"dainai\""), "{s}");
+    assert!(
+        s.contains("(item (sentence (free (free_unit (ui_free (UINAI_joint \"dainai\"))))"),
+        "{s}"
+    );
+    let s = parse_ok("ionai mi klama");
+    assert!(s.contains("UINAI_joint \"ionai\""), "{s}");
+    let s = parse_ok("paunai mi klama");
+    assert!(s.contains("UINAI_joint \"paunai\""), "{s}");
+    // 旧語の新収録融合形(ta'u+nai。既存の ta'o+nai = ta'onai とは別語形)
+    let s = parse_ok("ta'unai mi klama");
+    assert!(s.contains("UINAI_joint \"ta'unai\""), "{s}");
+    let s = parse_ok("uinai mi klama");
+    assert!(s.contains("UINAI_joint \"uinai\""), "{s}");
+}
+
+#[test]
+fn 融合感情否定_文末形_正規ui読み_v0_115() {
+    // v0.114 までは fuhivla 緩さの tanru 誤読で偶然受理していた。
+    // tanru_unit ガード(UINAI_joint 排除)により tail free の正規 UI 読みに統一
+    let s = parse_ok("mi klama dainai");
+    assert!(s.contains("UINAI_joint \"dainai\""), "{s}");
+    assert!(!s.contains("BRIVLA_core \"dainai\""), "{s}");
+    assert!(
+        s.contains("(tail_terms (free (free_unit (ui_free (UINAI_joint \"dainai\")))))"),
+        "{s}"
+    );
+    // 既存語形(文末)の木は v0.114 から tail free で不変
+    let s = parse_ok("mi klama u'inai");
+    assert!(
+        s.contains("(tail_terms (free (free_unit (ui_free (UINAI_joint \"u'inai\")))))"),
+        "{s}"
+    );
+    // tanru 単位間の融合形は tanru_post 経路(free は平準化される既知クラス)
+    let s = parse_ok("mi klama dainai brode");
+    assert!(s.contains("UINAI_joint \"dainai\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"brode\""), "{s}");
+    assert!(!s.contains("BRIVLA_core \"dainai\""), "{s}");
+}
+
+#[test]
+fn 融合感情否定_全数受理_v0_115() {
+    // UINAI_joint 152 形の全数ピン(文頭・文末の両位置)。
+    // 既存 26 形の不変ピンを兼ねる。語形間に前置衝突がないことを
+    // 実装時に全数確認済み(どの語形も他の語形の接頭辞ではない)
+    let old26 = [
+        "ta'onai", "ja'onai", "ku'inai", "po'onai", "da'inai", "je'unai", "la'anai", "za'anai",
+        "ga'inai", "zu'unai", "ba'anai", "ju'onai", "cu'inai", "ji'anai", "ru'anai", "ehinai",
+        "e'inai", "ihinai", "i'inai", "ohanai", "o'anai", "kahunai", "ka'unai", "a'unai", "u'inai",
+        "u'unai",
+    ];
+    // v0.115 新規: UI_core 既存語形の融合形 100 形
+    let new100 = [
+        "ru'enai", "pe'inai", "sa'enai", "e'onai", "e'enai", "ehunai", "e'unai", "ohunai",
+        "o'unai", "a'enai", "i'anai", "buhonai", "bu'onai", "kuhinai", "dahinai", "jehunai",
+        "lahanai", "zahanai", "gahinai", "uhonai", "u'onai", "kaunai", "ruhanai", "jihanai",
+        "zuhunai", "bahanai", "ainai", "aunai", "ki'anai", "zo'onai", "o'onai", "u'anai", "u'enai",
+        "cainai", "uinai", "oinai", "ienai", "iinai", "uunai", "uanai", "uenai", "uonai", "ianai",
+        "iunai", "einai", "xunai", "i'enai", "be'enai", "be'unai", "di'ainai", "fau'unai",
+        "ge'enai", "li'anai", "ni'aunai", "peinai", "o'inai", "su'anai", "a'inai", "ahinai",
+        "a'onai", "ahonai", "ca'enai", "cahenai", "dainai", "e'anai", "ehanai", "ionai", "ju'anai",
+        "juhanai", "ke'unai", "kehunai", "le'onai", "lehonai", "li'onai", "lihonai", "o'enai",
+        "ohenai", "paunai", "pa'enai", "pahenai", "ra'unai", "rahunai", "ro'anai", "rohanai",
+        "ro'onai", "rohonai", "se'anai", "sehanai", "si'anai", "sihanai", "ta'unai", "tahunai",
+        "ti'enai", "tihenai", "to'unai", "tohunai", "va'inai", "vahinai", "vu'enai", "vuhenai",
+    ];
+    // v0.115 新規: UI_core h 変体 26 形の融合形
+    let hv26 = [
+        "sahenai", "ohinai", "tahonai", "pehinai", "juhonai", "uhinai", "uhunai", "ruhenai",
+        "ehonai", "ehenai", "ahenai", "ihanai", "zohonai", "ahunai", "ohonai", "uhanai", "uhenai",
+        "ihenai", "behenai", "behunai", "dihainai", "fauhunai", "gehenai", "lihanai", "nihaunai",
+        "suhanai",
+    ];
+    for f in old26.iter().chain(new100.iter()).chain(hv26.iter()) {
+        let s = parse_ok(&format!("{f} mi klama"));
+        assert!(s.contains(&format!("UINAI_joint \"{f}\"")), "{f}: {s}");
+        let s = parse_ok(&format!("mi klama {f}"));
+        assert!(s.contains(&format!("UINAI_joint \"{f}\"")), "{f}: {s}");
+        assert!(!s.contains(&format!("BRIVLA_core \"{f}\"")), "{f}: {s}");
+    }
+    // kiahanai(ki'a の結合形)のみ参照 3 種とも拒否で不収録(z0 整合)
+    assert!(
+        lojban::parse("kiahanai mi klama").is_err(),
+        "kiahanai は拒否"
+    );
+    assert!(
+        lojban::parse("mi klama kiahanai").is_err(),
+        "kiahanai 文末形も拒否"
+    );
+}
+
+#[test]
+fn 融合感情否定_cai後置と既存空白形の不変_v0_115() {
+    // 融合形 + CAI(強度)。z0 は dai+nai+ru'e の 3 free 連続で受理するが、
+    // 本実装は UINAI_joint(1 トークン)+ free(UI ru'e)の 2 単位。受理一致
+    let s = parse_ok("dainai ru'e mi klama");
+    assert!(s.contains("UINAI_joint \"dainai\""), "{s}");
+    assert!(s.contains("UI_core \"ru'e\""), "{s}");
+    let s = parse_ok("dainai cai mi klama");
+    assert!(s.contains("UINAI_joint \"dainai\""), "{s}");
+    assert!(s.contains("UI_core \"cai\""), "{s}");
+    // sai/cu'i は zantufa が UI 語彙に包含するため参照 3 種受理だが、
+    // 本実装は CAI_core のみの既知差分クラス(次バッチ課題)。融合形でも同様
+    assert!(lojban::parse("dainai sai mi klama").is_err());
+    assert!(lojban::parse("dainai cu'i mi klama").is_err());
+    assert!(lojban::parse("dai nai sai mi klama").is_err());
+    // 既存不変ピン: UI+CAI 空白形(CAI スロットの木。ruhe は v0.115 で UI_core
+    // にも収録したが CAI スロットの読みは不変)
+    let s = parse_ok("mi u'i ruhe broda");
+    assert!(s.contains("UI_core \"u'i\""), "{s}");
+    assert!(s.contains("(CAI_clause (CAI_core \"ruhe\"))"), "{s}");
+    let s = parse_ok("mi u'i sai broda");
+    assert!(s.contains("(CAI_clause (CAI_core \"sai\"))"), "{s}");
+    // 既存不変ピン: UI+NAI スペースあり形(ui_free の NAI スロット)
+    let s = parse_ok("u'i nai mi klama");
+    assert!(
+        s.contains("(ui_free (UI_clause (UI_core \"u'i\")) (NAI_clause (NAI_core \"nai\")))"),
+        "{s}"
+    );
+    let s = parse_ok("dai nai ru'e mi klama");
+    assert!(s.contains("(NAI_clause (NAI_core \"nai\"))"), "{s}");
+    assert!(s.contains("UI_core \"ru'e\""), "{s}");
+    // nai 二重は z0/z1 のみ受理・maftufa は拒否の緩受理のため意図的非対応
+    // (裸 nai の自由修飾語と同クラス。次バッチ課題として記録)
+    assert!(lojban::parse("dainai nai mi klama").is_err());
+}
+
+#[test]
+fn ui_h変体_v0_115() {
+    // 旧 UI 語の h 変体 26 形(z0/z1/maf 全形受理の再実測済み)。
+    // 木ピン: UI_clause 経由の自由修飾語
+    let s = parse_ok("sahe mi klama");
+    assert!(s.contains("UI_core \"sahe\""), "{s}");
+    let s = parse_ok("mi klama ohi");
+    assert!(s.contains("UI_core \"ohi\""), "{s}");
+    // 空白ありの UI+NAI / UI+CAI 連鎖にも現れる
+    let s = parse_ok("sahe nai mi klama");
+    assert!(
+        s.contains("(ui_free (UI_clause (UI_core \"sahe\")) (NAI_clause (NAI_core \"nai\")))"),
+        "{s}"
+    );
+    let s = parse_ok("mi klama taho ru'e");
+    assert!(s.contains("UI_core \"taho\""), "{s}");
+    assert!(s.contains("CAI_core \"ru'e\""), "{s}");
+    // 全数(26 形 × 文頭/文末)
+    let hv = [
+        "sahe", "ohi", "taho", "pehi", "juho", "uhi", "uhu", "ruhe", "eho", "ehe", "ahe", "iha",
+        "zoho", "ahu", "oho", "uha", "uhe", "ihe", "behe", "behu", "dihai", "fauhu", "gehe",
+        "liha", "nihau", "suha",
+    ];
+    for h in hv {
+        let s = parse_ok(&format!("{h} mi klama"));
+        assert!(s.contains(&format!("UI_core \"{h}\"")), "{h}: {s}");
+        let s = parse_ok(&format!("mi klama {h}"));
+        assert!(s.contains(&format!("UI_core \"{h}\"")), "{h}: {s}");
+    }
+    // Ruhe は CAI_core と共通語形。UI 単独の自由修飾語位置でも受理される
+    // (v0.114 までは CAI スロット専用のため単独形は拒否 = z0 との GAP)
+    let s = parse_ok("ruhe mi klama");
+    assert!(s.contains("UI_core \"ruhe\""), "{s}");
+}
+
+#[test]
+fn 描述と_selbri時制後の_freeスロット_v0_115() {
+    // desc/quant_desc: LE 直後の free(zantufa は全語の直後に post_clause を取る)。
+    // 「lo .ui broda ku」は参照 3 種とも受理の pre-existing GAP が本スロットで解消
+    let s = parse_ok("lo .ui broda ku");
+    assert!(s.contains("(desc (LE_clause (LE_core \"lo\")"), "{s}");
+    assert!(s.contains("UI_core \"ui\""), "{s}");
+    assert!(s.contains("BRIVLA_core \"broda\""), "{s}");
+    // 融合形も同経路(fuhivla 誤読の代替読みではなく z0 同型の free+selbri)
+    let s = parse_ok("lo dainai broda ku");
+    assert!(s.contains("UINAI_joint \"dainai\""), "{s}");
+    assert!(!s.contains("BRIVLA_core \"dainai\""), "{s}");
+    let s = parse_ok("mi viska lo dainai broda ku");
+    assert!(s.contains("UINAI_joint \"dainai\""), "{s}");
+    // quant_desc 側も同じスロットを持つ
+    let s = parse_ok("re lo .ui broda ku");
+    assert!(s.contains("quant_desc"), "{s}");
+    assert!(s.contains("UI_core \"ui\""), "{s}");
+    // selbri: 時制連鎖と tanru の間の free
+    let s = parse_ok("mi pu dainai klama");
+    assert!(s.contains("UINAI_joint \"dainai\""), "{s}");
+    assert!(s.contains("(selbri (PU_clause (PU_core \"pu\")"), "{s}");
+    let s = parse_ok("mi pu .ui klama");
+    assert!(s.contains("UI_core \"ui\""), "{s}");
+    // 既存木の不変(free が無い入力)
+    let s = parse_ok("mi pu klama");
+    assert!(
+        s.contains("(selbri (PU_clause (PU_core \"pu\")) (tanru (tanru_unit"),
+        "{s}"
+    );
+    // OVER 解消ピン: 裸融合形の描述内 selbri は参照 3 種とも拒否(z0 整合の縮小)
+    assert!(lojban::parse("lo dainai ku").is_err());
+    assert!(lojban::parse("mi viska lo dainai ku").is_err());
+}

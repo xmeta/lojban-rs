@@ -40,12 +40,55 @@ IJ_joint = { ^"i" ~ !space_char ~ JA_bare ~ (NAI_clause)? ~ &word_boundary }
 // I+BO の結合表記(.ibo = 目的接続。.ijebo = I+JE+BO)
 IBO_joint = @{ (^"ibo" | ^"ijebo") ~ &word_boundary }
 // UI+NAI の結合表記(ta'onai ba'anai 等の談話標識否定形)
+// v0.115: UI_core の全語形 × nai の無空白融合形を z0/z1/maf 全数実測の上で
+// 収録(zantufa は UI 語 + nai の無ポーズ隣接として受理するが、本実装は
+// 無ポーズ隣接を一般にサポートしないため語形を列挙する。LAHEDI_joint 等の
+// 結合表記と同方針の木形状差異 = 既知クラス)。
+// 実測: UI_core 126 語形 × nai のうち 125 形が参照 3 種受理(kiahanai のみ
+// 参照 3 種とも拒否 — ki'a の結合形は参照の UI 語彙に無いため不収録)。
+// UI_core の h 変体 26 形(v0.115 追加分)の融合形も同様に全形受理実測。
+// 既存 26 形は最優先に維持(選言順序の不変。語形間に前置衝突はないことを
+// 全数確認済み: どの語形も他の語形の接頭辞ではない)
 UINAI_joint = @{ (^"ta'onai" | ^"ja'onai" | ^"ku'inai" | ^"po'onai"
                 | ^"da'inai" | ^"je'unai" | ^"la'anai" | ^"za'anai"
                 | ^"ga'inai" | ^"zu'unai" | ^"ba'anai" | ^"ju'onai"
                 | ^"cu'inai" | ^"ji'anai" | ^"ru'anai" | ^"ehinai" | ^"e'inai"
                 | ^"ihinai" | ^"i'inai" | ^"ohanai" | ^"o'anai" | ^"kahunai"
-                | ^"ka'unai" | ^"a'unai" | ^"u'inai" | ^"u'unai") ~ &word_boundary }
+                | ^"ka'unai" | ^"a'unai" | ^"u'inai" | ^"u'unai"
+                // v0.115: UI_core 既存語形の融合形のうち未収録だった 100 形
+                | ^"ru'enai" | ^"pe'inai" | ^"sa'enai" | ^"e'onai"
+                  | ^"e'enai" | ^"ehunai" | ^"e'unai" | ^"ohunai"
+                  | ^"o'unai" | ^"a'enai" | ^"i'anai" | ^"buhonai"
+                  | ^"bu'onai" | ^"kuhinai" | ^"dahinai" | ^"jehunai"
+                  | ^"lahanai" | ^"zahanai" | ^"gahinai" | ^"uhonai"
+                  | ^"u'onai" | ^"kaunai" | ^"ruhanai" | ^"jihanai"
+                  | ^"zuhunai" | ^"bahanai" | ^"ainai" | ^"aunai"
+                  | ^"ki'anai" | ^"zo'onai" | ^"o'onai" | ^"u'anai"
+                  | ^"u'enai" | ^"cainai" | ^"uinai" | ^"oinai"
+                  | ^"ienai" | ^"iinai" | ^"uunai" | ^"uanai"
+                  | ^"uenai" | ^"uonai" | ^"ianai" | ^"iunai"
+                  | ^"einai" | ^"xunai" | ^"i'enai" | ^"be'enai"
+                  | ^"be'unai" | ^"di'ainai" | ^"fau'unai" | ^"ge'enai"
+                  | ^"li'anai" | ^"ni'aunai" | ^"peinai" | ^"o'inai"
+                  | ^"su'anai" | ^"a'inai" | ^"ahinai" | ^"a'onai"
+                  | ^"ahonai" | ^"ca'enai" | ^"cahenai" | ^"dainai"
+                  | ^"e'anai" | ^"ehanai" | ^"ionai" | ^"ju'anai"
+                  | ^"juhanai" | ^"ke'unai" | ^"kehunai" | ^"le'onai"
+                  | ^"lehonai" | ^"li'onai" | ^"lihonai" | ^"o'enai"
+                  | ^"ohenai" | ^"paunai" | ^"pa'enai" | ^"pahenai"
+                  | ^"ra'unai" | ^"rahunai" | ^"ro'anai" | ^"rohanai"
+                  | ^"ro'onai" | ^"rohonai" | ^"se'anai" | ^"sehanai"
+                  | ^"si'anai" | ^"sihanai" | ^"ta'unai" | ^"tahunai"
+                  | ^"ti'enai" | ^"tihenai" | ^"to'unai" | ^"tohunai"
+                  | ^"va'inai" | ^"vahinai" | ^"vu'enai" | ^"vuhenai"
+                // v0.115: UI_core 新規収録の h 変体 26 形の融合形
+                | ^"sahenai" | ^"ohinai" | ^"tahonai" | ^"pehinai"
+                  | ^"juhonai" | ^"uhinai" | ^"uhunai" | ^"ruhenai"
+                  | ^"ehonai" | ^"ehenai" | ^"ahenai" | ^"ihanai"
+                  | ^"zohonai" | ^"ahunai" | ^"ohonai" | ^"uhanai"
+                  | ^"uhenai" | ^"ihenai" | ^"behenai" | ^"behunai"
+                  | ^"dihainai" | ^"fauhunai" | ^"gehenai" | ^"lihanai"
+                  | ^"nihaunai" | ^"suhanai") ~ &word_boundary }
 // 注: sentence を prenex_sentence より先に試す(v0.100)。prenex 項に sumti を
 // 許可すると、非 prenex 入力(sumti で始まる普通の文)で prenex_sentence が
 // 描述を解析し切ってから ZOhU で失敗・全巻き戻しとなり、sentence 経路が
@@ -311,8 +354,16 @@ quant_sumti = { mex ~ sp1 ~ sumti_core }
 // 裸 LAhE 語は sumti として成立しない)
 lahe_sumti = { LAHEDI_joint | LAhE_clause ~ sp1 ~ sumti ~ (sp1 ~ LUhU_clause)? }
 
-desc        = { LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
-quant_desc  = { number ~ sp1 ~ LE_clause ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
+// v0.115: LE 語直後の自由修飾語スロット(lo .ui broda ku / lo dainai broda ku)。
+// z0 実測(zantufa-0.9999.js): zantufa は全語の直後に post_clause の free を
+// 取るため「lo .ui broda ku」「lo pe'i broda ku」が参照 3 種すべて受理される
+// (pre-existing GAP)。また UI+NAI 融合形(UINAI_joint)を tanru_unit の
+// BRIVLA ガードで排除した結果、「lo dainai broda ku」型(fuhivla 誤読で
+// 偶然受理していた)がこのスロットで z0 同型の読み(free + selbri)に救済される。
+// 既存入力は (sp1 ~ frees_mid)? が空で失敗した後 sp1 を付け直すだけのため
+// 木・受理集合ともに不変(frees_mid は silent)
+desc        = { LE_clause ~ (sp1 ~ frees_mid)? ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
+quant_desc  = { number ~ sp1 ~ LE_clause ~ (sp1 ~ frees_mid)? ~ sp1 ~ sumti_tail ~ (sp1 ~ KU_clause)? }
 number      = { PA_clause ~ (sp1 ~ PA_clause)* ~ (sp1 ~ BOI_clause)?
               | PA_seq }
 abstraction = { abstr_head ~ sp1 ~ inner_sentence ~ (sp1 ~ KEI_clause)? }
@@ -402,7 +453,15 @@ vocative_closed = _{ COI_clause ~ (sp1 ~ NAI_clause)? ~ (sp1 ~ vocative_arg)?
 // 項リスト本体は terms と共通(CEhE/PEhE 含む)
 tail_terms = { (sp1 ~ free)* ~ (sp1 ~ terms_items)? ~ (sp1 ~ free)* ~ (sp1 ~ VAU_clause)? }
 
-selbri  = { s_marks? ~ sp1? ~ tense_marks? ~ sp1? ~ s_marks? ~ sp1? ~ tanru ~ co_tail?
+// v0.115: 時制連鎖と tanru の間の自由修飾語スロット(mi pu .ui klama /
+// mi pu dainai klama)。zantufa は全語の直後に post_clause の free を取るため
+// 参照 3 種はこの位置の free を受理する。UI+NAI 融合形(UINAI_joint)を
+// tanru_unit の BRIVLA ガードで排除した結果、「mi pu dainai klama」型
+// (fuhivla 誤読で偶然受理していた)がこのスロットで救済される。
+// 既存入力は (sp1 ~ frees_mid)? が空で失敗した後 sp1? を付け直すだけのため
+// 木・受理集合ともに不変。tagged の tense_tags 枝(ta'i ba'e ma … 等)には
+// frees_mid スロットが既存であり、selbri 内の時制との非対称を解消する
+selbri  = { s_marks? ~ sp1? ~ tense_marks? ~ (sp1 ~ frees_mid)? ~ sp1? ~ s_marks? ~ sp1? ~ tanru ~ co_tail?
           | (NAhE_clause ~ sp1)? ~ guhek_selbri }
 // 述語の先接続(gu'e X gi Y 等。camxes の selbri_6 相当)
 guhek_selbri = { GUhA_clause ~ (sp1 ~ NAI_clause)? ~ sp1 ~ selbri ~ sp1 ~ gi_joint
@@ -1300,7 +1359,18 @@ UI_core = @{ (^"u'i" | ^"u'u" | ^"ru'e" | ^"ju'o" | ^"pe'i" | ^"sa'e" | ^"ta'o"
                | ^"ra'u" | ^"rahu" | ^"ro'a" | ^"roha" | ^"ro'o" | ^"roho"
                | ^"se'a" | ^"seha" | ^"si'a" | ^"siha"
                | ^"ta'u" | ^"tahu" | ^"ti'e" | ^"tihe" | ^"to'u" | ^"tohu"
-               | ^"va'i" | ^"vahi" | ^"vu'e" | ^"vuhe") ~ &word_boundary }
+                | ^"va'i" | ^"vahi" | ^"vu'e" | ^"vuhe"
+               // v0.115: 旧 UI 語の h 変体の残り 26 形('↔h 併記規約の完成分。
+               // 全形を z0/z1/maf の自由修飾語 2 位置+UI+NAI/UI+CAI 空白形で
+               // 全数再実測の上で収録。ruhe は CAI_core と共通語形(cai/ru'e/cu'i
+               // と同様の二重収録。UI+CAI スロットの既存木は不変)
+                | ^"sahe" | ^"ohi" | ^"taho" | ^"pehi"
+                  | ^"juho" | ^"uhi" | ^"uhu" | ^"ruhe"
+                  | ^"eho" | ^"ehe" | ^"ahe" | ^"iha"
+                  | ^"zoho" | ^"ahu" | ^"oho" | ^"uha"
+                  | ^"uhe" | ^"ihe" | ^"behe" | ^"behu"
+                  | ^"dihai" | ^"fauhu" | ^"gehe" | ^"liha"
+                  | ^"nihau" | ^"suha") ~ &word_boundary }
 VAU_core = @{ ( ^"vau") ~ &word_boundary }
 VUhO_core = @{ ( ^"vu'o" | ^"vuho") ~ &word_boundary }
 Y_core = @{ ( ("y" | "Y")+) ~ &word_boundary }

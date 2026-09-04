@@ -1,13 +1,13 @@
 # 開発ステータス
 
-## 現在の状態: v0.114 完成(tu'a の LAhE 移設・全テストグリーン)
+## 現在の状態: v0.115 完成(UI+NAI 無空白結合形と旧 UI 語 h 変体の補完・全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語218 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体299 + doc 11 = 計310テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語224 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体305 + doc 11 = 計316テスト + example 内 unit test 5 全パス
 - tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件、
   v0.109 でバッチ2(接続詞・前置系)の 4 件、v0.110 でバッチ3(形態論・共有・前処理系)の 4 件を
   解消し全 12 テストが緑(下記「既知GAP」参照)
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.114.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.115.0)
 
 ### 帳簿整理(v0.114 版数のまま。文法・受理挙動の変更なし)
 
@@ -29,6 +29,48 @@
   語長上限 50 による rafsi 指数と stack overflow の封じ込み)。
   tests/fuzz.rs に lu ネスト最悪深度の境界テストを 1 本追加
   (fuzz の内訳 8→9。単体 298→299)
+
+## v0.115 で追加(UI+NAI 無空白結合形と旧 UI 語 h 変体の補完)
+
+### UI+NAI 無空白結合形の収録(UINAI_joint の拡張・文頭 GAP 100 行の緑化)
+
+UI_core の全語形 × nai の無空白融合形を z0/z1/maf で全数実測し、受理される
+125 形を UINAI_joint に追加(既存 26 形の選言順序は最優先に維持。語形間に
+前置衝突がないこと(どの語形も他の語形の接頭辞でない)を全数確認)。
+融合形は個別 @ トークンとして定義する必要がある(UI_core ~ NAI_core の
+連結は語境界ガードで失敗するため)。不収録は kiahanai のみ
+(参照 3 種とも拒否の整合。ki'a の結合形は参照の UI 語彙に無い)。
+CAI 後置との組合せ・nai 二重は z0 実測の上で整合を確認。
+副次効果: 文末形(「mi klama dainai」)は従来 fuhivla 緩さの tanru 誤読による
+偶然 ok だったが、UINAI_joint の正規 UI 読みに統一(木ピンで固定)。
+
+### 旧 UI 語 h 変体 26 形の収録('↔h 併記規約の完成)
+
+sahe/ohi/taho/pehi/juho/uhi/uhu/ruhe/eho/ehe/ahe/iha/zoho/ahu/oho/uha/
+uhe/ihe/behe/behu/dihai/fauhu/gehe/liha/nihau/suha を
+UI_core に追加(全形を z0/z1/maf の自由修飾語 2 位置+空白形で全数再実測の
+上で収録)。ruhe は CAI_core と共通語形のため二重収録
+(cai/ru'e/cu'i と同様。UI+CAI スロットの既存木は不変)。
+
+### 描述直後と selbri 時制後の自由修飾語スロットの追加
+
+z0 は全語の直後に post_clause の free を取るため「lo .ui broda ku」
+「mi pu .ui klama」型が参照 3 種すべて受理される(pre-existing GAP)。
+desc と selbri に (sp1 ~ frees_mid)? スロットを追加(z0 同型の読み)。
+既存入力はスロットが空で失敗した後 sp1 を付け直すだけのため木・受理集合
+ともに不変(frees_mid は silent)。UI+NAI 融合形を tanru_unit の BRIVLA
+ガードで排除した結果「lo dainai broda ku」「mi pu dainai klama」型は
+このスロットで救済される。
+
+### 掃引結果(v0.115。プローブ 2,201 行=2,097 行+新規 104 行)
+
+- ours ok 2,096 / z0 ok 1,959 / z1 ok 1,962 / maftufa ok 1,928。
+  GAP 候補 32 件、OVER 候補 145 件(不変)
+- ok→err ゼロ、err→ok 100 行(文頭融合 GAP の緑化)、参照列の変化ゼロ、
+  新規 104 行は全行 ours=参照 3 種 ok(融合文頭 26 / h 変体素形 26 /
+  h 変体融合文頭 26 / 描述・selbri free スロット他)
+- tests/syntax.rs に 6 テスト追加(融合文頭全数・文末正規 UI 読み・
+  CAI 後置と空白形の不変・h 変体・free スロット)。cargo test 316 全パス
 
 ## v0.114 で追加(tu'a の KOhA → LAhE 移設と不閉鎖 to の実測記録)
 
@@ -461,7 +503,7 @@ KOhA/UI 語彙リストを h→' 変換の上で本実装と突合し、欠落�
 - 裸 `nai` の自由修飾語(「nai mi klama」。z0/z1/maf 受理・ours 拒否)、
   `ra'o` の自由修飾語(「mi klama ra'o」。z0/z1 受理・maftufa 拒否の
   参照分裂)
-- UI+NAI の無空白結合形(文頭形「dainai mi klama」。z0/z1/maf 全 ok・ours 拒否)。
+- UI+NAI の無空白結合形(文頭形「dainai mi klama」。z0/z1/maf 全 ok・ours 拒否)。**v0.115 で解消**(UINAI_joint に 125 形収録・文頭 GAP 100 行緑化。下記 v0.115 節)。
   v0.111 掃引で UI 語形 126 × 文頭/文末の全組合せを実測: 文頭形 126 行のうち
   GAP(参照 3 種全 ok・ours 拒否)100 行、ours ok 25 行(UINAI_joint 既存語形
   ta'onai/da'inai/ja'onai/ku'inai/po'onai/je'unai/la'anai/za'anai/ga'inai/
@@ -473,7 +515,7 @@ KOhA/UI 語彙リストを h→' 変換の上で本実装と突合し、欠落�
   (v0.110 OVER 既知クラスと同族)で kiahanai のみ整合拒否。既存 UINAI_joint
   には uinai/einai が未収録の欠落クラス。プローブテンプレートに両位置を
   追加済み(掃引の GAP は 27 → 127 行)
-- 旧 UI 語の h 変体完成(26 形。全形 z0/z1/maf ok・ours 拒否を確認済み。
+- 旧 UI 語の h 変体完成(26 形。全形 z0/z1/maf ok・ours 拒否を確認済み。**v0.115 で解消**。
   v0.111 の新 UI 語は ' / h 併記済みだが既存語は ' 形のみのものが残存):
   sahe(←sa'e) ohi(←o'i) taho(←ta'o) pehi(←pe'i) juho(←ju'o) uhi(←u'i)
   uhu(←u'u) ruhe(←ru'e。CAI_core 既存だが UI 単独自由修飾語位置では無効)
