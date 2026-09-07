@@ -5479,3 +5479,153 @@ fn 語中有声混在と摩擦音対_v0_119() {
     // 本版の変更対象外だが現状を固定する
     parse_ok("gamzbarda");
 }
+
+#[test]
+fn ui実験語彙108形_v0_120() {
+    // v0.120: STATUS 記録の zantufa UI 実験語 111 語形のうち未収録 109 形から
+    // sa(消去語競合のため除外)を除く 108 形を UI_core に収録。
+    // 全形 z0/z1/maf の自由修飾語 2 位置での受理を事前実測済み
+    let words108 = [
+        "a'a",
+        "au'u",
+        "ba'u",
+        "bi'a",
+        "bi'u",
+        "bo'oi",
+        "bu'a'a",
+        "cau'i",
+        "ci'ai",
+        "ci'au'u'au'i",
+        "cu'ei",
+        "cu'ei'a",
+        "cu'ei'ai",
+        "cu'ei'e",
+        "cu'ei'ei",
+        "cu'ei'i",
+        "cu'ei'o",
+        "cu'ei'oi",
+        "cu'ei'u",
+        "dai'i",
+        "dai'o",
+        "dau'a",
+        "dau'i",
+        "de'ai",
+        "de'au",
+        "de'oi",
+        "do'a",
+        "do'ai",
+        "doi'a",
+        "fai'a",
+        "fu'au",
+        "fu'ei'a",
+        "fu'ei'e",
+        "fu'ei'i",
+        "fu'ei'o",
+        "fu'ei'u",
+        "fu'i",
+        "ge'ei",
+        "i'o",
+        "i'u",
+        "ia'u",
+        "ie'i",
+        "je'au",
+        "jei'u",
+        "ji'au",
+        "ji'ei",
+        "jo'a",
+        "ju'oi",
+        "kai'a",
+        "kai'e",
+        "ke'e'u",
+        "ki'a'au'u'au'i",
+        "ko'oi",
+        "koi'e",
+        "lai'i",
+        "li'oi",
+        "mau'i",
+        "mau'u",
+        "me'ai",
+        "mi'u",
+        "moi'i",
+        "mu'a",
+        "na'i",
+        "na'oi",
+        "ne'au",
+        "ne'e",
+        "oi'a",
+        "oi'o",
+        "oi'u",
+        "pe'a",
+        "pe'ai",
+        "pei'a",
+        "pei'e",
+        "pei'o",
+        "ra'i'au",
+        "re'e",
+        "ri'e",
+        "ro'e",
+        "ro'i",
+        "ro'u",
+        "sa'a",
+        "sa'u",
+        "se'i",
+        "sei'i",
+        "si'au",
+        "ta'ei",
+        "ta'oi",
+        "te'i'o",
+        "toi'e",
+        "toi'o",
+        "u'ai",
+        "uai",
+        "uau",
+        "ue'i",
+        "uei'e",
+        "vei'i",
+        "xa'a",
+        "xa'a'a",
+        "xa'i",
+        "xai'a",
+        "xau'e'o",
+        "xau'o'o",
+        "xo'o",
+        "xu'u'i",
+        "xy'y",
+        "zai'a",
+        "zi'a",
+        "zi'ai",
+    ];
+    assert_eq!(words108.len(), 108);
+    for w in words108 {
+        parse_ok(&format!("{w} mi klama"));
+        parse_ok(&format!("mi klama {w}"));
+        // 融合形(UINAI_joint。dai'o/do'a 系は z0/z1 受理・maftufa 拒否だが
+        // v0.115 の kiahanai 基準に従い収録)
+        let s = parse_ok(&format!("{w}nai mi klama"));
+        assert!(s.contains("UINAI_joint"), "{w}: {s}");
+    }
+    // 木ピン: UI+CAI/NAI 後置と接頭辞ペアの正規読み
+    let s = parse_ok("ro'u ru'e mi klama");
+    assert!(s.contains("UI_core \"ro'u\""), "{s}");
+    assert!(s.contains("CAI_core \"ru'e\""), "{s}");
+    let s = parse_ok("si'au nai mi klama");
+    assert!(s.contains("NAI_core \"nai\""), "{s}");
+    let s = parse_ok("au'u mi klama");
+    assert!(s.contains("UI_core \"au'u\""), "{s}");
+    assert!(!s.contains("UI_core \"au\""), "{s}");
+    // 既存短形の不変ピン(教訓6: 長形を先置したため短形も正しく読める)
+    for (long, short) in [
+        ("au'u", "au"),
+        ("cu'ei'ai", "cu'ei"),
+        ("pe'ai", "pe'a"),
+        ("do'ai", "do'a"),
+        ("oi'a", "oi"),
+    ] {
+        let s = parse_ok(&format!("{short} mi klama"));
+        assert!(s.contains(&format!("UI_core \"{short}\"")), "{short}: {s}");
+        assert!(!s.contains(&format!("UI_core \"{long}\"")), "{short}: {s}");
+    }
+    // 除外ピン: sa(消去語競合)/nai(NAI 要分析)は引き続き拒否
+    assert!(lojban::parse("sa mi klama").is_err());
+    assert!(lojban::parse("nai mi klama").is_err());
+}

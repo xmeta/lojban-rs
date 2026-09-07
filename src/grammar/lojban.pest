@@ -91,7 +91,30 @@ UINAI_joint = @{ (^"ta'onai" | ^"ja'onai" | ^"ku'inai" | ^"po'onai"
                   | ^"nihaunai" | ^"suhanai"
                 // v0.116: CAI スケール語の UI 読み(sai/cu'i/cuhi)に伴う融合形。
                 // z0/z1/maf 全形受理の実測。UI_core 追加分と対応
-                | ^"sainai" | ^"cu'inai" | ^"cuhinai") ~ &word_boundary }
+                | ^"sainai" | ^"cu'inai" | ^"cuhinai"
+
+                // v0.120: UI 実験語 108 形の融合形(z0/z1/maf 実測。
+                // dai'onai/do'ainai は z0/z1 受理・maftufa 拒否の
+                // 参照分裂だが v0.115 の kiahanai 基準(全参照拒否のみ除外)
+                // に従い収録。sa/nai は対象外(記録))
+                | ^"ki'a'au'u'au'inai" | ^"ci'au'u'au'inai" | ^"cu'ei'ainai" | ^"cu'ei'einai" | ^"cu'ei'oinai" | ^"cu'ei'anai"
+                | ^"cu'ei'enai" | ^"cu'ei'inai" | ^"cu'ei'onai" | ^"cu'ei'unai" | ^"fu'ei'anai" | ^"fu'ei'enai"
+                | ^"fu'ei'inai" | ^"fu'ei'onai" | ^"fu'ei'unai" | ^"ra'i'aunai" | ^"xau'e'onai" | ^"xau'o'onai"
+                | ^"bu'a'anai" | ^"ke'e'unai" | ^"te'i'onai" | ^"xa'a'anai" | ^"xu'u'inai" | ^"bo'oinai"
+                | ^"cau'inai" | ^"ci'ainai" | ^"cu'einai" | ^"dai'inai" | ^"dai'onai" | ^"dau'anai"
+                | ^"dau'inai" | ^"de'ainai" | ^"de'aunai" | ^"de'oinai" | ^"do'ainai" | ^"doi'anai"
+                | ^"fai'anai" | ^"fu'aunai" | ^"ge'einai" | ^"je'aunai" | ^"jei'unai" | ^"ji'aunai"
+                | ^"ji'einai" | ^"ju'oinai" | ^"kai'anai" | ^"kai'enai" | ^"ko'oinai" | ^"koi'enai"
+                | ^"lai'inai" | ^"li'oinai" | ^"mau'inai" | ^"mau'unai" | ^"me'ainai" | ^"moi'inai"
+                | ^"na'oinai" | ^"ne'aunai" | ^"pe'ainai" | ^"pei'anai" | ^"pei'enai" | ^"pei'onai"
+                | ^"sei'inai" | ^"si'aunai" | ^"ta'einai" | ^"ta'oinai" | ^"toi'enai" | ^"toi'onai"
+                | ^"uei'enai" | ^"vei'inai" | ^"xai'anai" | ^"zai'anai" | ^"zi'ainai" | ^"au'unai"
+                | ^"ba'unai" | ^"bi'anai" | ^"bi'unai" | ^"do'anai" | ^"fu'inai" | ^"ia'unai"
+                | ^"ie'inai" | ^"jo'anai" | ^"mi'unai" | ^"mu'anai" | ^"na'inai" | ^"ne'enai"
+                | ^"oi'anai" | ^"oi'onai" | ^"oi'unai" | ^"pe'anai" | ^"re'enai" | ^"ri'enai"
+                | ^"ro'enai" | ^"ro'inai" | ^"ro'unai" | ^"sa'anai" | ^"sa'unai" | ^"se'inai"
+                | ^"u'ainai" | ^"ue'inai" | ^"xa'anai" | ^"xa'inai" | ^"xo'onai" | ^"xy'ynai"
+                | ^"zi'anai" | ^"a'anai" | ^"i'onai" | ^"i'unai" | ^"uainai" | ^"uaunai") ~ &word_boundary }
 // 注: sentence を prenex_sentence より先に試す(v0.100)。prenex 項に sumti を
 // 許可すると、非 prenex 入力(sumti で始まる普通の文)で prenex_sentence が
 // 描述を解析し切ってから ZOhU で失敗・全巻き戻しとなり、sentence 経路が
@@ -1423,21 +1446,21 @@ SEI_core = @{ ( ^"sei") ~ &word_boundary }
 SEhU_core = @{ ( ^"se'u" | ^"sehu") ~ &word_boundary }
 TO_core = @{ ( ^"to") ~ &word_boundary }
 TOI_core = @{ ( ^"toi") ~ &word_boundary }
-UI_core = @{ (^"u'i" | ^"u'u" | ^"ru'e" | ^"ju'o" | ^"pe'i" | ^"sa'e" | ^"ta'o"
+UI_core = @{ (^"u'i" | ^"u'u" | ^"ru'e" | ^"ju'oi" | ^"ju'o" | ^"pe'i" | ^"sa'e" | ^"ta'oi" | ^"ta'o"
               | ^"e'o" | ^"e'e" | ^"ehu" | ^"e'u" | ^"ohu" | ^"o'u"
               | ^"a'e" | ^"i'a" | ^"buho" | ^"bu'o"
               | ^"kuhi" | ^"ku'i" | ^"ja'o" | ^"po'o" | ^"dahi" | ^"da'i"
               | ^"jehu" | ^"je'u" | ^"laha" | ^"la'a" | ^"zaha" | ^"za'a"
               | ^"gahi" | ^"ga'i" | ^"uho" | ^"u'o" | ^"ihi" | ^"i'i"
               | ^"oha" | ^"o'a" | ^"ehi" | ^"e'i" | ^"kahu" | ^"ka'u" | ^"kau"
-              | ^"ruha" | ^"ru'a" | ^"jiha" | ^"ji'a"
+              | ^"ruha" | ^"ru'a" | ^"jiha" | ^"ji'au" | ^"ji'a"
               | ^"zuhu" | ^"zu'u" | ^"baha" | ^"ba'a"
-              | ^"ai" | ^"au" | ^"kiaha" | ^"ki'a"
-               | ^"zo'o" | ^"a'u" | ^"o'o" | ^"u'a" | ^"u'e" | ^"cai"
-               | ^"ui" | ^"oi" | ^"ie" | ^"ii" | ^"uu" | ^"ua" | ^"ue" | ^"uo"
-               | ^"ia" | ^"iu" | ^"ei" | ^"xu"
-               | ^"i'e" | ^"be'e" | ^"be'u" | ^"di'ai" | ^"fau'u" | ^"ge'e"
-               | ^"li'a" | ^"ni'au" | ^"pei" | ^"o'i" | ^"su'a"
+              | ^"ai" | ^"au'u" | ^"au" | ^"kiaha" | ^"ki'a'au'u'au'i" | ^"ki'a"
+               | ^"zo'o" | ^"a'u" | ^"o'o" | ^"u'ai" | ^"u'a" | ^"u'e" | ^"cai"
+               | ^"ui" | ^"oi'a" | ^"oi'o" | ^"oi'u" | ^"oi" | ^"ie'i" | ^"ie" | ^"ii" | ^"uu" | ^"uai" | ^"uau" | ^"ua" | ^"ue'i" | ^"uei'e" | ^"ue" | ^"uo"
+               | ^"ia'u" | ^"ia" | ^"iu" | ^"ei" | ^"xu'u'i" | ^"xu"
+               | ^"i'e" | ^"be'e" | ^"be'u" | ^"di'ai" | ^"fau'u" | ^"ge'ei" | ^"ge'e"
+               | ^"li'a" | ^"ni'au" | ^"pei'a" | ^"pei'e" | ^"pei'o" | ^"pei" | ^"o'i" | ^"su'a"
                // v0.111: CLL 標準 UI の欠落語。z0/z1/maf で自由修飾語位置・tanru
                // 単位位置とも受理、本実装が拒否していた分を語彙突合で収録
                // (dai 共感 / ca'e CAhE 前置肯定 / pau 問い / ke'u 反復 / le'o 不寛容
@@ -1449,12 +1472,12 @@ UI_core = @{ (^"u'i" | ^"u'u" | ^"ru'e" | ^"ju'o" | ^"pe'i" | ^"sa'e" | ^"ta'o"
                // 注: ki'e は COI(呼格)、se'o は BAI として既存収録済み、
                //     cai/sai/ru'e/cu'i は CAI との共通語形で既存。
                //     zantufa の UI 内「nai」単独は語形衝突の懸念から次バッチ課題
-               | ^"a'i" | ^"ahi" | ^"a'o" | ^"aho" | ^"ca'e" | ^"cahe" | ^"dai"
+               | ^"a'i" | ^"ahi" | ^"a'o" | ^"aho" | ^"ca'e" | ^"cahe" | ^"dai'i" | ^"dai'o" | ^"dai"
                | ^"e'a" | ^"eha" | ^"io" | ^"ju'a" | ^"juha"
-               | ^"ke'u" | ^"kehu" | ^"le'o" | ^"leho" | ^"li'o" | ^"liho"
+               | ^"ke'u" | ^"kehu" | ^"le'o" | ^"leho" | ^"li'oi" | ^"li'o" | ^"liho"
                | ^"o'e" | ^"ohe" | ^"pau" | ^"pa'e" | ^"pahe"
                | ^"ra'u" | ^"rahu" | ^"ro'a" | ^"roha" | ^"ro'o" | ^"roho"
-               | ^"se'a" | ^"seha" | ^"si'a" | ^"siha"
+               | ^"se'a" | ^"seha" | ^"si'au" | ^"si'a" | ^"siha"
                | ^"ta'u" | ^"tahu" | ^"ti'e" | ^"tihe" | ^"to'u" | ^"tohu"
                 | ^"va'i" | ^"vahi" | ^"vu'e" | ^"vuhe"
                // v0.115: 旧 UI 語の h 変体の残り 26 形('↔h 併記規約の完成分。
@@ -1474,7 +1497,18 @@ UI_core = @{ (^"u'i" | ^"u'u" | ^"ru'e" | ^"ju'o" | ^"pe'i" | ^"sa'e" | ^"ta'o"
                // cai/ru'e/sa'e/ruhe は収録済みのため残り 3 形を追加
                // (cai/ru'e と同様の二重収録。ui_free の UI+CAI/NAI 後置と
                // UINAI_joint の融合形も自動で有効化)
-                | ^"sai" | ^"cu'i" | ^"cuhi") ~ &word_boundary }
+                | ^"sai" | ^"cu'i" | ^"cuhi"
+                | ^"ci'au'u'au'i" | ^"cu'ei'ai" | ^"cu'ei'ei" | ^"cu'ei'oi" | ^"cu'ei'a" | ^"cu'ei'e" | ^"cu'ei'i" | ^"cu'ei'o"
+                | ^"cu'ei'u" | ^"fu'ei'a" | ^"fu'ei'e" | ^"fu'ei'i" | ^"fu'ei'o" | ^"fu'ei'u" | ^"ra'i'au" | ^"xau'e'o"
+                | ^"xau'o'o" | ^"bu'a'a" | ^"ke'e'u" | ^"te'i'o" | ^"xa'a'a" | ^"bo'oi" | ^"cau'i" | ^"ci'ai"
+                | ^"cu'ei" | ^"dau'a" | ^"dau'i" | ^"de'ai" | ^"de'au" | ^"de'oi" | ^"do'ai" | ^"doi'a"
+                | ^"fai'a" | ^"fu'au" | ^"je'au" | ^"jei'u" | ^"ji'ei" | ^"kai'a" | ^"kai'e" | ^"ko'oi"
+                | ^"koi'e" | ^"lai'i" | ^"mau'i" | ^"mau'u" | ^"me'ai" | ^"moi'i" | ^"na'oi" | ^"ne'au"
+                | ^"pe'ai" | ^"sei'i" | ^"ta'ei" | ^"toi'e" | ^"toi'o" | ^"vei'i" | ^"xai'a" | ^"zai'a"
+                | ^"zi'ai" | ^"ba'u" | ^"bi'a" | ^"bi'u" | ^"do'a" | ^"fu'i" | ^"jo'a" | ^"mi'u"
+                | ^"mu'a" | ^"na'i" | ^"ne'e" | ^"pe'a" | ^"re'e" | ^"ri'e" | ^"ro'e" | ^"ro'i"
+                | ^"ro'u" | ^"sa'a" | ^"sa'u" | ^"se'i" | ^"xa'a" | ^"xa'i" | ^"xo'o" | ^"xy'y"
+                | ^"zi'a" | ^"a'a" | ^"i'o" | ^"i'u") ~ &word_boundary }
 VAU_core = @{ ( ^"vau") ~ &word_boundary }
 VUhO_core = @{ ( ^"vu'o" | ^"vuho") ~ &word_boundary }
 Y_core = @{ ( ("y" | "Y")+) ~ &word_boundary }

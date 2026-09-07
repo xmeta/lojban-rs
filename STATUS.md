@@ -1,13 +1,13 @@
 # 開発ステータス
 
-## 現在の状態: v0.119 完成(語中有声混在・全テストグリーン)
+## 現在の状態: v0.120 完成(UI 実験語彙108形・全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語228 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体309 + doc 11 = 計320テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語229 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体310 + doc 11 = 計321テスト + example 内 unit test 5 全パス
 - tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件、
   v0.109 でバッチ2(接続詞・前置系)の 4 件、v0.110 でバッチ3(形態論・共有・前処理系)の 4 件を
   解消し全 12 テストが緑(下記「既知GAP」参照)
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.119.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.120.0)
 
 ### 帳簿整理(v0.114 版数のまま。文法・受理挙動の変更なし)
 
@@ -29,6 +29,37 @@
   語長上限 50 による rafsi 指数と stack overflow の封じ込み)。
   tests/fuzz.rs に lu ネスト最悪深度の境界テストを 1 本追加
   (fuzz の内訳 8→9。単体 298→299)
+
+## v0.120 で追加(UI 実験語彙 108 形と融合形)
+
+### 111 語形リストの残り 109 形を全数再実測
+
+- STATUS 記録の 111 語形のうち未収録 109 形を z0/z1/maf の自由修飾語
+  2 位置で全数再実測: 218/218 全て参照 3 種受理。除外なし
+- 融合形 {W}nai も 109 形全数実測: 107 形が参照 3 種受理、
+  dai'onai/do'ainai のみ maftufa 拒否の参照分裂。v0.115 の kiahanai 基準
+  (全参照拒否のみ除外)に従い両形とも収録
+- 除外2件(記録): `sa`(消去語と競合。z0 は UI 読みだが本実装の前処理消去と
+  両立しないため別課題)、`nai`(NAI 要分析。z0 UI には存在するが否定
+  スロットへの波及要調査のため別課題)
+
+### 実装(UI_core 108 語+UINAI_joint 108 形)
+
+- UI_core 155→263 語形。教訓6(atomic 内は長い順)に従い接頭辞ペアを整列:
+  新語24語を既存短形の前に挿入(au'u→au 等)、新語内は長さ降順、
+  cu'ei/fu'ei スケール・do'ai/do'a 等を包摂。機械検証で順序違反ゼロ
+- UINAI_joint 155→263 形(衝突ゼロ)。UI+CAI/NAI 空白形は ui_free 経由で
+  自動有効化(ro'u ru'e / si'au nai をピン)
+- coverage.md の UI 行を文法順で再生成(coverage_doc 準拠)
+
+### 掃引結果(v0.120。プローブ 2,756 行=2,324 行+新規 432 行)
+
+- ours ok 2,641 / z0 ok 2,501 / z1 ok 2,501 / maftufa ok 2,464。
+  GAP 候補 29 件、OVER 候補 145 件(ともに不変)
+- ok→err ゼロ、既存行の err→ok ゼロ、参照列の変化ゼロ。新規 432 行は
+  428 行が全緑+4 行が maftufa 分裂(dai'onai/do'ainai の両位置)の正確な記録
+- tests/syntax.rs に 1 テスト追加(108 語×3 位置の全数+木ピン+除外ピン)。
+  cargo test 321 全パス
 
 ## v0.119 で追加(語中有声混在の許容と xa'emi'o 型 OVER の記録)
 
@@ -642,7 +673,7 @@ KOhA/UI 語彙リストを h→' 変換の上で本実装と突合し、欠落�
   kau'a kau'e kau'i lau'e lau'u mai'i mi'oi nau'u nei'o ri'au tu'oi xai
   zai'o zi'oi zu'ai zu'i'a
 - zantufa UI 実験語(111 語形。全て自由修飾語位置(文頭・文末の両形)で
-  z0/z1/maf 受理・ours 拒否を確認済み。初期列挙は 91 語で、
+  z0/z1/maf 受理・ours 拒否を確認済み。**v0.120 で 108 形を解消**(残り sa は消去競合で除外、sai/cu'i は v0.116 収録済み。下記 v0.120 節)。初期列挙は 91 語で、
   zantufa-0.9999.js.peg の UI 語形リスト(h→' 変換)との全数突合により
   20 語形の列挙漏れを修正(漏れ分も文頭/文末両位置で再実測済み):
   a'a / au'u / ba'u / ci'au'u'au'i / cu'ei の母音スケール形 8 形
