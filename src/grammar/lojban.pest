@@ -566,7 +566,11 @@ guhek_selbri = { GUhA_clause ~ (sp1 ~ NAI_clause)? ~ sp1 ~ selbri ~ sp1 ~ gi_joi
                  ~ sp1 ~ selbri }
 co_tail = _{ sp1 ~ CO_clause ~ sp1 ~ s_marks? ~ tanru }
 s_marks = _{ s_mark ~ (sp1 ~ s_mark)* }
-s_mark  = { NA_clause | JAhA_clause | SE_clause | NAhE_clause }
+s_mark  = { NA_clause | JAhA_clause | SE_clause
+          // v0.125: mo'i は MOhI との二重収録のため、FAhA 直続では時制連鎖
+          // (MOhI+FAhA)に譲る。「mi mo'i bu'u klama」は z0 も時制読み。
+          // 非 mo'i の NAhE は第1枝で従来どおり(木は不変)
+          | !MOhI_clause ~ NAhE_clause | NAhE_clause ~ !(sp1 ~ FAhA_clause) }
 
 // 時制・相・方位の連続(zantufa の tag/tense の簡略版。ku による明示閉鎖も許容)
 tense_marks = _{ tense_mark ~ (sp1 ~ tense_mark)* ~ (sp1 ~ KU_clause)? }
@@ -1206,12 +1210,17 @@ BEhO_core = @{ ( ^"be'o" | ^"beho") ~ &word_boundary }
 BO_core = @{ ( ^"bo") ~ &word_boundary }
 BOI_core = @{ ( ^"boi") ~ &word_boundary }
 CO_core = @{ ( ^"co") ~ &word_boundary }
-COI_core = @{ (^"coi" | ^"co'o" | ^"je'e" | ^"ju'i" | ^"re'i" | ^"nu'e" | ^"fi'i"
+COI_core = @{ (^"coi" | ^"co'oi" | ^"co'o" | ^"je'e" | ^"ju'i" | ^"re'i" | ^"nu'e" | ^"fi'i'e" | ^"fi'i"
                | ^"fe'o" | ^"mu'o" | ^"mi'e" | ^"ta'a" | ^"pe'u" | ^"ki'e"
-               | ^"viho" | ^"vi'o" | ^"keho" | ^"ke'o" | ^"doi"
+               | ^"viho" | ^"vi'o" | ^"keho" | ^"ke'o" | ^"doi'oi" | ^"doi"
               // v0.118: z0 COI に存在する ki'ai(Tatoeba 実文)/di'ai。
               // di'ai は UI_core との二重収録(z0 は COI としても受理)
-              | ^"ki'ai" | ^"di'ai") ~ &word_boundary }
+              | ^"ki'ai" | ^"di'ai"
+               // v0.125: zantufa COI 実験語の残り 14 形(ki'ai/di'ai は
+               // v0.124 収録済み。z0/z1/maf 実測受理)
+               | ^"sau'ei" | ^"bu'oi" | ^"ci'oi" | ^"da'ei" | ^"da'oi" | ^"fau'u"
+               | ^"goi'e" | ^"jo'au" | ^"sa'ei" | ^"tai'i" | ^"a'oi" | ^"be'e"
+               | ^"o'ai") ~ &word_boundary }
 CU_core = @{ ( ^"cu") ~ &word_boundary }
 DOhU_core = @{ ( ^"do'u" | ^"dohu") ~ &word_boundary }
 // fai は公式 FA(不定格。CLL 9.6・任意スロット用)。fi'a の後ろに追加。
@@ -1410,7 +1419,11 @@ LU_core = @{ ( ^"lu") ~ &word_boundary }
 LUhU_core = @{ ( ^"lu'u" | ^"luhu") ~ &word_boundary }
 NA_core = @{ ( ^"na") ~ &word_boundary }
 JAhA_core = @{ ( ^"ja'a" | ^"jaha") ~ &word_boundary }
-NAhE_core = @{ ( ^"na'e" | ^"to'e" | ^"no'e" | ^"je'a") ~ &word_boundary }
+NAhE_core = @{ ( ^"na'ei" | ^"na'e" | ^"to'e" | ^"no'e" | ^"je'ai" | ^"je'a"
+               // v0.125: zantufa NAhE 実験語 11 形(fe'e/mo'i は z0/z1
+               // 受理・maftufa 拒否の分裂。mo'i は MOhI と二重収録)
+               | ^"cau'o'e" | ^"cai'e" | ^"cau'e" | ^"noi'e" | ^"pai'e" | ^"rei'e"
+               | ^"sai'e" | ^"fe'e" | ^"mo'i") ~ &word_boundary }
 NIhO_core = @{ ( ^"ni'o" | ^"niho") ~ &word_boundary }
 NOI_core = @{ ( ^"poi" | ^"noi" | ^"voi") ~ &word_boundary }
 // si'o(概念抽象)は zantufa 由来の語彙に欠けている NU セルマォの1語(CLL 準拠で補完)
@@ -1496,7 +1509,9 @@ UI_core = @{ (^"u'i" | ^"u'u" | ^"ru'e" | ^"ju'oi" | ^"ju'o" | ^"pe'i" | ^"sa'e"
                | ^"zo'o" | ^"a'u" | ^"o'o" | ^"u'ai" | ^"u'a" | ^"u'e" | ^"cai"
                | ^"ui" | ^"oi'a" | ^"oi'o" | ^"oi'u" | ^"oi" | ^"ie'i" | ^"ie" | ^"ii" | ^"uu" | ^"uai" | ^"uau" | ^"ua" | ^"ue'i" | ^"uei'e" | ^"ue" | ^"uo"
                | ^"ia'u" | ^"ia" | ^"iu" | ^"ei" | ^"xu'u'i" | ^"xu"
-               | ^"i'e" | ^"be'e" | ^"be'u" | ^"di'ai" | ^"fau'u" | ^"ge'ei" | ^"ge'e"
+               // v0.125: be'e は UI から除去(z0 UI 不在・z0 COI に存在。
+               // COI 側に収録済みのため呼格読みに統一)
+               | ^"i'e" | ^"be'u" | ^"di'ai" | ^"ge'ei" | ^"ge'e"
                | ^"li'a" | ^"ni'au" | ^"pei'a" | ^"pei'e" | ^"pei'o" | ^"pei" | ^"o'i" | ^"su'a"
                // v0.111: CLL 標準 UI の欠落語。z0/z1/maf で自由修飾語位置・tanru
                // 単位位置とも受理、本実装が拒否していた分を語彙突合で収録

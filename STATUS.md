@@ -1,13 +1,13 @@
 # 開発ステータス
 
-## 現在の状態: v0.124 完成(JOI・ROI・KE・GA 実験語彙・全テストグリーン)
+## 現在の状態: v0.125 完成(NAhE・COI 実験語彙・全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語233 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体314 + doc 11 = 計325テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語234 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体315 + doc 11 = 計326テスト + example 内 unit test 5 全パス
 - tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件、
   v0.109 でバッチ2(接続詞・前置系)の 4 件、v0.110 でバッチ3(形態論・共有・前処理系)の 4 件を
   解消し全 12 テストが緑(下記「既知GAP」参照)
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.124.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.125.0)
 
 ### 帳簿整理(v0.114 版数のまま。文法・受理挙動の変更なし)
 
@@ -29,6 +29,33 @@
   語長上限 50 による rafsi 指数と stack overflow の封じ込み)。
   tests/fuzz.rs に lu ネスト最悪深度の境界テストを 1 本追加
   (fuzz の内訳 8→9。単体 298→299)
+
+## v0.125 で追加(NAhE・COI 実験語彙)
+
+### NAhE 11 形・COI 14 形の収録(ki'ai/di'ai は v0.124 済み)
+
+- 27 語形全てをテンプレート位置で z0/z1/maf 実測: 50/54 が参照 3 種受理、
+  fe'e/mo'i の 4 行が z0/z1 受理・maftufa 拒否の参照分裂(記録の上で収録)
+- NAhE_core 4→15・COI_core 20→36。教訓6に従い接頭辞ペアを整列
+  (na'ei→na'e、je'ai→je'a、co'oi→co'o、doi'oi→doi、fi'i'e→fi'i)。
+  mo'i は MOhI と二重収録のため s_marks で FAhA 直続のみ時制連鎖に譲歩
+  (「mi mo'i bu'u klama」は z0 同型の MOhI 読みを維持)。
+  coverage.md の 2 行を文法順で再生成
+
+### UI 側に残っていた COI 語の移設(be'e/fau'u)
+
+- be'e/fau'u は UI_core に残存していたが z0 UI には不在(z0 COI に存在)。
+  文位置では UI 読みが呼格読みを奪うため(z0 は呼格)、UI 側から除去し
+  COI 読みに統一。裸形・coverage・コーパスは維持
+
+### 掃引結果(v0.125。プローブ 3,064 行=3,020 行+新規 52 行-整理 8 行)
+
+- ours ok 2,953 / z0 ok 2,777 / z1 ok 2,797 / maftufa ok 2,729。
+  GAP 候補 24 件(-5: mo'i/fe'e 行の緑化)、OVER 候補 156 件(不変)
+- ok→err ゼロ、err→ok 5 行(mo'i 4 行+fe'e 1 行の意図分)、
+  参照列の変化ゼロ。新規 52 行は 50 行が全緑+2 行が maftufa 分裂
+- 削除 8 行(UI テンプレートの be'e/fau'u 8 行。語彙移動に伴う自動整理)
+- tests/syntax.rs に 1 テスト追加。cargo test 326 全パス
 
 ## v0.124 で追加(JOI・ROI・KE・GA 実験語彙)
 

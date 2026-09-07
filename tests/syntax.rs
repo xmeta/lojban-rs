@@ -5854,3 +5854,60 @@ fn joiroikegaa実験語彙_v0_124() {
         assert!(s.contains("GA_core"), "{short}: {s}");
     }
 }
+
+#[test]
+fn nahecoi実験語彙とmohi譲歩_v0_125() {
+    // v0.125: NAhE 11 形・COI 14 形(z0/z1/maf 実測。fe'e/mo'i は maftufa 分裂)。
+    // mo'i は MOhI と二重収録のため FAhA 直続では時制連鎖に譲る
+    for (w, t) in [
+        ("cai'e", "mi cai'e klama"),
+        ("cau'e", "lo cau'e broda cu barda"),
+        ("cau'o'e", "mi cau'o'e klama"),
+        ("fe'e", "lo fe'e broda cu barda"),
+        ("je'ai", "mi je'ai klama"),
+        ("mo'i", "mi mo'i klama"),
+        ("na'ei", "lo na'ei broda cu barda"),
+        ("noi'e", "mi noi'e klama"),
+        ("pai'e", "lo pai'e broda cu barda"),
+        ("rei'e", "mi rei'e klama"),
+        ("sai'e", "lo sai'e broda cu barda"),
+    ] {
+        let s = parse_ok(t);
+        assert!(s.contains("NAhE_core"), "{w}: {s}");
+    }
+    for (w, t) in [
+        ("a'oi", "a'oi la .alis. mi klama"),
+        ("be'e", "be'e do broda"),
+        ("bu'oi", "bu'oi la .alis. mi klama"),
+        ("ci'oi", "ci'oi do broda"),
+        ("co'oi", "co'oi la .alis. mi klama"),
+        ("da'ei", "da'ei do broda"),
+        ("da'oi", "da'oi la .alis. mi klama"),
+        ("doi'oi", "doi'oi do broda"),
+        ("fau'u", "fau'u la .alis. mi klama"),
+        ("fi'i'e", "fi'i'e do broda"),
+        ("goi'e", "goi'e la .alis. mi klama"),
+        ("jo'au", "jo'au do broda"),
+        ("o'ai", "o'ai la .alis. mi klama"),
+        ("sa'ei", "sa'ei do broda"),
+        ("sau'ei", "sau'ei la .alis. mi klama"),
+        ("tai'i", "tai'i do broda"),
+    ] {
+        let s = parse_ok(t);
+        assert!(s.contains("COI_core"), "{w}: {s}");
+    }
+    // 木ピン: mo'i+FAhA は時制連鎖(MOhI)読み、接頭辞ペアの正規読み
+    let s = parse_ok("mi mo'i bu'u klama");
+    assert!(s.contains("MOhI_core \"mo'i\""), "{s}");
+    assert!(!s.contains("NAhE_core \"mo'i\""), "{s}");
+    let s = parse_ok("mi na'ei klama");
+    assert!(s.contains("NAhE_core \"na'ei\""), "{s}");
+    let s = parse_ok("co'oi la .alis. mi klama");
+    assert!(s.contains("COI_core \"co'oi\""), "{s}");
+    // 既存不変ピン: MOhI 連鎖・NAhE 単独・PEhE
+    let s = parse_ok("mi mo'i ni'a klama");
+    assert!(s.contains("MOhI_core \"mo'i\""), "{s}");
+    parse_ok("mi na'e klama");
+    let s = parse_ok("mi zmadu lo klama pe'e je lo cadzu");
+    assert!(s.contains("PEhE_core \"pe'e\""), "{s}");
+}

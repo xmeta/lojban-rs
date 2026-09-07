@@ -323,11 +323,13 @@ mi pu bo klama
 li re boi su'i ci du xa
 mi klama lo zdani co broda
 coi la .alis. mi klama
+co'oi la .alis. mi klama
 co'o la .alis. mi klama
 je'e la .alis. mi klama
 ju'i la .alis. mi klama
 re'i la .alis. mi klama
 nu'e la .alis. mi klama
+fi'i'e la .alis. mi klama
 fi'i la .alis. mi klama
 fe'o la .alis. mi klama
 mu'o la .alis. mi klama
@@ -339,15 +341,31 @@ viho la .alis. mi klama
 vi'o la .alis. mi klama
 keho la .alis. mi klama
 ke'o la .alis. mi klama
+doi'oi la .alis. mi klama
 doi la .alis. mi klama
 ki'ai la .alis. mi klama
 di'ai la .alis. mi klama
+sau'ei la .alis. mi klama
+bu'oi la .alis. mi klama
+ci'oi la .alis. mi klama
+da'ei la .alis. mi klama
+da'oi la .alis. mi klama
+fau'u la .alis. mi klama
+goi'e la .alis. mi klama
+jo'au la .alis. mi klama
+sa'ei la .alis. mi klama
+tai'i la .alis. mi klama
+a'oi la .alis. mi klama
+be'e la .alis. mi klama
+o'ai la .alis. mi klama
 coi do broda
+co'oi do broda
 co'o do broda
 je'e do broda
 ju'i do broda
 re'i do broda
 nu'e do broda
+fi'i'e do broda
 fi'i do broda
 fe'o do broda
 mu'o do broda
@@ -359,9 +377,23 @@ viho do broda
 vi'o do broda
 keho do broda
 ke'o do broda
+doi'oi do broda
 doi do broda
 ki'ai do broda
 di'ai do broda
+sau'ei do broda
+bu'oi do broda
+ci'oi do broda
+da'ei do broda
+da'oi do broda
+fau'u do broda
+goi'e do broda
+jo'au do broda
+sa'ei do broda
+tai'i do broda
+a'oi do broda
+be'e do broda
+o'ai do broda
 doi la .alis. do'u mi klama
 doi la .alis. dohu mi klama
 fi'a mi klama lo zdani
@@ -1112,14 +1144,34 @@ mi viska la'e lo broda luhu
 mi na klama
 mi ja'a klama
 mi jaha klama
+mi na'ei klama
 mi na'e klama
 mi to'e klama
 mi no'e klama
+mi je'ai klama
 mi je'a klama
+mi cau'o'e klama
+mi cai'e klama
+mi cau'e klama
+mi noi'e klama
+mi pai'e klama
+mi rei'e klama
+mi sai'e klama
+lo na'ei broda cu barda
 lo na'e broda cu barda
 lo to'e broda cu barda
 lo no'e broda cu barda
+lo je'ai broda cu barda
 lo je'a broda cu barda
+lo cau'o'e broda cu barda
+lo cai'e broda cu barda
+lo cau'e broda cu barda
+lo noi'e broda cu barda
+lo pai'e broda cu barda
+lo rei'e broda cu barda
+lo sai'e broda cu barda
+lo fe'e broda cu barda
+lo mo'i broda cu barda
 mi klama ni'o do klama
 mi klama niho do klama
 lo broda poi broda cu barda
@@ -1467,10 +1519,8 @@ ei mi klama
 xu'u'i mi klama
 xu mi klama
 i'e mi klama
-be'e mi klama
 be'u mi klama
 di'ai mi klama
-fau'u mi klama
 ge'ei mi klama
 ge'e mi klama
 li'a mi klama
@@ -1730,10 +1780,8 @@ mi klama ei
 mi klama xu'u'i
 mi klama xu
 mi klama i'e
-mi klama be'e
 mi klama be'u
 mi klama di'ai
-mi klama fau'u
 mi klama ge'ei
 mi klama ge'e
 mi klama li'a
@@ -1993,10 +2041,8 @@ mi klama einai
 mi klama xu'u'inai
 mi klama xunai
 mi klama i'enai
-mi klama be'enai
 mi klama be'unai
 mi klama di'ainai
-mi klama fau'unai
 mi klama ge'einai
 mi klama ge'enai
 mi klama li'anai
@@ -2256,10 +2302,8 @@ einai mi klama
 xu'u'inai mi klama
 xunai mi klama
 i'enai mi klama
-be'enai mi klama
 be'unai mi klama
 di'ainai mi klama
-fau'unai mi klama
 ge'einai mi klama
 ge'enai mi klama
 li'anai mi klama

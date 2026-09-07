@@ -14,7 +14,7 @@
 | BO | `bo` | ✅ |
 | BOI | `boi` | ✅ |
 | CO | `co` | ✅ |
-| COI | `coi` `co'o` `je'e` `ju'i` `re'i` `nu'e` `fi'i` `fe'o` `mu'o` `mi'e` `ta'a` `pe'u` `ki'e` `viho` `vi'o` `keho` `ke'o` `doi` `ki'ai` `di'ai` | ✅ |
+| COI | `coi` `co'oi` `co'o` `je'e` `ju'i` `re'i` `nu'e` `fi'i'e` `fi'i` `fe'o` `mu'o` `mi'e` `ta'a` `pe'u` `ki'e` `viho` `vi'o` `keho` `ke'o` `doi'oi` `doi` `ki'ai` `di'ai` `sau'ei` `bu'oi` `ci'oi` `da'ei` `da'oi` `fau'u` `goi'e` `jo'au` `sa'ei` `tai'i` `a'oi` `be'e` `o'ai` | ✅ |
 | CU | `cu` | ✅ |
 | DOhU | `do'u` `dohu` | ✅ |
 | FA | `fi'a` `fai` `fa` `fe` `fi` `fo` `fu` | ✅ |
@@ -69,7 +69,7 @@
 | LUhU | `lu'u` `luhu` | ✅ |
 | NA | `na` | ✅ |
 | JAhA | `ja'a` `jaha` | ✅ |
-| NAhE | `na'e` `to'e` `no'e` `je'a` | ✅ |
+| NAhE | `na'ei` `na'e` `to'e` `no'e` `je'ai` `je'a` `cau'o'e` `cai'e` `cau'e` `noi'e` `pai'e` `rei'e` `sai'e` `fe'e` `mo'i` | ✅ |
 | NIhO | `ni'o` `niho` | ✅ |
 | NOI | `poi` `noi` `voi` | ✅ |
 | NU | `mu'e` `pu'u` `zu'o` `li'i` `su'u` `si'o` `du'u` `nu` `kai'ei` `kai'u` `ka'ei` `ka` `ni'ai` `ni` `bu'ai` `poi'i` `za'i` `jei` | ✅ |
@@ -80,7 +80,7 @@
 | SEhU | `se'u` `sehu` | ✅ |
 | TO | `to` | ✅ |
 | TOI | `toi` | ✅ |
-| UI | `u'i` `u'u` `ru'e` `ju'oi` `ju'o` `pe'i` `sa'e` `ta'oi` `ta'o` `e'o` `e'e` `ehu` `e'u` `ohu` `o'u` `a'e` `i'a` `buho` `bu'o` `kuhi` `ku'i` `ja'o` `po'o` `dahi` `da'i` `jehu` `je'u` `laha` `la'a` `zaha` `za'a` `gahi` `ga'i` `uho` `u'o` `ihi` `i'i` `oha` `o'a` `ehi` `e'i` `kahu` `ka'u` `kau` `ruha` `ru'a` `jiha` `ji'au` `ji'a` `zuhu` `zu'u` `baha` `ba'a` `ai` `au'u` `au` `kiaha` `ki'a'au'u'au'i` `ki'a` `zo'o` `a'u` `o'o` `u'ai` `u'a` `u'e` `cai` `ui` `oi'a` `oi'o` `oi'u` `oi` `ie'i` `ie` `ii` `uu` `uai` `uau` `ua` `ue'i` `uei'e` `ue` `uo` `ia'u` `ia` `iu` `ei` `xu'u'i` `xu` `i'e` `be'e` `be'u` `di'ai` `fau'u` `ge'ei` `ge'e` `li'a` `ni'au` `pei'a` `pei'e` `pei'o` `pei` `o'i` `su'a` `a'i` `ahi` `a'o` `aho` `ca'e` `cahe` `dai'i` `dai'o` `dai` `e'a` `eha` `io` `ju'a` `juha` `ke'u` `kehu` `le'o` `leho` `li'oi` `li'o` `liho` `o'e` `ohe` `pau` `pa'e` `pahe` `ra'u` `rahu` `ro'a` `roha` `ro'o` `roho` `se'a` `seha` `si'au` `si'a` `siha` `ta'u` `tahu` `ti'e` `tihe` `to'u` `tohu` `va'i` `vahi` `vu'e` `vuhe` `sahe` `ohi` `taho` `pehi` `juho` `uhi` `uhu` `ruhe` `eho` `ehe` `ahe` `iha` `zoho` `ahu` `oho` `uha` `uhe` `ihe` `behe` `behu` `dihai` `fauhu` `gehe` `liha` `nihau` `suha` `sai` `cu'i` `cuhi` `ci'au'u'au'i` `cu'ei'ai` `cu'ei'ei` `cu'ei'oi` `cu'ei'a` `cu'ei'e` `cu'ei'i` `cu'ei'o` `cu'ei'u` `fu'ei'a` `fu'ei'e` `fu'ei'i` `fu'ei'o` `fu'ei'u` `ra'i'au` `xau'e'o` `xau'o'o` `bu'a'a` `ke'e'u` `te'i'o` `xa'a'a` `bo'oi` `cau'i` `ci'ai` `cu'ei` `dau'a` `dau'i` `de'ai` `de'au` `de'oi` `do'ai` `doi'a` `fai'a` `fu'au` `je'au` `jei'u` `ji'ei` `kai'a` `kai'e` `ko'oi` `koi'e` `lai'i` `mau'i` `mau'u` `me'ai` `moi'i` `na'oi` `ne'au` `pe'ai` `sei'i` `ta'ei` `toi'e` `toi'o` `vei'i` `xai'a` `zai'a` `zi'ai` `ba'u` `bi'a` `bi'u` `do'a` `fu'i` `jo'a` `mi'u` `mu'a` `na'i` `ne'e` `pe'a` `re'e` `ri'e` `ro'e` `ro'i` `ro'u` `sa'a` `sa'u` `se'i` `xa'a` `xa'i` `xo'o` `xy'y` `zi'a` `a'a` `i'o` `i'u` | ✅ |
+| UI | `u'i` `u'u` `ru'e` `ju'oi` `ju'o` `pe'i` `sa'e` `ta'oi` `ta'o` `e'o` `e'e` `ehu` `e'u` `ohu` `o'u` `a'e` `i'a` `buho` `bu'o` `kuhi` `ku'i` `ja'o` `po'o` `dahi` `da'i` `jehu` `je'u` `laha` `la'a` `zaha` `za'a` `gahi` `ga'i` `uho` `u'o` `ihi` `i'i` `oha` `o'a` `ehi` `e'i` `kahu` `ka'u` `kau` `ruha` `ru'a` `jiha` `ji'au` `ji'a` `zuhu` `zu'u` `baha` `ba'a` `ai` `au'u` `au` `kiaha` `ki'a'au'u'au'i` `ki'a` `zo'o` `a'u` `o'o` `u'ai` `u'a` `u'e` `cai` `ui` `oi'a` `oi'o` `oi'u` `oi` `ie'i` `ie` `ii` `uu` `uai` `uau` `ua` `ue'i` `uei'e` `ue` `uo` `ia'u` `ia` `iu` `ei` `xu'u'i` `xu` `i'e` `be'u` `di'ai` `ge'ei` `ge'e` `li'a` `ni'au` `pei'a` `pei'e` `pei'o` `pei` `o'i` `su'a` `a'i` `ahi` `a'o` `aho` `ca'e` `cahe` `dai'i` `dai'o` `dai` `e'a` `eha` `io` `ju'a` `juha` `ke'u` `kehu` `le'o` `leho` `li'oi` `li'o` `liho` `o'e` `ohe` `pau` `pa'e` `pahe` `ra'u` `rahu` `ro'a` `roha` `ro'o` `roho` `se'a` `seha` `si'au` `si'a` `siha` `ta'u` `tahu` `ti'e` `tihe` `to'u` `tohu` `va'i` `vahi` `vu'e` `vuhe` `sahe` `ohi` `taho` `pehi` `juho` `uhi` `uhu` `ruhe` `eho` `ehe` `ahe` `iha` `zoho` `ahu` `oho` `uha` `uhe` `ihe` `behe` `behu` `dihai` `fauhu` `gehe` `liha` `nihau` `suha` `sai` `cu'i` `cuhi` `ci'au'u'au'i` `cu'ei'ai` `cu'ei'ei` `cu'ei'oi` `cu'ei'a` `cu'ei'e` `cu'ei'i` `cu'ei'o` `cu'ei'u` `fu'ei'a` `fu'ei'e` `fu'ei'i` `fu'ei'o` `fu'ei'u` `ra'i'au` `xau'e'o` `xau'o'o` `bu'a'a` `ke'e'u` `te'i'o` `xa'a'a` `bo'oi` `cau'i` `ci'ai` `cu'ei` `dau'a` `dau'i` `de'ai` `de'au` `de'oi` `do'ai` `doi'a` `fai'a` `fu'au` `je'au` `jei'u` `ji'ei` `kai'a` `kai'e` `ko'oi` `koi'e` `lai'i` `mau'i` `mau'u` `me'ai` `moi'i` `na'oi` `ne'au` `pe'ai` `sei'i` `ta'ei` `toi'e` `toi'o` `vei'i` `xai'a` `zai'a` `zi'ai` `ba'u` `bi'a` `bi'u` `do'a` `fu'i` `jo'a` `mi'u` `mu'a` `na'i` `ne'e` `pe'a` `re'e` `ri'e` `ro'e` `ro'i` `ro'u` `sa'a` `sa'u` `se'i` `xa'a` `xa'i` `xo'o` `xy'y` `zi'a` `a'a` `i'o` `i'u` | ✅ |
 | VAU | `vau` | ✅ |
 | VUhO | `vu'o` `vuho` | ✅ |
 | Y |  | ✅ |
