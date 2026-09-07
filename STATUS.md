@@ -1,13 +1,13 @@
 # 開発ステータス
 
-## 現在の状態: v0.123 完成(LE・LAhE 実験語彙・全テストグリーン)
+## 現在の状態: v0.124 完成(JOI・ROI・KE・GA 実験語彙・全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語232 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体313 + doc 11 = 計324テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語233 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体314 + doc 11 = 計325テスト + example 内 unit test 5 全パス
 - tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件、
   v0.109 でバッチ2(接続詞・前置系)の 4 件、v0.110 でバッチ3(形態論・共有・前処理系)の 4 件を
   解消し全 12 テストが緑(下記「既知GAP」参照)
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.123.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.124.0)
 
 ### 帳簿整理(v0.114 版数のまま。文法・受理挙動の変更なし)
 
@@ -29,6 +29,47 @@
   語長上限 50 による rafsi 指数と stack overflow の封じ込み)。
   tests/fuzz.rs に lu ネスト最悪深度の境界テストを 1 本追加
   (fuzz の内訳 8→9。単体 298→299)
+
+## v0.124 で追加(JOI・ROI・KE・GA 実験語彙)
+
+### JOI 16 形・ROI 5 形・KE 6 形・GA 6 形の収録
+
+- JOI/ROI/KE/GA の全語形をテンプレート位置で z0/z1/maf 実測。
+  除外: mex 内 li pa 位置の JOI 16 形(参照 3 種とも拒否。既存 joi と同型の
+  OVER 既知クラスのため記録のみ)
+- 参照分裂(記録の上で収録): ROI 5 形は z1 のみ受理(re'u の前例)、GA 6 形と
+  nu'i は z0/z1 受理・maftufa 拒否
+- JOI_core 11→27・ROI_core 3→8・KE_core 1→7・GA_core 4→10。
+  教訓6に従い接頭辞ペアを整列(ce'oi→ce'o→ce、jo'ei'i→jo'ei→jo/jo'e、
+  fa'u'ai→fa'u、je'i→je、ju'e→ju、ji'o'e→ji、ke'ai→ke 等)。
+  機械検証で順序違反ゼロ。coverage.md の 4 行を文法順で再生成
+
+### mex/区間の BIhI と項位置 JOI の使い分け(z0 同型)
+
+- bi'o/bi'i/mi'i の JOI 収録により mex_conn で JOI 枝が BIhI 読みを奪う
+  ため、mex_conn のみ BIhI 枝を先に試す順序に変更
+  (「.i se bi'i no da klama」は BIhI を維持)。項レベルの ek_joik は
+  JOI 優先のまま(z0 は「mi broda bi'o brode」を JOI 読みする実測)
+- 裸/GAhO-BIhI 区間形(「mi klama pa bi'o re」型)は参照 3 種とも拒否する
+  実測のため既知 OVER として記録・スイープ行で固定(受理自体は不変)
+
+### je'i の NU 除去(二重修正)
+
+- z0 NU に je'i は存在せず(無印の jei のみ)、z0 JOI に存在する実測。
+  NU 位置の受理(「lo je'i broda」)は参照 3 種とも拒否の OVER だったため
+  NU_core から除去し、旧逆差分記録を解消。項位置は JOI 読みに統一
+  (「mi broda je'i brode」は z0 同型)
+
+### 掃引結果(v0.124。プローブ 3,020 行=2,943 行+新規 78 行-重複整理 1 行)
+
+- ours ok 2,904 / z0 ok 2,733 / z1 ok 2,753 / maftufa ok 2,687。
+  GAP 候補 29 件、OVER 候補 156 件(+11: JOI-mex 13 行の追加と
+  je'i-NU 2 行の解消の差し引き)
+- ok→err 1 行(je'i-NU の意図的縮小)、既存行の err→ok ゼロ、
+  参照列の変化ゼロ。新規 78 行は 36 行が全緑+20 行が z1 分裂(ROI)+
+  13 行が OVER(mex-JOI)+9 行が maftufa 分裂(GA/nu'i)
+- プローブ削除 1 行(`mi troci lo je'i klama ku`。NU 語彙からの自動除外)
+- tests/syntax.rs に 1 テスト追加+2 更新。cargo test 325 全パス
 
 ## v0.123 で追加(LE・LAhE 実験語彙)
 
@@ -600,7 +641,8 @@ maftufa = maftufa-1.9999.js)が受理するのに本パーサーが拒否する�
   - v0.97 で見送りを明記した尾部形 quantifier+sumti(lo pa le gerku ku。
     拒否ピンあり)
   - 差分なしの確認項目: 抽象詞 li'i/su'u/ni と逆参照 ri/ra/ru は本パーサーも
-    受理、je'i は z0/z1 が未収録(ours ok の逆差分)、na'e bo broda は
+    受理、je'i の NU 読みは z0/z1/maf が拒否のため v0.124 で除去
+    (JOI 読みは z0 整合で受理継続)、na'e bo broda は
     既存経路で受理、「数式+mai」の mex 全体形は参照 3 種も拒否のため
     GAP は不在
 
@@ -677,8 +719,9 @@ maftufa = maftufa-1.9999.js)が受理するのに本パーサーが拒否する�
 OVER 候補の残りは既存の記録済みクラス(li … du 型の mex 受容(v0.101)、
 裸数詞項 `mi viska {PA}` クラス(v0.112)、レタル接頭融合語の無ポーズ隣接
 (v0.110)、`lo kuku ku` 型 CVCV 短形残部(v0.110)、lo aburobu ku
-(v0.106)、mi pu bo ge broda gi broda 型(v0.107))と je'i(z0/z1 が
-未収録の逆差分。掃引方法論の節参照)で、いずれも記録済み。
+(v0.106)、mi pu bo ge broda gi broda 型(v0.107))で、いずれも記録済み。
+なお je'i の NU 読みの逆差分記録は v0.124 で解消
+(JOI_core に移設し NU 位置は z0 整合の拒否に)。
 
 ## v0.111 で追加(KOhA の ce'u/zi'o と CLL 標準 UI の欠落語彙)
 

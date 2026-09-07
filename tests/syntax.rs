@@ -390,8 +390,12 @@ fn 接続詞のboグルーピング() {
 
 #[test]
 fn bihi_間隔接続() {
+    // v0.124: bi'o/bi'i/mi'i の JOI 収録により区間形は JOI 読みに。
+    // ただし「mi klama pa bi'o re」型の裸/GAhO-BIhI 区間は参照 3 種とも
+    // 拒否する実測のため既知 OVER として記録(受理自体は v0.123 から不変)。
+    // 項位置の JOI 読み(「mi broda bi'o brode」は z0 も JOI)と区別する
     let s = parse_ok("mi klama pa bi'o re");
-    assert!(s.contains("BIhI_core \"bi'o\""), "{s}");
+    assert!(s.contains("JOI_core \"bi'o\""), "{s}");
     // 連鎖先のない間隔接続は拒否
     assert!(LojbanParser::parse(Rule::text, "mi klama bi'o").is_err());
 }
@@ -592,8 +596,8 @@ fn gaho_間隔端点() {
     let s = parse_ok("mi klama pa ga'o bi'o ke'i re");
     assert!(s.contains("GAhO_core \"ga'o\""), "{s}");
     let s = parse_ok("mi klama pa bi'o re");
-    // 従来形(GAhO 省略)も後方互換
-    assert!(s.contains("BIhI_core \"bi'o\""), "{s}");
+    // 従来形(GAhO 省略)も後方互換。参照 3 種とも拒否の既知 OVER(記録)
+    assert!(s.contains("JOI_core \"bi'o\""), "{s}");
 }
 
 #[test]
@@ -5763,5 +5767,90 @@ fn lelahe実験語彙_v0_123() {
             s.contains(&format!("LAhE_core \"{short}\"")),
             "{short}: {s}"
         );
+    }
+}
+
+#[test]
+fn joiroikegaa実験語彙_v0_124() {
+    // v0.124: JOI 16 形・ROI 5 形・KE 6 形・GA 6 形(z0/z1/maf 実測)。
+    // ROI は z1 のみ受理、GA/nu'i は z0/z1 受理・maftufa 拒否の参照分裂
+    // (いずれも記録の上で収録)。mex 内 li pa 位置の JOI は参照 3 種とも
+    // 拒否の OVER 既知クラスと同型のため除外
+    for (w, t) in [
+        ("ce", "mi ce do klama"),
+        ("ce'o", "mi broda ce'o brode"),
+        ("fa'u'ai", "mi fa'u'ai do klama"),
+        ("je'i", "mi broda je'i brode"),
+        ("ji'o'e", "mi ji'o'e do klama"),
+        ("jo'ei", "mi broda jo'ei brode"),
+        ("jo'ei'i", "mi jo'ei'i do klama"),
+        ("ju'e", "mi broda ju'e brode"),
+        ("mi'i", "mi mi'i do klama"),
+        ("pi'u", "mi broda pi'u brode"),
+        ("xoi'u", "mi xoi'u do klama"),
+        ("y'i", "mi broda y'i brode"),
+        ("zi'e", "mi zi'e do klama"),
+        ("bi'i", "mi bi'i do klama"),
+        ("bi'o", "mi broda bi'o brode"),
+    ] {
+        let s = parse_ok(t);
+        assert!(s.contains("JOI_core"), "{w}: {s}");
+    }
+    for (w, t) in [
+        ("ba'oi", "mi ba'oi klama"),
+        ("de'ei", "mi de'ei lo zdani klama"),
+        ("mu'ei", "mu'ei lo zdani klama"),
+        ("va'ei", "mi klama va'ei lo zdani"),
+        ("xu'au", "mi xu'au klama"),
+    ] {
+        let s = parse_ok(t);
+        assert!(!s.is_empty(), "{w}");
+    }
+    for (w, t) in [
+        ("fei'u", "mi klama fei'u broda je brode"),
+        ("ke'ai", "mi klama ke'ai broda ke'e"),
+        ("ke'ei", "mi klama ke'ei broda je brode"),
+        ("ke'oi", "mi klama ke'oi broda ke'e"),
+        ("nu'i", "mi klama nu'i broda ke'e"),
+        ("pi'ai", "mi klama pi'ai broda je brode"),
+    ] {
+        let s = parse_ok(t);
+        assert!(!s.is_empty(), "{w}");
+    }
+    let s = parse_ok("mi klama nu'i broda je brode");
+    assert!(s.contains("KE_core \"nu'i\""), "{s}");
+    for (w, t) in [
+        ("ge'i", "ge'i mi klama gi do broda"),
+        ("gu'a", "gu'a broda gi brode"),
+        ("gu'e", "gu'e mi klama gi do broda"),
+        ("gu'i", "gu'i broda gi brode"),
+        ("gu'o", "gu'o mi klama gi do broda"),
+        ("gu'u", "gu'u broda gi brode"),
+    ] {
+        let s = parse_ok(t);
+        assert!(!s.is_empty(), "{w}");
+    }
+    // 木ピン: 項位置 JOI(z0 同型)と mex 位置 BIhI の使い分け
+    let s = parse_ok("mi broda bi'o brode");
+    assert!(s.contains("JOI_core \"bi'o\""), "{s}");
+    // je'i は NU_core から除去(z0 NU 不在)。項位置は JOI 読み、
+    // NU 位置は参照 3 種とも拒否の z0 整合(旧逆差分記録の解消)
+    let s = parse_ok("mi broda je'i brode");
+    assert!(s.contains("JOI_core \"je'i\""), "{s}");
+    assert!(lojban::parse("lo je'i broda cu barda").is_err());
+    assert!(lojban::parse("mi troci lo je'i broda ku").is_err());
+    let s = parse_ok(".i se bi'i no da klama");
+    assert!(s.contains("BIhI_core \"bi'i\""), "{s}");
+    // 既存短形の不変ピン(JOI/KE は項位置、GA は文頭前置)
+    for short in ["jo", "ju", "je", "ke"] {
+        let s = parse_ok(&format!("mi {short} do klama"));
+        assert!(
+            s.contains(&format!("JOI_core \"{short}\"")) || s.contains("KE_core"),
+            "{short}: {s}"
+        );
+    }
+    for short in ["ga", "ge", "go", "gu"] {
+        let s = parse_ok(&format!("{short} mi klama gi do broda"));
+        assert!(s.contains("GA_core"), "{short}: {s}");
     }
 }

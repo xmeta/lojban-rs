@@ -509,12 +509,24 @@ mi klama mohi lo zdani
 mi klama fa'o
 mi klama faho
 ga mi klama gi do broda
+ge'i mi klama gi do broda
 ge mi klama gi do broda
 go mi klama gi do broda
+gu'a mi klama gi do broda
+gu'e mi klama gi do broda
+gu'i mi klama gi do broda
+gu'o mi klama gi do broda
+gu'u mi klama gi do broda
 gu mi klama gi do broda
 ga broda gi brode
+ge'i broda gi brode
 ge broda gi brode
 go broda gi brode
+gu'a broda gi brode
+gu'e broda gi brode
+gu'i broda gi brode
+gu'o broda gi brode
+gu'u broda gi brode
 gu broda gi brode
 mi viska la'e lo broda ge'u ku
 mi viska la'e lo broda gehu ku
@@ -667,46 +679,93 @@ mi viska obu
 mi viska ubu
 mi viska ybu
 mi cusku zo bu
-gu'a broda gi brode
-gu'e broda gi brode
-gu'o broda gi brode
-gu'u broda gi brode
 mi si klama
 mi klama lo zdani su
 mi broda ja brode
 mi broda je brode
 mi broda jo brode
 mi broda ju brode
+mi jo'ei'i do klama
+mi jo'ei do klama
 mi jo'e do klama
 mi joi do klama
+mi fa'u'ai do klama
 mi fa'u do klama
 mi ku'a do klama
 mi johu do klama
 mi jo'u do klama
 mi ja do klama
+mi je'i do klama
 mi je do klama
 mi jo do klama
+mi ju'e do klama
 mi ju do klama
+mi ji'o'e do klama
 mi ji do klama
+mi ce'oi do klama
+mi ce'o do klama
+mi ce do klama
+mi xoi'u do klama
+mi bi'i do klama
+mi bi'o do klama
+mi mi'i do klama
+mi pi'u do klama
+mi zi'e do klama
+mi y'i do klama
+mi broda jo'ei'i brode
+mi broda jo'ei brode
 mi broda jo'e brode
 mi broda joi brode
+mi broda fa'u'ai brode
 mi broda fa'u brode
 mi broda ku'a brode
 mi broda johu brode
 mi broda jo'u brode
+mi broda je'i brode
+mi broda ju'e brode
+mi broda ji'o'e brode
 mi broda ji brode
+mi broda ce'oi brode
+mi broda ce'o brode
+mi broda ce brode
+mi broda xoi'u brode
+mi broda bi'i brode
+mi broda bi'o brode
+mi broda mi'i brode
+mi broda pi'u brode
+mi broda zi'e brode
+mi broda y'i brode
+li pa jo'ei'i re du vo
+li pa jo'ei re du vo
 li pa jo'e re du vo
 li pa joi re du vo
+li pa fa'u'ai re du vo
 li pa fa'u re du vo
 li pa ku'a re du vo
 li pa johu re du vo
 li pa jo'u re du vo
 li pa ja re du vo
+li pa je'i re du vo
 li pa je re du vo
 li pa jo re du vo
+li pa ju'e re du vo
 li pa ju re du vo
+li pa ji'o'e re du vo
 li pa ji re du vo
+li pa ce'oi re du vo
+li pa ce'o re du vo
+li pa ce re du vo
+li pa xoi'u re du vo
+li pa pi'u re du vo
+li pa zi'e re du vo
+li pa y'i re du vo
+mi klama ke'ai broda je brode
+mi klama ke'ei broda je brode
+mi klama ke'oi broda je brode
 mi klama ke broda je brode
+mi klama fei'u broda je brode
+mi klama pi'ai broda je brode
+mi klama nu'i broda je brode
 mi klama ke broda je brode ke'e
 mi klama ke broda je brode kehe
 mi troci lo nu broda kei
@@ -1068,7 +1127,6 @@ lo broda noi broda cu barda
 lo broda voi broda cu barda
 lo broda noi mi viska ke'a ku'o barda
 lo broda voi mi viska ke'a ku'o barda
-mi troci lo je'i klama ku
 mi troci lo mu'e klama ku
 mi troci lo pu'u klama ku
 mi troci lo zu'o klama ku
@@ -1087,7 +1145,6 @@ mi troci lo bu'ai klama ku
 mi troci lo poi'i klama ku
 mi troci lo za'i klama ku
 mi troci lo jei klama ku
-lo je'i broda cu nandu
 lo mu'e broda cu nandu
 lo pu'u broda cu nandu
 lo zu'o broda cu nandu
@@ -1262,15 +1319,35 @@ mi viska fihu
 mi roi klama
 mi re'u klama
 mi rehu klama
+mi ba'oi klama
+mi de'ei klama
+mi mu'ei klama
+mi va'ei klama
+mi xu'au klama
 mi roi lo zdani klama
 mi re'u lo zdani klama
 mi rehu lo zdani klama
+mi ba'oi lo zdani klama
+mi de'ei lo zdani klama
+mi mu'ei lo zdani klama
+mi va'ei lo zdani klama
+mi xu'au lo zdani klama
 roi lo zdani klama
 re'u lo zdani klama
 rehu lo zdani klama
+ba'oi lo zdani klama
+de'ei lo zdani klama
+mu'ei lo zdani klama
+va'ei lo zdani klama
+xu'au lo zdani klama
 mi klama roi lo zdani
 mi klama re'u lo zdani
 mi klama rehu lo zdani
+mi klama ba'oi lo zdani
+mi klama de'ei lo zdani
+mi klama mu'ei lo zdani
+mi klama va'ei lo zdani
+mi klama xu'au lo zdani
 mi se'o'e klama lo zdani
 mi se'u'o klama lo zdani
 mi se klama lo zdani
@@ -2777,7 +2854,6 @@ mi jai se go broda
 mi broda joi nai brode
 mi broda joi bo brode
 mi broda se joi brode
-mi broda bi'i brode
 mi broda ga'o bi'i ke'i brode
 mi broda bi'i nai brode
 mi broda se bi'i brode
@@ -2809,6 +2885,7 @@ mi klama ri
 mi klama ra
 mi klama ru
 mi viska lo broda .i mi viska ri
+lo je'i broda cu nandu
 mi klama lo ni broda ku
 lo pa mi gerku ku barda
 lo pa le gerku ku barda

@@ -828,9 +828,15 @@ mex_operand = _{ number | vei_group | BY_clause | MOhE_clause ~ sp1 ~ sumti
 // ja/je/jo/ju を含む。JOI_core の注を参照)+ NAI、BIhI + GAhO 両端 + NAI。
 // 注: ek_joik の A/JOI/BIhI 各枝を変更する際は本規則も同期すること
 //     (両規則の差分は BO の有無のみ。mex は BO を取らない)
-mex_conn = _{ (A_clause | JOI_clause) ~ (sp1 ~ NAI_clause)?
-            | (GAhO_clause ~ sp1)? ~ BIhI_clause ~ (sp1 ~ GAhO_clause)?
-              ~ (sp1 ~ NAI_clause)? }
+// v0.124: BIhI 枝を JOI 枝より先に試す。bi'o/bi'i/mi'i が JOI_core に
+// 入ったため、mex 位置で JOI 枝が BIhI 読みを奪う(z0 は mex 位置では BIhI
+// 読み。「se bi'i no」は z0 実測で BIhI。項位置の JOI 読みは ek_joik 側で
+// 維持するため本規則のみの順序変更)。
+// 項レベルの ek_joik は JOI 優先のまま(z0 は「mi broda bi'o brode」を
+// JOI 読みする実測のため。両規則の差分は BO の有無のみ、という注記は維持)
+mex_conn = _{ (GAhO_clause ~ sp1)? ~ BIhI_clause ~ (sp1 ~ GAhO_clause)?
+              ~ (sp1 ~ NAI_clause)?
+            | (A_clause | JOI_clause) ~ (sp1 ~ NAI_clause)? }
 // 先置数理(peho su'i re ci = 2+3)。kuhe による明示閉鎖は省略可。
 // 被演算子は連結数詞を展開しない単一形(re ci を2桁数と読む number との競合回避)
 peho_group  = { PEhO_clause ~ sp1 ~ mex_operator ~ sp1 ~ fore_operand
@@ -1231,7 +1237,9 @@ MOhI_core = @{ ( ^"mo'i" | ^"mohi") ~ &word_boundary }
 FAhO_core = @{ ( ^"fa'o" | ^"faho") ~ &word_boundary }
 FEhU_core = @{ ( ^"fe'u" | ^"fehu") ~ &word_boundary }
 FIhO_core = @{ ( ^"fi'o" | ^"fiho") ~ &word_boundary }
-GA_core = @{ ( ^"ga" | ^"ge" | ^"go" | ^"gu") ~ &word_boundary }
+// v0.124: zantufa GA 実験語 6 形(z0/z1 受理・maftufa 拒否の分裂。
+// gek/GA 規則は GA_clause 汎用のため自動合成)
+GA_core = @{ ( ^"ga" | ^"ge'i" | ^"ge" | ^"go" | ^"gu'a" | ^"gu'e" | ^"gu'i" | ^"gu'o" | ^"gu'u" | ^"gu") ~ &word_boundary }
 // GA+NAI / GI+NAI の結合表記(ganai … ginai 等。IJ_joint 同様の一体化形)
 GANAI_joint = @{ (^"ganai" | ^"genai" | ^"gonai" | ^"gunai") ~ &word_boundary }
 GINAI_joint = @{ (^"ginai") ~ &word_boundary }
@@ -1327,9 +1335,17 @@ JA_bare = _{ ^"ja" | ^"je" | ^"jo" | ^"ju" }
 //     v0.109 で対応(GAP_JOIによるselbri接続の解消。gihek_joik 参照)。
 //     jo は jo'e/johu/jo'u の前置衝突を避けるため長い語形より後に置く
 //     (語彙選択のクセ。KOhA_core の注を参照)
-JOI_core = @{ ( ^"jo'e" | ^"joi" | ^"fa'u" | ^"ku'a" | ^"johu" | ^"jo'u"
-              | ^"ja" | ^"je" | ^"jo" | ^"ju" | ^"ji") ~ &word_boundary }
-KE_core = @{ ( ^"ke") ~ &word_boundary }
+JOI_core = @{ ( ^"jo'ei'i" | ^"jo'ei" | ^"jo'e" | ^"joi" | ^"fa'u'ai" | ^"fa'u" | ^"ku'a" | ^"johu" | ^"jo'u"
+              | ^"ja" | ^"je'i" | ^"je" | ^"jo" | ^"ju'e" | ^"ju" | ^"ji'o'e" | ^"ji"
+               | ^"ce'oi" | ^"ce'o" | ^"ce"
+               // v0.124: zantufa JOI 実験語 16 形(mex 内 li pa 位置は
+               // 参照 3 種とも拒否の OVER 既知クラスと同型のため記録のみ)
+               | ^"xoi'u" | ^"bi'i" | ^"bi'o" | ^"mi'i" | ^"pi'u" | ^"zi'e"
+               | ^"y'i") ~ &word_boundary }
+KE_core = @{ ( ^"ke'ai" | ^"ke'ei" | ^"ke'oi" | ^"ke"
+               // v0.124: zantufa KE 実験語 6 形(nu'i は z0/z1 受理・
+               // maftufa 拒否の分裂。ke_group は KE_clause 汎用のため自動合成)
+               | ^"fei'u" | ^"pi'ai" | ^"nu'i") ~ &word_boundary }
 KEhE_core = @{ ( ^"ke'e" | ^"kehe") ~ &word_boundary }
 KEI_core = @{ ( ^"kei") ~ &word_boundary }
 // 注: アポストロフィ付き形は必ずその素の接頭辞(mi/do/di 等)より先に置く。
@@ -1398,7 +1414,9 @@ NAhE_core = @{ ( ^"na'e" | ^"to'e" | ^"no'e" | ^"je'a") ~ &word_boundary }
 NIhO_core = @{ ( ^"ni'o" | ^"niho") ~ &word_boundary }
 NOI_core = @{ ( ^"poi" | ^"noi" | ^"voi") ~ &word_boundary }
 // si'o(概念抽象)は zantufa 由来の語彙に欠けている NU セルマォの1語(CLL 準拠で補完)
-NU_core = @{ ( ^"je'i" | ^"mu'e" | ^"pu'u" | ^"zu'o" | ^"li'i" | ^"su'u" | ^"si'o" | ^"du'u" | ^"nu" | ^"kai'ei" | ^"kai'u" | ^"ka'ei" | ^"ka" | ^"ni'ai" | ^"ni"
+// v0.124: je'i は NU_core から除去(z0 NU 不在。z0 JOI に存在するため
+// JOI 側に収録。NU 位置の受理は参照 3 種とも拒否の OVER だった)
+NU_core = @{ ( ^"mu'e" | ^"pu'u" | ^"zu'o" | ^"li'i" | ^"su'u" | ^"si'o" | ^"du'u" | ^"nu" | ^"kai'ei" | ^"kai'u" | ^"ka'ei" | ^"ka" | ^"ni'ai" | ^"ni"
                // v0.122: zantufa NU 実験語 8 形(z0/z1/maf 実測受理)
                | ^"bu'ai" | ^"poi'i" | ^"za'i" | ^"jei") ~ &word_boundary }
 // SE+NU の結合表記(報話で高頻度の sedu'u)。素の形が先だと境界先読みで失敗するため
@@ -1442,7 +1460,10 @@ PA_core  = @{ PA_word ~ &word_boundary }
 // 無ポーズ連結数詞(renono = 1200 等)
 PA_seq   = @{ PA_word+ ~ &word_boundary }
 // roi に同系列の序数頻度タグ re'u を追加(CLL: selma'o ROI)。h 表記 rehu も併記
-ROI_core = @{ ( ^"roi" | ^"re'u" | ^"rehu") ~ &word_boundary }
+ROI_core = @{ ( ^"roi" | ^"re'u" | ^"rehu"
+               // v0.124: zantufa ROI 実験語 5 形(z1 のみ受理の参照分裂。
+               // re'u の前例に従い収録・記録)
+               | ^"ba'oi" | ^"de'ei" | ^"mu'ei" | ^"va'ei" | ^"xu'au") ~ &word_boundary }
 SE_core = @{ ( ^"se'o'e" | ^"se'u'o" | ^"se" | ^"te" | ^"ve" | ^"xe"
                // v0.122: zantufa SE 実験語 8 形(z0/z1/maf 実測受理)
                | ^"re'au'e" | ^"su'ei" | ^"tau'o" | ^"to'ai" | ^"vo'ai" | ^"xo'ai") ~ &word_boundary }

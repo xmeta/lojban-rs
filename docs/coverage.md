@@ -23,7 +23,7 @@
 | FAhO | `fa'o` `faho` | ✅ |
 | FEhU | `fe'u` `fehu` | ✅ |
 | FIhO | `fi'o` `fiho` | ✅ |
-| GA | `ga` `ge` `go` `gu` | ✅ |
+| GA | `ga` `ge'i` `ge` `go` `gu'a` `gu'e` `gu'i` `gu'o` `gu'u` `gu` | ✅ |
 | GAhO | `ke'i` `kehi` `ga'o` `gaho` | ✅ |
 | GEhU | `ge'u` `gehu` | ✅ |
 | GI | `gi` | ✅ |
@@ -52,8 +52,8 @@
 | SI | `si` | ✅ |
 | SU | `su` | ✅ |
 | JA | `ja` `je` `jo` `ju` | ✅ |
-| JOI | `jo'e` `joi` `fa'u` `ku'a` `johu` `jo'u` `ja` `je` `jo` `ju` `ji` | ✅ |
-| KE | `ke` | ✅ |
+| JOI | `jo'ei'i` `jo'ei` `jo'e` `joi` `fa'u'ai` `fa'u` `ku'a` `johu` `jo'u` `ja` `je'i` `je` `jo` `ju'e` `ju` `ji'o'e` `ji` `ce'oi` `ce'o` `ce` `xoi'u` `bi'i` `bi'o` `mi'i` `pi'u` `zi'e` `y'i` | ✅ |
+| KE | `ke'ai` `ke'ei` `ke'oi` `ke` `fei'u` `pi'ai` `nu'i` | ✅ |
 | KEhE | `ke'e` `kehe` | ✅ |
 | KEI | `kei` | ✅ |
 | KOhA | `zo'e` `zu'i'a` `zu'i` `ke'a` `mi'oi` `mi'o` `ko'a` `ko'e` `ko'i` `ko'o` `ko'u` `fo'a` `fo'e` `fo'i` `fo'o` `fo'u` `vo'a` `vo'e` `vo'i` `vo'o` `vo'u` `mi'ai` `miahi` `mi'a` `ma'a` `do'o` `dei'ei` `dei'e` `dei'o` `dei'u` `dei` `di'u` `dihu` `de'u` `dehu` `da'u` `dahu` `mi` `do'ei` `do'i` `do` `ti` `ta` `tu'oi` `tu` `ri'au` `ri` `ra` `ru` `ko` `mai'i` `ma` `da'ai` `da'au` `da'e` `da` `de'e` `de` `di'au` `di'ei` `di'e` `di'oi` `di` `ce'u` `cehu` `zi'oi` `zi'o` `ziho` `ca'au` `kau'a` `kau'e` `kau'i` `lau'e` `lau'u` `nau'u` `nei'o` `zai'o` `zu'ai` `bo'a` `bo'e` `bo'i` `bo'o` `bo'u` `xai` | ✅ |
@@ -72,9 +72,9 @@
 | NAhE | `na'e` `to'e` `no'e` `je'a` | ✅ |
 | NIhO | `ni'o` `niho` | ✅ |
 | NOI | `poi` `noi` `voi` | ✅ |
-| NU | `je'i` `mu'e` `pu'u` `zu'o` `li'i` `su'u` `si'o` `du'u` `nu` `kai'ei` `kai'u` `ka'ei` `ka` `ni'ai` `ni` `bu'ai` `poi'i` `za'i` `jei` | ✅ |
+| NU | `mu'e` `pu'u` `zu'o` `li'i` `su'u` `si'o` `du'u` `nu` `kai'ei` `kai'u` `ka'ei` `ka` `ni'ai` `ni` `bu'ai` `poi'i` `za'i` `jei` | ✅ |
 | PA | `dau` `fei` `rei` `vai` `so'a` `so'e` `so'i` `so'u` `so'o` `soho` `za'u` `su'o` `suho` `suhe` `su'e` `daha` `da'a` `ji'i` `jihi` `xo` `pi` `rau` `du'e` `duhe` `mo'a` `moha` `te'o` `teho` `ka'o` `kaho` `tu'o` `pai` `pa` `re` `ci'i` `ci` `vo` `mu` `xa` `ze` `bi` `so` `no` `ro` `ki'o` `ma'u` `ni'u` `ce'i` `cehi` `fi'u` `fihu` | ✅ |
-| ROI | `roi` `re'u` `rehu` | ✅ |
+| ROI | `roi` `re'u` `rehu` `ba'oi` `de'ei` `mu'ei` `va'ei` `xu'au` | ✅ |
 | SE | `se'o'e` `se'u'o` `se` `te` `ve` `xe` `re'au'e` `su'ei` `tau'o` `to'ai` `vo'ai` `xo'ai` | ✅ |
 | SEI | `sei` | ✅ |
 | SEhU | `se'u` `sehu` | ✅ |
