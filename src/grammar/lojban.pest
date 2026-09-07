@@ -1344,19 +1344,24 @@ KEI_core = @{ ( ^"kei") ~ &word_boundary }
 //      だった。実文の意味論が変わるため z0 整合の意図的受理縮小
 //      (裸 tu'a は拒否。tests/syntax.rs の
 //      tu_a_は_lahe_経路で後続_sumti_を束ねる を参照)
-KOhA_core = @{ (^"zo'e" | ^"zu'i" | ^"ke'a" | ^"mi'o" | ^"ko'a" | ^"ko'e" | ^"ko'i"
+KOhA_core = @{ (^"zo'e" | ^"zu'i'a" | ^"zu'i" | ^"ke'a" | ^"mi'oi" | ^"mi'o" | ^"ko'a" | ^"ko'e" | ^"ko'i"
                | ^"ko'o" | ^"ko'u" | ^"fo'a" | ^"fo'e" | ^"fo'i" | ^"fo'o" | ^"fo'u"
                | ^"vo'a" | ^"vo'e" | ^"vo'i" | ^"vo'o" | ^"vo'u"
-               | ^"mi'ai" | ^"miahi" | ^"mi'a" | ^"ma'a" | ^"do'o" | ^"dei"
+               | ^"mi'ai" | ^"miahi" | ^"mi'a" | ^"ma'a" | ^"do'o" | ^"dei'ei" | ^"dei'e"  | ^"dei'o" | ^"dei'u" | ^"dei"
                | ^"di'u" | ^"dihu" | ^"de'u" | ^"dehu" | ^"da'u" | ^"dahu"
-               | ^"mi" | ^"do" | ^"ti" | ^"ta" | ^"tu" | ^"ri" | ^"ra" | ^"ru" | ^"ko"
-               | ^"ma" | ^"da" | ^"de" | ^"di"
+               | ^"mi" | ^"do'ei" | ^"do'i" | ^"do" | ^"ti" | ^"ta" | ^"tu'oi" | ^"tu" | ^"ri'au" | ^"ri" | ^"ra" | ^"ru" | ^"ko"
+               | ^"mai'i" | ^"ma" | ^"da'ai" | ^"da'au" | ^"da'e" | ^"da" | ^"de'e" | ^"de" | ^"di'au" | ^"di'ei" | ^"di'e"  | ^"di'oi" | ^"di"
                // ラムダ変数 ce'u(抽象 ka 内の ce'u が示す未充填スロット)と
                // 消去項 zi'o(CLL 7)。v0.110 まで欠落しており「mi klama ce'u」等が
                // 拒否されていたユーザー報告文の失敗点。h 変換規約に従い cehu/ziho も
                // 併記(z0/z1/maf 実測: いずれも項位置で受理)。KOhA_core 内に
                // 素の接頭辞 ce/zi は無いため語形選択の衝突はない
-               | ^"ce'u" | ^"cehu" | ^"zi'o" | ^"ziho") ~ &word_boundary }
+               | ^"ce'u" | ^"cehu" | ^"zi'oi" | ^"zi'o" | ^"ziho"
+               // v0.121: zantufa KOhA 実験語(2015-08-20 追加分。
+               // z0/z1/maf の項位置受理を全数実測の上で収録)
+                | ^"ca'au" | ^"kau'a" | ^"kau'e" | ^"kau'i" | ^"lau'e" | ^"lau'u"
+                | ^"nau'u" | ^"nei'o" | ^"zai'o" | ^"zu'ai" | ^"bo'a" | ^"bo'e"
+                | ^"bo'i" | ^"bo'o" | ^"bo'u" | ^"xai") ~ &word_boundary }
 KU_core = @{ ( ^"ku") ~ &word_boundary }
 KUhO_core = @{ ( ^"ku'o" | ^"kuho") ~ &word_boundary }
 // v0.114: tu'a(要約抽象「the event of …」)を KOhA_core から移設。

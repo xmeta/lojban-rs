@@ -711,8 +711,10 @@ mi klama ke broda je brode ke'e
 mi klama ke broda je brode kehe
 mi troci lo nu broda kei
 zo'e klama
+zu'i'a klama
 zu'i klama
 ke'a klama
+mi'oi klama
 mi'o klama
 ko'a klama
 ko'e klama
@@ -734,6 +736,10 @@ miahi klama
 mi'a klama
 ma'a klama
 do'o klama
+dei'ei klama
+dei'e klama
+dei'o klama
+dei'u klama
 dei klama
 di'u klama
 dihu klama
@@ -742,25 +748,57 @@ dehu klama
 da'u klama
 dahu klama
 mi klama
+do'ei klama
+do'i klama
 do klama
 ti klama
 ta klama
+tu'oi klama
 tu klama
+ri'au klama
 ri klama
 ra klama
 ru klama
 ko klama
+mai'i klama
 ma klama
+da'ai klama
+da'au klama
+da'e klama
 da klama
+de'e klama
 de klama
+di'au klama
+di'ei klama
+di'e klama
+di'oi klama
 di klama
 ce'u klama
 cehu klama
+zi'oi klama
 zi'o klama
 ziho klama
+ca'au klama
+kau'a klama
+kau'e klama
+kau'i klama
+lau'e klama
+lau'u klama
+nau'u klama
+nei'o klama
+zai'o klama
+zu'ai klama
+bo'a klama
+bo'e klama
+bo'i klama
+bo'o klama
+bo'u klama
+xai klama
 mi zo'e klama
+mi zu'i'a klama
 mi zu'i klama
 mi ke'a klama
+mi mi'oi klama
 mi mi'o klama
 mi ko'a klama
 mi ko'e klama
@@ -782,6 +820,10 @@ mi miahi klama
 mi mi'a klama
 mi ma'a klama
 mi do'o klama
+mi dei'ei klama
+mi dei'e klama
+mi dei'o klama
+mi dei'u klama
 mi dei klama
 mi di'u klama
 mi dihu klama
@@ -790,25 +832,57 @@ mi dehu klama
 mi da'u klama
 mi dahu klama
 mi mi klama
+mi do'ei klama
+mi do'i klama
 mi do klama
 mi ti klama
 mi ta klama
+mi tu'oi klama
 mi tu klama
+mi ri'au klama
 mi ri klama
 mi ra klama
 mi ru klama
 mi ko klama
+mi mai'i klama
 mi ma klama
+mi da'ai klama
+mi da'au klama
+mi da'e klama
 mi da klama
+mi de'e klama
 mi de klama
+mi di'au klama
+mi di'ei klama
+mi di'e klama
+mi di'oi klama
 mi di klama
 mi ce'u klama
 mi cehu klama
+mi zi'oi klama
 mi zi'o klama
 mi ziho klama
+mi ca'au klama
+mi kau'a klama
+mi kau'e klama
+mi kau'i klama
+mi lau'e klama
+mi lau'u klama
+mi nau'u klama
+mi nei'o klama
+mi zai'o klama
+mi zu'ai klama
+mi bo'a klama
+mi bo'e klama
+mi bo'i klama
+mi bo'o klama
+mi bo'u klama
+mi xai klama
 mi viska zo'e
+mi viska zu'i'a
 mi viska zu'i
 mi viska ke'a
+mi viska mi'oi
 mi viska mi'o
 mi viska ko'a
 mi viska ko'e
@@ -830,6 +904,10 @@ mi viska miahi
 mi viska mi'a
 mi viska ma'a
 mi viska do'o
+mi viska dei'ei
+mi viska dei'e
+mi viska dei'o
+mi viska dei'u
 mi viska dei
 mi viska di'u
 mi viska dihu
@@ -838,22 +916,52 @@ mi viska dehu
 mi viska da'u
 mi viska dahu
 mi viska mi
+mi viska do'ei
+mi viska do'i
 mi viska do
 mi viska ti
 mi viska ta
+mi viska tu'oi
 mi viska tu
+mi viska ri'au
 mi viska ri
 mi viska ra
 mi viska ru
 mi viska ko
+mi viska mai'i
 mi viska ma
+mi viska da'ai
+mi viska da'au
+mi viska da'e
 mi viska da
+mi viska de'e
 mi viska de
+mi viska di'au
+mi viska di'ei
+mi viska di'e
+mi viska di'oi
 mi viska di
 mi viska ce'u
 mi viska cehu
+mi viska zi'oi
 mi viska zi'o
 mi viska ziho
+mi viska ca'au
+mi viska kau'a
+mi viska kau'e
+mi viska kau'i
+mi viska lau'e
+mi viska lau'u
+mi viska nau'u
+mi viska nei'o
+mi viska zai'o
+mi viska zu'ai
+mi viska bo'a
+mi viska bo'e
+mi viska bo'i
+mi viska bo'o
+mi viska bo'u
+mi viska xai
 lo broda ku klama
 lo broda poi mi viska ke'a ku'o barda
 lo broda poi mi viska ke'a kuho barda

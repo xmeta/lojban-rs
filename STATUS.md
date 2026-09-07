@@ -1,13 +1,13 @@
 # 開発ステータス
 
-## 現在の状態: v0.120 完成(UI 実験語彙108形・全テストグリーン)
+## 現在の状態: v0.121 完成(KOhA 実験語彙36形・全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語229 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体310 + doc 11 = 計321テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語230 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体311 + doc 11 = 計322テスト + example 内 unit test 5 全パス
 - tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件、
   v0.109 でバッチ2(接続詞・前置系)の 4 件、v0.110 でバッチ3(形態論・共有・前処理系)の 4 件を
   解消し全 12 テストが緑(下記「既知GAP」参照)
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.120.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.121.0)
 
 ### 帳簿整理(v0.114 版数のまま。文法・受理挙動の変更なし)
 
@@ -29,6 +29,26 @@
   語長上限 50 による rafsi 指数と stack overflow の封じ込み)。
   tests/fuzz.rs に lu ネスト最悪深度の境界テストを 1 本追加
   (fuzz の内訳 8→9。単体 298→299)
+
+## v0.121 で追加(KOhA 実験語彙 36 形)
+
+### zantufa KOhA 実験語(2015-08-20 追加分)の全数収録
+
+- 36 形全てを z0/z1/maf の項 3 位置で全数再実測: 108/108 全て参照 3 種
+  受理。除外なし
+- KOhA_core 48→84 語形。教訓6(atomic 内は長い順)に従い接頭辞ペアを整列:
+  新語 20 語を既存短形の前に挿入(da'ai→da、dei'ei→dei'e→dei 等)、
+  残りは長さ降順で追記。機械検証で順序違反ゼロ
+- coverage.md の KOhA 行を文法順で再生成(coverage_doc 準拠)
+
+### 掃引結果(v0.121。プローブ 2,864 行=2,756 行+新規 108 行)
+
+- ours ok 2,749 / z0 ok 2,609 / z1 ok 2,609 / maftufa ok 2,572。
+  GAP 候補 29 件、OVER 候補 145 件(ともに不変)
+- ok→err ゼロ、既存行の err→ok ゼロ、参照列の変化ゼロ。
+  新規 108 行は全行 ours=参照 3 種 ok
+- tests/syntax.rs に 1 テスト追加(36 語×3 位置の全数+木ピン+不変ピン)。
+  cargo test 322 全パス
 
 ## v0.120 で追加(UI 実験語彙 108 形と融合形)
 
@@ -668,7 +688,7 @@ KOhA/UI 語彙リストを h→' 変換の上で本実装と突合し、欠落�
 ### 次バッチ課題(zantufa 実験語彙・参照語彙差分の残り)
 
 - zantufa KOhA 実験語(2015-08-20 追加分。全て z0/z1/maf の項位置受理・
-  ours 拒否を確認済み): bo'a bo'e bo'i bo'o bo'u ca'au da'ai da'au da'e
+  ours 拒否を確認済み。**v0.121 で 36 形全て解消**。下記 v0.121 節): bo'a bo'e bo'i bo'o bo'u ca'au da'ai da'au da'e
   de'e dei'e dei'ei dei'o dei'u di'au di'e di'ei di'oi do'ei do'i
   kau'a kau'e kau'i lau'e lau'u mai'i mi'oi nau'u nei'o ri'au tu'oi xai
   zai'o zi'oi zu'ai zu'i'a

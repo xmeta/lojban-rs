@@ -56,7 +56,7 @@
 | KE | `ke` | ✅ |
 | KEhE | `ke'e` `kehe` | ✅ |
 | KEI | `kei` | ✅ |
-| KOhA | `zo'e` `zu'i` `ke'a` `mi'o` `ko'a` `ko'e` `ko'i` `ko'o` `ko'u` `fo'a` `fo'e` `fo'i` `fo'o` `fo'u` `vo'a` `vo'e` `vo'i` `vo'o` `vo'u` `mi'ai` `miahi` `mi'a` `ma'a` `do'o` `dei` `di'u` `dihu` `de'u` `dehu` `da'u` `dahu` `mi` `do` `ti` `ta` `tu` `ri` `ra` `ru` `ko` `ma` `da` `de` `di` `ce'u` `cehu` `zi'o` `ziho` | ✅ |
+| KOhA | `zo'e` `zu'i'a` `zu'i` `ke'a` `mi'oi` `mi'o` `ko'a` `ko'e` `ko'i` `ko'o` `ko'u` `fo'a` `fo'e` `fo'i` `fo'o` `fo'u` `vo'a` `vo'e` `vo'i` `vo'o` `vo'u` `mi'ai` `miahi` `mi'a` `ma'a` `do'o` `dei'ei` `dei'e` `dei'o` `dei'u` `dei` `di'u` `dihu` `de'u` `dehu` `da'u` `dahu` `mi` `do'ei` `do'i` `do` `ti` `ta` `tu'oi` `tu` `ri'au` `ri` `ra` `ru` `ko` `mai'i` `ma` `da'ai` `da'au` `da'e` `da` `de'e` `de` `di'au` `di'ei` `di'e` `di'oi` `di` `ce'u` `cehu` `zi'oi` `zi'o` `ziho` `ca'au` `kau'a` `kau'e` `kau'i` `lau'e` `lau'u` `nau'u` `nei'o` `zai'o` `zu'ai` `bo'a` `bo'e` `bo'i` `bo'o` `bo'u` `xai` | ✅ |
 | KU | `ku` | ✅ |
 | KUhO | `ku'o` `kuho` | ✅ |
 | LAhE | `tu'a` `tuha` `la'e` `lu'e` | ✅ |

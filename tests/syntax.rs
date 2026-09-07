@@ -5629,3 +5629,35 @@ fn ui実験語彙108形_v0_120() {
     assert!(lojban::parse("sa mi klama").is_err());
     assert!(lojban::parse("nai mi klama").is_err());
 }
+
+#[test]
+fn koha実験語彙36形_v0_121() {
+    // v0.121: STATUS 記録の zantufa KOhA 実験語(2015-08-20 追加分)36 形。
+    // 全形 z0/z1/maf の項 3 位置での受理を事前実測済み
+    let words36 = [
+        "bo'a", "bo'e", "bo'i", "bo'o", "bo'u", "ca'au", "da'ai", "da'au", "da'e", "de'e", "dei'e",
+        "dei'ei", "dei'o", "dei'u", "di'au", "di'e", "di'ei", "di'oi", "do'ei", "do'i", "kau'a",
+        "kau'e", "kau'i", "lau'e", "lau'u", "mai'i", "mi'oi", "nau'u", "nei'o", "ri'au", "tu'oi",
+        "xai", "zai'o", "zi'oi", "zu'ai", "zu'i'a",
+    ];
+    assert_eq!(words36.len(), 36);
+    for w in words36 {
+        parse_ok(&format!("{w} klama"));
+        parse_ok(&format!("mi {w} klama"));
+        parse_ok(&format!("mi viska {w}"));
+    }
+    // 木ピン: KOhA 項読みと接頭辞ペアの正規読み(教訓6: 長形先置)
+    let s = parse_ok("mi do'i klama");
+    assert!(s.contains("KOhA_core \"do'i\""), "{s}");
+    assert!(!s.contains("KOhA_core \"do\""), "{s}");
+    let s = parse_ok("dei'ei klama");
+    assert!(s.contains("KOhA_core \"dei'ei\""), "{s}");
+    // 既存短形の不変ピン
+    for short in ["do", "da", "de", "di", "dei", "mi", "ri"] {
+        let s = parse_ok(&format!("mi {short} klama"));
+        assert!(
+            s.contains(&format!("KOhA_core \"{short}\"")),
+            "{short}: {s}"
+        );
+    }
+}
