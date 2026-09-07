@@ -5710,3 +5710,58 @@ fn nusebahemai実験語彙_v0_122() {
     // 除外ピン: pe'e 単独形は別課題として拒否維持
     assert!(lojban::parse("mi pe'e klama").is_err());
 }
+
+#[test]
+fn lelahe実験語彙_v0_123() {
+    // v0.123: LE 12 形・LAhE 10 形(z0/z1/maf 実測受理)。
+    // lu'a/lu'i/lu'o は標準 LAhE の欠落分
+    for (w, t) in [
+        ("la'ei", "mi viska la'ei broda ku"),
+        ("le'ei", "le'ei broda cu barda"),
+        ("lei'e", "mi viska lei'e broda ku"),
+        ("lei'i", "lei'i broda cu barda"),
+        ("lo'ei", "mi viska lo'ei broda ku"),
+        ("loi'e", "loi'e broda cu barda"),
+        ("loi'i", "mi viska loi'i broda ku"),
+        ("me'ei", "me'ei broda cu barda"),
+        ("mo'oi", "mi viska mo'oi broda ku"),
+        ("moi'oi", "moi'oi broda cu barda"),
+        ("ri'oi", "mi viska ri'oi broda ku"),
+        ("zo'au", "zo'au broda cu barda"),
+    ] {
+        let s = parse_ok(t);
+        assert!(s.contains("LE_core"), "{w}: {s}");
+    }
+    for (w, t) in [
+        ("du'au", "mi viska du'au di'u"),
+        ("la'e'au", "mi viska la'e'au lo broda ku"),
+        ("lai'e", "mi viska lai'e di'u"),
+        ("lu'a", "mi viska lu'a di'u"),
+        ("lu'au", "mi viska lu'au lo broda ku"),
+        ("lu'i", "mi viska lu'i di'u"),
+        ("lu'o", "mi viska lu'o lo broda ku"),
+        ("tau'e", "mi viska tau'e di'u"),
+        ("vu'i", "mi viska vu'i lo broda ku"),
+        ("zo'ei", "mi viska zo'ei di'u"),
+    ] {
+        let s = parse_ok(t);
+        assert!(s.contains("LAhE_core"), "{w}: {s}");
+    }
+    // 木ピン: 接頭辞ペアの正規読み(教訓6: 長形先置)
+    let s = parse_ok("le'ei broda cu barda");
+    assert!(s.contains("LE_core \"le'ei\""), "{s}");
+    let s = parse_ok("mi viska lu'au di'u");
+    assert!(s.contains("LAhE_core \"lu'au\""), "{s}");
+    // 既存短形の不変ピン
+    for short in ["le", "lo", "loi", "lei", "la"] {
+        let s = parse_ok(&format!("mi viska {short} broda ku"));
+        assert!(s.contains(&format!("LE_core \"{short}\"")), "{short}: {s}");
+    }
+    for short in ["la'e", "lu'e"] {
+        let s = parse_ok(&format!("mi viska {short} di'u"));
+        assert!(
+            s.contains(&format!("LAhE_core \"{short}\"")),
+            "{short}: {s}"
+        );
+    }
+}

@@ -1,13 +1,13 @@
 # 開発ステータス
 
-## 現在の状態: v0.122 完成(NU・SE・BAhE・MAI 実験語彙・全テストグリーン)
+## 現在の状態: v0.123 完成(LE・LAhE 実験語彙・全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語231 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体312 + doc 11 = 計323テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語232 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体313 + doc 11 = 計324テスト + example 内 unit test 5 全パス
 - tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件、
   v0.109 でバッチ2(接続詞・前置系)の 4 件、v0.110 でバッチ3(形態論・共有・前処理系)の 4 件を
   解消し全 12 テストが緑(下記「既知GAP」参照)
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.122.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.123.0)
 
 ### 帳簿整理(v0.114 版数のまま。文法・受理挙動の変更なし)
 
@@ -29,6 +29,25 @@
   語長上限 50 による rafsi 指数と stack overflow の封じ込み)。
   tests/fuzz.rs に lu ネスト最悪深度の境界テストを 1 本追加
   (fuzz の内訳 8→9。単体 298→299)
+
+## v0.123 で追加(LE・LAhE 実験語彙)
+
+### LE 12 形・LAhE 10 形の収録
+
+- 22 形全てをテンプレート位置で z0/z1/maf 実測: 44/44 全て参照 3 種受理。
+  除外なし。lu'a/lu'i/lu'o は標準 LAhE の欠落分だった
+- LE_core 12→24・LAhE_core 4→14。教訓6に従い接頭辞ペアを整列
+  (lo'ei→lo'e、loi'e/loi'i→loi、lei'e/lei'i→lei、la'ei→la、le'ei→le'e/le、
+  lu'au→lu'a、la'e'au→la'e)。機械検証で順序違反ゼロ
+- coverage.md の LE/LAhE 行を文法順で再生成(coverage_doc 準拠)
+
+### 掃引結果(v0.123。プローブ 2,943 行=2,899 行+新規 44 行)
+
+- ours ok 2,828 / z0 ok 2,688 / z1 ok 2,688 / maftufa ok 2,651。
+  GAP 候補 29 件、OVER 候補 145 件(ともに不変)
+- ok→err ゼロ、既存行の err→ok ゼロ、参照列の変化ゼロ。
+  新規 44 行は全行 ours=参照 3 種 ok
+- tests/syntax.rs に 1 テスト追加。cargo test 324 全パス
 
 ## v0.122 で追加(NU・SE・BAhE・MAI 実験語彙)
 

@@ -1372,10 +1372,17 @@ KUhO_core = @{ ( ^"ku'o" | ^"kuho") ~ &word_boundary }
 //      経路となり、木形状も z0 と同型になる。
 //      h 変体 tuha も z0/z1/maf 実測受理(v0.111 の '↔h 併記規約に従い併記。
 //      「tuha do」は従来 ours err の既存 GAP だった)
-LAhE_core = @{ ( ^"tu'a" | ^"tuha" | ^"la'e" | ^"lu'e") ~ &word_boundary }
-LE_core = @{ ( ^"le'i" | ^"lo'i" | ^"la'i" | ^"lei" | ^"loi" | ^"lai"
-              | ^"lo'e" | ^"lehe" | ^"le'e"
-              | ^"le" | ^"lo" | ^"la") ~ &word_boundary }
+LAhE_core = @{ ( ^"tu'a" | ^"tuha" | ^"la'e'au" | ^"la'e" | ^"lu'e"
+               | ^"lu'au" | ^"lu'a"
+               // v0.123: zantufa LAhE 実験語 10 形(z0/z1/maf 実測受理。
+               // lu'a/lu'i/lu'o は標準 LAhE の欠落分)
+               | ^"du'au" | ^"lai'e" | ^"tau'e" | ^"zo'ei" | ^"lu'i" | ^"lu'o"
+               | ^"vu'i") ~ &word_boundary }
+LE_core = @{ ( ^"le'i" | ^"lo'i" | ^"la'i" | ^"lei'e" | ^"lei'i" | ^"lei" | ^"loi'e" | ^"loi'i" | ^"loi" | ^"lai"
+              | ^"lo'ei" | ^"lo'e" | ^"lehe" | ^"le'ei" | ^"le'e"
+              | ^"le" | ^"lo" | ^"la'ei" | ^"la"
+               // v0.123: zantufa LE 実験語 12 形(z0/z1/maf 実測受理)
+               | ^"moi'oi" | ^"me'ei" | ^"mo'oi" | ^"ri'oi" | ^"zo'au") ~ &word_boundary }
 LEhU_core = @{ ( ^"le'u" | ^"lehu") ~ &word_boundary }
 LI_core = @{ ( ^"li") ~ &word_boundary }
 // li'u は LU 引用の終端詞(zantufa の命名踏襲)

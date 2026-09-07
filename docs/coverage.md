@@ -59,8 +59,8 @@
 | KOhA | `zo'e` `zu'i'a` `zu'i` `ke'a` `mi'oi` `mi'o` `ko'a` `ko'e` `ko'i` `ko'o` `ko'u` `fo'a` `fo'e` `fo'i` `fo'o` `fo'u` `vo'a` `vo'e` `vo'i` `vo'o` `vo'u` `mi'ai` `miahi` `mi'a` `ma'a` `do'o` `dei'ei` `dei'e` `dei'o` `dei'u` `dei` `di'u` `dihu` `de'u` `dehu` `da'u` `dahu` `mi` `do'ei` `do'i` `do` `ti` `ta` `tu'oi` `tu` `ri'au` `ri` `ra` `ru` `ko` `mai'i` `ma` `da'ai` `da'au` `da'e` `da` `de'e` `de` `di'au` `di'ei` `di'e` `di'oi` `di` `ce'u` `cehu` `zi'oi` `zi'o` `ziho` `ca'au` `kau'a` `kau'e` `kau'i` `lau'e` `lau'u` `nau'u` `nei'o` `zai'o` `zu'ai` `bo'a` `bo'e` `bo'i` `bo'o` `bo'u` `xai` | ✅ |
 | KU | `ku` | ✅ |
 | KUhO | `ku'o` `kuho` | ✅ |
-| LAhE | `tu'a` `tuha` `la'e` `lu'e` | ✅ |
-| LE | `le'i` `lo'i` `la'i` `lei` `loi` `lai` `lo'e` `lehe` `le'e` `le` `lo` `la` | ✅ |
+| LAhE | `tu'a` `tuha` `la'e'au` `la'e` `lu'e` `lu'au` `lu'a` `du'au` `lai'e` `tau'e` `zo'ei` `lu'i` `lu'o` `vu'i` | ✅ |
+| LE | `le'i` `lo'i` `la'i` `lei'e` `lei'i` `lei` `loi'e` `loi'i` `loi` `lai` `lo'ei` `lo'e` `lehe` `le'ei` `le'e` `le` `lo` `la'ei` `la` `moi'oi` `me'ei` `mo'oi` `ri'oi` `zo'au` | ✅ |
 | LEhU | `le'u` `lehu` | ✅ |
 | LI | `li` | ✅ |
 | LIhU | `li'u` `lihu` | ✅ |
