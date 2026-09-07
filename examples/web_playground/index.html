@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Interactive Lojban PEG parser playground powered by lojban-rs">
+  <meta name="lojban-runtime" content="server">
+  <title>Lojban Parser Playground</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="brand">
+      <span class="eyebrow">lojban-rs / example</span>
+      <h1>Lojban Parser Playground</h1>
+      <p>PEG パーサーの解析結果を、構文木・単語分類・JSON・S式で探索できます。</p>
+    </div>
+    <div class="hero-actions">
+      <label class="sample-picker">
+        <span>Example</span>
+        <select id="sample-select">
+          <option value="mi tavla do">mi tavla do</option>
+          <option value="le mlatu cu cadzu">le mlatu cu cadzu</option>
+          <option value="mi pu klama le zarci">mi pu klama le zarci</option>
+          <option value="coi la alis. .i mi gleki">coi la alis. .i mi gleki</option>
+          <option value="lu mi klama li'u cu melbi">lu mi klama li'u cu melbi</option>
+        </select>
+      </label>      <button id="share-button" class="secondary-button hero-button" type="button" title="入力をURLとしてコピー">Share URL</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <section class="panel editor-panel">
+      <div class="panel-heading">
+        <div>
+          <span class="section-label">INPUT</span>
+          <h2>Lojban text</h2>
+        </div>
+        <div class="button-row">
+          <button id="clear-button" class="ghost-button" type="button">Clear</button>
+          <button id="parse-button" class="primary-button" type="button">Parse</button>
+        </div>
+      </div>
+      <textarea id="source" spellcheck="false" autocapitalize="off" aria-label="Lojban text">mi tavla do</textarea>
+      <div class="editor-footer">
+        <span id="selection-info">Ctrl/⌘ + Enter: Parse · Ctrl/⌘ + K: Focus</span>
+        <span id="char-count">11 chars</span>
+      </div>
+      <aside class="history-panel" aria-label="Recent valid inputs">
+        <div class="history-heading">
+          <span>Recent valid inputs</span>
+          <button id="clear-history" class="text-button" type="button">Clear history</button>
+        </div>
+        <div id="history-list" class="history-list"></div>
+      </aside>
+    </section>    <section class="panel result-panel">
+      <div class="result-header">
+        <div class="status-block">
+          <div id="status" class="status pending">
+            <span class="status-dot"></span>
+            <span id="status-text">Ready</span>
+          </div>
+          <span id="latency" class="latency"></span>
+        </div>
+        <div id="stats" class="stats"></div>
+        <div class="button-row result-actions">
+          <button id="copy-button" class="ghost-button" type="button">Copy</button>
+          <button id="download-button" class="ghost-button" type="button">Download</button>
+        </div>
+      </div>
+
+      <nav class="tabs" aria-label="解析結果">
+        <button class="tab active" data-tab="tree" type="button">Tree <kbd>Alt+1</kbd></button>
+        <button class="tab" data-tab="words" type="button">Words <kbd>Alt+2</kbd></button>
+        <button class="tab" data-tab="json" type="button">JSON <kbd>Alt+3</kbd></button>
+        <button class="tab" data-tab="sexpr" type="button">S-expression <kbd>Alt+4</kbd></button>
+      </nav>
+      <div class="tab-content active" id="tab-tree">
+        <div class="tree-toolbar">
+          <span>ノードのテキストをクリックすると入力範囲を選択</span>
+          <div class="button-row compact-buttons">
+            <button id="expand-tree" class="text-button" type="button">Expand all</button>
+            <button id="collapse-tree" class="text-button" type="button">Collapse all</button>
+          </div>
+        </div>
+        <div id="tree-view" class="tree-view"></div>
+      </div>
+      <div class="tab-content" id="tab-words">
+        <div id="word-view" class="word-grid"></div>
+      </div>
+      <div class="tab-content" id="tab-json">
+        <pre id="json-view" class="code-view"></pre>
+      </div>
+      <div class="tab-content" id="tab-sexpr">
+        <pre id="sexpr-view" class="code-view"></pre>
+      </div>
+      <div id="error-view" class="error-view" hidden></div>
+      <aside id="inspector" class="inspector-panel" aria-live="polite" hidden>
+        <div class="inspector-heading">
+          <div>
+            <span class="section-label">INSPECTOR</span>
+            <h2 id="inspector-rule">Parse node</h2>
+          </div>
+          <button id="close-inspector" class="text-button" type="button">Close</button>
+        </div>
+        <p id="inspector-description" class="inspector-description"></p>
+        <dl class="inspector-grid">
+          <div><dt>Text</dt><dd id="inspector-text"></dd></div>
+          <div><dt>Bytes</dt><dd id="inspector-range"></dd></div>
+          <div><dt>Depth</dt><dd id="inspector-depth"></dd></div>
+          <div><dt>Children</dt><dd id="inspector-children"></dd></div>
+        </dl>
+        <div class="inspector-path"><span>Path</span><code id="inspector-path"></code></div>
+      </aside>
+    </section>
+  </main>
+
+  <section class="panel regression-lab" aria-labelledby="regression-title">
+    <div class="regression-heading">
+      <div>
+        <span class="section-label">REGRESSION LAB</span>
+        <h2 id="regression-title">Batch parser check</h2>
+        <p>1行を1ケースとしてまとめて解析し、成功率・失敗位置・処理時間を比較します。</p>
+      </div>
+      <div class="button-row">
+        <button id="regression-use-current" class="ghost-button" type="button">Add current</button>
+        <button id="regression-run" class="primary-button" type="button">Run batch</button>
+      </div>
+    </div>
+    <textarea id="regression-source" class="regression-source" spellcheck="false" aria-label="Regression test cases">mi tavla do
+le mlatu cu cadzu
+le cu
+mi pu klama le zarci
+qqq</textarea>
+    <div id="regression-summary" class="regression-summary" aria-live="polite"></div>
+    <div class="regression-table-wrap">
+      <table class="regression-table">
+        <thead><tr><th>Line</th><th>Status</th><th>Input</th><th>Time</th><th>Diagnostic</th></tr></thead>
+        <tbody id="regression-results"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>Powered by <strong>lojban-rs</strong> + pest · local only</span>
+    <span>Esc: clear range · Alt+1…4: switch result tabs</span>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <script src="./runtime.js" defer></script>
+  <script src="./app.js" defer></script>
+</body>
+</html>

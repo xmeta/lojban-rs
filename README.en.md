@@ -50,9 +50,10 @@ The parser engine is [pest](https://pest.rs); the grammar in
     `pu bi'o ba` / `ca bi'i ba`), **space intervals** (VEhA/VIhA as in
     `ve'i ne'i le zdani` / `vi'a ca'u`), and **tense tags taking a sumti**
     (`mi ca le cabdei cu klama` / `vi ne'i le zdani` / durations `ze'a lo cacra`)
-  - **Term reinforcement**: LAhE reference (`la'e di'u` / `lu'e le cukta`),
+  - **Term reinforcement**: LAhE reference (`la'e di'u` / `lu'e le cukta`,
+    abstractor `tu'a lo broda`),
     term-position negation with `naku` (NA KU), KOhA completion
-    (`mi'a` `ma'a` `do'o` `di'u` `tu'a` `dei`, etc.),
+    (`mi'a` `ma'a` `do'o` `di'u` `dei`, etc.),
     description articles `lo'e` / `le'e`
   - Quantifier + selbri terms (`pa prenu cu klama`), quantifiers inside descriptions
     (`le ci gerku`)
@@ -106,6 +107,32 @@ zba (Ccv)
 ta'u (CvvApo)
 ```
 
+### Web Playground example
+
+**Live site:** https://xmeta.github.io/lojban-rs/
+
+A local web app for inspecting the parse tree, word classification, JSON, and
+S-expressions in the browser ships as an example. It has no additional
+dependencies.
+
+```console
+$ cargo run --example web_playground
+# open http://127.0.0.1:8787 in your browser
+```
+
+Input is parsed by a local Rust process and is never sent to any external
+service. The UI supports jumping from tree nodes / words to the input range,
+a history of recent successful inputs, share URLs, copy/download of the parse
+result, expand/collapse all for the tree, keyboard shortcuts, and parser
+timing display. It also provides an inspector that explains each grammar rule
+in Japanese, visualization of error positions and expected rules, and a
+Regression Lab that batch-validates up to 200 cases (one case per line) with
+a success rate, failure diagnostics, and per-case timing.
+
+The same UI also runs as WebAssembly: the `lojban-web` crate under `site/wasm/`
+and `site/build-pages.sh` produce a static site for GitHub Pages, deployed
+automatically by `.github/workflows/pages.yml`.
+
 ### Library API
 
 ```rust
@@ -132,7 +159,8 @@ See [docs/parsing-guide.md](docs/parsing-guide.md) for rule-name meanings and
 ## Development
 
 ```console
-$ cargo test      # all tests (195 = 185 unit + 10 doc; includes 418 corpus sentences)
+$ cargo test      # all tests (302 = 291 unit + 11 doc; includes 418 corpus sentences.
+                  # all 12 gap_tracker tests pass — see STATUS.md)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 $ cargo bench    # performance benchmarks (criterion)
@@ -182,6 +210,7 @@ Reproduce with: `cargo run --release --example speed_check`
 | `tests/syntax.rs` | Syntactic structure verification |
 | `tests/fuzz.rs` | Lightweight fuzzing (random input, mutations, nesting sweep). Heavy variants: `cargo test -- --ignored` |
 | `tests/corpus.rs` | **418 real-world sentences** (Tatoeba sentences, CC BY 2.0 FR + curated CLL-style examples; 2 known failures excluded) |
+| `tests/gap_tracker.rs` | Known-gap tracker (forms accepted by the reference parsers are pinned as RED tests; each turns green when the gap is fixed — see STATUS.md) |
 
 The real-sentence corpus uses Lojban sentences from [Tatoeba](https://tatoeba.org).
 

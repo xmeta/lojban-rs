@@ -63,17 +63,22 @@ fn coverage_doc_は文法と同期している() {
 
     for (base, words, wired) in &classes {
         // 各クラス行がドキュメントに存在すること
-        let first_word = words.first().map(|w| format!("`{w}`")).unwrap_or_default();
+        let row_prefix = format!("| {base} |");
+        let row = doc.lines().find(|l| l.starts_with(&row_prefix));
         assert!(
-            doc.contains(&format!("| {base} |")) && doc.contains(&first_word),
+            row.is_some(),
             "docs/coverage.md に {base} の行が古い/存在しない。再生成してください"
         );
+        let row = row.unwrap();
+        // 抽出した全語彙がクラス行にバッククォート付きで載っていること
+        // (かつては先頭語のみの検査で、2語目以降の欠落を見逃していた)
+        for w in words {
+            assert!(
+                row.contains(&format!("`{w}`")),
+                "docs/coverage.md の {base} 行に語彙 `{w}` がない。再生成してください: {row}"
+            );
+        }
         let mark = if *wired { "✅" } else { "—" };
-        let row_prefix = format!("| {base} |");
-        let row = doc
-            .lines()
-            .find(|l| l.starts_with(&row_prefix))
-            .expect("row exists");
         assert!(
             row.contains(mark),
             "docs/coverage.md の {base} 行の接続マークが不正(期待: {mark}): {row}"

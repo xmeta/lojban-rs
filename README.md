@@ -44,9 +44,10 @@ guskant 氏の **zantufa-1.9999.peg** を Rust/pest 向けに移植したもの�
     MOhI 移動指定 `mo'i ca'u`)、**時制間隔**(ZEhA `pu bi'o ba` / `ca bi'i ba`)、
     **sumti を取る時制タグ**
     (`mi ca le cabdei cu klama` / `vi ne'i le zdani` / 期間 `ze'a lo cacra`)
-  - **項の補強**: LAhE 参照(`la'e di'u` / `lu'e le cukta`)、
+  - **項の補強**: LAhE 参照(`la'e di'u` / `lu'e le cukta` / 要約抽象
+    `tu'a lo broda`)、
     `naku`(NA KU)による項位置の否定、KOhA 補完(`mi'a` `ma'a` `do'o` `di'u`
-    `tu'a` `dei` 等)、記述詞 `lo'e` / `le'e`
+    `dei` 等)、記述詞 `lo'e` / `le'e`
   - 数量詞+述語の項(`pa prenu cu klama`)、描述内数量詞(`le ci gerku`)
   - **前置スコープ**(`su'o da zo'u da prami mi`)/ **項set**(`nu'i X Y [nu'u]`)
     / **項グループ接続**(`pe'e je`)/ 項の明示区切り(`ce'e`)
@@ -100,6 +101,28 @@ zba (Ccv)
 ta'u (CvvApo)
 ```
 
+### Web Playground example
+
+**公開版:** https://xmeta.github.io/lojban-rs/
+
+ブラウザで解析木・単語分類・JSON・S式を確認できるローカルWebアプリを同梱しています。追加依存はありません。
+
+```console
+$ cargo run --example web_playground
+# http://127.0.0.1:8787 をブラウザで開く
+```
+
+入力はローカルのRustプロセスで解析され、外部サービスには送信されません。
+構文木/単語から入力範囲へのジャンプ、最近の正常入力履歴、共有URL、
+解析結果のコピー/ダウンロード、Tree全展開/折りたたみ、キーボード操作、
+パーサー処理時間表示に対応しています。さらに構文規則の日本語Inspector、
+エラー位置と期待規則の可視化、1行1ケースで最大200件を一括検証できる
+Regression Lab（成功率・失敗診断・ケース別処理時間）を備えています。
+
+同じUIはWebAssemblyとしても動作します。`site/wasm/` の `lojban-web` クレートと
+`site/build-pages.sh` がGitHub Pages用の静的サイトを生成し、
+`.github/workflows/pages.yml` が自動デプロイします。
+
 ### ライブラリ API
 
 ```rust
@@ -126,7 +149,8 @@ println!("{}", tree::to_json(pairs));
 ## 開発
 
 ```console
-$ cargo test      # 全テスト(195件=単体185+doc 10、実文418文を含む)
+$ cargo test      # 全テスト(302件=単体291+doc 11、実文418文を含む。
+                  # gap_tracker 12件を含む全テストがグリーン。STATUS.md 参照)
 $ cargo clippy --all-targets
 $ cargo run -- "mi klama"
 $ cargo bench    # 性能ベンチマーク(criterion)
@@ -175,6 +199,7 @@ src/
 | `tests/syntax.rs` | 統語構造の検証 |
 | `tests/fuzz.rs` | 簡易ファジング(ランダム・変異・深さ掃引)。重量版は `cargo test -- --ignored` |
 | `tests/corpus.rs` | **実文418文**(Tatoeba 実文 + CLL 風厳選例文。既知失敗2文を除く) |
+| `tests/gap_tracker.rs` | 未解決 GAP の追跡(参照パーサーが受理する形を RED テストで固定。GAP 解消時に緑化。詳細は STATUS.md) |
 
 実文コーパスは [Tatoeba](https://tatoeba.org) のロジバン文を使用しています。
 
