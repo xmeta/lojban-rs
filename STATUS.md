@@ -1,13 +1,13 @@
 # 開発ステータス
 
-## 現在の状態: v0.121 完成(KOhA 実験語彙36形・全テストグリーン)
+## 現在の状態: v0.122 完成(NU・SE・BAhE・MAI 実験語彙・全テストグリーン)
 
-- ライブラリ20 / 形態論11 / 統語230 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体311 + doc 11 = 計322テスト + example 内 unit test 5 全パス
+- ライブラリ20 / 形態論11 / 統語231 / battery 5 / cli 20 / coverage_doc 1 / コーパス3 / fuzz 9(+ignore 2) / gap_tracker 12 = 単体312 + doc 11 = 計323テスト + example 内 unit test 5 全パス
 - tests/gap_tracker.rs は既知 GAP の追跡用 12 テスト。v0.108 でバッチ1(語彙+NAI 後置)の 4 件、
   v0.109 でバッチ2(接続詞・前置系)の 4 件、v0.110 でバッチ3(形態論・共有・前処理系)の 4 件を
   解消し全 12 テストが緑(下記「既知GAP」参照)
 - コーパス 418 文(Tatoeba 実文受理率 94% を維持)
-- Cargo.toml の版数を STATUS 版数に同期(0.121.0)
+- Cargo.toml の版数を STATUS 版数に同期(0.122.0)
 
 ### 帳簿整理(v0.114 版数のまま。文法・受理挙動の変更なし)
 
@@ -29,6 +29,27 @@
   語長上限 50 による rafsi 指数と stack overflow の封じ込み)。
   tests/fuzz.rs に lu ネスト最悪深度の境界テストを 1 本追加
   (fuzz の内訳 8→9。単体 298→299)
+
+## v0.122 で追加(NU・SE・BAhE・MAI 実験語彙)
+
+### NU 8 形・SE 8 形・BAhE 2 形・MAI 1 形の収録
+
+- 20 語形全てをテンプレート位置で z0/z1/maf 実測: 35/36 が参照 3 種受理、
+  `mi pe'e klama` のみ maftufa 拒否の参照分裂
+- NU_core 11→19・SE_core 4→12・BAhE_core 3→6(ba'ei/zai'e)・
+  MAI_core 13→14。教訓6に従い接頭辞ペアを整列(ni'ai→ni 等。
+  機械検証で順序違反ゼロ)。coverage.md の 4 行を文法順で再生成
+- 除外1件(記録): pe'e は PEhE_core と同形のため、BAhE 収録すると free 経路
+  の bae_free が「pe'e je」型の PEhE 読みを奪い既存受理を破壊する実測。
+  pe'e 単独形は別課題として記録
+
+### 掃引結果(v0.122。プローブ 2,899 行=2,864 行+新規 35 行)
+
+- ours ok 2,784 / z0 ok 2,644 / z1 ok 2,644 / maftufa ok 2,607。
+  GAP 候補 29 件、OVER 候補 145 件(ともに不変)
+- ok→err ゼロ、既存行の err→ok ゼロ、参照列の変化ゼロ。
+  新規 35 行は全行 ours=参照 3 種 ok
+- tests/syntax.rs に 1 テスト追加。cargo test 323 全パス
 
 ## v0.121 で追加(KOhA 実験語彙 36 形)
 

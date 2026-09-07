@@ -1391,7 +1391,9 @@ NAhE_core = @{ ( ^"na'e" | ^"to'e" | ^"no'e" | ^"je'a") ~ &word_boundary }
 NIhO_core = @{ ( ^"ni'o" | ^"niho") ~ &word_boundary }
 NOI_core = @{ ( ^"poi" | ^"noi" | ^"voi") ~ &word_boundary }
 // si'o(概念抽象)は zantufa 由来の語彙に欠けている NU セルマォの1語(CLL 準拠で補完)
-NU_core = @{ ( ^"je'i" | ^"mu'e" | ^"pu'u" | ^"zu'o" | ^"li'i" | ^"su'u" | ^"si'o" | ^"du'u" | ^"nu" | ^"ka" | ^"ni") ~ &word_boundary }
+NU_core = @{ ( ^"je'i" | ^"mu'e" | ^"pu'u" | ^"zu'o" | ^"li'i" | ^"su'u" | ^"si'o" | ^"du'u" | ^"nu" | ^"kai'ei" | ^"kai'u" | ^"ka'ei" | ^"ka" | ^"ni'ai" | ^"ni"
+               // v0.122: zantufa NU 実験語 8 形(z0/z1/maf 実測受理)
+               | ^"bu'ai" | ^"poi'i" | ^"za'i" | ^"jei") ~ &word_boundary }
 // SE+NU の結合表記(報話で高頻度の sedu'u)。素の形が先だと境界先読みで失敗するため
 // joint を先に試行(教訓6)。tanru_unit の BRIVLA ガードにも追加(fu'ivla 誤認防止)
 SEDUHU_joint = @{ (^"sedu'u" | ^"seduhu") ~ &word_boundary }
@@ -1434,7 +1436,9 @@ PA_core  = @{ PA_word ~ &word_boundary }
 PA_seq   = @{ PA_word+ ~ &word_boundary }
 // roi に同系列の序数頻度タグ re'u を追加(CLL: selma'o ROI)。h 表記 rehu も併記
 ROI_core = @{ ( ^"roi" | ^"re'u" | ^"rehu") ~ &word_boundary }
-SE_core = @{ ( ^"se" | ^"te" | ^"ve" | ^"xe") ~ &word_boundary }
+SE_core = @{ ( ^"se'o'e" | ^"se'u'o" | ^"se" | ^"te" | ^"ve" | ^"xe"
+               // v0.122: zantufa SE 実験語 8 形(z0/z1/maf 実測受理)
+               | ^"re'au'e" | ^"su'ei" | ^"tau'o" | ^"to'ai" | ^"vo'ai" | ^"xo'ai") ~ &word_boundary }
 // SE+BAI の結合表記(pi'o va'u mu'i cau ja'e cu'u ba'i ki'u ri'a ka'a の se 変換)。
 // 注: CLL 上 SE+BAI は全 BAI に生産的だが、本リストは pre-existing の部分集合のまま
 //     (seba'i/sebahi はあるが seci'o/serai 等の結合形は未整備。2語形は tagged の
@@ -1524,7 +1528,9 @@ NAI_core = @{ ( ^"nai") ~ &word_boundary }
 // (zantufa は bahai/moho/mai。bahai は標準外のため未収録)
 MAI_core = @{ (^"pamai" | ^"remai" | ^"cimai" | ^"vomai" | ^"mumai"
               | ^"xamai" | ^"zemai" | ^"bimai" | ^"somai" | ^"nomai"
-              | ^"mai" | ^"mo'o" | ^"moho") ~ &word_boundary }
+              | ^"mai" | ^"mo'o" | ^"moho"
+               // v0.122: zantufa MAI 実験語 ba'ai(z0/z1/maf 実測受理)
+               | ^"ba'ai") ~ &word_boundary }
 // 感情強度(CAI): cai=最強 / sai=強 / ru'e=弱 / cu'i=中立
 CAI_core = @{ (^"cai" | ^"sai" | ^"ru'e" | ^"ruhe" | ^"cu'i" | ^"cuhi") ~ &word_boundary }
 PU_core   = @{ (^"pu" | ^"ca" | ^"ba") ~ &word_boundary }
@@ -1562,7 +1568,12 @@ PEhE_core = @{ (^"pehe" | ^"pe'e") ~ &word_boundary }
 // 強調マーカー(次の語を強調。camxes pre_clause 準拠だが
 // 受容を優先し独立した自由修飾語として受理)。
 // 同 selma'o の za'e(前借り語)も含む
-BAhE_core = @{ (^"bahe" | ^"ba'e" | ^"za'e") ~ &word_boundary }
+BAhE_core = @{ (^"bahe" | ^"ba'ei" | ^"ba'e" | ^"za'e"
+               // v0.122: zantufa BAhE 実験語 ba'ei/zai'e の 2 形。
+               // pe'e は除外: PEhE_core と同形で、BAhE 収録すると
+               // free 経路の bae_free が「pe'e je」型の PEhE 読みを奪い
+               // 既存受理を壊す実測。pe'e 単独形は別課題として記録
+               | ^"zai'e" | ^"ba'ei") ~ &word_boundary }
 DAhO_core = @{ (^"daho" | ^"da'o") ~ &word_boundary }
 // 項set(複数項をまとめて接続対象にする)
 NUhI_core = @{ (^"nuhi" | ^"nu'i") ~ &word_boundary }

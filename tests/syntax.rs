@@ -5661,3 +5661,52 @@ fn koha実験語彙36形_v0_121() {
         );
     }
 }
+
+#[test]
+fn nusebahemai実験語彙_v0_122() {
+    // v0.122: NU 8 形・SE 8 形・BAhE 2 形・MAI 1 形(z0/z1/maf 実測受理)。
+    // pe'e は PEhE_core との衝突のため除外し別課題として記録
+    for (w, t) in [
+        ("bu'ai", "mi troci lo bu'ai klama ku"),
+        ("jei", "lo jei broda cu nandu"),
+        ("ka'ei", "mi troci lo ka'ei klama ku"),
+        ("kai'ei", "lo kai'ei broda cu nandu"),
+        ("kai'u", "mi troci lo kai'u klama ku"),
+        ("ni'ai", "lo ni'ai broda cu nandu"),
+        ("poi'i", "mi troci lo poi'i klama ku"),
+        ("za'i", "lo za'i broda cu nandu"),
+    ] {
+        let s = parse_ok(t);
+        assert!(s.contains("NU_core"), "{w}: {s}");
+    }
+    for (w, t) in [
+        ("re'au'e", "mi re'au'e klama lo zdani"),
+        ("se'o'e", "mi se'o'e broda"),
+        ("se'u'o", "mi se'u'o klama lo zdani"),
+        ("su'ei", "mi su'ei broda"),
+        ("tau'o", "mi tau'o klama lo zdani"),
+        ("to'ai", "mi to'ai broda"),
+        ("vo'ai", "mi vo'ai klama lo zdani"),
+        ("xo'ai", "mi xo'ai broda"),
+    ] {
+        let s = parse_ok(t);
+        assert!(s.contains("SE_core"), "{w}: {s}");
+    }
+    for (w, t) in [
+        ("ba'ei", "mi ba'ei klama"),
+        ("zai'e", "mi zai'e klama"),
+        ("ba'ai", "mi broda pa ba'ai"),
+    ] {
+        parse_ok(t);
+        assert!(lojban::parse(t).is_ok(), "{w}");
+    }
+    // 木ピン: 接頭辞ペアの正規読みと PEhE 不変
+    let s = parse_ok("mi ni'ai klama");
+    assert!(s.contains("NU_core \"ni'ai\""), "{s}");
+    let s = parse_ok("mi se'o'e klama lo zdani");
+    assert!(s.contains("SE_core \"se'o'e\""), "{s}");
+    let s = parse_ok("mi zmadu lo klama pe'e je lo cadzu");
+    assert!(s.contains("PEhE_core \"pe'e\""), "{s}");
+    // 除外ピン: pe'e 単独形は別課題として拒否維持
+    assert!(lojban::parse("mi pe'e klama").is_err());
+}
